@@ -1,0 +1,26 @@
+<mat-nav-list>
+  <a mat-list-item routerLink="/publisher/templates-cards">
+    <mat-icon>redeem</mat-icon>
+    <span class="nav-link">Plantillas</span>
+  </a>
+  <a mat-list-item routerLink="/publisher/users">
+    <mat-icon>people</mat-icon>
+    <span class="nav-link">Usuarios</span>
+  </a>
+  <a mat-list-item routerLink="/publisher/events-day">
+    <mat-icon>date_range</mat-icon>
+    <span class="nav-link">Eventos</span>
+  </a>
+  <a mat-list-item routerLink="/admin/publishers">
+    <mat-icon>language</mat-icon>
+    <span class="nav-link">Publicadores</span>
+  </a>
+  <a mat-list-item routerLink="/publisher/help">
+    <mat-icon>help</mat-icon>
+    <span class="nav-link">Ayuda</span>
+  </a>
+  <a mat-list-item (click)="onExit()">
+    <mat-icon>exit_to_app</mat-icon>
+    <span class="nav-link">Exit</span>
+  </a>
+</mat-nav-list>
