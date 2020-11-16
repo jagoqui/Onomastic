@@ -4,33 +4,23 @@
       mat-icon-button
       class="borderless"
       (click)="onToggleSidenav()"
-      *ngIf="userData.role === 'ADMIN'"
-    >
+      *ngIf="userData.role === 'ADMIN'">
       <mat-icon>menu</mat-icon>
     </button>
     <button
       mat-raised-button
       class="borderless text-uppercase"
-      [routerLink]="''"
-    >
+      [routerLink]="''">
       Onomástico
     </button>
   </span>
   <span class="spacer"></span>
   <div class="option-list-nav">
     <span *ngIf="userData.email" routerLink="/profile">{{ userData.email.split('@')[0] }}</span>
-    <ng-container *ngIf="!isLogged; else viewLogout">
-      <button mat-raised-button routerLink="/login">Login</button>
-      <button mat-raised-button routerLink="/register">Register</button>
-    </ng-container>
     <button mat-raised-button routerLink="/admin" *ngIf="userData.role === 'ADMIN'">
       Admin
     </button>
   </div>
+  <mat-slide-toggle [formControl] = "toggleDarkThemeControl"><mat-icon>bedtime</mat-icon></mat-slide-toggle>
 </mat-toolbar>
 
-<ng-template #viewLogout>
-  <button mat-raised-button class="borderless" (click)="onLogout()">
-    Logout
-  </button>
-</ng-template>

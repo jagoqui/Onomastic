@@ -1,4 +1,6 @@
+import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-header',
@@ -7,7 +9,9 @@ import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 })
 export class HeaderComponent implements OnInit {
   @Output() toggleSidenav = new EventEmitter<void>();
+  @Output() toggleDarkTheme = new EventEmitter<string>(null);
 
+  toggleDarkThemeControl = new FormControl(false);
   userData = {
     name: 'Jaidiver Gómez',
     email: 'jaidiver.gomez@udea.edu.co',
@@ -16,7 +20,7 @@ export class HeaderComponent implements OnInit {
   };
   isLogged = 'true';
 
-  constructor() { }
+  constructor(private overlayContainer: OverlayContainer) { }
 
   onToggleSidenav(): void {
     this.toggleSidenav.emit();
@@ -25,6 +29,9 @@ export class HeaderComponent implements OnInit {
   onLogout() { }
 
   ngOnInit(): void {
+    this.toggleDarkThemeControl.valueChanges.subscribe((darkMode) => {
+      this.toggleDarkTheme.emit(darkMode ? 'dark-theme' : 'light-theme');
+    });
   }
 
 }

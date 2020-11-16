@@ -34,7 +34,8 @@ const routes: Routes = [
   {
     path: 'publisher',
     loadChildren: () => import('./pages/publisher/publisher.module').then(m => m.PublisherModule)
-  }
+  },
+  { path: 'forgot-password', loadChildren: () => import('./auth/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule) }
 ];
 
 @NgModule({

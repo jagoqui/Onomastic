@@ -1,4 +1,6 @@
-/* You can add global styles to this file, and also import other style files */
+@import 'src/assets/custom_styles/material_custom_theme.scss';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+html, body { height: 100%; margin: 0}
+// Create your Sass color vars (will be available in all the project)
+
