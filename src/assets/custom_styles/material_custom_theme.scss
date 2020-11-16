@@ -215,9 +215,6 @@ $theme-warn: mat-palette($mat-warn, main, lighter, darker);;
 $mat-theming-theme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
 $mat-theming-theme-dark: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
 
-// // Theme Init
-@include angular-material-theme($mat-theming-theme);
-
 .light-theme{
   @include angular-material-theme($mat-theming-theme);
 }

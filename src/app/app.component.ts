@@ -16,7 +16,7 @@ import {
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  @HostBinding('class') className = '';
+  @HostBinding('class') className = 'light-theme';
 
   opened = false;
   private destroy$ = new Subject<any>();
