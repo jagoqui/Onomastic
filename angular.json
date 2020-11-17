@@ -125,5 +125,8 @@
       }
     }
   },
-  "defaultProject": "onomastic"
+  "defaultProject": "onomastic",
+  "cli": {
+    "analytics": false
+  }
 }
