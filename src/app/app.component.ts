@@ -1,7 +1,6 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Location } from '@angular/common';
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { MediaChange, MediaObserver } from '@angular/flex-layout';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -16,7 +15,7 @@ import {
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  @HostBinding('class') className = '';
+  @HostBinding('class') className = 'light-theme';
 
   opened = false;
   private destroy$ = new Subject<any>();
@@ -24,7 +23,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
   constructor(
     private overlayContainer: OverlayContainer,
-    private mediaObserver: MediaObserver,
     private sidenavController: SidenavControllerService,
     location: Location
   ) { this.onHeaderView = location.path() !== '/login' ? true : false; }
@@ -38,13 +36,6 @@ export class AppComponent implements OnInit, OnDestroy {
     }
   }
   ngOnInit(): void {
-    this.mediaObserver.media$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe((change: MediaChange) => {
-        const mediaQuery = change.mqAlias;
-        console.log(mediaQuery);
-      });
-
     this.sidenavController.sidebarOpened$
       .pipe(takeUntil(this.destroy$))
       .subscribe(

@@ -1,7 +1,7 @@
 <app-header *ngIf="onHeaderView" (toggleSidenav)="sidenav.toggle()" (toggleDarkTheme) = "onSetTheme($event)"></app-header>
 <mat-sidenav-container hasBackdrop="true">
-  <mat-sidenav #sidenav mode="side" [(opened)]="opened">
-    <mat-toolbar color="primary">
+  <mat-sidenav #sidenav mode="side" [(opened)]="opened" class="app-sidenav">
+    <mat-toolbar color="accent">
       <span>Menu</span>
     </mat-toolbar>
     <app-sidebar></app-sidebar>

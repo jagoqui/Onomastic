@@ -1,4 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import {
   SidenavControllerService,
@@ -9,7 +11,9 @@ import {
   templateUrl: './sidebar.component.html',
   styleUrls: ['./sidebar.component.scss']
 })
-export class SidebarComponent implements OnInit {
+export class SidebarComponent implements OnInit, OnDestroy {
+  opened = false;
+  private destroy$ = new Subject<any>();
 
   constructor(private sidenavController: SidenavControllerService) { }
 
@@ -19,6 +23,15 @@ export class SidebarComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.sidenavController.sidebarOpened$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (res: boolean) => (this.opened = res)
+      );
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next({});
+    this.destroy$.complete();
+  }
 }

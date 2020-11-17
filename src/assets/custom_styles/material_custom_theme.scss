@@ -11,7 +11,7 @@
 @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500');
 
 $fontConfig: (
-  display-4: mat-typography-level(112px, 112px, 300, 'Poppins', -0.0134em),
+  display-4: mat-typography-level(112px, 112px, 300, 'Poppins', -0.2144px),
   display-3: mat-typography-level(56px, 56px, 400, 'Poppins', -0.0089em),
   display-2: mat-typography-level(45px, 48px, 400, 'Poppins', 0.0000em),
   display-1: mat-typography-level(34px, 40px, 400, 'Poppins', 0.0074em),
@@ -215,9 +215,6 @@ $theme-warn: mat-palette($mat-warn, main, lighter, darker);;
 $mat-theming-theme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
 $mat-theming-theme-dark: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
 
-// // Theme Init
-@include angular-material-theme($mat-theming-theme);
-
 .light-theme{
   @include angular-material-theme($mat-theming-theme);
 }
@@ -250,3 +247,9 @@ $mat-theming-theme-dark: mat-dark-theme($theme-primary, $theme-accent, $theme-wa
   }
 }
 
+// Custom styles
+.active-list-item {
+  font-weight: bold;
+  // color: mat-color($theme-warn, main) !important;
+  color: #7DB006 !important;
+}

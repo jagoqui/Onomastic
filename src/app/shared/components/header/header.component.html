@@ -1,26 +1,16 @@
-<mat-toolbar color="primary">
+<mat-toolbar color="primary" class="mat-elevation-z3">
   <span>
-    <button
-      mat-icon-button
-      class="borderless"
-      (click)="onToggleSidenav()"
-      *ngIf="userData.role === 'ADMIN'">
+    <button *ngIf="userData.role === 'ADMIN'" mat-icon-button (click)="onToggleSidenav()" >
       <mat-icon>menu</mat-icon>
     </button>
-    <button
-      mat-raised-button
-      class="borderless text-uppercase"
-      [routerLink]="''">
-      Onomástico
-    </button>
+    <button id = "app-title" mat-raised-button color = "primary" class="mat-display-2" [routerLink]="''" title="Home">Onomástico</button>
   </span>
   <span class="spacer"></span>
   <div class="option-list-nav">
-    <span *ngIf="userData.email" routerLink="/profile">{{ userData.email.split('@')[0] }}</span>
-    <button mat-raised-button routerLink="/admin" *ngIf="userData.role === 'ADMIN'">
-      Admin
-    </button>
+    <button *ngIf="userData.email" mat-raised-button color = "primary"  routerLink="/profile" title="Perfil" title = "Perfil">{{ userData.email.split('@')[0] }}</button>
+    <button *ngIf="userData.role === 'ADMIN'" mat-raised-button color = "primary" routerLink="/admin" title="Admin" >Admin</button>
   </div>
-  <mat-slide-toggle [formControl] = "toggleDarkThemeControl"><mat-icon>bedtime</mat-icon></mat-slide-toggle>
+  <mat-slide-toggle [formControl]="toggleDarkThemeControl">
+    <mat-icon>bedtime</mat-icon>
+  </mat-slide-toggle>
 </mat-toolbar>
-
