@@ -1,22 +1,26 @@
 <mat-nav-list>
-  <a mat-list-item routerLink="/publisher/templates-cards">
-    <mat-icon>redeem</mat-icon>
+  <a id = "home_nav_item" mat-list-item  routerLink="/home" routerLinkActive="active-list-item">
+    <mat-icon matListIcon>home</mat-icon>
+    <span class="nav-link">home</span>
+  </a>
+  <a mat-list-item  routerLink="/publisher/templates-cards" routerLinkActive="active-list-item">
+    <mat-icon matListIcon>redeem</mat-icon>
     <span class="nav-link">Plantillas</span>
   </a>
-  <a mat-list-item routerLink="/publisher/users">
-    <mat-icon>people</mat-icon>
+  <a mat-list-item routerLink="/publisher/users" routerLinkActive="active-list-item">
+    <mat-icon matListIcon>people</mat-icon>
     <span class="nav-link">Usuarios</span>
   </a>
-  <a mat-list-item routerLink="/publisher/events-day">
-    <mat-icon>date_range</mat-icon>
+  <a mat-list-item routerLink="/publisher/events-day" routerLinkActive="active-list-item">
+    <mat-icon matListIcon>date_range</mat-icon>
     <span class="nav-link">Eventos</span>
   </a>
-  <a mat-list-item routerLink="/admin/publishers">
-    <mat-icon>language</mat-icon>
+  <a mat-list-item routerLink="/admin/publishers" routerLinkActive="active-list-item">
+    <mat-icon matListIcon>language</mat-icon>
     <span class="nav-link">Publicadores</span>
   </a>
-  <a mat-list-item routerLink="/publisher/help">
-    <mat-icon>help</mat-icon>
+  <a mat-list-item routerLink="/publisher/help" routerLinkActive="active-list-item">
+    <mat-icon matListIcon>help</mat-icon>
     <span class="nav-link">Ayuda</span>
   </a>
   <a mat-list-item (click)="onExit()">

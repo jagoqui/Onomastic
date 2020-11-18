@@ -1,25 +1,18 @@
-.spacer {
-  flex: 1 1 auto;
-}
+.mat-toolbar {
+  .spacer {
+    flex: 1 1 auto;
+  }
 
-.example-container {
-  width : 400px;
-  height: 200px;
-  margin: 12px;
-  border: 1px solid #555;
-}
+  #app-title {
+    margin : 0;
+    padding: 0;
+  }
 
-mat-drawer-content {
-  padding       : 12px;
-  display       : flex;
-  flex-direction: column;
-  align-items   : flex-start;
-}
-
-.borderless,
-.option-list-nav button {
-  outline         : none;
-  box-shadow      : none;
-  background-color: transparent;
-  color           : white;
+  button {
+    font-size       : 1em;
+    outline         : none;
+    box-shadow      : none;
+    background-color: transparent;
+    color           : white;
+  }
 }

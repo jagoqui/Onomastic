@@ -72,7 +72,6 @@ const MaterialLibs = [
   MatTreeModule,
   MatOptionModule,
   MatSelectModule
-  // MatCarouselModule,
 ];
 
 @NgModule({
