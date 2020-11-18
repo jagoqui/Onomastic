@@ -1,22 +1,22 @@
-<body>
-  <button mat-raised-button class="buttons-users-list">Total de correos
+
+  <button mat-raised-button class="mat-headline">Total de correos
     <div class="circle">
       <mat-icon class="icon">autorenew</mat-icon>
     </div>
-    <p class="number-emails">34</p>
+    <p class="mat-title">34</p>
   </button>
-  <button mat-raised-button class="buttons-users-list">Total de usuarios
+  <button mat-raised-button class="mat-headline">Total de usuarios
     <div class="circle">
       <mat-icon class="icon">people_outline</mat-icon>
     </div>
-    <p class="number-users">34</p>
+    <p class="mat-title">34</p>
   </button>
-  <button mat-raised-button class="add-user">Agregar usuario
+  <button mat-raised-button class="subheading-2">Agregar usuario
   </button>
 
   <ng-container>
     <div class="mat-elevation-z8">
-      <table mat-table [dataSource]="dataSource" multiTemplateDataRows>
+      <table  class="mat-body-1" mat-table [dataSource]="dataSource" multiTemplateDataRows>
         <ng-container matColumnDef="{{column}}" *ngFor="let column of columnsToDisplay">
           <th mat-header-cell *matHeaderCellDef class="table-header"> {{column}} </th>
           <td mat-cell *matCellDef="let element"> {{element[column]}} </td>
@@ -47,8 +47,7 @@
         </tr>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></tr>
       </table>
-      <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+      <mat-paginator class="mat-body-1" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
 
     </div>
   </ng-container>
-</body>

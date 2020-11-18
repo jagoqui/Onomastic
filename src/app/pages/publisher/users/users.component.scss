@@ -1,108 +1,79 @@
-@import '~@angular/material/theming';
+@import 'src/assets/custom_styles/material_custom_theme.scss';
 
-body{
-  background-color: rgb(228, 255, 229);
-}
-
-.number-emails, p, .number-users{
+.number-emails, p, .number-users, .mat-title{
   position: absolute;
   top: 50%;
   left: 10%;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 600; 
-  font-size: 20pt;
+  font-weight: bold;
 }
 
 .circle{
-  margin-top: 2px;
-  margin-left: 10px;
+  margin-top: 0.1111rem;
+  margin-left: 0.5556rem;
   vertical-align: auto;
   background: #0b5810;
-  width: 39px;
-  height: 39px;
+  width: 2.1667rem;
+  height: 2.1667rem;
   border-radius: 50%;
   position: absolute;
   display: inline;
 }
 
 .icon{
-  padding: 7px;
+  padding: 0.3889rem;
   transform: scale(1);
   opacity: 100%;
   color: #efefef;
 }
 
-.buttons-users-list{
-  margin: 30px;
-  min-width: 210px;
-  min-height: 70px;
+.mat-headline{
+  margin: 1.6667rem;
+  min-width: 11.6667rem;
+  min-height: 3.8889rem;
   text-align: justify;
-  padding-bottom: 10px;
-  border-radius: 50px;
-  font-family: 'Poppins', sans-serif;
-  font-weight: 400;
-  font-size: 12pt;
-  background-color: #ffff;
+  padding-bottom: 0.5556rem;
+  border-radius: 2.7778rem;
 }
 
-.add-user{
-  color: rgb(0, 0, 0) ;
-  font-size: 12pt;
+.subheading-2{
   font-weight: 600;
-  font-family: 'Poppins', sans-serif;
-  background: #00ff22;
+  background: mat-color($mat-primary, lighter);;
   position: relative;
-  border-radius: 50px;
-  margin: 30px;
-  min-width: 250px;
+  border-radius: 2.7778rem;
+  margin: 1.6667rem;
+  min-width: 13.8889rem;
 }
 
-.add-user:before {
+.subheading-2:before {
   position: fixed;
   top: 0%;
   left: 0%;
   width: 100%;
   height: 100%;
-  border-radius: 50px;
-  background: #0b5810;
+  border-radius: 2.7778rem;
+  color: white;
+  background: mat-color($mat-primary, main);
   transition: all 0.5s ease;
-  color: rgb(255, 255, 255) ;
-  font-size: 12pt;
   font-weight: 600;
   content:"Agregar usuario";
 }
 
-.add-user:hover:before {
+.subheading-2:hover:before {
   content:"";
   width: 15%;
-}
-
-.table{
-  font-family: 'Poppins', sans-serif;
-  font-weight: 400; 
-  font-size: 10pt;
 }
 
 .mat-elevation-z8{
  width: 85%;
  height: 50%;
  margin: auto;
- font-family: 'Poppins', sans-serif;
- font-weight: 400; 
- font-size: 10pt;
-}
-
-.paginator{
-  font-family: 'Poppins', sans-serif;
- font-weight: 400; 
- font-size: 10pt;
 }
 
 .table-header{
-  font-family: 'Poppins', sans-serif;
-  font-weight: 600; 
-  font-size: 12pt;
-  background-color: #E0F92E;
+  text-align: center;
+  background-color: mat-color($mat-primary, lighter);
+  font-weight: bold; 
+  font-size: 0.8889rem;
 }
 
 tr.example-detail-row {
@@ -110,11 +81,11 @@ tr.example-detail-row {
 }
 
 tr.example-element-row:not(.example-expanded-row):hover {
-  background: whitesmoke;
+  background: mat-color($mat-accent, lighter);
 }
 
 tr.example-element-row:not(.example-expanded-row):active {
-  background: #efefef;
+  background: mat-color($mat-accent, lighter);
 }
 
 .example-element-row td {
@@ -127,22 +98,22 @@ tr.example-element-row:not(.example-expanded-row):active {
 }
 
 .example-element-diagram {
-  min-width: 80px;
-  border: 2px solid black;
-  padding: 8px;
+  min-width: 4.4444rem;
+  border: 0.1111rem solid black;
+  padding: 0.4444rem;
   font-weight: lighter;
-  margin: 8px 0;
-  height: 104px;
+  margin: 0.4444rem 0;
+  height: 5.7778rem;
 }
 
 .example-element-symbol {
   font-weight: bold;
-  font-size: 40px;
+  font-size: 2.2222rem;
   line-height: normal;
 }
 
 .example-element-description {
-  padding: 16px;
+  padding: 0.8889rem;
 }
 
 .example-element-description-attribution {
