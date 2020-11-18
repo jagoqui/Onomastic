@@ -156,7 +156,7 @@ body {
 
 $mat-primary: (
   main: #0b5810,
-  lighter: #b6cdb7,
+  lighter: #7DB006,
   darker: #063d09,
   200: #0b5810, // For slide toggle,
   contrast : (
@@ -250,6 +250,6 @@ $mat-theming-theme-dark: mat-dark-theme($theme-primary, $theme-accent, $theme-wa
 // Custom styles
 .active-list-item {
   font-weight: bold;
-  // color: mat-color($theme-warn, main) !important;
-  color: #7DB006 !important;
+  color: mat-color($theme-primary, lighter) !important;
+
 }
