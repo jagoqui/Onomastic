@@ -65,57 +65,10 @@
 
 .mat-elevation-z8{
  width: 85%;
- height: 50%;
+ height: 100%;
  margin: auto;
 }
 
-.table-header{
-  text-align: center;
-  background-color: #7DB006;
-  font-weight: bold; 
-  font-size: 1.1111rem;
-}
-
-tr.example-detail-row {
-  height: 0;
-}
-
-tr.example-element-row:not(.example-expanded-row):hover {
-  background: mat-color($mat-accent, lighter);
-}
-
-tr.example-element-row:not(.example-expanded-row):active {
-  background: mat-color($mat-accent, lighter);
-}
-
-.example-element-row td {
-  border-bottom-width: 0;
-}
-
-.example-element-detail {
-  overflow: hidden;
-  display: flex;
-}
-
-.example-element-diagram {
-  min-width: 4.4444rem;
-  border: 0.1111rem solid black;
-  padding: 0.4444rem;
-  font-weight: lighter;
-  margin: 0.4444rem 0;
-  height: 5.7778rem;
-}
-
-.example-element-symbol {
-  font-weight: bold;
-  font-size: 2.2222rem;
-  line-height: normal;
-}
-
-.example-element-description {
-  padding: 0.8889rem;
-}
-
-.example-element-description-attribution {
-  opacity: 0.5;
+table {
+  width: 100%;
 }
