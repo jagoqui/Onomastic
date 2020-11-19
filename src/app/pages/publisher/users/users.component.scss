@@ -63,12 +63,31 @@
   width: 15%;
 }
 
-.mat-elevation-z8{
- width: 85%;
- height: 100%;
- margin: auto;
+#container {
+  width     : 98%;
+  margin: 0 auto;
+  margin-top: 1rem;
 }
 
-table {
+.mat-header-cell {
+  align-items: center;
+  background: mat-color($mat-accent, main);
+  font-size: large;
+}
+
+
+table{
   width: 100%;
+}
+
+th.mat-sort-header-sorted {
+  color: black;
+}
+
+.table-button-row button {
+  margin: 12px;
+}
+
+.btn-new {
+  width: 20%;
 }
