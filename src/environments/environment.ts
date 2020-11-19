@@ -4,5 +4,5 @@
 
 export const environment = {
   production: false,
-  API_URL: 'http://arquimedes.udea.edu.co:8096/onomastico/'
+  API_URL: 'http://arquimedes.udea.edu.co:8096/onomastico/usuariosemail'
 };
