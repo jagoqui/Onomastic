@@ -27,6 +27,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     NgxCaptchaModule
   ],
   exports: [
+    CommonModule,
     OnomasticLogoComponent,
     HeaderComponent,
     SidebarComponent,

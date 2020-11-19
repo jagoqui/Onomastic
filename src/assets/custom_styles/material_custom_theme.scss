@@ -158,7 +158,8 @@ $mat-primary: (
   main: #0b5810,
   lighter: #7DB006,
   darker: #063d09,
-  200: #0b5810, // For slide toggle,
+  200: #54892b, // For slide toggle,
+  50: #efefef,
   contrast : (
     main: $light-primary-text,
     lighter: $dark-primary-text,
@@ -253,3 +254,4 @@ $mat-theming-theme-dark: mat-dark-theme($theme-primary, $theme-accent, $theme-wa
   color: mat-color($theme-primary, lighter) !important;
 
 }
+

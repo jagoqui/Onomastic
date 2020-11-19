@@ -19,12 +19,16 @@ import { EmailUsersService } from '../services/email-users.service';
 export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
-  columnsToDisplay = ['id', 'plataformaPorUsuarioCorreo', 'nombre', 'email', 'fechaNacimiento', 'vinculacionPorUsuarioCorreo', 'asociacionPorUsuarioCorreo', 'estado','actions'];
+  columnsToDisplay = ['id', 'plataformaPorUsuarioCorreo', 'nombre', 'email', 'fechaNacimiento', 'vinculacionPorUsuarioCorreo', 'asociacionPorUsuarioCorreo', 'estado', 'actions'];
   dataSource = new MatTableDataSource();
   private destroy$ = new Subject<any>();
 
   constructor(private userSvc: EmailUsersService) { }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
   onDelete(userId: number): void {
     // if (window.confirm('Do you really want remove this user')) {
@@ -53,7 +57,6 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
   ngOnInit(): void {
     this.userSvc.getAll().subscribe((users) => {
       this.dataSource.data = users;
-      console.log(users);
     });
   }
 

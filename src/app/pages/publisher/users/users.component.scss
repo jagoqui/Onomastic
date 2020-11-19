@@ -1,93 +1,77 @@
 @import 'src/assets/custom_styles/material_custom_theme.scss';
 
-.number-emails, p, .number-users, .mat-title{
-  position: absolute;
-  top: 50%;
-  left: 10%;
-  font-weight: bold;
-}
-
-.circle{
-  margin-top: 0.1111rem;
-  margin-left: 0.5556rem;
-  vertical-align: auto;
-  background: #0b5810;
-  width: 2.1667rem;
-  height: 2.1667rem;
-  border-radius: 50%;
-  position: absolute;
-  display: inline;
-}
-
-.icon{
-  padding: 0.3889rem;
-  transform: scale(1);
-  opacity: 100%;
-  color: #efefef;
-}
-
-.mat-headline{
-  margin: 1.6667rem;
-  min-width: 11.6667rem;
-  min-height: 3.8889rem;
-  text-align: justify;
-  padding-bottom: 0.5556rem;
-  border-radius: 2.7778rem;
-}
-
-.subheading-2{
-  font-weight: 600;
-  background: mat-color($mat-primary, lighter);;
-  position: relative;
-  border-radius: 2.7778rem;
-  margin: 1.6667rem;
-  min-width: 13.8889rem;
-}
-
-.subheading-2:before {
-  position: fixed;
-  top: 0%;
-  left: 0%;
-  width: 100%;
-  height: 100%;
-  border-radius: 2.7778rem;
-  color: white;
-  background: mat-color($mat-primary, main);
-  transition: all 0.5s ease;
-  font-weight: 600;
-  content:"Agregar usuario";
-}
-
-.subheading-2:hover:before {
-  content:"";
-  width: 15%;
-}
-
 #container {
-  width     : 98%;
   margin: 0 auto;
-  margin-top: 1rem;
-}
+  padding-top: 2%;
+  #actions_buttons {
+    width: 50%;
+    margin-bottom: 0.5556rem;
+    .mat-headline {
+      border-radius : 2.7778rem;
 
-.mat-header-cell {
-  align-items: center;
-  background: mat-color($mat-accent, main);
-  font-size: large;
-}
+      .button-title{
+        padding: 0;
+        margin: 0;
+        color: mat-color($mat-accent, main);
+      }
+      .circle {
+        background    : mat-color($mat-primary, main);
+        width         : 50px;
+        height        : 50px;
+        border-radius : 50%;
+        margin: auto;
+        margin-left: 0.6667rem;
+        .icon {
+          padding: 0.3889rem;
+          color  : mat-color($mat-primary, 50);
+        }
+      }
+      .mat-title {
+        font-weight: bold;
+      }
+    }
 
+    .subheading-2 {
+      padding: 5px;
+      font-weight  : 1.1111rem;
+      background   : mat-color($mat-primary, lighter);
+      border-radius: 2.7778rem;
+      position: relative;
+      color: mat-color($mat-accent, lighter);
+      &:before {
+        position     : fixed;
+        top          : 0%;
+        left         : 0%;
+        width        : 100%;
+        height       : 100%;
+        border-radius: 2.7778rem;
+        color        : white;
+        background   : mat-color($mat-primary, main);
+        transition   : all 0.5s ease;
+        font-weight  : 1.1111rem;
+        content      : "Agregar usuario";
+      }
 
-table{
-  width: 100%;
-}
+      &:hover:before {
+        content: "";
+        width  : 15%;
+      }
 
-th.mat-sort-header-sorted {
-  color: black;
-}
+    }
+  }
 
-.table-button-row button {
-  margin: 12px;
-}
+  .mat-form-field {
+    font-size: 14px;
+    width    : 100%;
+  }
 
-.btn-new {
-  width: 20%;
+  table {
+    width: 100%;
+
+    .mat-header-cell {
+      align-items: center;
+      background : mat-color($mat-accent, 200);
+      font-size  : large;
+    }
+  }
 }
