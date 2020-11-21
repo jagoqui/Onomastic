@@ -6,6 +6,7 @@ import { RouterModule } from '@angular/router';
 import { NgxCaptchaModule } from 'ngx-captcha';
 
 import { MaterialModule } from '../material-module.module';
+import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import {
   OnomasticLogoComponent,
@@ -16,7 +17,8 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
   declarations: [
     OnomasticLogoComponent,
     HeaderComponent,
-    SidebarComponent
+    SidebarComponent,
+    FooterComponent
   ],
   imports: [
     CommonModule,
@@ -34,6 +36,8 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     MaterialModule,
     FlexLayoutModule,
     ReactiveFormsModule,
-    NgxCaptchaModule]
+    NgxCaptchaModule,
+    FooterComponent
+  ]
 })
 export class SharedModule { }

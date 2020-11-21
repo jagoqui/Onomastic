@@ -2,8 +2,12 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import {
+  HeaderFooterViewControllerService,
+} from 'src/app/shared/services/header-footer-view-controller.service';
+import {
   BaseFormPlatformUsers,
 } from 'src/app/shared/utils/base-form-platform-users';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-login',
@@ -14,7 +18,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   hidePassword = true;
   private subscripcion: Subscription = new Subscription();
   recaptchaConfig = {
-    siteKey: '6Le8wOIZAAAAAFeAhjhZtmkI8oUTqsjkLnJzazwL',
+    siteKey: `${environment.RECAPTCHA_KEY}`,
     size: 'Normal',
     lang: 'es',
     theme: 'Ligtht',
@@ -23,7 +27,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   constructor(
     private router: Router,
-    public loginForm: BaseFormPlatformUsers
+    public loginForm: BaseFormPlatformUsers,
+    private headerFooterViewController: HeaderFooterViewControllerService
   ) { }
 
   onLogin(): void {
@@ -68,6 +73,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   handleErrorRecaptcha() { }
 
   ngOnInit(): void {
+    this.headerFooterViewController.setShowHeaderFooter();
     this.loginForm.baseForm.get('name').setValidators(null);
     this.loginForm.baseForm.get('name').updateValueAndValidity();
     this.loginForm.baseForm.get('email').setValidators(null);
@@ -79,6 +85,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
+    this.headerFooterViewController.setShowHeaderFooter(true);
     this.subscripcion.unsubscribe();
   }
 

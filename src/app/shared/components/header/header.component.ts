@@ -2,6 +2,10 @@ import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
+import {
+  ThemeSwitcherControllerService,
+} from '../../services/theme-switcher-controller.service';
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -9,7 +13,6 @@ import { FormControl } from '@angular/forms';
 })
 export class HeaderComponent implements OnInit {
   @Output() toggleSidenav = new EventEmitter<void>();
-  @Output() toggleDarkTheme = new EventEmitter<string>(null);
 
   toggleDarkThemeControl = new FormControl(false);
   userData = {
@@ -20,7 +23,7 @@ export class HeaderComponent implements OnInit {
   };
   isLogged = 'true';
 
-  constructor(private overlayContainer: OverlayContainer) { }
+  constructor(private overlayContainer: OverlayContainer, private themeSwitcher: ThemeSwitcherControllerService) { }
 
   onToggleSidenav(): void {
     this.toggleSidenav.emit();
@@ -30,7 +33,7 @@ export class HeaderComponent implements OnInit {
 
   ngOnInit(): void {
     this.toggleDarkThemeControl.valueChanges.subscribe((darkMode) => {
-      this.toggleDarkTheme.emit(darkMode ? 'dark-theme' : 'light-theme');
+      this.themeSwitcher.setThemeClass(darkMode ? 'dark-theme' : 'light-theme');
     });
   }
 

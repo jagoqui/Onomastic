@@ -1,29 +1,28 @@
 <div  id="container" fxFlex = "98"  fxLayout = "column">
   <!-- Actions buttons -->
     <div id = "actions_buttons" fxLayout="row" fxLayoutAlign="space-between center">
-      <button fxFlex = "30" mat-raised-button fxLayout = "row"  fxLayoutAlign="center center" class="mat-headline">
+      <button fxFlex  mat-raised-button fxLayout = "row"  fxLayoutAlign="center center" class="mat-headline">
         <div  fxLayout="column" fxLayoutAlign="center start" >
           <span class="button-title">Total de correos</span>
           <span class="mat-title">30K</span>
         </div>
         <div  fxFlex class="circle">
-          <mat-icon  class="icon">autorenew</mat-icon>
+          <mat-icon>autorenew</mat-icon>
         </div>
       </button>
-      <button fxFlex = "30" mat-raised-button fxFlex fxLayout="row" fxLayoutAlign="center center"  class="mat-headline">
+      <button fxFlex  mat-raised-button fxFlex fxLayout="row" fxLayoutAlign="center center"  class="mat-headline">
         <div fxLayout="column" fxLayoutAlign="center start">
           <span class="button-title">Total de usuarios</span>
           <span class="mat-title">20K</span>
         </div>
-        <div fxFlex  class="circle">
-          <mat-icon class="icon">people_outline</mat-icon>
+        <div fxFlex class="circle">
+          <mat-icon>people_outline</mat-icon>
         </div>
-
       </button>
-      <button fxFlex = "30" mat-raised-button class="subheading-2">Agregar usuario</button>
+      <button id = "add-mail-user" fxFlex  mat-raised-button>Agregar usuario</button>
     </div>
     <!-- Filter -->
-    <mat-form-field>
+    <mat-form-field id="filter">
       <mat-label>Filtrar</mat-label>
       <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
     </mat-form-field>

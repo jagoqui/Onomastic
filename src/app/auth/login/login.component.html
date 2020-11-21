@@ -35,7 +35,7 @@
           [disabled]="loginForm.baseForm.valid">conectar</button>
       </form>
       <!-- Password recovery -->
-      <a mat-hint class="forgot-password" fxFlex="20" fxFlexAlign="center" routerLink="/forgot-password" mat-menu-item>
+      <a mat-hint class="forgot-password" fxFlex="20" fxFlexAlign="center" routerLink="/forgot-password" mat-menu-item (click) = "ngOnDestroy()">
         ¿Olvidaste tu contraseña?
       </a>
     </mat-card-content>

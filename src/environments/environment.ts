@@ -4,5 +4,6 @@
 
 export const environment = {
   production: false,
-  API_URL: 'http://arquimedes.udea.edu.co:8096/onomastico/usuariosemail'
+  API_URL: 'http://arquimedes.udea.edu.co:8096/onomastico/usuariosemail',
+  RECAPTCHA_KEY: '6Le8wOIZAAAAAFeAhjhZtmkI8oUTqsjkLnJzazwL'
 };

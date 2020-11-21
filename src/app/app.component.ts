@@ -1,12 +1,17 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
-import { Location } from '@angular/common';
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import {
+  HeaderFooterViewControllerService,
+} from './shared/services/header-footer-view-controller.service';
+import {
   SidenavControllerService,
 } from './shared/services/sidenav-controller.service';
+import {
+  ThemeSwitcherControllerService,
+} from './shared/services/theme-switcher-controller.service';
 
 @Component({
   selector: 'app-root',
@@ -19,13 +24,13 @@ export class AppComponent implements OnInit, OnDestroy {
 
   opened = false;
   private destroy$ = new Subject<any>();
-  onHeaderView: boolean;
 
   constructor(
     private overlayContainer: OverlayContainer,
     private sidenavController: SidenavControllerService,
-    location: Location
-  ) { this.onHeaderView = location.path() !== '/login' ? true : false; }
+    private themeSwitcherController: ThemeSwitcherControllerService,
+    public headerFooterViewController: HeaderFooterViewControllerService
+  ) { }
 
   onSetTheme(classTheme: string) {
     this.className = classTheme;
@@ -35,7 +40,13 @@ export class AppComponent implements OnInit, OnDestroy {
       this.overlayContainer.getContainerElement().classList.remove(classTheme);
     }
   }
+
   ngOnInit(): void {
+    this.themeSwitcherController.themeClass$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (theme: string) => (this.onSetTheme(theme))
+      );
     this.sidenavController.sidebarOpened$
       .pipe(takeUntil(this.destroy$))
       .subscribe(
