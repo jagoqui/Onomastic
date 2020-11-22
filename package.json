@@ -1,9 +1,10 @@
 {
   "name": "onomastic",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "prebuild": "npm --no-git-tag-version version patch",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -34,7 +35,7 @@
     "@angular/compiler-cli": "~11.0.1",
     "@types/jasmine": "~3.6.1",
     "@types/jasminewd2": "~2.0.8",
-    "@types/node": "^14.14.8",
+    "@types/node": "^14.14.9",
     "codelyzer": "^6.0.1",
     "jasmine-core": "~3.6.0",
     "jasmine-spec-reporter": "~6.0.0",

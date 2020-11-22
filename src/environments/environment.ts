@@ -3,6 +3,7 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
+  appVersion: require ( '../../package.json' ) .version + '-dev',
   production: false,
   API_URL: 'http://arquimedes.udea.edu.co:8096/onomastico/usuariosemail',
   RECAPTCHA_KEY: '6Le8wOIZAAAAAFeAhjhZtmkI8oUTqsjkLnJzazwL'
