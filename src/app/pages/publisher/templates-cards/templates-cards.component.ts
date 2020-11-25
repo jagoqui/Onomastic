@@ -1,4 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalComponent} from './components/modal/modal.component';
 
 @Component({
   selector: 'app-templates-cards',
@@ -7,9 +9,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class TemplatesCardsComponent implements OnInit {
 
-  constructor() { }
+  constructor(private dialog: MatDialog) { }
 
   ngOnInit(): void {
   }
 
+  onOpenModal(): void {
+    this.dialog.open(ModalComponent, {
+      height: '100%',
+      width: '100%',
+      hasBackdrop: true,
+      data: { title: 'New template' },
+    });
+  }
 }
