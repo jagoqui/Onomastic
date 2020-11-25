@@ -1,22 +1,20 @@
+@import 'src/assets/custom_styles/material_custom_theme.scss';
+
 app-onomastic-logo {
-  background-color: #E4FFE5;
+  background-color: mat-color($mat-primary, lighter);
 }
 
 mat-card {
   mat-card-content {
     form {
-      border     : 0.1875rem  #707070 solid;
+      border     : 0.1875rem mat-color($mat-accent, main) solid;
       align-items: center;
 
       .mat-form-field,
       #login-buttton,
       .forgot-password {
-        font-family   : Poppins-SemiBold;
-        font-style    : normal;
-        font-weight   : bold;
-        width         : 79.39%;
-        letter-spacing: 0.0039rem;
-        border-radius : 1.875rem;
+        width        : 79.39%;
+        border-radius: 1.875rem;
       }
 
       mat-label {
@@ -27,13 +25,13 @@ mat-card {
       ::ng-deep .mat-form-field {
 
         .mat-input-element {
-          font-size: 2.1875rem;
-          color    : #707070;
+          font-size: 1.3889rem;
+          color    : mat-color($mat-accent, darker)
         }
 
 
         .mat-form-field-label {
-          color: #8B8C94
+          color: mat-color($mat-accent, lighter);
         }
 
 
@@ -48,15 +46,17 @@ mat-card {
       }
 
       #hide-password-button {
-        @mixin md-icon-size($size: 24px) {
+
+        @mixin md-icon-size($size: 1.1111rem) {
           font-size: $size;
           height   : $size;
           width    : $size;
         }
 
+        @include md-icon-size(2.6667rem);
+
         .material-icons.mat-icon {
-          @include md-icon-size(48px);
-          margin-left: -1.25rem;
+          @include md-icon-size(2.2222rem);
         }
       }
 
@@ -73,21 +73,36 @@ mat-card {
       #login-buttton {
         padding  : 1.5625rem;
         font-size: 2.375rem;
-        color    : #E8EAFF;
+        color    : white;
         bottom   : -2.8125rem;
+
 
         .mat-button {
           border-radius: 1.875rem;
+
+        }
+
+        &:hover {
+          background-color: mat-color($mat-primary, darker);
+        }
+
+        &:disabled {
+          background-color: mat-color($mat-primary, lighter)
         }
       }
+
     }
 
     .forgot-password {
       text-decoration: none;
       margin-top     : 6.25rem;
       font-size      : 1.5rem;
-      color          : rgba(90, 96, 127, 1);
+      color          : mat-color($mat-accent, main);
       letter-spacing : 0.0026rem;
+
+      &:hover {
+        color: mat-color($mat-primary, darker);
+      }
     }
   }
 }

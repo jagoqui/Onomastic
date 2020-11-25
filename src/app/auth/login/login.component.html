@@ -5,11 +5,11 @@
   <mat-card fxFlex fxLayout="row" fxLayoutAlign="center center">
     <mat-card-content fxLayout="column" fxFlex="73.5">
       <form [formGroup]="loginForm.baseForm" (ngSubmit)="onLogin()" fxLayout="column">
-        <!-- Username -->
+        <!-- Email -->
         <mat-form-field id="user-input" hideRequiredMarker appearance="outline">
-          <mat-label>usuario</mat-label>
-          <input matInput type="text" matInput required formControlName="username" (keydown)="handleKeyDown($event)">
-          <mat-error *ngIf="checkField('username')">{{loginForm.errorMessage}}</mat-error>
+          <mat-label>correo</mat-label>
+          <input matInput type="text" matInput required formControlName="email" (keydown)="handleKeyDown($event)">
+          <mat-error *ngIf="checkField('email')">{{loginForm.errorMessage["email"]}}</mat-error>
         </mat-form-field>
         <!-- Password -->
         <mat-form-field id="password-input" hideRequiredMarker appearance="outline">
@@ -20,22 +20,21 @@
             [title]="hidePassword ? 'Show password': 'Hide password'">
             <mat-icon>{{hidePassword ? "visibility_off" :"visibility"}}</mat-icon>
           </button>
-          <mat-error *ngIf="checkField('password')">{{loginForm.errorMessage}}</mat-error>
+          <mat-error *ngIf="checkField('password')">{{loginForm.errorMessage["password"]}}</mat-error>
         </mat-form-field>
         <!-- Captcha -->
         <ngx-recaptcha2 #captchaElem
           [siteKey]="recaptchaConfig.siteKey" (reset)="handleResetRecaptcha()" (expire)="handleExpireRecaptcha()"
           (error)="handleErrorRecaptcha()" (load)="handleLoadRecaptcha()" (success)="handleSuccessRecaptcha($event)"
           [useGlobalDomain]="false" [size]="recaptchaConfig.size" [hl]="recaptchaConfig.lang"
-          [theme]="recaptchaConfig.theme" [type]="recaptchaConfig.type" formControlName="recaptcha">
+          [theme]="recaptchaConfig.theme" [type]="recaptchaConfig.type">
         </ngx-recaptcha2>
-        <mat-error *ngIf="checkField('recaptcha')">{{loginForm.errorMessage}}</mat-error>
         <!-- Login -->
         <button id="login-buttton" type="submit" mat-button mat-raised-button color="primary"
-          [disabled]="loginForm.baseForm.valid">conectar</button>
+          [disabled] = "isValidForm()">conectar</button>
       </form>
       <!-- Password recovery -->
-      <a mat-hint class="forgot-password" fxFlex="20" fxFlexAlign="center" routerLink="/forgot-password" mat-menu-item (click) = "ngOnDestroy()">
+    <a mat-hint class="forgot-password" fxFlex="20" fxFlexAlign="center" routerLink="/forgot-password" mat-menu-item (click) = "ngOnDestroy()">
         ¿Olvidaste tu contraseña?
       </a>
     </mat-card-content>

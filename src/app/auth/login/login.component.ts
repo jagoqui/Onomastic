@@ -22,9 +22,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     size: 'Normal',
     lang: 'es',
     theme: 'Ligtht',
-    type: 'Image'
+    type: 'Image',
+    success: false
   };
-
   constructor(
     private router: Router,
     public loginForm: BaseFormPlatformUsers,
@@ -32,10 +32,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   ) { }
 
   onLogin(): void {
-    if (this.loginForm.baseForm.invalid) {
-      return;
-    }
-
+    this.router.navigate(['/home']);
     // const formValue = this.loginForm.baseForm.value;
     // this.subscripcion.add(
     //   this.authSvc.login(formValue).subscribe(userRes => {
@@ -45,6 +42,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     //     }
     //   })
     // );
+  }
+
+  isValidForm(): boolean {
+    return this.loginForm.baseForm.invalid && !this.recaptchaConfig.success;
   }
 
   handleKeyDown(event: any) {
@@ -60,14 +61,12 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   handleResetRecaptcha() { }
 
-  handleExpireRecaptcha() { }
+  handleExpireRecaptcha() { this.recaptchaConfig.success = false; }
 
   handleLoadRecaptcha() { }
 
   handleSuccessRecaptcha(event: any) {
-    if (event) {
-      alert('Sucess');
-    }
+    this.recaptchaConfig.success = true;
   }
 
   handleErrorRecaptcha() { }
