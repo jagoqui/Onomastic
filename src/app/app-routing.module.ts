@@ -16,7 +16,7 @@ const routes: Routes = [
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
   },
   {
-    path: 'admin',
+    path: 'ADMIN',
     loadChildren: () => import('./pages/admin/admin.module').then(m => m.AdminModule)
   },
   {
@@ -36,7 +36,7 @@ const routes: Routes = [
     loadChildren: () => import('./auth/confirmation-email/confirmation-email.module').then(m => m.ConfirmationEmailModule)
   },
   {
-    path: 'publisher',
+    path: 'PUBLISHER',
     loadChildren: () => import('./pages/publisher/publisher.module').then(m => m.PublisherModule)
   },
   {

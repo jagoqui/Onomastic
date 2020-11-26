@@ -1,7 +1,16 @@
-import { OverlayContainer } from '@angular/cdk/overlay';
-import { Component, EventEmitter, OnInit, Output } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
+import { PlatformUserResponse } from '../../models/platform-users.model';
 import {
   ThemeSwitcherControllerService,
 } from '../../services/theme-switcher-controller.service';
@@ -11,30 +20,47 @@ import {
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   @Output() toggleSidenav = new EventEmitter<void>();
 
+  platformUserData: PlatformUserResponse;
   toggleDarkThemeControl = new FormControl(false);
-  userData = {
-    name: 'Jaidiver Gómez',
-    email: 'jaidiver.gomez@udea.edu.co',
-    role: 'ADMIN',
-    verified: 'true'
-  };
-  isLogged = 'true';
+  isLogged = false;
+  private destroy$ = new Subject<any>();
 
-  constructor(private overlayContainer: OverlayContainer, private themeSwitcher: ThemeSwitcherControllerService) { }
+  constructor(private authSvc: AuthService, private themeSwitcher: ThemeSwitcherControllerService) { }
 
   onToggleSidenav(): void {
     this.toggleSidenav.emit();
   }
 
-  onLogout() { }
+  onLogout() {
+    this.authSvc.logout();
+  }
 
   ngOnInit(): void {
+    this.authSvc.isLoggged$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((isLogged: boolean) => {
+        if (isLogged) {
+          this.isLogged = isLogged;
+        }
+      });
+
+    this.authSvc.userResponse$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((userRes: PlatformUserResponse) => {
+        if (userRes) {
+          this.platformUserData = userRes;
+        }
+      });
+
     this.toggleDarkThemeControl.valueChanges.subscribe((darkMode) => {
       this.themeSwitcher.setThemeClass(darkMode ? 'dark-theme' : 'light-theme');
     });
   }
 
+  ngOnDestroy(): void {
+
+  }
 }

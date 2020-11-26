@@ -5,6 +5,6 @@
 export const environment = {
   appVersion: require('../../package.json').version + '-dev',
   production: false,
-  API_URL: 'http://arquimedes.udea.edu.co:8096/onomastico/usuariosemail',
+  API_URL: 'http://arquimedes.udea.edu.co:8096/onomastico',
   RECAPTCHA_KEY: '6Le7wOIZAAAAAL4OZ9W0B-Xju1nca9uRiS02Iazx'
 };

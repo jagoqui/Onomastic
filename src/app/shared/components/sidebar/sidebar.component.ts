@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { AuthService } from 'src/app/auth/services/auth.service';
 
 import {
   SidenavControllerService,
@@ -15,11 +16,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
   opened = false;
   private destroy$ = new Subject<any>();
 
-  constructor(private sidenavController: SidenavControllerService) { }
+  constructor(private authSvc: AuthService, private sidenavController: SidenavControllerService) { }
 
   onExit(): void {
-    // this.authSvc.logout();
+    this.authSvc.logout();
     this.sidenavController.openSidebar(false);
+    this.ngOnDestroy();
   }
 
   ngOnInit(): void {

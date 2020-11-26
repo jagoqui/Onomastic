@@ -4,10 +4,10 @@ import { FormBuilder, Validators } from '@angular/forms';
 @Injectable({ providedIn: 'root' })
 export class BaseFormPlatformUsers {
   private emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
-  private passwordPattern = '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}';
+  // private passwordPattern = '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}';
   errorMessage = {
     name: '',
-    email: '',
+    userEmail: '',
     username: '',
     password: '',
     recaptcha: '',
@@ -19,10 +19,9 @@ export class BaseFormPlatformUsers {
 
   baseForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(10)]],
-    email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
+    userEmail: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
     username: ['', [Validators.required]],
-    password: ['', [Validators.required, Validators.pattern(this.passwordPattern)]],
-    recaptcha: ['', [Validators.required]],
+    password: ['', [Validators.required]],
     association: ['', [Validators.required]],
     role: ['', [Validators.required]],
   });

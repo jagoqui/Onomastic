@@ -1,6 +1,6 @@
 export class MailUsers {
 }
-export interface MailUsers {
+export interface MailUser {
   id: {
     tipoIdentificacion: string,
     numeroIdentificacion: string

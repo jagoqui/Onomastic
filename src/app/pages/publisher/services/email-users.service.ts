@@ -17,7 +17,7 @@ export class EmailUsersService {
 
   getAll(): Observable<MailUserResponse[]> {
     return this.http
-      .get<MailUserResponse[]>(`${environment.API_URL}`)
+      .get<MailUserResponse[]>(`${environment.API_URL}/usuariosemail`)
       .pipe(catchError(this.handlerError));
   }
 
