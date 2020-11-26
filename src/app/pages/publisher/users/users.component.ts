@@ -5,11 +5,15 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 
 import { EmailUsersService } from '../services/email-users.service';
+import {
+  ModalMailUsersComponent,
+} from './components/modal-mail-users/modal-mail-users.component';
 
 @Component({
   selector: 'app-users',
@@ -19,11 +23,17 @@ import { EmailUsersService } from '../services/email-users.service';
 export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild(MatSort) sort: MatSort;
 
-  columnsToDisplay = ['id', 'plataformaPorUsuarioCorreo', 'nombre', 'email', 'fechaNacimiento', 'vinculacionPorUsuarioCorreo', 'asociacionPorUsuarioCorreo', 'estado', 'actions'];
+  columnsToDisplay = [
+    'id', 'plataformaPorUsuarioCorreo',
+    'nombre', 'email', 'fechaNacimiento',
+    'vinculacionPorUsuarioCorreo',
+    'asociacionPorUsuarioCorreo',
+    'estado', 'actions'
+  ];
   dataSource = new MatTableDataSource();
   private destroy$ = new Subject<any>();
 
-  constructor(private userSvc: EmailUsersService) { }
+  constructor(private dialog: MatDialog, private userSvc: EmailUsersService) { }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -42,12 +52,10 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   onOpenModal(user = {}): void {
-    // this.dialog.open(ModalComponent, {
-    //   height: '400px',
-    //   width: '600px',
-    //   hasBackdrop: false,
-    //   data: { title: 'New user', user },
-    // });
+    this.dialog.open(ModalMailUsersComponent, {
+      hasBackdrop: true,
+      data: { title: 'Nuevo destinario', user },
+    });
   }
 
   ngAfterViewInit(): void {

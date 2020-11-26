@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private headerFooterViewController: HeaderFooterViewControllerService
   ) {
     this.onResetCaptcha();
+    this.recaptchaConfig.success = false;
   }
 
   onLogin(): void {
@@ -88,8 +89,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     this.loginForm.baseForm.get('name').setValidators(null);
     this.loginForm.baseForm.get('name').updateValueAndValidity();
-    this.loginForm.baseForm.get('username').setValidators(null);
-    this.loginForm.baseForm.get('username').updateValueAndValidity();
     this.loginForm.baseForm.get('association').setValidators(null);
     this.loginForm.baseForm.get('association').updateValueAndValidity();
     this.loginForm.baseForm.get('role').setValidators(null);

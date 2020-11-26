@@ -19,9 +19,8 @@ export class SidebarComponent implements OnInit, OnDestroy {
   constructor(private authSvc: AuthService, private sidenavController: SidenavControllerService) { }
 
   onExit(): void {
-    this.authSvc.logout();
     this.sidenavController.openSidebar(false);
-    this.ngOnDestroy();
+    this.authSvc.logout();
   }
 
   ngOnInit(): void {

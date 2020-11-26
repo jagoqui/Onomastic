@@ -1,0 +1,28 @@
+<h1 mat-dialog-title>{{data.title}}</h1>
+<div mat-dialog-content>
+  <mat-card fxFlex fxLayout="row" fxLayoutAlign="center center">
+    <mat-card-content fxLayout="column" fxFlex="73.5">
+      <form [formGroup]="mailUserForm.baseForm" (ngSubmit)="onSave()" fxLayout="column">
+        <!-- Name -->
+        <mat-form-field id="user-input" hideRequiredMarker appearance="outline">
+          <mat-label>Nombre</mat-label>
+          <input matInput type="text" matInput required formControlName="userEmail" (keydown)="handleKeyDown($event)">
+          <mat-error *ngIf="checkField('nombre')">{{mailUserForm.errorMessage["nombre"]}}</mat-error>
+        </mat-form-field>
+        <!-- Last name -->
+        <mat-form-field id="user-input" hideRequiredMarker appearance="outline">
+          <mat-label>Apelligo</mat-label>
+          <input matInput type="text" matInput required formControlName="userEmail" (keydown)="handleKeyDown($event)">
+          <mat-error *ngIf="checkField('apellido')">{{mailUserForm.errorMessage["apellido"]}}</mat-error>
+        </mat-form-field>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>
+<div mat-dialog-actions>
+  <button mat-button mat-dialog-close>Cancel</button>
+  <button mat-raised-button [mat-dialog-close]="close" color="primary" (click)="onSave()" ckdFocusInitial
+    [disabled]="mailUserForm.baseForm.invalid">
+    {{actionTODO}}
+  </button>
+</div>

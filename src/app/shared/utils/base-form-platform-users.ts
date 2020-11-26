@@ -8,7 +8,6 @@ export class BaseFormPlatformUsers {
   errorMessage = {
     name: '',
     userEmail: '',
-    username: '',
     password: '',
     recaptcha: '',
     association: '',
@@ -20,7 +19,6 @@ export class BaseFormPlatformUsers {
   baseForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(10)]],
     userEmail: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
-    username: ['', [Validators.required]],
     password: ['', [Validators.required]],
     association: ['', [Validators.required]],
     role: ['', [Validators.required]],

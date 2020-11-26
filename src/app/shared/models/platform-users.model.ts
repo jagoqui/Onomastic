@@ -6,8 +6,8 @@ export class PlatformUser {
 }
 
 export class PlatformUserResponse {
-  name: string;
   userEmail: string;
+  name: string;
   role: Role;
   token: string;
 }
