@@ -1,0 +1,33 @@
+@import 'src/assets/custom_styles/material_custom_theme.scss';
+
+#container {
+  margin: 0 auto;
+  padding-top: 2%;
+
+  #actions_buttons {
+    width: 20%;
+    margin-bottom: 0.5556rem;
+
+    #add-mail-user {
+      border-radius: 2.7778rem;
+      background: mat-color($mat-accent, main);
+
+      &:before {
+        position: fixed;
+        left         : 0%;
+        width: 100%;
+        height: 100%;
+        border-radius: 2.7778rem;
+        color        : white;
+        transition   : all 0.35s ease;
+        font-weight  : 1.1111rem;
+        content      : "Agregar usuario";
+        background   : mat-color($mat-primary, main);
+      }
+      &:hover:before {
+        content: "";
+        width  : 15%;
+      }
+    }
+  }
+}
