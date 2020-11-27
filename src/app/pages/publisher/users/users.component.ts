@@ -54,7 +54,7 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
   onOpenModal(user = {}): void {
     this.dialog.open(ModalMailUsersComponent, {
       hasBackdrop: true,
-      data: { title: 'Nuevo destinario', user },
+      data: { title: user ? 'Actualizar destinario' : 'Nuevo destinario', user },
     });
   }
 

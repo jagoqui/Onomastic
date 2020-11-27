@@ -45,10 +45,11 @@ export class AuthService {
     return this.http.post<PlatformUserResponse>(`${environment.API_URL}/auth/signin`, authData).pipe(
       map((userResponse: any) => {
         const decode = jwtHelper.decodeToken(userResponse.accessToken);
+
         const userRes: PlatformUserResponse = {
           name: decode.nombre,
           userEmail: authData.userEmail,
-          role: decode.role === 'ADMIN' ? 'ADMIN' : 'PUBLISHER',
+          role: decode.rol,
           token: userResponse.accessToken
         };
         localStorage.setItem('PlatformUser', JSON.stringify(userRes));

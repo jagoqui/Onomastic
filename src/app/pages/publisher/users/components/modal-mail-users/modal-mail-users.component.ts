@@ -16,7 +16,7 @@ enum Action {
   styleUrls: ['./modal-mail-users.component.scss']
 })
 export class ModalMailUsersComponent implements OnInit {
-  actionTODO = Action.NEW;
+  actionTODO = '';
   showPasswordField = true;
   close = false;
 
@@ -44,6 +44,8 @@ export class ModalMailUsersComponent implements OnInit {
   ngOnInit(): void {
     if (this.data?.user.hasOwnProperty('id')) {
       this.actionTODO = Action.EDIT;
+    } else {
+      this.actionTODO = Action.NEW;
     }
   }
 
