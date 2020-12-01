@@ -97,6 +97,6 @@ export class AuthService {
     localStorage.clear();
     this.PlatformUserRes.next(null);
     this.isLogged.next(false);
-    this.router.navigate(['/login']);
+    this.router.navigate(['']);
   }
 }

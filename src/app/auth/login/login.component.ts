@@ -3,9 +3,6 @@ import { Router } from '@angular/router';
 import { ReCaptcha2Component } from 'ngx-captcha';
 import { Subscription } from 'rxjs';
 import {
-  HeaderFooterViewControllerService,
-} from 'src/app/shared/services/header-footer-view-controller.service';
-import {
   BaseFormPlatformUsers,
 } from 'src/app/shared/utils/base-form-platform-users';
 import { environment } from 'src/environments/environment';
@@ -33,8 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private authSvc: AuthService,
     private router: Router,
-    public loginForm: BaseFormPlatformUsers,
-    private headerFooterViewController: HeaderFooterViewControllerService
+    public loginForm: BaseFormPlatformUsers
   ) {
     this.onResetCaptcha();
     this.recaptchaConfig.success = false;
@@ -85,8 +81,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.headerFooterViewController.setShowHeaderFooter();
-
     this.loginForm.baseForm.get('name').setValidators(null);
     this.loginForm.baseForm.get('name').updateValueAndValidity();
     this.loginForm.baseForm.get('association').setValidators(null);
@@ -96,7 +90,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.headerFooterViewController.setShowHeaderFooter(true);
     this.subscripcion.unsubscribe();
   }
 

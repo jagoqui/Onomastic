@@ -16,9 +16,12 @@ export class SidebarComponent implements OnInit, OnDestroy {
   opened = false;
   private destroy$ = new Subject<any>();
 
-  constructor(private authSvc: AuthService, private sidenavController: SidenavControllerService) { }
+  constructor(
+    private authSvc: AuthService,
+    private sidenavController: SidenavControllerService
+  ) { }
 
-  onExit(): void {
+  onExit() {
     this.sidenavController.openSidebar(false);
     this.authSvc.logout();
   }

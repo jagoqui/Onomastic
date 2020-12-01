@@ -5,9 +5,6 @@ import { takeUntil } from 'rxjs/operators';
 
 import { AuthService } from './auth/services/auth.service';
 import {
-  HeaderFooterViewControllerService,
-} from './shared/services/header-footer-view-controller.service';
-import {
   SidenavControllerService,
 } from './shared/services/sidenav-controller.service';
 import {
@@ -27,11 +24,10 @@ export class AppComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<any>();
 
   constructor(
-    private authSvc: AuthService,
+    public authSvc: AuthService,
     private overlayContainer: OverlayContainer,
     private sidenavController: SidenavControllerService,
-    private themeSwitcherController: ThemeSwitcherControllerService,
-    public headerFooterViewController: HeaderFooterViewControllerService
+    private themeSwitcherController: ThemeSwitcherControllerService
   ) { }
 
   onSetTheme(classTheme: string) {

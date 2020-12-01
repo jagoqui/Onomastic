@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { CanActivate } from '@angular/router';
+import { CanActivate, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { map, take } from 'rxjs/operators';
 import { AuthService } from 'src/app/auth/services/auth.service';
@@ -10,14 +10,21 @@ import { PlatformUserResponse } from '../models/platform-users.model';
   providedIn: 'root'
 })
 export class NegateCheckLoginGuard implements CanActivate {
-  constructor(private authSvc: AuthService) { }
+  constructor(private authSvc: AuthService, private route: Router) { }
 
   canActivate(): Observable<boolean> {
     return this.authSvc.userResponse$.pipe(
       take(1),
-      map((userRes: PlatformUserResponse) => (!userRes ? true : false))
+      map((userRes: PlatformUserResponse) => {
+        if (!userRes) {
+          return true;
+        }
+        alert('Acceso denegado!');
+        return false;
+      })
     );
   }
+
 
 
 }

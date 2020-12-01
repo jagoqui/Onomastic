@@ -1,4 +1,4 @@
-<app-header *ngIf="headerFooterViewController.showHeaderFooter$|async" (toggleSidenav)="sidenav.toggle()"></app-header>
+<app-header *ngIf="authSvc.isLoggged$|async" (toggleSidenav)="sidenav.toggle()"></app-header>
 <mat-sidenav-container hasBackdrop="true">
   <mat-sidenav #sidenav mode="side" [(opened)]="opened" class="app-sidenav">
     <mat-toolbar color="accent">
@@ -8,6 +8,6 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <router-outlet></router-outlet>
-    <app-footer *ngIf="headerFooterViewController.showHeaderFooter$|async"></app-footer>
+    <app-footer *ngIf="authSvc.isLoggged$|async"></app-footer>
   </mat-sidenav-content>
 </mat-sidenav-container>
