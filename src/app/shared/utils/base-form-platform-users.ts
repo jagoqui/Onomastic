@@ -9,7 +9,7 @@ export class BaseFormPlatformUsers {
     name: '',
     userEmail: '',
     password: '',
-    recaptcha: '',
+    recaptcha: 'No marcado',
     association: '',
     role: ''
   };
@@ -20,13 +20,14 @@ export class BaseFormPlatformUsers {
     name: ['', [Validators.required, Validators.minLength(10)]],
     userEmail: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
     password: ['', [Validators.required]],
+    recaptcha: ['', Validators.required],
     association: ['', [Validators.required]],
     role: ['', [Validators.required]],
   });
 
-  isValidField(field?: string): boolean {
+  isValidField(field: string): boolean {
     this.getErrorMessage(field);
-    return ((this.baseForm.get(field).touched || this.baseForm.get(field).dirty) && !this.baseForm.get(field).valid);
+    return (((this.baseForm.get(field).touched || this.baseForm.get(field).dirty) && !this.baseForm.get(field).valid));
   }
 
   private getErrorMessage(field: string): void {
@@ -34,11 +35,11 @@ export class BaseFormPlatformUsers {
 
     if (errors) {
       const messages = {
-        required: 'es requerido!',
-        pattern: `es ivalido!`,
+        required: ' es requerido!',
+        pattern: ` es ivalido!`,
       };
       const errorKey = Object.keys(errors).find(Boolean);
-      this.errorMessage[field] = 'El campo ' + messages[errorKey];
+      this.errorMessage[field] = 'El campo ' + `${field}` + messages[errorKey];
     } else {
       this.errorMessage[field] = null;
     }

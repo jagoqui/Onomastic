@@ -3,6 +3,7 @@ import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { AuthService } from './auth/services/auth.service';
 import {
   HeaderFooterViewControllerService,
 } from './shared/services/header-footer-view-controller.service';
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<any>();
 
   constructor(
+    private authSvc: AuthService,
     private overlayContainer: OverlayContainer,
     private sidenavController: SidenavControllerService,
     private themeSwitcherController: ThemeSwitcherControllerService,
@@ -42,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
     this.themeSwitcherController.themeClass$
       .pipe(takeUntil(this.destroy$))
       .subscribe(

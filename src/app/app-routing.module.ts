@@ -9,38 +9,47 @@ import {
 const routes: Routes = [
   {
     path: '',
-    loadChildren: () => import('./auth/login/login.module').then(m => m.LoginModule)
+    redirectTo: '/login',
+    pathMatch: 'full',
   },
+
   {
     path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule)
+    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
+    // canActivate: [CheckLoginGuard]
   },
   {
     path: 'ADMIN',
-    loadChildren: () => import('./pages/admin/admin.module').then(m => m.AdminModule)
+    loadChildren: () => import('./pages/admin/admin.module').then(m => m.AdminModule),
+    // canActivate: [CheckLoginGuard]
   },
   {
     path: 'login',
-    loadChildren: () => import('./auth/login/login.module').then(m => m.LoginModule)
+    loadChildren: () => import('./auth/login/login.module').then(m => m.LoginModule),
+    // canActivate: [NegateCheckLoginGuard]
   },
   {
     path: 'profile',
-    loadChildren: () => import('./auth/profile/profile.module').then(m => m.ProfileModule)
+    loadChildren: () => import('./auth/profile/profile.module').then(m => m.ProfileModule),
+    // canActivate: [CheckLoginGuard]
   },
   {
     path: 'add-publisher',
-    loadChildren: () => import('./auth/add-publisher/add-publisher.module').then(m => m.AddPublisherModule)
+    loadChildren: () => import('./auth/add-publisher/add-publisher.module').then(m => m.AddPublisherModule),
+    // canActivate: [CheckLoginGuard]
   },
   {
     path: 'confirmation-email',
-    loadChildren: () => import('./auth/confirmation-email/confirmation-email.module').then(m => m.ConfirmationEmailModule)
+    loadChildren: () => import('./auth/confirmation-email/confirmation-email.module').then(m => m.ConfirmationEmailModule),
   },
   {
     path: 'PUBLISHER',
-    loadChildren: () => import('./pages/publisher/publisher.module').then(m => m.PublisherModule)
+    loadChildren: () => import('./pages/publisher/publisher.module').then(m => m.PublisherModule),
+    // canActivate: [CheckLoginGuard]
   },
   {
-    path: 'forgot-password', loadChildren: () => import('./auth/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule)
+    path: 'forgot-password', loadChildren: () => import('./auth/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule),
+    // canActivate: [NegateCheckLoginGuard]
   },
   {
     path: '**',
