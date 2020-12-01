@@ -32,10 +32,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   onSetTheme(classTheme: string) {
     this.className = classTheme;
+    this.overlayContainer.getContainerElement().classList.add(classTheme);
+
     if (classTheme === 'dark-theme') {
-      this.overlayContainer.getContainerElement().classList.add(classTheme);
+      this.overlayContainer.getContainerElement().classList.remove('ligth-theme');
     } else {
-      this.overlayContainer.getContainerElement().classList.remove(classTheme);
+      this.overlayContainer.getContainerElement().classList.remove('dark-theme');
     }
   }
 
