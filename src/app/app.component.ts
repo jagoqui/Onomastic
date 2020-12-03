@@ -11,6 +11,7 @@ import {
   ThemeSwitcherControllerService,
 } from './shared/services/theme-switcher-controller.service';
 
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -22,6 +23,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
   opened = false;
   private destroy$ = new Subject<any>();
+
 
   constructor(
     public authSvc: AuthService,
@@ -42,7 +44,6 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-
     this.themeSwitcherController.themeClass$
       .pipe(takeUntil(this.destroy$))
       .subscribe(

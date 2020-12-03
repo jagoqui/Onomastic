@@ -1,27 +1,165 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
 <div mat-dialog-content>
   <mat-card fxFlex fxLayout="row" fxLayoutAlign="center center">
-    <mat-card-content fxLayout="column" fxFlex="73.5">
+    <mat-card-content fxLayout="column" fxFlex>
       <form [formGroup]="mailUserForm.baseForm" (ngSubmit)="onSave()" fxLayout="column">
-        <!-- Name -->
-        <mat-form-field id="user-input" hideRequiredMarker appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input matInput type="text" matInput required formControlName="userEmail" (keydown)="handleKeyDown($event)">
-          <mat-error *ngIf="checkField('nombre')">{{mailUserForm.errorMessage["nombre"]}}</mat-error>
-        </mat-form-field>
-        <!-- Last name -->
-        <mat-form-field id="user-input" hideRequiredMarker appearance="outline">
-          <mat-label>Apelligo</mat-label>
-          <input matInput type="text" matInput required formControlName="userEmail" (keydown)="handleKeyDown($event)">
-          <mat-error *ngIf="checkField('apellido')">{{mailUserForm.errorMessage["apellido"]}}</mat-error>
-        </mat-form-field>
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <!-- Name -->
+          <mat-form-field hideRequiredMarker appearance="outline" fxFlex="47">
+            <mat-label>Nombre</mat-label>
+            <input matInput type="text" matInput required formControlName="nombre" (keydown)="handleKeyDown($event)">
+            <mat-error *ngIf="checkField('nombre')">{{mailUserForm.errorMessage["nombre"]}}</mat-error>
+          </mat-form-field>
+          <!-- Lastname -->
+          <mat-form-field hideRequiredMarker appearance="outline" fxFlex="47">
+            <mat-label>Apellido</mat-label>
+            <input matInput type="text" matInput required formControlName="apellido" (keydown)="handleKeyDown($event)">
+            <mat-error *ngIf="checkField('apellido')">{{mailUserForm.errorMessage["apellido"]}}</mat-error>
+          </mat-form-field>
+        </div>
+        <!-- ID -->
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <!-- ID type -->
+          <mat-form-field hideRequiredMarker fxFlex="47" formGroupName="id">
+            <mat-select placeholder="Tipo de documento" formControlName="tipoIdentificacion"
+              (keydown)="handleKeyDown($event)">
+              <mat-option>-- Seleccione una opción --</mat-option>
+              <mat-option value="C.C">Cédula de ciudadania</mat-option>
+              <mat-option value="T.I">Tarjeta de identidad</mat-option>
+              <mat-option value="C.E">Cédula de extrageria</mat-option>
+            </mat-select>
+            <mat-error *ngIf="checkField('tipoIdentificacion','id')">
+              {{mailUserForm.errorMessage['id'].tipoIdentificacion}}</mat-error>
+          </mat-form-field>
+          <!-- ID number -->
+          <mat-form-field hideRequiredMarker appearance="outline" fxFlex="47" formGroupName="id">
+            <mat-label>Número de identificación</mat-label>
+            <input matInput type="text" matInput required formControlName="numeroIdentificacion"
+              (keydown)="handleKeyDown($event)">
+            <mat-error *ngIf="checkField('numeroIdentificacion','id' )">
+              {{mailUserForm.errorMessage['id'].numeroIdentificacion}}</mat-error>
+          </mat-form-field>
+        </div>
+        <!-- Birhtday/Gender -->
+        <div fxLayout="row" fxLayoutAlign="space-between center">
+          <!-- Birhtday -->
+          <mat-form-field appearance="fill" fxFlex="47">
+            <mat-label>Fecha de naciemiento</mat-label>
+            <input matInput [matDatepicker]="dp" formControlName="fechaNacimiento" (dateChange)="addEvent($event)">
+            <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
+            <mat-datepicker #dp></mat-datepicker>
+            <mat-error *ngIf="checkField('fechaNacimiento')">{{mailUserForm.errorMessage["fechaNacimiento"]}}
+            </mat-error>
+          </mat-form-field>
+          <!-- Gender -->
+          <mat-form-field hideRequiredMarker fxFlex="47">
+            <mat-select placeholder="Genero" formControlName="genero" (keydown)="handleKeyDown($event)">
+              <mat-option>-- Seleccione una opción --</mat-option>
+              <mat-option value="MASCULINO">MASCULINO</mat-option>
+              <mat-option value="FEMENINO">FEMENINO</mat-option>
+              <mat-option value="OTRO">OTRO</mat-option>
+            </mat-select>
+            <mat-error *ngIf="checkField('genero')">
+              {{mailUserForm.errorMessage["genero"]}}</mat-error>
+          </mat-form-field>
+        </div>
+        <div formArrayName="asociacionPorUsuarioCorreo" *ngFor="let mailAssociation of mailUserForm.baseForm.get('asociacionPorUsuarioCorreo')['controls'];
+          let i = index" [formGroupName]="i" fxLayout ="row" fxFlexAlign="space-between center">
+          <!-- Association -->
+          <div fxFlex="70">
+            <mat-form-field hideRequiredMarker fxFlex="90">
+              <mat-select placeholder="Asociación" formControlG="nombre" (keydown)="handleKeyDown($event)">
+                <mat-option>-- Seleccione una opción --</mat-option>
+                <mat-option *ngFor="let association of associations" [value]="association['nombre']">
+                  {{association['nombre']}}</mat-option>
+              </mat-select>
+              <!-- <mat-error *ngIf="checkField('nombre','asociacionPorUsuarioCorreo')">
+                {{mailUserForm.errorMessage['asociacionPorUsuarioCorreo']}}</mat-error> -->
+            </mat-form-field>
+          </div>
+          <!-- Actions list -->
+          <div fxFlex="25" fxLayout="row" fxFlexAlign="space-between center">
+            <div *ngIf="i>0" fxFlex="47">
+              <button mat-mini-fab color="warn" title="Eliminar asociación"
+                (click)="removeOrClearByName(i,'asociacionPorUsuarioCorreo')">
+                <mat-icon>remove</mat-icon>
+              </button>
+            </div>
+            <div *ngIf="i<10" fxFlex="47">
+              <button mat-mini-fab color="primary" title="Agregar asociación"
+                (click)="addByNameFormGroup('asociacionPorUsuarioCorreo')">
+                <mat-icon>playlist_add</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div formArrayName="vinculacionPorUsuarioCorreo" *ngFor="let bodyType of mailUserForm.baseForm.get('vinculacionPorUsuarioCorreo')['controls'];
+          let i = index" [formGroupName]="i" fxLayout ="row" fxFlexAlign="space-between center">
+          <!-- Bonding -->
+          <div fxFlex="70">
+            <mat-form-field hideRequiredMarker fxFlex="90">
+              <mat-select placeholder="Vinculación" formControlG="nombre" (keydown)="handleKeyDown($event)">
+                <mat-option>-- Seleccione una opción --</mat-option>
+                <mat-option *ngFor="let bondingType of bondingTypes" [value]="bondingType['nombre']">
+                  {{bondingType['nombre']}}</mat-option>
+              </mat-select>
+              <!-- <mat-error *ngIf="checkField('nombre','asociacionPorUsuarioCorreo')">
+                {{mailUserForm.errorMessage['asociacionPorUsuarioCorreo']}}</mat-error> -->
+            </mat-form-field>
+          </div>
+          <!-- Actions list -->
+          <div fxFlex="25" fxLayout="row" fxFlexAlign="space-between center">
+            <div *ngIf="i>0" fxFlex="47">
+              <button mat-mini-fab color="warn" title="Eliminar vinculación"
+                (click)="removeOrClearByName(i,'vinculacionPorUsuarioCorreo')">
+                <mat-icon>remove</mat-icon>
+              </button>
+            </div>
+            <div *ngIf="i<10" fxFlex="47">
+              <button mat-mini-fab color="primary" title="Agregar vinculación"
+                (click)="addByNameFormGroup('vinculacionPorUsuarioCorreo')">
+                <mat-icon>playlist_add</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div formArrayName="programaAcademicoPorUsuarioCorreo" *ngFor="let academicProgram of mailUserForm.baseForm.get('programaAcademicoPorUsuarioCorreo')['controls'];
+          let i = index" [formGroupName]="i" fxLayout ="row" fxFlexAlign="space-between center">
+          <!-- Bonding -->
+          <div fxFlex="70">
+            <mat-form-field hideRequiredMarker fxFlex="90">
+              <mat-select placeholder="Programa" formControlG="nombre" (keydown)="handleKeyDown($event)">
+                <mat-option>-- Seleccione una opción --</mat-option>
+                <mat-option *ngFor="let program of programs" [value]="program['nombre']">
+                  {{program['nombre']}}</mat-option>
+              </mat-select>
+              <!-- <mat-error *ngIf="checkField('nombre','asociacionPorUsuarioCorreo')">
+                {{mailUserForm.errorMessage['asociacionPorUsuarioCorreo']}}</mat-error> -->
+            </mat-form-field>
+          </div>
+          <!-- Actions list -->
+          <div fxFlex="25" fxLayout="row" fxFlexAlign="space-between center">
+            <div *ngIf="i>0" fxFlex="47">
+              <button mat-mini-fab color="warn" title="Eliminar programa"
+                (click)="removeOrClearByName(i,'programaAcademicoPorUsuarioCorreo')">
+                <mat-icon>remove</mat-icon>
+              </button>
+            </div>
+            <div *ngIf="i<10" fxFlex="47">
+              <button mat-mini-fab color="primary" title="Agregar programa"
+                (click)="addByNameFormGroup('programaAcademicoPorUsuarioCorreo')" >
+                <mat-icon>playlist_add</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
       </form>
     </mat-card-content>
   </mat-card>
 </div>
-<div mat-dialog-actions>
-  <button mat-button mat-dialog-close>Cancel</button>
-  <button mat-raised-button [mat-dialog-close]="close" color="primary" (click)="onSave()">
+<div mat-dialog-actions fxLayout="row" fxLayoutAlign="end end">
+  <button mat-raised-button fxFlex="20" color="warn" (click)="onClose(null)">Cancelar</button>
+  <button mat-raised-button fxFlex="20" [disabled]="mailUserForm.baseForm.invalid" color="primary" (click)="onSave()">
     {{actionTODO}}
   </button>
 </div>

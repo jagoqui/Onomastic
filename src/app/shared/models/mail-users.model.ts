@@ -1,79 +1,28 @@
-export class MailUsers {
-}
-export interface MailUser {
-  id: {
-    tipoIdentificacion: string,
-    numeroIdentificacion: string
-  };
+export interface MailUsersResponse {
+  id: ID;
   nombre: string;
   apellido: string;
   email: string;
-  fechaNacimiento: string;
+  fechaNacimiento: Date;
   estado: string;
-  genero?: string;
-  asociacionPorUsuarioCorreo: [
-    {
-      id: number,
-      nombre: string
-    }
-  ];
-  programaAcademicoPorUsuarioCorreo: [
-    {
-      codigo: number,
-      nombre: string
-    }
-  ];
-  plataformaPorUsuarioCorreo: [
-    {
-      id: number,
-      nombre: string
-    }
-  ];
-  vinculacionPorUsuarioCorreo: [
-    {
-      id?: number,
-      nombre?: string
-    },
-    {
-      id?: number,
-      nombre?: string
-    }
-  ];
+  genero: string;
+  asociacionPorUsuarioCorreo: ByNameId[];
+  programaAcademicoPorUsuarioCorreo: ProgramaAcademicoPorUsuarioCorreo[];
+  plataformaPorUsuarioCorreo: ByNameId[];
+  vinculacionPorUsuarioCorreo: ByNameId[];
 }
 
-export interface MailUserResponse {
-  id: {
-    tipoIdentificacion: string,
-    numeroIdentificacion: string
-  };
+export interface ByNameId {
+  id: number;
   nombre: string;
-  apellido: string;
-  email: string;
-  fechaNacimiento: string;
-  estado: string;
-  genero?: string;
-  asociacionPorUsuarioCorreo: [
-    {
-      id: number,
-      nombre: string
-    }
-  ];
-  programaAcademicoPorUsuarioCorreo: [
-    {
-      codigo: number,
-      nombre: string
-    }
-  ];
-  plataformaPorUsuarioCorreo: [
-    {
-      id: number,
-      nombre: string
-    }
-  ];
-  vinculacionPorUsuarioCorreo: [
-    [{
-      id: number,
-      nombre: string
-    }]
-  ];
+}
+
+export interface ID {
+  tipoIdentificacion: string;
+  numeroIdentificacion: string;
+}
+
+export interface ProgramaAcademicoPorUsuarioCorreo {
+  codigo: number;
+  nombre: string;
 }

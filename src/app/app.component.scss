@@ -1,7 +1,12 @@
-mat-sidenav{
-  width: 12.5rem;
-}
-
-mat-sidenav-container{
+mat-sidenav-container {
   height: 100%;
+
+  mat-sidenav {
+    width: 12.5rem;
+  }
+
+  footer{
+    margin-top: 30px;
+  }
+
 }

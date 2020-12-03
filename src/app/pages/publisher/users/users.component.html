@@ -13,13 +13,13 @@
     <button fxFlex mat-raised-button fxFlex fxLayout="row" fxLayoutAlign="center center" class="mat-headline">
       <div fxLayout="column" fxLayoutAlign="center start">
         <span class="button-title">Total de usuarios</span>
-        <span class="mat-title">20K</span>
+        <span class="mat-title">{{getParcialUsers()}}</span>
       </div>
       <div fxFlex class="circle">
         <mat-icon>people_outline</mat-icon>
       </div>
     </button>
-    <button mat-raised-button class="button-action" fxFlex (click)="onOpenModal()">Agregar destinario</button>
+    <button mat-raised-button class="button-action" fxFlex (click)="onOpenModal(null)">Agregar destinatarios</button>
   </div>
   <!-- Filter -->
   <mat-form-field class="filter">
@@ -34,10 +34,12 @@
         <th mat-header-cell *matHeaderCellDef mat-sort-header>No.</th>
         <td mat-cell *matCellDef="let element">{{ element.id["numeroIdentificacion"] }}</td>
       </ng-container>
-      <!-- ID Column -->
+      <!-- Platform Column -->
       <ng-container matColumnDef="plataformaPorUsuarioCorreo">
         <th mat-header-cell *matHeaderCellDef mat-sort-header>Plataforma</th>
-        <td mat-cell *matCellDef="let element">{{ element.plataformaPorUsuarioCorreo }}</td>
+        <td mat-cell *matCellDef="let element">
+          <tr *ngFor="let item of element.plataformaPorUsuarioCorreo">{{ item["nombre"] }}</tr>
+        </td>
       </ng-container>
       <!-- Username Column -->
       <ng-container matColumnDef="nombre">
@@ -94,6 +96,6 @@
       <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
       <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
     </table>
-    <mat-paginator class="mat-body-1" [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    <mat-paginator class="mat-body-1" [pageSizeOptions]="getPageSizeOptions()" showFirstLastButtons></mat-paginator>
   </div>
 </div>

@@ -1,16 +1,8 @@
-@import 'src/assets/custom_styles/material_custom_theme.scss';
-footer{
-  /* Like the header, the footer will have a static height - it shouldn't grow or shrink.  */
-  /* 0 flex-grow, 0 flex-shrink, auto flex-basis */
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  background: mat-color($mat-primary, main);;
-}
-p{
-  float: right;
-  color: white;
-  text-align-last: right;
-  margin: 0px;
-  margin-right: 2px; 
+mat-toolbar {
+  span{
+    font-size: 0.8333rem;
+  }
+  div span{
+    font-size: 0.7222rem;
+  }
 }
