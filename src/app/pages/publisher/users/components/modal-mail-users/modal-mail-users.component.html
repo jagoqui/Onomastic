@@ -92,7 +92,7 @@
           <mat-option value="DESACTIVADO">DESACTIVADO</mat-option>
         </mat-select>
         <ng-container [ngSwitch]="state.value" matSuffix>
-          <mat-icon *ngSwitchCase="'ACTIVADO'" matSuffix>email</mat-icon>
+          <mat-icon *ngSwitchCase="'ACTIVO'" matSuffix>email</mat-icon>
           <mat-icon *ngSwitchCase="'DESACTIVADO'" matSuffix>unsubscribe</mat-icon>
           <mat-icon *ngSwitchDefault matSuffix>contact_mail</mat-icon>
         </ng-container>

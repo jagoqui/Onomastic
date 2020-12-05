@@ -6,10 +6,24 @@ export interface MailUsersResponse {
   fechaNacimiento: Date;
   estado: string;
   genero: string;
-  asociacionPorUsuarioCorreo: ByNameId[];
-  programaAcademicoPorUsuarioCorreo: ProgramaAcademicoPorUsuarioCorreo[];
-  plataformaPorUsuarioCorreo: ByNameId[];
-  vinculacionPorUsuarioCorreo: ByNameId[];
+  asociacionPorUsuarioCorreo?: ByNameId[];
+  programaAcademicoPorUsuarioCorreo?: ProgramaAcademicoPorUsuarioCorreo[];
+  plataformaPorUsuarioCorreo?: ByNameId[];
+  vinculacionPorUsuarioCorreo?: ByNameId[];
+}
+
+export interface MailUsers {
+  id: ID;
+  nombre: string;
+  apellido: string;
+  email: string;
+  fechaNacimiento: Date;
+  estado: string;
+  genero: string;
+  asociacionPorUsuarioCorreo?: ByNameId[];
+  programaAcademicoPorUsuarioCorreo?: ProgramaAcademicoPorUsuarioCorreo[];
+  plataformaPorUsuarioCorreo?: ByNameId[];
+  vinculacionPorUsuarioCorreo?: ByNameId[];
 }
 
 export interface ByNameId {

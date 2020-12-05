@@ -25,11 +25,17 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   platformUserData: PlatformUserResponse;
   toggleDarkThemeControl = new FormControl(false);
-  darkMode: boolean;
+  darkMode = false;
   isLogged = false;
   private destroy$ = new Subject<any>();
 
-  constructor(private authSvc: AuthService, private themeSwitcher: ThemeSwitcherControllerService) { }
+  constructor(private authSvc: AuthService, private themeSwitcher: ThemeSwitcherControllerService) {
+    const AppTheme = localStorage.getItem('AppTheme') || null;
+    if (AppTheme) {
+      console.log(AppTheme);
+      this.toggleDarkThemeControl.setValue(AppTheme === 'dark-theme' ? true : false);
+    }
+  }
 
   onToggleSidenav(): void {
     this.toggleSidenav.emit();

@@ -2,8 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
-import { BehaviorSubject, Observable, throwError } from 'rxjs';
-import { catchError, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import {
   PlatformUser,
   PlatformUserResponse,
@@ -56,8 +56,7 @@ export class AuthService {
         this.PlatformUserRes.next(userRes);
         this.isLogged.next(true);
         return userRes;
-      }),
-      catchError((err) => this.handlerError(err.error))
+      })
     );
   }
 
@@ -66,8 +65,7 @@ export class AuthService {
       map((user: PlatformUserResponse) => {
         // this.saveLocalStorage(user);
         return user;
-      }),
-      catchError((err) => this.handlerError(err.error))
+      })
     );
   }
 
@@ -81,16 +79,9 @@ export class AuthService {
         this.PlatformUserRes.next(platformUser);
         this.isLogged.next(true);
       }
+    } else {
+      this.router.navigate(['/login']);
     }
-  }
-
-  private handlerError(error: Error): Observable<never> {
-    let errorMessage = 'An error ocurred retrienving data';
-    if (error) {
-      errorMessage = `Error: code ${error.message}`;
-    }
-    window.alert(errorMessage);
-    return throwError(errorMessage);
   }
 
   logout() {

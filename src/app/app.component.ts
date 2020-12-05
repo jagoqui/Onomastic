@@ -44,6 +44,7 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+
     this.themeSwitcherController.themeClass$
       .pipe(takeUntil(this.destroy$))
       .subscribe(

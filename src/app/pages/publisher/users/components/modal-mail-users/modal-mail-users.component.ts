@@ -164,6 +164,17 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   }
 
   onSave(): void {
+    const formValue = this.mailUserForm.baseForm.value;
+    if (this.actionTODO === Action.NEW) {
+      this.userSvc.new(formValue).subscribe((res) => {
+        console.log('New ', res);
+      });
+    } else {
+      const userId = this.data?.user?.id;
+      this.userSvc.update(userId, formValue).subscribe((res) => {
+        console.log('Update', res);
+      });
+    }
     this.onClose(true);
     this.mailUserForm.onReset();
   }
@@ -182,14 +193,8 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
         if (associations) {
           this.associations = associations;
         }
-      })
-    );
-
-    this.subscripcion.add(
-      this.userSvc.getBondingType().subscribe(types => {
-        if (types) {
-          this.bondingTypes = types;
-        }
+      }, (err) => {
+        console.log('Get associations error!');
       })
     );
 
@@ -198,6 +203,18 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
         if (programs) {
           this.programs = programs;
         }
+      }, (err) => {
+        console.log('Get program error!');
+      })
+    );
+
+    this.subscripcion.add(
+      this.userSvc.getBondingType().subscribe(types => {
+        if (types) {
+          this.bondingTypes = types;
+        }
+      }, (err) => {
+        console.log('Get bonding type error!');
       })
     );
   }

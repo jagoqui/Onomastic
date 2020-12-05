@@ -6,6 +6,9 @@ import { AuthService } from 'src/app/auth/services/auth.service';
 import {
   SidenavControllerService,
 } from '../../services/sidenav-controller.service';
+import {
+  ThemeSwitcherControllerService,
+} from '../../services/theme-switcher-controller.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -18,12 +21,14 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   constructor(
     private authSvc: AuthService,
-    private sidenavController: SidenavControllerService
+    private sidenavController: SidenavControllerService,
+    private themeSwitcherController: ThemeSwitcherControllerService
   ) { }
 
   onExit() {
     if (confirm('Está seguro que desea cerrar sesión')) {
       this.sidenavController.openSidebar(false);
+      this.themeSwitcherController.setThemeClass('light-theme');
       this.authSvc.logout();
     }
   }
