@@ -22,8 +22,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
   ) { }
 
   onExit() {
-    this.sidenavController.openSidebar(false);
-    this.authSvc.logout();
+    if (confirm('Está seguro que desea cerrar sesión')) {
+      this.sidenavController.openSidebar(false);
+      this.authSvc.logout();
+    }
   }
 
   ngOnInit(): void {

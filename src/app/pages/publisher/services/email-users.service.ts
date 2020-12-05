@@ -36,7 +36,7 @@ export class EmailUsersService {
 
   getBondingType(): Observable<ByNameId[]> {
     return this.http
-      .get<ByNameId[]>(`${environment.API_URL}/programasacademicos`)
+      .get<ByNameId[]>(`${environment.API_URL}/vinculaciones`)
       .pipe(catchError(this.handlerError));
   }
 

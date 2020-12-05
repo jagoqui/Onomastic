@@ -56,7 +56,7 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
       hasBackdrop: true,
       disableClose: true,
       height: 'auto',
-      width: '40%',
+      width: '45%',
       data: { title: user ? 'Actualizar destinatario' : 'Nuevo destinatario', user },
     });
   }

@@ -1,8 +1,17 @@
+$heigth-footer: 2.2222rem;
 mat-toolbar {
+  min-height: $heigth-footer !important;
+  height: $heigth-footer !important;
+  padding: 1.3889rem 0;
   span{
     font-size: 0.8333rem;
   }
   div span{
     font-size: 0.7222rem;
   }
+  // .mat-toolbar-row {
+  //   padding: 10px;
+  // }
+
 }
+

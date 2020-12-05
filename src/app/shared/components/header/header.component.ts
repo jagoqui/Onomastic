@@ -25,6 +25,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   platformUserData: PlatformUserResponse;
   toggleDarkThemeControl = new FormControl(false);
+  darkMode: boolean;
   isLogged = false;
   private destroy$ = new Subject<any>();
 
@@ -56,6 +57,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       });
 
     this.toggleDarkThemeControl.valueChanges.subscribe((darkMode) => {
+      this.darkMode = darkMode;
       this.themeSwitcher.setThemeClass(darkMode ? 'dark-theme' : 'light-theme');
     });
   }

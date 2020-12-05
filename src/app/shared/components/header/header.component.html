@@ -11,7 +11,8 @@
     <button *ngIf="platformUserData.role" mat-raised-button color = "primary" [routerLink]="'/'+platformUserData.role" title="Role" >{{platformUserData.role }}</button>
   </div>
   <mat-slide-toggle [formControl]="toggleDarkThemeControl">
-    <mat-icon>bedtime</mat-icon>
+    <mat-icon  *ngIf="darkMode" class="mat-18">brightness_4</mat-icon>
+    <mat-icon *ngIf="!darkMode" class="mat-18">brightness_7</mat-icon>
   </mat-slide-toggle>
 </mat-toolbar>
 
