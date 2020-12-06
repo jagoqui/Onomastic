@@ -25,7 +25,8 @@ export class BaseFormMailUsers {
     genero: '',
     asociacionPorUsuarioCorreo: this.createByNameArrayError('id'),
     programaAcademicoPorUsuarioCorreo: this.createByNameArrayError('codigo'),
-    vinculacionPorUsuarioCorreo: this.createByNameArrayError('id')
+    vinculacionPorUsuarioCorreo: this.createByNameArrayError('id'),
+    plataformaPorUsuarioCorreo: this.createByNameArrayError('id')
   };
 
   constructor(private fb: FormBuilder) { }
@@ -44,6 +45,7 @@ export class BaseFormMailUsers {
     asociacionPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')]),
     programaAcademicoPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('codigo')]),
     vinculacionPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')]),
+    plataformaPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')]),
   });
 
 
@@ -56,6 +58,7 @@ export class BaseFormMailUsers {
     } else {
       return new FormGroup({
         codigo: new FormControl('', Validators.required),
+        // id_facultad: new FormControl('', Validators.required),
         nombre: new FormControl('', Validators.required)
       });
     }

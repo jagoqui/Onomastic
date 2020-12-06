@@ -2,7 +2,6 @@ import {
   HttpErrorResponse,
   HttpEvent,
   HttpHandler,
-  HttpHeaders,
   HttpInterceptor,
   HttpRequest,
 } from '@angular/common/http';
@@ -19,13 +18,14 @@ export class InterceptorService implements HttpInterceptor {
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.loaderSvc.setLaoding(true);
-    const headers = new HttpHeaders({
-      'token-mail-user': ''
-    });
+    // const headers = new HttpHeaders({
+    //   'token-mail-user': ''
+    // });
 
-    const requestClone = req.clone({
-      headers
-    });
+    // const requestClone = req.clone({
+    //   headers
+    // });
+    const requestClone = req.clone();
 
     return next.handle(requestClone).pipe(
       catchError(this.handlerError),

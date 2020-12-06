@@ -22,8 +22,8 @@ export interface MailUsers {
   genero: string;
   asociacionPorUsuarioCorreo?: ByNameId[];
   programaAcademicoPorUsuarioCorreo?: ProgramaAcademicoPorUsuarioCorreo[];
-  plataformaPorUsuarioCorreo?: ByNameId[];
   vinculacionPorUsuarioCorreo?: ByNameId[];
+  plataformaPorUsuarioCorreo?: ByNameId[];
 }
 
 export interface ByNameId {

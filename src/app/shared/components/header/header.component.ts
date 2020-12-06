@@ -32,7 +32,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private authSvc: AuthService, private themeSwitcher: ThemeSwitcherControllerService) {
     const AppTheme = localStorage.getItem('AppTheme') || null;
     if (AppTheme) {
-      console.log(AppTheme);
       this.toggleDarkThemeControl.setValue(AppTheme === 'dark-theme' ? true : false);
     }
   }

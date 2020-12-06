@@ -1,4 +1,4 @@
-<h1 mat-dialog-title>{{data.title}}</h1>
+<h1 #tittle mat-dialog-title >{{data.title | uppercase }}</h1>
 <div mat-dialog-content>
 
   <form [formGroup]="mailUserForm.baseForm" (ngSubmit)="onSave()" fxLayout="column">
@@ -107,10 +107,12 @@
       <div fxFlex="70" >
         <mat-form-field hideRequiredMarker fxFlex="90" appearance="outline">
           <mat-label>Facultad/Escuela</mat-label>
-          <mat-select formControlName="nombre" (keydown)="handleKeyDown($event)">
+          <mat-select  formControlName="nombre"  (keydown)="handleKeyDown($event)">
             <mat-option>-- Seleccione una opción --</mat-option>
-            <mat-option *ngFor="let association of associations" [value]="association['nombre']">
-              {{association['nombre']}}</mat-option>
+            <mat-option *ngFor="let association of associations" [value]="association['nombre']"
+              (onSelectionChange)="setformGropuID(mailAssociation, association['id'])">
+              {{association['nombre']}}
+            </mat-option>
           </mat-select>
           <mat-icon matSuffix>account_balance</mat-icon>
           <mat-error *ngIf="checkField('nombre','asociacionPorUsuarioCorreo',i)">
@@ -134,6 +136,7 @@
         </div>
       </div>
     </div>
+    <!-- Academic program-->
     <div *ngFor="let academicProgram of mailUserForm.baseForm.get('programaAcademicoPorUsuarioCorreo')['controls'];
           let i = index" [formGroup]="academicProgram" fxLayout="row" fxFlexAlign="space-between center">
       <!-- Academic program-->
@@ -142,11 +145,12 @@
           <mat-label>Programa</mat-label>
           <mat-select formControlName="nombre" (keydown)="handleKeyDown($event)">
             <mat-option>-- Seleccione una opción --</mat-option>
-            <mat-option *ngFor="let program of programs" [value]="program['nombre']">
+            <mat-option *ngFor="let program of programs" [value]="program['nombre']"
+            (onSelectionChange)="setformGropuCode(academicProgram, program['codigo'])">
               {{program['nombre']}}</mat-option>
           </mat-select>
           <mat-icon matSuffix>school</mat-icon>
-          <mat-error *ngIf="checkField('nombre','programaAcademicoPorUsuarioCorreo',i)">
+          <mat-error *ngIf="checkField('nombre','programaAcademicoPorUsuarioCorreo',i)" >
             {{mailUserForm.errorsMessage['programaAcademicoPorUsuarioCorreo'][i].nombre}}
           </mat-error>
         </mat-form-field>
@@ -167,15 +171,17 @@
         </div>
       </div>
     </div>
-    <div *ngFor="let bodyType of mailUserForm.baseForm.get('vinculacionPorUsuarioCorreo')['controls'];
-          let i = index" [formGroup]="bodyType" fxLayout="row" fxFlexAlign="space-between center">
+    <!-- Bonding -->
+    <div *ngFor="let bonding of mailUserForm.baseForm.get('vinculacionPorUsuarioCorreo')['controls'];
+          let i = index" [formGroup]="bonding" fxLayout="row" fxFlexAlign="space-between center">
       <!-- Bonding -->
       <div fxFlex="70">
         <mat-form-field hideRequiredMarker fxFlex="90" appearance="outline">
           <mat-label>Vinculación</mat-label>
           <mat-select formControlName="nombre" (keydown)="handleKeyDown($event)">
             <mat-option>-- Seleccione una opción --</mat-option>
-            <mat-option *ngFor="let bondingType of bondingTypes" [value]="bondingType['nombre']">
+            <mat-option *ngFor="let bondingType of bondingTypes" [value]="bondingType['nombre']"
+            (onSelectionChange)="setformGropuID(bonding, bondingType['id'])">
               {{bondingType['nombre']}}</mat-option>
           </mat-select>
           <mat-icon matSuffix>group_work</mat-icon>
@@ -195,6 +201,42 @@
         <div *ngIf="onShowAddBodyType(i)" fxFlex="47">
           <button mat-mini-fab color="primary" title="Agregar vinculación"
             (click)="addByNameFormGroup('vinculacionPorUsuarioCorreo')">
+            <mat-icon>playlist_add</mat-icon>
+          </button>
+        </div>
+      </div>
+    </div>
+    <!-- Platform -->
+    <div *ngFor="let platformUser of mailUserForm.baseForm.get('plataformaPorUsuarioCorreo')['controls'];
+          let i = index" [formGroup]="platformUser" fxLayout="row" fxFlexAlign="space-between center">
+      <!-- Platform -->
+      <div  fxFlex="70" fxLayout = "row" >
+        <mat-form-field hideRequiredMarker fxFlex="90" appearance="outline">
+          <mat-label>Plataforma</mat-label>
+          <mat-select #platformSelect formControlName="nombre" (keydown)="handleKeyDown($event)">
+            <mat-option>-- Seleccione una opción --</mat-option>
+            <mat-option *ngFor="let platform of platforms" [value]="platform['nombre']"
+            (onSelectionChange)="setformGropuID(platformUser, platform['id'])">
+              {{platform['nombre']}}
+            </mat-option>
+          </mat-select>
+          <mat-icon matSuffix>storage</mat-icon>
+          <mat-error *ngIf="checkField('nombre','plataformaPorUsuarioCorreo',i)">
+            {{mailUserForm.errorsMessage['plataformaPorUsuarioCorreo'][i].nombre}}
+          </mat-error>
+        </mat-form-field>
+      </div>
+      <!-- Actions list -->
+      <div fxFlex="15" fxLayout="row" fxFlexAlign="space-between center">
+        <div *ngIf="getPlatformsSize()> 1" fxFlex="47">
+          <button mat-mini-fab color="warn" title="Eliminar plataforma"
+            (click)="removeOrClearByName(i,'plataformaPorUsuarioCorreo', false)">
+            <mat-icon>remove</mat-icon>
+          </button>
+        </div>
+        <div *ngIf="onShowPlatforms(i)" fxFlex="47">
+          <button mat-mini-fab color="primary" title="Agregar plataforma"
+            (click)="addByNameFormGroup('plataformaPorUsuarioCorreo')">
             <mat-icon>playlist_add</mat-icon>
           </button>
         </div>

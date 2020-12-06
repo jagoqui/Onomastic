@@ -30,10 +30,16 @@ export class EmailUsersService {
       .get<ProgramaAcademicoPorUsuarioCorreo[]>(`${environment.API_URL}/programasacademicos`);
   }
 
-  getBondingType(): Observable<ByNameId[]> {
+  getBondingTypes(): Observable<ByNameId[]> {
     return this.http
       .get<ByNameId[]>(`${environment.API_URL}/vinculaciones`);
   }
+
+  getPlatforms(): Observable<ByNameId[]> {
+    return this.http
+      .get<ByNameId[]>(`${environment.API_URL}/plataformas`);
+  }
+
 
   new(user: MailUsers): Observable<MailUsersResponse> {
     return this.http

@@ -87,9 +87,17 @@
               <mat-icon>edit</mat-icon>
               <span>Editar</span>
             </button>
-            <button mat-menu-item (click)="onDelete(element.id)">
+            <button mat-menu-item *ngIf="element.estado === 'ACTIVO'">
               <mat-icon>unsubscribe</mat-icon>
               <span>Desactivar</span>
+            </button>
+            <button mat-menu-item *ngIf="element.estado === 'DESACTIVADO'">
+              <mat-icon>email</mat-icon>
+              <span>Activar</span>
+            </button>
+            <button  mat-menu-item (click)="onDelete(element.id)" >
+              <mat-icon color="warn">delete</mat-icon>
+              <span>Eliminar</span>
             </button>
           </mat-menu>
       </ng-container>

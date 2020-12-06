@@ -10,6 +10,8 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { ID } from 'src/app/shared/models/mail-users.model';
 
 import { EmailUsersService } from '../services/email-users.service';
 import {
@@ -70,15 +72,18 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
-  onDelete(userId: number): void {
-    // if (window.confirm('Do you really want remove this user')) {
-    //   this.userSvc
-    //     .delete(userId)
-    //     .pipe(takeUntil(this.destroy$))
-    //     .subscribe((res) => {
-    //       window.alert(res);
-    //     });
-    // }
+  onDelete(userId: ID): void {
+    if (window.confirm('Esta seguro que desea eliminar éste usuario?')) {
+      this.userSvc
+        .delete(userId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((res) => {
+          this.ngOnInit();
+          window.alert('Usuario eliminado!');
+        }, (err) => {
+          console.log('Error in create new mail user! :> ', err);
+        });
+    }
   }
 
 
