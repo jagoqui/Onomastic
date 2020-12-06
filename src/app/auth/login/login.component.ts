@@ -1,6 +1,7 @@
 import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReCaptcha2Component } from 'ngx-captcha';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import {
   BaseFormPlatformUsers,
@@ -30,7 +31,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private authSvc: AuthService,
     private router: Router,
-    public loginForm: BaseFormPlatformUsers
+    public loginForm: BaseFormPlatformUsers,
+    private spinner: NgxSpinnerService,
   ) {
     this.onResetCaptcha();
     this.recaptchaConfig.success = false;
@@ -81,6 +83,11 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.spinner.show(undefined, {
+      type: 'ball-triangle-path',
+      size: 'medium'
+    });
+
     this.loginForm.baseForm.get('name').setValidators(null);
     this.loginForm.baseForm.get('name').updateValueAndValidity();
     this.loginForm.baseForm.get('association').setValidators(null);

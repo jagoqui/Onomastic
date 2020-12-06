@@ -8,6 +8,7 @@
   <mat-sidenav-content fxFlex fxLayout="column">
    <app-header *ngIf="authSvc.isLoggged$|async" (toggleSidenav)="sidenav.toggle()"></app-header>
     <main fxFlex fxLayout="column">
+      <ngx-spinner *ngIf="loaderSvc.isLoading$ | async"></ngx-spinner>
       <router-outlet></router-outlet>
     </main>
     <footer>

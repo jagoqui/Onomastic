@@ -21,7 +21,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   constructor(
     private authSvc: AuthService,
-    private sidenavController: SidenavControllerService,
+    public sidenavController: SidenavControllerService,
     private themeSwitcherController: ThemeSwitcherControllerService
   ) { }
 

@@ -2,15 +2,14 @@ import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import {
   PageNotFoundComponent,
 } from './shared/components/page-not-found/page-not-found.component';
-import {
-  MailUse1rsInterceptorService,
-} from './shared/interceptors/mail-users-interceptor.service';
+import { InterceptorService } from './shared/interceptors/interceptor.service';
 import { SharedModule } from './shared/shared.module';
 
 @NgModule({
@@ -23,12 +22,13 @@ import { SharedModule } from './shared/shared.module';
     AppRoutingModule,
     BrowserAnimationsModule,
     HttpClientModule,
+    NgxSpinnerModule,
     SharedModule
   ],
   providers: [
     {
       provide: HTTP_INTERCEPTORS,
-      useClass: MailUse1rsInterceptorService,
+      useClass: InterceptorService,
       multi: true
     }
   ],

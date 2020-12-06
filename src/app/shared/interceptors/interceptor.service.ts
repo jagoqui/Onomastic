@@ -8,14 +8,17 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError } from 'rxjs/operators';
+import { catchError, finalize } from 'rxjs/operators';
+
+import { LoaderService } from '../services/loader.service';
 
 @Injectable({ providedIn: 'root' })
-export class MailUse1rsInterceptorService implements HttpInterceptor {
+export class InterceptorService implements HttpInterceptor {
 
-  constructor() { }
+  constructor(private loaderSvc: LoaderService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    this.loaderSvc.setLaoding(true);
     const headers = new HttpHeaders({
       'token-mail-user': ''
     });
@@ -25,7 +28,12 @@ export class MailUse1rsInterceptorService implements HttpInterceptor {
     });
 
     return next.handle(requestClone).pipe(
-      catchError(this.handlerError)
+      catchError(this.handlerError),
+      finalize(
+        () => {
+          this.loaderSvc.setLaoding(false);
+        }
+      )
     );
   }
 

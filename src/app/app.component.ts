@@ -1,9 +1,11 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { AuthService } from './auth/services/auth.service';
+import { LoaderService } from './shared/services/loader.service';
 import {
   SidenavControllerService,
 } from './shared/services/sidenav-controller.service';
@@ -19,7 +21,7 @@ import {
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  @HostBinding('class') className = 'light-theme';
+  @HostBinding('class') className: string;
 
   opened = false;
   private destroy$ = new Subject<any>();
@@ -29,7 +31,9 @@ export class AppComponent implements OnInit, OnDestroy {
     public authSvc: AuthService,
     private overlayContainer: OverlayContainer,
     private sidenavController: SidenavControllerService,
-    private themeSwitcherController: ThemeSwitcherControllerService
+    private themeSwitcherController: ThemeSwitcherControllerService,
+    private spinner: NgxSpinnerService,
+    public loaderSvc: LoaderService
   ) { }
 
   onSetTheme(classTheme: string) {
@@ -44,6 +48,10 @@ export class AppComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.spinner.show(undefined, {
+      type: 'ball-triangle-path',
+      size: 'medium'
+    });
 
     this.themeSwitcherController.themeClass$
       .pipe(takeUntil(this.destroy$))
