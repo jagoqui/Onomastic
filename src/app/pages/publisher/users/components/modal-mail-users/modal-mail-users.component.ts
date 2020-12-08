@@ -177,11 +177,11 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
 
   onSave(): void {
     const formValue = this.mailUserForm.baseForm.value;
-    console.log(formValue);
-
     if (this.actionTODO === Action.NEW) {
       this.userSvc.new(formValue).subscribe((res) => {
         console.log('New ', res);
+        this.onClose(true);
+        this.mailUserForm.onReset();
       }, (err) => {
         console.log('Error in create new mail user! :> ', err);
       });
@@ -189,12 +189,12 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
       const userId = this.data?.user?.id;
       this.userSvc.update(userId, formValue).subscribe((res) => {
         console.log('Update', res);
+        this.onClose(true);
+        this.mailUserForm.onReset();
       }, (err) => {
         console.log('Error in update mail user! :> ', err);
       });
     }
-    this.onClose(true);
-    this.mailUserForm.onReset();
   }
 
   ngOnInit(): void {

@@ -33,6 +33,7 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
     'nombre', 'email', 'fechaNacimiento',
     'vinculacionPorUsuarioCorreo',
     'asociacionPorUsuarioCorreo',
+    'programaAcademicoPorUsuarioCorreo',
     'estado', 'actions'
   ];
   dataSource = new MatTableDataSource();
@@ -86,6 +87,11 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
+  onRefresh(): void {
+    this.destroy$.next({});
+    this.destroy$.complete();
+    this.ngOnInit();
+  }
 
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;

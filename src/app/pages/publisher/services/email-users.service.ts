@@ -43,7 +43,7 @@ export class EmailUsersService {
 
   new(user: MailUsers): Observable<MailUsersResponse> {
     return this.http
-      .post<MailUsers>(`${environment.API_URL}/usuariosemail`, user);
+      .put<MailUsers>(`${environment.API_URL}/usuariosemail`, user);
   }
 
   getById(id: ID): Observable<MailUsersResponse> {
@@ -54,7 +54,7 @@ export class EmailUsersService {
 
   update(id: ID, user: MailUsers): Observable<MailUsersResponse> {
     return this.http
-      .patch<MailUsersResponse>(`${environment.API_URL}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`, user);
+      .post<MailUsersResponse>(`${environment.API_URL}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`, user);
   }
 
   delete(id: ID): Observable<{}> {

@@ -45,6 +45,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    const AppTheme = localStorage.getItem('AppTheme') || null;
+    if (AppTheme) {
+      this.darkMode = AppTheme === 'dark-theme' ? true : false;
+    }
     this.authSvc.isLoggged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((isLogged: boolean) => {
@@ -63,8 +67,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.toggleDarkThemeControl.valueChanges.subscribe((darkMode) => {
       this.darkMode = darkMode;
+      console.log(this.darkMode);
       this.themeSwitcher.setThemeClass(darkMode ? 'dark-theme' : 'light-theme');
     });
+
   }
 
   ngOnDestroy(): void {

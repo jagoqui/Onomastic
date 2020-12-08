@@ -4,24 +4,25 @@
 html,
 body {
   box-sizing: border-box;
-  height: 100%;
-  margin: 0
+  height    : 100%;
+  margin    : 0
 }
 
 // Create your Sass color vars (will be available in all the project)
-.container{
-  margin: 0 auto;
+.container {
+  margin    : 0 auto;
   margin-top: 2%;
-  padding: 0;
+  padding   : 0;
+
   div .button-action {
     border-radius: 2.7778rem;
-    background: mat-color($mat-accent, main);
+    background   : mat-color($mat-accent, main);
 
     &:before {
-      position: fixed;
+      position     : fixed;
       left         : 0%;
-      width: 100%;
-      height: 100%;
+      width        : 100%;
+      height       : 100%;
       border-radius: 2.7778rem;
       color        : white;
       transition   : all 0.35s ease;
@@ -29,27 +30,43 @@ body {
       content      : "Agregar";
       background   : mat-color($mat-primary, main);
     }
+
     &:hover:before {
       content: "";
       width  : 15%;
     }
   }
 
-  #filter{
-    margin-top: 15px;
-    .mat-form-field {
+  div{
+    .mat-toolbar {
+      margin-top: 1.6667rem;
       font-size: 0.7778rem;
-      width    : 100%;
     }
   }
 
-  table {
-    width: 100%;
+  .table-responsive {
+    display   : block;
+    width     : 100%;
+    overflow-x: auto;
 
+    .mat-table {
+      width          : 100%;
+      max-width      : 100%;
+      margin-bottom  : 1rem;
+      display        : table;
+      border-collapse: collapse;
+    }
+
+    .mat-cell,
     .mat-header-cell {
-      align-items: center;
-      background : mat-color($mat-accent, 200);
-      font-size  : large;
+      word-wrap     : initial;
+      display       : table-cell;
+      padding       : 0px 0.2778rem;
+      line-break    : unset;
+      width         : auto;
+      white-space   : nowrap;
+      overflow      : hidden;
+      vertical-align: middle;
     }
   }
 }

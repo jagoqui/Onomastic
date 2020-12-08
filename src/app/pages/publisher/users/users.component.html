@@ -1,4 +1,4 @@
-<div class="container" fxFlex="98" fxLayout="column">
+<div class="container table-wrapper" fxFlex="98">
   <!-- Actions buttons -->
   <div id="actions_buttons" fxLayout="row" fxLayoutAlign="space-between center">
     <button fxFlex mat-raised-button fxLayout="row" fxLayoutAlign="center center" class="mat-headline">
@@ -21,89 +21,114 @@
     </button>
     <button mat-raised-button class="button-action" fxFlex (click)="onOpenModal(null)">Agregar destinatarios</button>
   </div>
-  <!-- Filter -->
-  <mat-form-field class="filter">
-    <mat-label>Filtrar</mat-label>
-    <input matInput (keyup)="applyFilter($event)" placeholder="Ex. ium" #input>
-  </mat-form-field>
   <!-- Table -->
   <div class="mat-elevation-z8">
-    <table class="mat-body-1" mat-table [dataSource]="dataSource" matSort>
-      <!-- ID Column -->
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>No.</th>
-        <td mat-cell *matCellDef="let element">{{ element.id["numeroIdentificacion"] }}</td>
-      </ng-container>
-      <!-- Platform Column -->
-      <ng-container matColumnDef="plataformaPorUsuarioCorreo">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Plataforma</th>
-        <td mat-cell *matCellDef="let element">
-          <tr *ngFor="let item of element.plataformaPorUsuarioCorreo">{{ item["nombre"] }}</tr>
-        </td>
-      </ng-container>
-      <!-- Username Column -->
-      <ng-container matColumnDef="nombre">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
-        <td mat-cell *matCellDef="let element">{{ element.nombre }}{{' '+element.apellido}}</td>
-      </ng-container>
-      <!-- Email Column -->
-      <ng-container matColumnDef="email">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
-        <td mat-cell *matCellDef="let element">{{ element.email }}</td>
-      </ng-container>
-      <!-- Date Birth Column -->
-      <ng-container matColumnDef="fechaNacimiento">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de nacimiento</th>
-        <td mat-cell *matCellDef="let element">{{ element.fechaNacimiento }}</td>
-      </ng-container>
-      <!-- Bonding -->
-      <ng-container matColumnDef="vinculacionPorUsuarioCorreo">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Vinculo</th>
-        <td mat-cell *matCellDef="let element">
-          <tr *ngFor="let item of element.vinculacionPorUsuarioCorreo">{{ item["nombre"] }}</tr>
-        </td>
-      </ng-container>
-      <!-- Association -->
-      <ng-container matColumnDef="asociacionPorUsuarioCorreo">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Facultad/Escuela</th>
-        <td mat-cell *matCellDef="let element">
-          <tr *ngFor="let item of element.asociacionPorUsuarioCorreo">{{ item["nombre"] }}</tr>
-        </td>
-      </ng-container>
-      <!-- State -->
-      <ng-container matColumnDef="estado">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
-        <td mat-cell *matCellDef="let element">{{ element.estado }}</td>
-      </ng-container>
-      <!-- Table actions -->
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
-        <td mat-cell *matCellDef="let element">
-          <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
-            <mat-icon>more_vert</mat-icon>
+    <mat-toolbar color="primary">
+      <mat-toolbar-row fxLayout="row" fxLayoutAlign="space-between center">
+        <!-- Filter/ Refresh-->
+        <mat-form-field fxFlex="95">
+          <mat-label>Buscar</mat-label>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ingrese un campo a buscar" #input>
+        </mat-form-field>
+        <div>
+          <button mat-mini-fab color="primary" title="Refresh" (click)="onRefresh()">
+            <mat-icon>refresh</mat-icon>
           </button>
-          <mat-menu #menu="matMenu">
-            <button mat-menu-item (click)="onOpenModal(element)">
-              <mat-icon>edit</mat-icon>
-              <span>Editar</span>
+        </div>
+
+      </mat-toolbar-row>
+    </mat-toolbar>
+
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" matSort>
+        <!-- ID Column -->
+        <ng-container matColumnDef="id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>ID</th>
+          <td mat-cell *matCellDef="let element">{{ element.id["tipoIdentificacion"]}}
+            {{element.id["numeroIdentificacion"]}}</td>
+        </ng-container>
+        <!-- Platform Column -->
+        <ng-container matColumnDef="plataformaPorUsuarioCorreo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Plataforma</th>
+          <td mat-cell *matCellDef="let element">
+            <tr *ngFor="let item of element.plataformaPorUsuarioCorreo">{{ item["nombre"] }}</tr>
+          </td>
+        </ng-container>
+        <!-- Username Column -->
+        <ng-container matColumnDef="nombre">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nombre</th>
+          <td mat-cell *matCellDef="let element">{{ element.nombre }}{{' '+element.apellido}}</td>
+        </ng-container>
+        <!-- Email Column -->
+        <ng-container matColumnDef="email">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Email</th>
+          <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+        </ng-container>
+        <!-- Date Birth Column -->
+        <ng-container matColumnDef="fechaNacimiento">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Fecha de nacimiento</th>
+          <td mat-cell *matCellDef="let element">{{ element.fechaNacimiento }}</td>
+        </ng-container>
+        <!-- Bonding -->
+        <ng-container matColumnDef="vinculacionPorUsuarioCorreo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Vinculo</th>
+          <td mat-cell *matCellDef="let element">
+            <tr *ngFor="let item of element.vinculacionPorUsuarioCorreo">{{ item["nombre"] }}</tr>
+          </td>
+        </ng-container>
+        <!-- Association -->
+        <ng-container matColumnDef="asociacionPorUsuarioCorreo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Facultad/Escuela</th>
+          <td mat-cell *matCellDef="let element">
+            <tr *ngFor="let item of element.asociacionPorUsuarioCorreo">{{ item["nombre"] }}</tr>
+          </td>
+        </ng-container>
+        <!-- Association -->
+        <ng-container matColumnDef="programaAcademicoPorUsuarioCorreo">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Programa</th>
+          <td mat-cell *matCellDef="let element">
+            <tr *ngFor="let item of element.programaAcademicoPorUsuarioCorreo">{{ item["nombre"] }}</tr>
+          </td>
+        </ng-container>
+        <!-- State -->
+        <ng-container matColumnDef="estado">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Estado</th>
+          <td mat-cell *matCellDef="let element">{{ element.estado }}</td>
+        </ng-container>
+        <!-- Table actions -->
+        <ng-container matColumnDef="actions">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Actions</th>
+          <td mat-cell *matCellDef="let element">
+            <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+              <mat-icon>more_vert</mat-icon>
             </button>
-            <button mat-menu-item *ngIf="element.estado === 'ACTIVO'">
-              <mat-icon>unsubscribe</mat-icon>
-              <span>Desactivar</span>
-            </button>
-            <button mat-menu-item *ngIf="element.estado === 'DESACTIVADO'">
-              <mat-icon>email</mat-icon>
-              <span>Activar</span>
-            </button>
-            <button  mat-menu-item (click)="onDelete(element.id)" >
-              <mat-icon color="warn">delete</mat-icon>
-              <span>Eliminar</span>
-            </button>
-          </mat-menu>
-      </ng-container>
-      <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
-      <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
-    </table>
-    <mat-paginator class="mat-body-1" [pageSizeOptions]="getPageSizeOptions()" showFirstLastButtons></mat-paginator>
+            <mat-menu #menu="matMenu">
+              <button mat-menu-item (click)="onOpenModal(element)">
+                <mat-icon>edit</mat-icon>
+                <span>Editar</span>
+              </button>
+              <button mat-menu-item *ngIf="element.estado === 'ACTIVO'">
+                <mat-icon>unsubscribe</mat-icon>
+                <span>Desactivar</span>
+              </button>
+              <button mat-menu-item *ngIf="element.estado === 'DESACTIVADO'">
+                <mat-icon>email</mat-icon>
+                <span>Activar</span>
+              </button>
+              <button mat-menu-item (click)="onDelete(element.id)">
+                <mat-icon color="warn">delete</mat-icon>
+                <span>Eliminar</span>
+              </button>
+            </mat-menu>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="columnsToDisplay"></tr>
+        <tr mat-row *matRowDef="let row; columns: columnsToDisplay"></tr>
+        <!-- Row shown when there is no matching data. -->
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell" colspan="4">No hay usuarios o no se ha cargado la data</td>
+        </tr>
+      </table>
+    </div>
+    <mat-paginator [pageSizeOptions]="getPageSizeOptions()" showFirstLastButtons></mat-paginator>
   </div>
 </div>
