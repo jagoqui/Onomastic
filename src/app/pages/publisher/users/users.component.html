@@ -28,7 +28,7 @@
         <!-- Filter/ Refresh-->
         <mat-form-field fxFlex="95">
           <mat-label>Buscar</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Ingrese un campo a buscar" #input>
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ingrese el valor del campo a buscar" #input>
         </mat-form-field>
         <div>
           <button mat-mini-fab color="primary" title="Refresh" (click)="onRefresh()">

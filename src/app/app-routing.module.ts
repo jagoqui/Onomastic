@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { QuicklinkStrategy } from 'ngx-quicklink';
 
 import {
   PageNotFoundComponent,
@@ -48,8 +49,7 @@ const routes: Routes = [
   },
   {
     path: 'PUBLISHER',
-    loadChildren: () => import('./pages/publisher/publisher.module').then(m => m.PublisherModule),
-    canActivate: [CheckLoginGuard]
+    loadChildren: () => import('./pages/publisher/publisher.module').then(m => m.PublisherModule)
   },
   {
     path: 'forgot-password', loadChildren: () => import('./auth/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule),
@@ -62,7 +62,10 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [RouterModule.forRoot(routes, {
+    enableTracing: true,
+    preloadingStrategy: QuicklinkStrategy
+  })],
   exports: [RouterModule]
 })
 export class AppRoutingModule { }
