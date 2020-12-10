@@ -31,23 +31,26 @@ export class BaseFormMailUsers {
 
   constructor(private fb: FormBuilder) { }
 
-  baseForm = this.fb.group({
-    nombre: ['', [Validators.required]],
-    apellido: ['', [Validators.required, Validators.minLength(2)]],
-    id: this.fb.group({
-      tipoIdentificacion: ['', [Validators.required]],
-      numeroIdentificacion: ['', [Validators.required]]
-    }),
-    fechaNacimiento: ['', [Validators.required, this.validDate]],
-    genero: ['', [Validators.required]],
-    email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
-    estado: ['', [Validators.required]],
-    asociacionPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')]),
-    programaAcademicoPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('codigo')]),
-    vinculacionPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')]),
-    plataformaPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')]),
-  });
+  baseForm = this.createBaseForm();
 
+  createBaseForm(): FormGroup {
+    return this.fb.group({
+      nombre: ['', [Validators.required]],
+      apellido: ['', [Validators.required, Validators.minLength(2)]],
+      id: this.fb.group({
+        tipoIdentificacion: ['', [Validators.required]],
+        numeroIdentificacion: ['', [Validators.required]]
+      }),
+      fechaNacimiento: ['', [Validators.required, this.validDate]],
+      genero: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
+      estado: ['', [Validators.required]],
+      asociacionPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')]),
+      programaAcademicoPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('codigo')]),
+      vinculacionPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')]),
+      plataformaPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')]),
+    });
+  }
 
   private createByNameFormGroup(id: string): FormGroup {
     if (id === 'id') {

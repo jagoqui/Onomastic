@@ -4,18 +4,18 @@
   <!-- Login form -->
   <mat-card fxFlex fxLayout="row" fxLayoutAlign="center center">
     <mat-card-content fxLayout="column" fxFlex="73.5">
-      <form [formGroup]="loginForm.baseForm" (ngSubmit)="onLogin()" fxLayout="column">
+      <form [formGroup]="loginForm.baseForm" (ngSubmit)="onLogin()" fxLayout="column"  (keydown.enter)="$event.preventDefault()">
         <!-- userEmail -->
         <mat-form-field id="user-input" hideRequiredMarker appearance="outline">
           <mat-label>correo</mat-label>
-          <input matInput type="text" matInput required formControlName="userEmail" (keydown)="handleKeyDown($event)">
+          <input matInput type="text" matInput required formControlName="userEmail">
           <mat-error *ngIf="checkField('userEmail')">{{loginForm.errorMessage["userEmail"]}}</mat-error>
         </mat-form-field>
         <!-- Password -->
         <mat-form-field id="password-input" hideRequiredMarker appearance="outline">
           <mat-label>contraseña</mat-label>
           <input matInput [type]="hidePassword? 'password':'text'" matInput required formControlName="password"
-            (keydown)="handleKeyDown($event)">
+          >
           <button id="hide-password-button" mat-icon-button matSuffix (click)="hidePassword= !hidePassword"
             [title]="hidePassword ? 'Show password': 'Hide password'">
             <mat-icon>{{hidePassword ? "visibility_off" :"visibility"}}</mat-icon>

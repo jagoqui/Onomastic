@@ -54,14 +54,22 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  onOpenModal(user = {}): void {
-    this.dialog.open(ModalMailUsersComponent, {
+  onOpenModal(user = {}) {
+    const dialogRef = this.dialog.open(ModalMailUsersComponent, {
       hasBackdrop: true,
       disableClose: true,
       height: 'auto',
       width: '45%',
       data: { title: user ? 'Actualizar destinatario' : 'Nuevo destinatario', user },
     });
+    if (dialogRef.afterClosed()) {
+      dialogRef.componentInstance.refresh.subscribe((refresh) => {
+        // TODO: No está refrescando
+        // if (refresh) {
+        //   this.onRefresh();
+        // }
+      });
+    }
   }
 
   getPageSizeOptions(): number[] {

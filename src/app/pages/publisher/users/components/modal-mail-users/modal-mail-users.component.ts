@@ -1,4 +1,11 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Inject,
+  OnDestroy,
+  OnInit,
+  Output,
+} from '@angular/core';
 import { FormGroup } from '@angular/forms';
 import {
   MAT_MOMENT_DATE_ADAPTER_OPTIONS,
@@ -54,6 +61,8 @@ enum Action {
   ],
 })
 export class ModalMailUsersComponent implements OnInit, OnDestroy {
+  @Output() refresh = new EventEmitter<boolean>(false);
+
   actionTODO = '';
   maxListsConfig = {
     associations: 4,
@@ -61,7 +70,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     bodyType: 4,
     platforms: 4,
   };
-
+  today = new Date();
   close = false;
   private subscripcion: Subscription = new Subscription();
 
@@ -78,22 +87,42 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   ) { }
 
   private pathFormData(): void {
+    const associations = this.data?.user.asociacionPorUsuarioCorreo;
+    const programs = this.data?.user.programaAcademicoPorUsuarioCorreo;
+    const bonding = this.data?.user.vinculacionPorUsuarioCorreo;
+    const platform = this.data?.user.plataformaPorUsuarioCorreo;
+
+    if (associations) {
+      for (let i = 0; i < associations.length - 1; i++) {
+        this.mailUserForm.addByNameFormGroup('asociacionPorUsuarioCorreo');
+      }
+    }
+    if (programs) {
+      for (let i = 0; i < programs.length - 1; i++) {
+        this.mailUserForm.addByNameFormGroup('programaAcademicoPorUsuarioCorreo');
+      }
+    }
+    if (bonding) {
+      for (let i = 0; i < bonding.length - 1; i++) {
+        this.mailUserForm.addByNameFormGroup('vinculacionPorUsuarioCorreo');
+      }
+    }
+    if (platform) {
+      for (let i = 0; i < platform.length - 1; i++) {
+        this.mailUserForm.addByNameFormGroup('plataformaPorUsuarioCorreo');
+      }
+    }
     this.mailUserForm.baseForm.patchValue(this.data?.user);
+
   }
+
 
   setBirtdayFormat(event: MatDatepickerInputEvent<Date>) {
     this.mailUserForm.baseForm.controls.fechaNacimiento.setValue(moment(event.value).format('YYYY-MM-DD'));
   }
 
-  checkField(field: string, group?: string, i?: number): boolean {
-    return this.mailUserForm.isValidField(field, group, i);
-  }
-
-  handleKeyDown(event: any) {
-    if (event.keyCode === 'Enter') {
-      this.onSave();
-      event.default();
-    }
+  checkField(field: string, group?: string, iterator?: number): boolean {
+    return this.mailUserForm.isValidField(field, group, iterator);
   }
 
   setformGropuID(formGroup: FormGroup, id: number) {
@@ -108,42 +137,42 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     this.mailUserForm.addByNameFormGroup(formGroup);
   }
 
-  removeOrClearByName(i: number, formGroup: string, onClose?: boolean): void {
+  removeOrClearByName(iterator: number, formGroup: string, onClose?: boolean): void {
     if (!onClose) {
       if (confirm('Seguro que desea remover la lista?')) {
-        this.mailUserForm.removeOrClearByName(i, formGroup);
+        this.mailUserForm.removeOrClearByName(iterator, formGroup);
       }
     } else {
-      this.mailUserForm.removeOrClearByName(i, formGroup);
+      this.mailUserForm.removeOrClearByName(iterator, formGroup);
     }
   }
 
-  onShowAddAssociation(i: number): boolean {
-    return (i === (this.getAssociationsSize() - 1) && (this.getAssociationsSize() < this.maxListsConfig.associations));
+  onShowAddAssociation(iterator: number): boolean {
+    return (iterator === (this.getAssociationsSize() - 1) && (this.getAssociationsSize() < this.maxListsConfig.associations));
   }
 
   getAssociationsSize(): number {
     return this.mailUserForm.baseForm.controls.asociacionPorUsuarioCorreo.value.length;
   }
 
-  onShowAddProgram(i: number): boolean {
-    return (i === (this.getProgramsSize() - 1) && (this.getProgramsSize() < this.maxListsConfig.program));
+  onShowAddProgram(iterator: number): boolean {
+    return (iterator === (this.getProgramsSize() - 1) && (this.getProgramsSize() < this.maxListsConfig.program));
   }
 
   getProgramsSize(): number {
     return this.mailUserForm.baseForm.controls.programaAcademicoPorUsuarioCorreo.value.length;
   }
 
-  onShowAddBodyType(i: number): boolean {
-    return (i === (this.getBodyTypesSize() - 1) && (this.getBodyTypesSize() < this.maxListsConfig.bodyType));
+  onShowAddBodyType(iterator: number): boolean {
+    return (iterator === (this.getBodyTypesSize() - 1) && (this.getBodyTypesSize() < this.maxListsConfig.bodyType));
   }
 
   getPlatformsSize(): number {
     return this.mailUserForm.baseForm.controls.plataformaPorUsuarioCorreo.value.length;
   }
 
-  onShowPlatforms(i: number): boolean {
-    return (i === (this.getPlatformsSize() - 1) && (this.getPlatformsSize() < this.maxListsConfig.platforms));
+  onShowPlatforms(iterator: number): boolean {
+    return (iterator === (this.getPlatformsSize() - 1) && (this.getPlatformsSize() < this.maxListsConfig.platforms));
   }
 
   getBodyTypesSize(): number {
@@ -178,18 +207,20 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   onSave(): void {
     const formValue = this.mailUserForm.baseForm.value;
     if (this.actionTODO === Action.NEW) {
-      this.userSvc.new(formValue).subscribe((res) => {
-        console.log('New ', res);
+      this.userSvc.new(formValue).subscribe((user) => {
+        console.log('New mailuser', user);
         this.onClose(true);
+        this.refresh.emit(true);
         this.mailUserForm.onReset();
       }, (err) => {
         console.log('Error in create new mail user! :> ', err);
       });
     } else {
       const userId = this.data?.user?.id;
-      this.userSvc.update(userId, formValue).subscribe((res) => {
-        console.log('Update', res);
+      this.userSvc.update(userId, formValue).subscribe((user) => {
+        console.log('Update mailuser:>', user);
         this.onClose(true);
+        this.refresh.emit(true);
         this.mailUserForm.onReset();
       }, (err) => {
         console.log('Error in update mail user! :> ', err);

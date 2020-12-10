@@ -54,13 +54,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     return this.loginForm.baseForm.invalid && !this.recaptchaConfig.success;
   }
 
-  handleKeyDown(event: any) {
-    if (event.keyCode === 'Enter') {
-      this.onLogin();
-      event.default();
-    }
-  }
-
   checkField(field: string): boolean {
     return this.loginForm.isValidField(field);
   }

@@ -1,19 +1,19 @@
-<h1 #tittle mat-dialog-title >{{data.title | uppercase }}</h1>
+<h1 #tittle mat-dialog-title>{{data.title | uppercase }}</h1>
 <div mat-dialog-content>
 
-  <form [formGroup]="mailUserForm.baseForm" (ngSubmit)="onSave()" fxLayout="column">
+  <form [formGroup]="mailUserForm.baseForm" (ngSubmit)="onSave()" fxLayout="column"  (keydown.enter)="$event.preventDefault()">
     <div fxLayout="row" fxLayoutAlign="space-between center">
       <!-- Name -->
       <mat-form-field hideRequiredMarker appearance="outline" fxFlex="47">
         <mat-label>Nombre</mat-label>
-        <input matInput type="text" matInput required formControlName="nombre" (keydown)="handleKeyDown($event)">
+        <input matInput type="text" matInput required formControlName="nombre">
         <mat-icon matSuffix>account_circle</mat-icon>
         <mat-error *ngIf="checkField('nombre', null, null)">{{mailUserForm.errorsMessage["nombre"]}}</mat-error>
       </mat-form-field>
       <!-- Lastname -->
       <mat-form-field hideRequiredMarker appearance="outline" fxFlex="47">
         <mat-label>Apellidos</mat-label>
-        <input matInput type="text" matInput required formControlName="apellido" (keydown)="handleKeyDown($event)">
+        <input matInput type="text" matInput required formControlName="apellido">
         <mat-icon matSuffix>account_circle</mat-icon>
         <mat-error *ngIf="checkField('apellido',null, null)">{{mailUserForm.errorsMessage["apellido"]}}</mat-error>
       </mat-form-field>
@@ -23,11 +23,11 @@
       <!-- ID type -->
       <mat-form-field hideRequiredMarker fxFlex="47" formGroupName="id" appearance="outline">
         <mat-label>Tipo de documento</mat-label>
-        <mat-select formControlName="tipoIdentificacion" (keydown)="handleKeyDown($event)">
+        <mat-select formControlName="tipoIdentificacion">
           <mat-option>-- Seleccione una opción --</mat-option>
           <mat-option value="CA">CARNET</mat-option>
           <mat-option value="CC">CEDULA DE CIUDADANIA</mat-option>
-          <mat-option value="CE">CEDULA DE CIUDADANIA</mat-option>
+          <mat-option value="CE">CEDULA DE ESTRAJERIA</mat-option>
           <mat-option value="PA">PASAPORTE</mat-option>
           <mat-option value="PT">PERMISO TRABAJO</mat-option>
           <mat-option value="RC">REGISTRO CIVIL</mat-option>
@@ -42,7 +42,7 @@
       <mat-form-field hideRequiredMarker appearance="outline" fxFlex="47" formGroupName="id">
         <mat-label>Número de identificación</mat-label>
         <input matInput type="text" matInput required formControlName="numeroIdentificacion"
-          (keydown)="handleKeyDown($event)">
+         >
         <mat-icon matSuffix>account_box</mat-icon>
         <mat-error *ngIf="checkField('numeroIdentificacion','id', null )">
           {{mailUserForm.errorsMessage['id'].numeroIdentificacion}}</mat-error>
@@ -53,8 +53,8 @@
       <!-- Birhtday -->
       <mat-form-field fxFlex="47" appearance="outline">
         <mat-label>Fecha de naciemiento</mat-label>
-        <input matInput [matDatepicker]="dp" formControlName="fechaNacimiento" (dateChange)="setBirtdayFormat($event)"
-          placeholder="YYYY-MM-DD">
+        <input matInput [matDatepicker]="dp" [max]="today" formControlName="fechaNacimiento"
+          (dateChange)="setBirtdayFormat($event)" placeholder="YYYY-MM-DD">
         <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
         <mat-datepicker #dp></mat-datepicker>
         <mat-error *ngIf="checkField('fechaNacimiento', null, null)">{{mailUserForm.errorsMessage["fechaNacimiento"]}}
@@ -63,7 +63,7 @@
       <!-- Gender -->
       <mat-form-field fxFlex="47" appearance="outline">
         <mat-label>Género</mat-label>
-        <mat-select formControlName="genero" (keydown)="handleKeyDown($event)">
+        <mat-select formControlName="genero">
           <mat-option>-- Seleccione una opción --</mat-option>
           <mat-option value="MASCULINO">MASCULINO</mat-option>
           <mat-option value="FEMENINO">FEMENINO</mat-option>
@@ -79,21 +79,21 @@
       <!-- Email -->
       <mat-form-field fxFlex="47" appearance="outline">
         <mat-label>Email</mat-label>
-        <input matInput type="text" matInput required formControlName="email" (keydown)="handleKeyDown($event)">
+        <input matInput type="text" matInput required formControlName="email">
         <mat-error *ngIf="checkField('email', null, null)">{{mailUserForm.errorsMessage["email"]}}</mat-error>
         <mat-icon matSuffix>contact_mail</mat-icon>
       </mat-form-field>
       <!-- State -->
-      <mat-form-field fxFlex="47" appearance="outline">
+      <mat-form-field fxFlex="47" hideRequiredMarker appearance="outline">
         <mat-label>estado</mat-label>
-        <mat-select #state formControlName="estado" (keydown)="handleKeyDown($event)">
+        <mat-select #state formControlName="estado">
           <mat-option>-- Seleccione una opción --</mat-option>
           <mat-option value="ACTIVO">ACTIVO</mat-option>
-          <mat-option value="DESACTIVADO">DESACTIVADO</mat-option>
+          <mat-option value="INACTIVO">INACTIVO</mat-option>
         </mat-select>
         <ng-container [ngSwitch]="state.value" matSuffix>
           <mat-icon *ngSwitchCase="'ACTIVO'" matSuffix>email</mat-icon>
-          <mat-icon *ngSwitchCase="'DESACTIVADO'" matSuffix>unsubscribe</mat-icon>
+          <mat-icon *ngSwitchCase="'INACTIVO'" matSuffix>unsubscribe</mat-icon>
           <mat-icon *ngSwitchDefault matSuffix>contact_mail</mat-icon>
         </ng-container>
         <mat-error *ngIf="checkField('estado', null, null)">
@@ -101,13 +101,13 @@
       </mat-form-field>
     </div>
     <!-- Association -->
-    <div  *ngFor="let mailAssociation of mailUserForm.baseForm.get('asociacionPorUsuarioCorreo')['controls'];
+    <div *ngFor="let mailAssociation of mailUserForm.baseForm.get('asociacionPorUsuarioCorreo')['controls'];
           let i = index" [formGroup]="mailAssociation" fxLayout="row" fxFlexAlign="space-between center">
       <!-- Association -->
-      <div fxFlex="70" >
+      <div fxFlex="70">
         <mat-form-field hideRequiredMarker fxFlex="90" appearance="outline">
           <mat-label>Facultad/Escuela</mat-label>
-          <mat-select  formControlName="nombre"  (keydown)="handleKeyDown($event)">
+          <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let association of associations" [value]="association['nombre']"
               (onSelectionChange)="setformGropuID(mailAssociation, association['id'])">
@@ -143,14 +143,14 @@
       <div fxFlex="70">
         <mat-form-field hideRequiredMarker fxFlex="90" appearance="outline">
           <mat-label>Programa</mat-label>
-          <mat-select formControlName="nombre" (keydown)="handleKeyDown($event)">
+          <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let program of programs" [value]="program['nombre']"
-            (onSelectionChange)="setformGropuCode(academicProgram, program['codigo'])">
+              (onSelectionChange)="setformGropuCode(academicProgram, program['codigo'])">
               {{program['nombre']}}</mat-option>
           </mat-select>
           <mat-icon matSuffix>school</mat-icon>
-          <mat-error *ngIf="checkField('nombre','programaAcademicoPorUsuarioCorreo',i)" >
+          <mat-error *ngIf="checkField('nombre','programaAcademicoPorUsuarioCorreo',i)">
             {{mailUserForm.errorsMessage['programaAcademicoPorUsuarioCorreo'][i].nombre}}
           </mat-error>
         </mat-form-field>
@@ -178,10 +178,10 @@
       <div fxFlex="70">
         <mat-form-field hideRequiredMarker fxFlex="90" appearance="outline">
           <mat-label>Vinculación</mat-label>
-          <mat-select formControlName="nombre" (keydown)="handleKeyDown($event)">
+          <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let bondingType of bondingTypes" [value]="bondingType['nombre']"
-            (onSelectionChange)="setformGropuID(bonding, bondingType['id'])">
+              (onSelectionChange)="setformGropuID(bonding, bondingType['id'])">
               {{bondingType['nombre']}}</mat-option>
           </mat-select>
           <mat-icon matSuffix>group_work</mat-icon>
@@ -210,13 +210,13 @@
     <div *ngFor="let platformUser of mailUserForm.baseForm.get('plataformaPorUsuarioCorreo')['controls'];
           let i = index" [formGroup]="platformUser" fxLayout="row" fxFlexAlign="space-between center">
       <!-- Platform -->
-      <div  fxFlex="70" fxLayout = "row" >
+      <div fxFlex="70" fxLayout="row">
         <mat-form-field hideRequiredMarker fxFlex="90" appearance="outline">
           <mat-label>Plataforma</mat-label>
-          <mat-select #platformSelect formControlName="nombre" (keydown)="handleKeyDown($event)">
+          <mat-select #platformSelect formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let platform of platforms" [value]="platform['nombre']"
-            (onSelectionChange)="setformGropuID(platformUser, platform['id'])">
+              (onSelectionChange)="setformGropuID(platformUser, platform['id'])">
               {{platform['nombre']}}
             </mat-option>
           </mat-select>
