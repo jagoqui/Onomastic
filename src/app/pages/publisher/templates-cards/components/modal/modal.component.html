@@ -1,1 +1,21 @@
-<p>modal works!</p>
+<div class="example-container" fxLayout="column" fxFlex="100" fxLayoutAlign="center ">
+  <input type="file" accept="image/*" (change)="updateSource($event)">
+  <br>
+  <div>
+      <img *ngIf="source" [src]="source" src="" style="width: 90%; height:90%;">
+  </div>
+</div>
+<div id="container" fxLayout="column" fxFlex="100%" fxLayoutAlign="center stretch">
+  <p>Texto a agregar: </p>
+  <div id="actions_buttons" fxLayout="row" fxFlex="100" fxLayoutAlign="space-around center">
+      <button id="name" mat-raised-button (click)="AddName()">Nombre</button>
+      <button id="date" mat-raised-button (click)="AddDate()">Fecha</button>
+      <button id="school" mat-raised-button (click)="AddSchool()">Facultad/Escuela</button>
+      <button id="association" mat-raised-button (click)="AddAsociation()">Asociación</button>
+  </div>
+  <br>
+  <ckeditor [(ngModel)]="mycontent" #myckeditor="ngModel" name="textEditor" [config]="ckeConfig"></ckeditor>
+  <mat-dialog-actions>
+      <button mat-raised-button mat-dialog-close>Cancel</button>
+  </mat-dialog-actions>
+</div>

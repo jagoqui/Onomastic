@@ -1,0 +1,36 @@
+.mat-dialog-content {
+  background-color: white;
+}
+
+#container {
+  margin: 0 auto;
+  padding-top: 2%;
+
+  #actions_buttons {
+    width: 100%;
+    margin: 0.5556rem;
+
+    #name {
+      background-color: tomato;
+    }
+
+    #date {
+      background-color: aqua;
+    }
+
+    #school {
+      background-color: chocolate;
+    }
+
+    #association {
+      background-color: teal;
+    }
+
+  }
+}
+
+img {
+  display: flex;
+  flex-direction: column;
+
+}

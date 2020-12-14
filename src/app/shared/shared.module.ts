@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { CKEditorModule } from 'ng2-ckeditor';
 import { NgxCaptchaModule } from 'ngx-captcha';
 
 import { MaterialModule } from '../material-module.module';
@@ -27,6 +28,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
+    CKEditorModule,
     NgxCaptchaModule
   ],
   exports: [
@@ -36,7 +38,9 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     SidebarComponent,
     MaterialModule,
     FlexLayoutModule,
+    FormsModule,
     ReactiveFormsModule,
+    CKEditorModule,
     NgxCaptchaModule,
     FooterComponent
   ]
