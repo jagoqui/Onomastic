@@ -38,7 +38,7 @@
   }
 }
 
-#template-background {
+#template-background, #template-background-drop{
   width: 100%;
 
   img {
@@ -54,3 +54,10 @@
   max-height: 95vh;
 }
 ::ng-deep .cdk-overlay-pane .mat-dialog-container .mat-dialog-content { max-height: 95vh; }
+
+.drop-zone {
+  border: dotted 3px lightgray;
+}
+.file-over {
+  border: dotted 3px #2196f3;
+}

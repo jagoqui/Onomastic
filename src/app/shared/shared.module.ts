@@ -13,13 +13,17 @@ import {
   OnomasticLogoComponent,
 } from './components/onomastic-logo/onomastic-logo.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
+import {
+  UploadFilesDirective,
+} from './upload-files/directives/upload-files.directive';
 
 @NgModule({
   declarations: [
     OnomasticLogoComponent,
     HeaderComponent,
     SidebarComponent,
-    FooterComponent
+    FooterComponent,
+    UploadFilesDirective
   ],
   imports: [
     CommonModule,
@@ -36,6 +40,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
     OnomasticLogoComponent,
     HeaderComponent,
     SidebarComponent,
+    UploadFilesDirective,
     MaterialModule,
     FlexLayoutModule,
     FormsModule,

@@ -1,15 +1,25 @@
 <h1 #tittle mat-dialog-title>{{data.title | uppercase }}</h1>
 <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
   <!-- Image load -->
-  <div fxFlex="48" fxLayout="column wrap" fxLayoutAlign="center center" style="border: red solid 1px;">
-    <div id="template-background" style="border: blue solid 1px;">
-
-      <div [innerHTML]="mycontent"></div>
-      <img *ngIf="source" [src]="source">
+  <div fxFlex="48" fxLayout="column" fxLayoutAlign="space-between stretch">
+    <!-- <div [innerHTML]="mycontent"></div> -->
+    <div appUploadFiles [files]="itemImages" [multiple]=false (mouseOver)="isOverDrop = $event"
+      (fileSrc)="imageSrc = $event" [ngClass]="{ 'file-over': isOverDrop }" class="drop-zone" fxFlex>
+      <div *ngIf="imageSrc ; else dropImage" id="template-background">
+        <button mat-raised-button (click)="quitImage()">
+          <mat-icon>close</mat-icon>
+        </button>
+        <img [src]="imageSrc" fxFlex>
+      </div>
+      <ng-template #dropImage>
+        <div id="template-background-drop" fxLayout="column" fxFlexAlign="center center">
+          <h4 fxFlex>Arrastra imagen</h4>
+          <img src="assets/images/cloud.png" alt="drop-images"/>
+        </div>
+      </ng-template>
     </div>
-    <input type="file" accept="image/*" (change)="updateSource($event)">
+    <input type="file" appUploadFiles [files]="itemImages" [multiple]=false (fileSrc)="imageSrc =$event"/>
   </div>
-
   <!-- Edit text -->
   <div fxFlex="48" fxLayout="row" fxLayoutAlign="space-around center" class="container">
     <ckeditor [(ngModel)]="mycontent" #myckeditor="ngModel" name="textEditor" [config]="ckeConfig" fxFlex="72">
@@ -35,4 +45,3 @@
   </button> -->
   <button mat-raised-button fxFlex="20" color="primary">Crear tarjeta</button>
 </div>
-

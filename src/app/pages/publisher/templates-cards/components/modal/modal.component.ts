@@ -7,6 +7,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { FileUpload } from 'src/app/shared/upload-files/models/file-upload';
 
 import {
   ModalMailUsersComponent,
@@ -25,6 +26,9 @@ export class ModalComponent implements OnInit {
   @ViewChild('textEditor') ckeditor: any;
   source = '';
   ckeConfig: any;
+  itemImages: FileUpload[] = [];
+  imageSrc: string = null;
+  isOverDrop = false;
 
   constructor(
     private dialogRef: MatDialogRef<ModalMailUsersComponent>,
@@ -33,25 +37,15 @@ export class ModalComponent implements OnInit {
     this.mycontent = `<p>Hola&nbsp;<!--<p--><span style="color:#e74c3c"><strong>&lt;Nombre&gt;&nbsp;</strong></span>en esta&nbsp;<!--<p--><span style="color:#16a085"><strong>&lt;Fecha&gt; </strong></span>la Universidad de Antioquia le desea un feliz cumplea&ntilde;os</p>`;
   }
 
+  quitImage() {
+    this.itemImages[0] = null;
+    this.imageSrc = null;
+  }
   onClose(close?: boolean): void {
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       // this.mailUserForm.onReset();
       this.dialogRef.close();
     }
-  }
-
-  updateSource($event: Event) {
-    const tarjetName = 'files';
-    this.projectImage($event.target[tarjetName][0]);
-  }
-
-  projectImage(file: File) {
-    const reader = new FileReader();
-    reader.onload = (e: any) => {
-      this.source = e.target.result;
-      this.cahange.emit(file);
-    };
-    reader.readAsDataURL(file);
   }
 
   addName() {
