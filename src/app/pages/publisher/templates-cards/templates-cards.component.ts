@@ -1,11 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { ModalComponent} from './components/modal/modal.component';
+
+import { ModalComponent } from './components/modal/modal.component';
 
 @Component({
   selector: 'app-templates-cards',
   templateUrl: './templates-cards.component.html',
-  styleUrls: ['./templates-cards.component.scss']
+  styleUrls: ['./templates-cards.component.scss'],
+  encapsulation: ViewEncapsulation.None
 })
 export class TemplatesCardsComponent implements OnInit {
 
@@ -16,10 +18,12 @@ export class TemplatesCardsComponent implements OnInit {
 
   onOpenModal(): void {
     this.dialog.open(ModalComponent, {
-      height: '100%',
-      width: '100%',
+      height: 'auto',
+      width: '95%',
+      panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
-      data: { title: 'New template' },
+      disableClose: true,
+      data: { title: 'Nueva tarjeta' },
     });
   }
 }

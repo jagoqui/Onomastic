@@ -19,7 +19,8 @@
         <mat-icon>people_outline</mat-icon>
       </div>
     </button>
-    <button mat-raised-button class="button-action" fxFlex (click)="onOpenModal(null)">Agregar destinatarios</button>
+    <button mat-raised-button class="button-action button-add-user" fxFlex (click)="onOpenModal(null)"
+      title="Pulse para agregar un nuevo destinatario">Nuevo destinatario</button>
   </div>
   <!-- Table -->
   <div class="mat-elevation-z8">
@@ -28,7 +29,8 @@
         <!-- Filter/ Refresh-->
         <mat-form-field fxFlex="95">
           <mat-label>Buscar</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Ingrese el valor del campo a buscar" #input autocomplete="off">
+          <input matInput (keyup)="applyFilter($event)" placeholder="Ingrese el valor del campo a buscar" #input
+            autocomplete="off">
         </mat-form-field>
         <div>
           <button mat-mini-fab color="primary" title="Refresh" (click)="onRefresh()">

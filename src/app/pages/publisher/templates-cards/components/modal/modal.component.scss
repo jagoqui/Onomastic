@@ -1,36 +1,56 @@
-.mat-dialog-content {
-  background-color: white;
-}
+@import 'src/assets/custom_styles/material_custom_theme.scss';
 
-#container {
-  margin: 0 auto;
-  padding-top: 2%;
-
-  #actions_buttons {
-    width: 100%;
-    margin: 0.5556rem;
-
-    #name {
-      background-color: tomato;
-    }
-
-    #date {
-      background-color: aqua;
-    }
-
-    #school {
-      background-color: chocolate;
-    }
-
-    #association {
-      background-color: teal;
-    }
-
+#actions_buttons {
+  button {
+    margin-bottom: 10%;
   }
 }
 
-img {
-  display: flex;
-  flex-direction: column;
+.button-add-name {
+  background-color: tomato;
 
+  &:before {
+    content: "Nombre";
+  }
 }
+
+.button-add-date {
+  background-color: aqua;
+
+  &:before {
+    content: "Fecha";
+  }
+}
+
+.button-add-school {
+  background-color: chocolate;
+
+  &:before {
+    content: "Falcultad";
+  }
+}
+
+.button-add-association {
+  background-color: teal;
+
+  &:before {
+    content: "Asociación";
+  }
+}
+
+#template-background {
+  width: 100%;
+
+  img {
+    width              : 90%;
+    height             : 90%;
+    border-radius      : 10%;
+  }
+}
+
+::ng-deep .cdk-overlay-pane { max-width: 100vw !important; max-height: 95vh; }
+::ng-deep .cdk-overlay-pane .mat-dialog-container{
+  max-width: 100vw;
+  max-height: 95vh;
+}
+::ng-deep .cdk-overlay-pane .mat-dialog-container .mat-dialog-content { max-height: 95vh; }

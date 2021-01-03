@@ -1,0 +1,7 @@
+@import 'src/assets/custom_styles/material_custom_theme.scss';
+
+.button-add-template-card{
+  &:before {
+    content      : "Agregar plantilla";
+  }
+}
