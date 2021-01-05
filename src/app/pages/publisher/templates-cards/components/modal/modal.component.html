@@ -2,7 +2,7 @@
 <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
   <!-- Image load -->
   <div fxFlex="48" fxLayout="column" fxLayoutAlign="space-between stretch">
-    <!-- <div [innerHTML]="mycontent"></div> -->
+    <div #htmlContent [innerHTML]="mycontent"></div>
     <div appUploadFiles [files]="itemImages" [multiple]=false (mouseOver)="isOverDrop = $event"
       (fileSrc)="imageSrc = $event" [ngClass]="{ 'file-over': isOverDrop }" class="drop-zone" fxFlex>
       <div *ngIf="imageSrc ; else dropImage" id="template-background">
@@ -14,15 +14,16 @@
       <ng-template #dropImage>
         <div id="template-background-drop" fxLayout="column" fxFlexAlign="center center">
           <h4 fxFlex>Arrastra imagen</h4>
-          <img src="assets/images/cloud.png" alt="drop-images"/>
+          <img src="assets/images/cloud.png" alt="drop-images" />
         </div>
       </ng-template>
     </div>
-    <input type="file" appUploadFiles [files]="itemImages" [multiple]=false (fileSrc)="imageSrc =$event"/>
+    <input type="file" appUploadFiles [files]="itemImages" [multiple]=false (fileSrc)="imageSrc =$event" />
   </div>
   <!-- Edit text -->
   <div fxFlex="48" fxLayout="row" fxLayoutAlign="space-around center" class="container">
-    <ckeditor [(ngModel)]="mycontent" #myckeditor="ngModel" name="textEditor" [config]="ckeConfig" fxFlex="72">
+    <ckeditor [(ngModel)]="mycontent" #myckeditor="ngModel" name="textEditor" [config]="ckeConfig" fxFlex="72"
+      (change)="loadHtmlContent($event)">
     </ckeditor>
     <div id="actions_buttons" fxFlex="25" fxLayout="column" fxLayoutAlign="space-between stretch">
       <h2 #tittle mat-dialog-title>Etiquetas</h2>
@@ -32,8 +33,10 @@
         title="Pulse para agregar etiqueta de fecha.">Fecha</button>
       <button id="school" mat-raised-button class="button-action button-add-school" (click)="addSchool()"
         title="Pulse para agregar etoqueta de facultad/escuela.">Facultad</button>
-      <button mat-raised-button class="button-action button-add-association" (click)="addAsociation()"
+      <button mat-raised-button class="button-action button-add-association" (click)="addAssociation()"
         title="Pulse para agregar etiqueta asociación.">Asociación</button>
+        <button mat-raised-button color = "warn" class="button-action button-clear-text" (click)="mycontent=''"
+        title="Pulse para eliminar todo el texto.">Limpiar texto</button>
     </div>
   </div>
 </div>

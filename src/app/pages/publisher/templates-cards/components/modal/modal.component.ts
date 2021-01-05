@@ -1,5 +1,6 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Inject,
   OnInit,
@@ -7,6 +8,7 @@ import {
   ViewChild,
 } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { CKEditorComponent } from 'ng2-ckeditor/ckeditor.component';
 import { FileUpload } from 'src/app/shared/upload-files/models/file-upload';
 
 import {
@@ -21,9 +23,11 @@ import {
 
 export class ModalComponent implements OnInit {
 
-  mycontent: string;
   @Output() cahange: EventEmitter<File> = new EventEmitter<File>();
-  @ViewChild('textEditor') ckeditor: any;
+  @ViewChild('textEditor') ckeditor: CKEditorComponent;
+  @ViewChild('htmlContent') htmlContent: ElementRef;
+
+  mycontent: string;
   source = '';
   ckeConfig: any;
   itemImages: FileUpload[] = [];
@@ -41,6 +45,28 @@ export class ModalComponent implements OnInit {
     this.itemImages[0] = null;
     this.imageSrc = null;
   }
+
+  loadHtmlContent(content) {
+    this.htmlContent.nativeElement.innerHTML = content;
+  }
+
+  addName() {
+    this.mycontent = this.mycontent.substring(0, this.mycontent.length - 3).concat(`<p id="name"><span style="color:#e74c3c"><strong>&lt;Nombre&gt;</strong></span>&nbsp;</p>`);
+    // this.ckeditor.editing.view.focus();
+  }
+
+  addDate() {
+    this.mycontent = this.mycontent.substring(0, this.mycontent.length - 3).concat(`<p id="date"><span style="color:#16a085"><strong>&lt;Fecha&gt;</strong></span>&nbsp;</p>`);
+  }
+
+  addSchool() {
+    this.mycontent = this.mycontent.substring(0, this.mycontent.length - 3).concat(`<p id="school"><span style="color:#9b59b6"><strong>&lt;Facultad/Escuela&gt;</strong></span>&nbsp;</p>`);
+  }
+
+  addAssociation() {
+    this.mycontent = this.mycontent.substring(0, this.mycontent.length - 3).concat(`<p id="association"><span style="color:#f39c12"><strong>&lt;Asociación&gt;</strong></span>&nbsp;</p>`);
+  }
+
   onClose(close?: boolean): void {
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       // this.mailUserForm.onReset();
@@ -48,40 +74,8 @@ export class ModalComponent implements OnInit {
     }
   }
 
-  addName() {
-    this.mycontent = this.mycontent.substring(0, this.mycontent.length - 3).concat(`<p><span style="color:#e74c3c"><strong>&lt;Nombre&gt;</strong></span></p>`);
-  }
-
-  addDate() {
-    this.mycontent = this.mycontent.substring(0, this.mycontent.length - 3).concat(`<p><span style="color:#16a085"><strong>&lt;Fecha&gt;</strong></span></p>`);
-  }
-
-  addSchool() {
-    this.mycontent = this.mycontent.substring(0, this.mycontent.length - 3).concat(`<p><span style="color:#9b59b6"><strong>&lt;Facultad/Escuela&gt;</strong></span></p>`);
-  }
-
-  addAsociation() {
-    this.mycontent = this.mycontent.substring(0, this.mycontent.length - 3).concat(`<p><span style="color:#f39c12"><strong>&lt;Asociación&gt;</strong></span></p>`);
-  }
-
   ngOnInit() {
     this.ckeConfig = {
-      toolbarGroups: [
-        { name: 'basicstyles', groups: ['basicstyles', 'cleanup'] },
-        { name: 'insert', groups: ['insert'] },
-        { name: 'colors', groups: ['colors'] },
-        { name: 'paragraph', groups: ['align', 'list', 'indent', 'blocks', 'bidi', 'paragraph'] },
-        { name: 'styles', groups: ['styles'] },
-        { name: 'clipboard', groups: ['clipboard', 'undo'] },
-        { name: 'document', groups: ['mode', 'document', 'doctools'] },
-        { name: 'editing', groups: ['find', 'selection', 'spellchecker', 'editing'] },
-        { name: 'forms', groups: ['forms'] },
-        { name: 'links', groups: ['links'] },
-        { name: 'tools', groups: ['tools'] },
-        { name: 'others', groups: ['others'] },
-        { name: 'about', groups: ['about'] }
-      ],
-      removeButtons: 'Source,Save,NewPage,ExportPdf,Preview,Print,Templates,Cut,Copy,Paste,PasteText,PasteFromWord,Find,Replace,SelectAll,Scayt,Form,Checkbox,Radio,TextField,Textarea,Select,Button,ImageButton,HiddenField,Subscript,Superscript,Strike,CopyFormatting,RemoveFormat,NumberedList,BulletedList,Blockquote,CreateDiv,BidiLtr,BidiRtl,Language,Link,Unlink,Anchor,Image,Flash,Table,HorizontalRule,SpecialChar,PageBreak,Iframe,Maximize,ShowBlocks,About'
     };
   }
 }

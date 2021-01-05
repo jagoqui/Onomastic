@@ -38,6 +38,12 @@
   }
 }
 
+.button-clear-text{
+  &:before {
+    content: "Limpiar";
+  }
+}
+
 #template-background, #template-background-drop{
   width: 100%;
 
