@@ -22,10 +22,10 @@
   </div>
   <!-- Edit text -->
   <div fxFlex="48" fxLayout="row" fxLayoutAlign="space-between center" class="container">
-    <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)" fxFlex="72">
+    <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)" fxFlex>
       <div class="form-group">
         <angular-editor formControlName="description" (input)="showHTML()"
-          [(ngModel)]="mycontent" ></angular-editor>
+          [(ngModel)]="mycontent" (config)="config"></angular-editor>
         <div *ngIf="formdata.controls.description.errors && formdata.controls.description.touched" class="error">
           description is required(Max 400 - Min 5).</div>
       </div>
@@ -33,7 +33,6 @@
         {{htmlContentWithoutStyles}}
       </div> -->
     </form>
-
     <div id="actions_buttons" fxFlex="25" fxLayout="column" fxLayoutAlign="space-between stretch">
       <h2 #tittle mat-dialog-title>Etiquetas</h2>
       <button id="name" mat-raised-button class="button-action button-add-name" (click)="addName()"

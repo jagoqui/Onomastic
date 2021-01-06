@@ -5,7 +5,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FileUpload } from 'src/app/shared/upload-files/models/file-upload';
@@ -29,7 +29,7 @@ export class ModalComponent implements OnInit {
   mycontent: string;
   config: AngularEditorConfig;
   htmlContentWithoutStyles = '';
-  formdata;
+  formdata: FormGroup;
 
   constructor(
     private dialogRef: MatDialogRef<ModalMailUsersComponent>,
@@ -101,7 +101,7 @@ export class ModalComponent implements OnInit {
       translate: 'yes',
       enableToolbar: true,
       showToolbar: true,
-      placeholder: 'Enter text here...',
+      placeholder: 'Ingrese el texto aquí...',
       defaultParagraphSeparator: '',
       defaultFontName: '',
       defaultFontSize: '',
@@ -126,14 +126,10 @@ export class ModalComponent implements OnInit {
           tag: 'h1',
         },
       ],
-      // uploadUrl: 'v1/image',
+      uploadUrl: 'v1/image',
       uploadWithCredentials: false,
       sanitize: true,
       toolbarPosition: 'top',
-      toolbarHiddenButtons: [
-        ['bold', 'italic'],
-        ['fontSize']
-      ]
     };
   }
 }
