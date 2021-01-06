@@ -1,14 +1,13 @@
 import {
   Component,
   ElementRef,
-  EventEmitter,
   Inject,
   OnInit,
-  Output,
   ViewChild,
 } from '@angular/core';
+import { FormBuilder, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { CKEditorComponent } from 'ng2-ckeditor/ckeditor.component';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FileUpload } from 'src/app/shared/upload-files/models/file-upload';
 
 import {
@@ -22,23 +21,23 @@ import {
 })
 
 export class ModalComponent implements OnInit {
-
-  @Output() cahange: EventEmitter<File> = new EventEmitter<File>();
-  @ViewChild('textEditor') ckeditor: CKEditorComponent;
   @ViewChild('htmlContent') htmlContent: ElementRef;
 
-  mycontent: string;
-  source = '';
-  ckeConfig: any;
   itemImages: FileUpload[] = [];
   imageSrc: string = null;
   isOverDrop = false;
+  mycontent: string;
+  config: AngularEditorConfig;
+  htmlContentWithoutStyles = '';
+  formdata;
 
   constructor(
     private dialogRef: MatDialogRef<ModalMailUsersComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private formBuilder: FormBuilder
   ) {
-    this.mycontent = `<p>Hola&nbsp;<!--<p--><span style="color:#e74c3c"><strong>&lt;Nombre&gt;&nbsp;</strong></span>en esta&nbsp;<!--<p--><span style="color:#16a085"><strong>&lt;Fecha&gt; </strong></span>la Universidad de Antioquia le desea un feliz cumplea&ntilde;os</p>`;
+    this.mycontent = `Hola&nbsp;<span><b><font color="#e74c3c">&lt;Nombre&gt;</font></b>&nbsp;en ésta&nbsp;<b><font color="#16a085">&lt;Fecha&gt;</font></b>&nbsp;la Universidad de Antioquia le desea un feliz cumpleaños 🥳.</span>`;
+    this.htmlContentWithoutStyles = this.mycontent;
   }
 
   quitImage() {
@@ -46,25 +45,37 @@ export class ModalComponent implements OnInit {
     this.imageSrc = null;
   }
 
+  showHTML() {
+    this.htmlContentWithoutStyles = document.getElementById('htmlDiv').innerHTML;
+  }
+
+  onClickSubmit(data) {
+    if (this.formdata.invalid) {
+
+      this.formdata.get('description').markAsTouched();
+
+    }
+  }
+
   loadHtmlContent(content) {
     this.htmlContent.nativeElement.innerHTML = content;
   }
 
   addName() {
-    this.mycontent = this.mycontent.substring(0, this.mycontent.length - 3).concat(`<p id="name"><span style="color:#e74c3c"><strong>&lt;Nombre&gt;</strong></span>&nbsp;</p>`);
+    this.mycontent = this.mycontent.substring(0, this.mycontent.length).concat(`<span id="name"><b><font color="#e74c3c">&lt;Nombre&gt;</font></b>&nbsp;</span>`);
     // this.ckeditor.editing.view.focus();
   }
 
   addDate() {
-    this.mycontent = this.mycontent.substring(0, this.mycontent.length - 3).concat(`<p id="date"><span style="color:#16a085"><strong>&lt;Fecha&gt;</strong></span>&nbsp;</p>`);
+    this.mycontent = this.mycontent.substring(0, this.mycontent.length).concat(`<span id="date"><b><font color="#16a085">&lt;Fecha&gt;</font></b>&nbsp;</span>`);
   }
 
   addSchool() {
-    this.mycontent = this.mycontent.substring(0, this.mycontent.length - 3).concat(`<p id="school"><span style="color:#9b59b6"><strong>&lt;Facultad/Escuela&gt;</strong></span>&nbsp;</p>`);
+    this.mycontent = this.mycontent.substring(0, this.mycontent.length).concat(`<span id="date"><b><font color="#9b59b6">&lt;Falcultad/Escuela&gt;</font></b>&nbsp;</span>`);
   }
 
   addAssociation() {
-    this.mycontent = this.mycontent.substring(0, this.mycontent.length - 3).concat(`<p id="association"><span style="color:#f39c12"><strong>&lt;Asociación&gt;</strong></span>&nbsp;</p>`);
+    this.mycontent = this.mycontent.substring(0, this.mycontent.length).concat(`<span id="date"><b><font color="#f39c12">&lt;Asociación&gt;</font></b>&nbsp;</span>`);
   }
 
   onClose(close?: boolean): void {
@@ -75,7 +86,54 @@ export class ModalComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.ckeConfig = {
+    this.formdata = this.formBuilder.group({
+      description: ['', [Validators.required,
+      Validators.maxLength(400), Validators.minLength(5)]]
+    });
+    this.config = {
+      editable: true,
+      spellcheck: true,
+      height: 'auto',
+      minHeight: '0',
+      maxHeight: 'auto',
+      width: 'auto',
+      minWidth: '0',
+      translate: 'yes',
+      enableToolbar: true,
+      showToolbar: true,
+      placeholder: 'Enter text here...',
+      defaultParagraphSeparator: '',
+      defaultFontName: '',
+      defaultFontSize: '',
+      fonts: [
+        { class: 'arial', name: 'Arial' },
+        { class: 'times-new-roman', name: 'Times New Roman' },
+        { class: 'calibri', name: 'Calibri' },
+        { class: 'comic-sans-ms', name: 'Comic Sans MS' }
+      ],
+      customClasses: [
+        {
+          name: 'quote',
+          class: 'quote',
+        },
+        {
+          name: 'redText',
+          class: 'redText'
+        },
+        {
+          name: 'titleText',
+          class: 'titleText',
+          tag: 'h1',
+        },
+      ],
+      // uploadUrl: 'v1/image',
+      uploadWithCredentials: false,
+      sanitize: true,
+      toolbarPosition: 'top',
+      toolbarHiddenButtons: [
+        ['bold', 'italic'],
+        ['fontSize']
+      ]
     };
   }
 }
