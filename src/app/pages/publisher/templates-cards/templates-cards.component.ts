@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { ModalComponent } from './components/modal/modal.component';
@@ -6,8 +6,7 @@ import { ModalComponent } from './components/modal/modal.component';
 @Component({
   selector: 'app-templates-cards',
   templateUrl: './templates-cards.component.html',
-  styleUrls: ['./templates-cards.component.scss'],
-  encapsulation: ViewEncapsulation.None
+  styleUrls: ['./templates-cards.component.scss']
 })
 export class TemplatesCardsComponent implements OnInit {
 
