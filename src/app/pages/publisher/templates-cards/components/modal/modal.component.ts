@@ -1,13 +1,12 @@
-import {
-  Component,
-  ElementRef,
-  Inject,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { JoditAngularComponent } from 'jodit-angular';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import {
+  ThemeSwitcherControllerService,
+} from 'src/app/shared/services/theme-switcher-controller.service';
 import { FileUpload } from 'src/app/shared/upload-files/models/file-upload';
 
 import {
@@ -20,21 +19,23 @@ import {
   styleUrls: ['./modal.component.scss']
 })
 
-export class ModalComponent implements OnInit {
-  @ViewChild('htmlContent') htmlContent: ElementRef;
+export class ModalComponent implements OnInit, OnDestroy {
+  @ViewChild('editor') joditEditor: JoditAngularComponent;
 
+  private destroy$ = new Subject<any>();
   itemImages: FileUpload[] = [];
   imageSrc: string = null;
   isOverDrop = false;
   mycontent: string;
-  config: AngularEditorConfig;
+  config: any;
   htmlContentWithoutStyles = '';
   formdata: FormGroup;
 
   constructor(
     private dialogRef: MatDialogRef<ModalMailUsersComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private themeSwitcherController: ThemeSwitcherControllerService
   ) {
     this.mycontent = `Hola&nbsp;<span><b><font color="#e74c3c">&lt;Nombre&gt;</font></b>&nbsp;en ésta&nbsp;<b><font color="#16a085">&lt;Fecha&gt;</font></b>&nbsp;la Universidad de Antioquia le desea un feliz cumpleaños 🥳.</span>`;
     this.htmlContentWithoutStyles = this.mycontent;
@@ -45,25 +46,25 @@ export class ModalComponent implements OnInit {
     this.imageSrc = null;
   }
 
+  resetEditor() {
+    this.mycontent = '';
+    this.htmlContentWithoutStyles = '';
+    this.joditEditor.resetEditor();
+  }
+
   showHTML() {
     this.htmlContentWithoutStyles = document.getElementById('htmlDiv').innerHTML;
   }
 
   onClickSubmit(data) {
     if (this.formdata.invalid) {
-
       this.formdata.get('description').markAsTouched();
-
     }
-  }
-
-  loadHtmlContent(content) {
-    this.htmlContent.nativeElement.innerHTML = content;
   }
 
   addName() {
     this.mycontent = this.mycontent.substring(0, this.mycontent.length).concat(`<span id="name"><b><font color="#e74c3c">&lt;Nombre&gt;</font></b>&nbsp;</span>`);
-    // this.ckeditor.editing.view.focus();
+    // this.joditEditor.element.innerHTML = `<span id="name"><b><font color="#e74c3c">&lt;Nombre&gt;</font></b>&nbsp;</span>`;
   }
 
   addDate() {
@@ -80,7 +81,7 @@ export class ModalComponent implements OnInit {
 
   onClose(close?: boolean): void {
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
-      // this.mailUserForm.onReset();
+      this.formdata.reset();
       this.dialogRef.close();
     }
   }
@@ -91,45 +92,24 @@ export class ModalComponent implements OnInit {
       Validators.maxLength(400), Validators.minLength(5)]]
     });
     this.config = {
-      editable: true,
-      spellcheck: true,
-      height: 'auto',
-      minHeight: '0',
-      maxHeight: 'auto',
-      width: 'auto',
-      minWidth: '0',
-      translate: 'yes',
-      enableToolbar: true,
-      showToolbar: true,
-      placeholder: 'Ingrese el texto aquí...',
-      defaultParagraphSeparator: '',
-      defaultFontName: '',
-      defaultFontSize: '',
-      fonts: [
-        { class: 'arial', name: 'Arial' },
-        { class: 'times-new-roman', name: 'Times New Roman' },
-        { class: 'calibri', name: 'Calibri' },
-        { class: 'comic-sans-ms', name: 'Comic Sans MS' }
-      ],
-      customClasses: [
-        {
-          name: 'quote',
-          class: 'quote',
-        },
-        {
-          name: 'redText',
-          class: 'redText'
-        },
-        {
-          name: 'titleText',
-          class: 'titleText',
-          tag: 'h1',
-        },
-      ],
-      uploadUrl: 'v1/image',
-      uploadWithCredentials: false,
-      sanitize: true,
-      toolbarPosition: 'top',
+      autofocus: true,
+      uploader: {
+        insertImageAsBase64URI: true
+      },
+      language: 'es',
+      theme: 'default',
+      enter: 'DIV'
     };
+    this.themeSwitcherController.themeClass$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (theme: string) => (this.config.theme = theme === 'light-theme' ? 'default' : 'dark')
+        // TODO: Detectar evento de preview para poner tema claro.
+      );
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next({});
+    this.destroy$.complete();
   }
 }

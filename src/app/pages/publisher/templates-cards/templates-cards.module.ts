@@ -1,4 +1,5 @@
 import { NgModule } from '@angular/core';
+import { JoditAngularModule } from 'jodit-angular';
 import { SharedModule } from 'src/app/shared/shared.module';
 
 import { ModalComponent } from './components/modal/modal.component';
@@ -9,6 +10,7 @@ import { TemplatesCardsComponent } from './templates-cards.component';
   declarations: [TemplatesCardsComponent, ModalComponent],
   imports: [
     TemplatesCardsRoutingModule,
+    JoditAngularModule,
     SharedModule,
   ]
 })

@@ -3,7 +3,6 @@ import { NgModule } from '@angular/core';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { AngularEditorModule } from '@kolkov/angular-editor';
 import { NgxCaptchaModule } from 'ngx-captcha';
 
 import { MaterialModule } from '../material-module.module';
@@ -32,7 +31,6 @@ import {
     MaterialModule,
     FormsModule,
     ReactiveFormsModule,
-    AngularEditorModule,
     NgxCaptchaModule
   ],
   exports: [
@@ -45,7 +43,6 @@ import {
     FlexLayoutModule,
     FormsModule,
     ReactiveFormsModule,
-    AngularEditorModule,
     NgxCaptchaModule,
     FooterComponent
   ]

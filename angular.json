@@ -17,6 +17,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "jodit-angular",
+              "debug"
+            ],
             "outputPath": "dist/onomastic",
             "index": "src/index.html",
             "main": "src/main.ts",
@@ -28,9 +32,14 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "src/styles.scss",
+              "node_modules/jodit/build/jodit.min.css",
+              "node_modules/jodit/build/jodit.es2018.min.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/jodit/build/jodit.min.js",
+              "node_modules/jodit/build/jodit.es2018.min.js"
+            ]
           },
           "configurations": {
             "production": {

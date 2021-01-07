@@ -2,7 +2,6 @@
 <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
   <!-- Image load -->
   <div fxFlex="48" fxLayout="column" fxLayoutAlign="space-between stretch">
-    <div id="htmlDiv" class="html" [innerHTML]="mycontent"></div>
     <div appUploadFiles [files]="itemImages" [multiple]=false (mouseOver)="isOverDrop = $event"
       (fileSrc)="imageSrc = $event" [ngClass]="{ 'file-over': isOverDrop }" class="drop-zone" fxFlex>
       <div *ngIf="imageSrc ; else dropImage" id="template-background">
@@ -24,12 +23,13 @@
   <div fxFlex="48" fxLayout="row" fxLayoutAlign="space-between center" class="container">
     <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)" fxFlex>
       <div class="form-group">
-        <angular-editor formControlName="description" (input)="showHTML()"
-          [(ngModel)]="mycontent" (config)="config"></angular-editor>
+        <jodit-editor #editor formControlName="description" (input)="showHTML()"
+          [(ngModel)]="mycontent" [(config)]="config"></jodit-editor>
         <div *ngIf="formdata.controls.description.errors && formdata.controls.description.touched" class="error">
           description is required(Max 400 - Min 5).</div>
       </div>
     </form>
+
     <div id="actions_buttons" fxFlex="25" fxLayout="column" fxLayoutAlign="space-between stretch">
       <h2 #tittle mat-dialog-title>Etiquetas</h2>
       <button id="name" mat-raised-button class="button-action button-add-name" (click)="addName()"
@@ -40,7 +40,7 @@
         title="Pulse para agregar etoqueta de facultad/escuela.">Facultad</button>
       <button mat-raised-button class="button-action button-add-association" (click)="addAssociation()"
         title="Pulse para agregar etiqueta asociación.">Asociación</button>
-      <button mat-raised-button color="warn" class="button-action button-clear-text" (click)="mycontent=''"
+      <button mat-raised-button color="warn" class="button-action button-clear-text" (click)="resetEditor()"
         title="Pulse para eliminar todo el texto.">Limpiar texto</button>
     </div>
   </div>

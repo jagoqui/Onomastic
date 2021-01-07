@@ -53,6 +53,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
       this.overlayContainer.getContainerElement().classList.remove('dark-theme');
     }
   }
+
   ngAfterViewInit(): void {
     setTimeout(() => {
       this.spinner.show(undefined, {
