@@ -1,9 +1,13 @@
 <h1 #tittle mat-dialog-title>{{data.title | uppercase }}</h1>
+
+<!-- <div #htmlContent [innerHTML]="mycontent"></div> -->
+<!-- <p>{{mycontent}}</p> -->
 <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
   <!-- Image load -->
-  <div fxFlex="48" fxLayout="column" fxLayoutAlign="space-between stretch">
+  <div fxFlex="30" fxLayout="column" fxLayoutAlign="space-between stretch">
     <div appUploadFiles [files]="itemImages" [multiple]=false (mouseOver)="isOverDrop = $event"
-      (fileSrc)="imageSrc = $event" [ngClass]="{ 'file-over': isOverDrop }" class="drop-zone" fxFlex>
+      (fileSrc)="imageSrc = $event"  [ngClass]="{ 'file-over': isOverDrop }" class="drop-zone" fxFlex
+      (change)="picked($event)">
       <div *ngIf="imageSrc ; else dropImage" id="template-background">
         <button mat-raised-button (click)="quitImage()">
           <mat-icon>close</mat-icon>
@@ -17,16 +21,16 @@
         </div>
       </ng-template>
     </div>
-    <input type="file" appUploadFiles [files]="itemImages" [multiple]=false (fileSrc)="imageSrc =$event" />
+    <input type="file" appUploadFiles [files]="itemImages" [multiple]=false (fileSrc)="imgB64=imageSrc=$event" (change)="picked($event)"  />
   </div>
   <!-- Edit text -->
-  <div fxFlex="48" fxLayout="row" fxLayoutAlign="space-between center" class="container">
+  <div fxFlex="66" fxLayout="row" fxLayoutAlign="space-between center" class="container">
     <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)" fxFlex>
       <div class="form-group">
-        <jodit-editor #editor formControlName="description" (input)="showHTML()"
-          [(ngModel)]="mycontent" [(config)]="config"></jodit-editor>
+        <jodit-editor #editor formControlName="description" (input)="showHTML()" [(ngModel)]="mycontent"
+          [(config)]="config"></jodit-editor>
         <div *ngIf="formdata.controls.description.errors && formdata.controls.description.touched" class="error">
-          description is required(Max 400 - Min 5).</div>
+          Máximo 400 carácteres.</div>
       </div>
     </form>
 
@@ -45,6 +49,7 @@
     </div>
   </div>
 </div>
+
 
 <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end end">
   <button mat-raised-button fxFlex="20" color="warn" (click)="onClose(null)">Cancelar</button>
