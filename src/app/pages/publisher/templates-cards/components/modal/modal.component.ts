@@ -25,13 +25,17 @@ export class ModalComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<any>();
   itemImages: FileUpload[] = [];
   imageSrc: string = null;
-  imgB64: string = null;
   isOverDrop = false;
-  mycontent: string;
+  initialContent = `
+    <div id="editorContent">
+      <span>
+        Hola&nbsp;<b><font color="#e74c3c">&lt;Nombre&gt;</font></b>&nbsp;en ésta&nbsp;<b><font color="#16a085">&lt;Fecha&gt;</font></b>&nbsp;la Universidad de Antioquia le desea un feliz cumpleaños 🥳.
+      </span>
+    </div>
+  `;
+  myContent: string;
   config: any;
-  htmlContentWithoutStyles = '';
   formdata: FormGroup;
-  imgBase64: string = null;
 
   constructor(
     private dialogRef: MatDialogRef<ModalMailUsersComponent>,
@@ -39,68 +43,97 @@ export class ModalComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private themeSwitcherController: ThemeSwitcherControllerService
   ) {
-    this.mycontent = `<div id="imgb">Hola&nbsp;<span><b><font color="#e74c3c">&lt;Nombre&gt;</font></b>&nbsp;en ésta&nbsp;<b><font color="#16a085">&lt;Fecha&gt;</font></b>&nbsp;la Universidad de Antioquia le desea un feliz cumpleaños 🥳.</span>
-  </div>`;
-    this.htmlContentWithoutStyles = this.mycontent;
+    this.myContent = this.initialContent;
+  }
+
+  deleteEvent(event): void {
+    const key = event.key; // const {key} = event; ES6+
+    if (key === 'Backspace') {
+      console.log('The key was deleted');
+    }
+  }
+
+  editorContentVerify() {
+    const content = document.getElementById('editorContent');
+    if (!content) {
+      this.myContent = `
+        <div id="editorContent">
+          ${this.myContent}
+        </div>
+      `;
+      this.quitImage();
+    }
+  }
+
+  setCardBackground(event) {
+    const file: File = event.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = this._handleReaderLoaded.bind(this);
+    reader.readAsDataURL(this.itemImages[0]?.file || file); // TODO: Aveces no carga la imagen('itemImages) en el editor,
+    // entonces toca salta la validación y leer la imagen normal para que cargue la imagen.
+  }
+
+  _handleReaderLoaded() {
+    const content = document.getElementById('editorContent');
+
+    if (!content.children[0]?.innerHTML) {
+      content.innerHTML = '&nbsp;';
+    }
+    content.style.backgroundImage = `url(${this.imageSrc})`;
+    content.style.backgroundRepeat = 'no-repeat';
+    content.style.backgroundPosition = 'center';
+    content.style.backgroundSize = 'cover';
+    content.style.height = 'auto';
+    content.style.color = 'white';
   }
 
   quitImage() {
+    // TODO: Error al quitar la imagen, al cargar de nuevo debe ser una imagen diferente para que carge.
     this.itemImages[0] = null;
-    this.imageSrc = null;
-    const imagen = document.getElementById('imgb');
-    imagen.style.backgroundImage = `url(${this.imageSrc})`;
+    this.imageSrc = '';
+    const content = document.getElementById('editorContent');
+    if (content) {
+      content.style.backgroundImage = null;
+      content.style.color = 'black';
+    }
   }
 
   resetEditor() {
-    console.log(this.imageSrc);
-    this.mycontent = '';
-    this.htmlContentWithoutStyles = '';
+    this.myContent = null;
     this.joditEditor.resetEditor();
-  }
-
-  showHTML() {
-    this.htmlContentWithoutStyles = document.getElementById('htmlDiv').innerHTML;
+    this.imageSrc = null;
   }
 
   onClickSubmit(data) {
+    console.log(this.joditEditor.editor.chars);
+
     if (this.formdata.invalid) {
       this.formdata.get('description').markAsTouched();
     }
   }
 
-  public picked(event) {
-    const file: File = event.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = this._handleReaderLoaded.bind(this);
-    reader.readAsDataURL(file);
-  }
-
-  _handleReaderLoaded(e) {
-    const reader = e.target;
-    this.imgBase64 = reader.result;
-    const imagen = document.getElementById('imgb');
-    imagen.style.backgroundImage = `url(${this.imageSrc})`;
-    imagen.style.backgroundRepeat = 'no-repeat';
-    imagen.style.backgroundPosition = 'center';
-    imagen.style.backgroundSize = 'cover';
-    imagen.style.height = '500px';
-  }
-
   addName() {
-    this.mycontent = this.mycontent.substring(0, this.mycontent.length).concat(`<span id="name"><b><font color="#e74c3c">&lt;Nombre&gt;</font></b>&nbsp;</span>`);
-    //this.joditEditor.element.innerHTML = `<span id="name"><b><font color="#e74c3c">&lt;Nombre&gt;</font></b>&nbsp;</span>`;
+    const content = document.getElementById('editorContent');
+    const spanName = `<span id="name"><b><font color="#e74c3c">&lt;Nombre&gt;</font></b>&nbsp;</span>`;
+    content.innerHTML += spanName;
   }
 
   addDate() {
-    this.mycontent = this.mycontent.substring(0, this.mycontent.length).concat(`<span id="date"><b><font color="#16a085">&lt;Fecha&gt;</font></b>&nbsp;</span>`);
+    const content = document.getElementById('editorContent');
+    const spanDate = `<span id="date"><b><font color="#16a085">&lt;Fecha&gt;</font></b>&nbsp;</span>`;
+    content.innerHTML += spanDate;
   }
 
   addSchool() {
-    this.mycontent = this.mycontent.substring(0, this.mycontent.length).concat(`<span id="date"><b><font color="#9b59b6">&lt;Falcultad/Escuela&gt;</font></b>&nbsp;</span>`);
+    const content = document.getElementById('editorContent');
+    const spanSchool = `<span id="school"><b><font color="#9b59b6">&lt;Falcultad/Escuela&gt;</font></b>&nbsp;</span>`;
+    content.innerHTML += spanSchool;
   }
 
   addAssociation() {
-    this.mycontent = this.mycontent.substring(0, this.mycontent.length).concat(`<span id="date"><b><font color="#f39c12">&lt;Asociación&gt;</font></b>&nbsp;</span>`);
+    const content = document.getElementById('editorContent');
+    const spanAssociation = `<span id="association"><b><font color="#f39c12">&lt;Asociación&gt;</font></b>&nbsp;</span>`;
+    content.innerHTML += spanAssociation;
   }
 
   onClose(close?: boolean): void {
@@ -117,17 +150,70 @@ export class ModalComponent implements OnInit, OnDestroy {
     });
     this.config = {
       autofocus: true,
+      maxWidth: 800,
+      maxHeight: 600,
       uploader: {
         insertImageAsBase64URI: true
       },
       language: 'es',
+      enter: 'BR',
       theme: 'default',
       limitChars: 400,
-      toolbarButtonSize: 'small',
+      placeholder: 'Ingrese el texto aquí',
       showXPathInStatusbar: false,
-      toolbarAdaptive: true,
-      disablePlugins: 'enter,table,about,delete,clean-html,wrap-text-nodes,placeholder,iframe,video,file,print,table-keyboard-navigation,select-cells,resize-cells'
-
+      toolbarAdaptive: false,
+      buttons: [
+        'bold', 'underline', 'italic', 'strikethrough', '|',
+        'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
+        'superscript', 'subscript', 'symbol', '|',
+        'cut', 'copy', 'paste', 'eraser', '|',
+        'undo', 'redo',
+        '\n',
+        'ol', 'ul', '|',
+        'indent', 'outdent', '|',
+        'table', 'hr', '|',
+        'link', 'image', 'video', 'fullsize', '|',
+        'selectall', 'source', 'preview', 'print', 'find', 'about'
+      ],
+      buttonsMD: [
+        'bold', 'underline', 'italic', 'strikethrough', '|',
+        'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
+        'superscript', 'subscript', 'symbol', '|',
+        'cut', 'copy', 'paste', 'eraser', '|',
+        'undo', 'redo',
+        '\n',
+        'ol', 'ul', '|',
+        'indent', 'outdent', '|',
+        'table', 'hr', '|',
+        'link', 'image', 'video', 'fullsize', '|',
+        'selectall', 'source', 'preview', 'print', 'find', 'about'
+      ],
+      buttonsSM: [
+        'bold', 'underline', 'italic', 'strikethrough', '|',
+        'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
+        'superscript', 'subscript', 'symbol', '|',
+        'cut', 'copy', 'paste', 'eraser', '|',
+        'undo', 'redo',
+        '\n',
+        'ol', 'ul', '|',
+        'indent', 'outdent', '|',
+        'table', 'hr', '|',
+        'link', 'image', 'video', 'fullsize', '|',
+        'selectall', 'source', 'preview', 'print', 'find', 'about'
+      ],
+      buttonsXS: [
+        'bold', 'underline', 'italic', 'strikethrough', '|',
+        'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
+        'superscript', 'subscript', 'symbol', '|',
+        'cut', 'copy', 'paste', 'eraser', '|',
+        'undo', 'redo',
+        '\n',
+        'ol', 'ul', '|',
+        'indent', 'outdent', '|',
+        'table', 'hr', '|',
+        'link', 'image', 'video', 'fullsize', '|',
+        'selectall', 'source', 'preview', 'print', 'find', 'about'
+      ],
     };
     this.themeSwitcherController.themeClass$
       .pipe(takeUntil(this.destroy$))

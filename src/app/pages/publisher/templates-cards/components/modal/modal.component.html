@@ -1,13 +1,9 @@
 <h1 #tittle mat-dialog-title>{{data.title | uppercase }}</h1>
-
-<!-- <div #htmlContent [innerHTML]="mycontent"></div> -->
-<!-- <p>{{mycontent}}</p> -->
 <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
   <!-- Image load -->
-  <div fxFlex="30" fxLayout="column" fxLayoutAlign="space-between stretch">
-    <div appUploadFiles [files]="itemImages" [multiple]=false (mouseOver)="isOverDrop = $event"
-      (fileSrc)="imageSrc = $event"  [ngClass]="{ 'file-over': isOverDrop }" class="drop-zone" fxFlex
-      (change)="picked($event)">
+  <div fxFlex="20" fxLayout="column" fxLayoutAlign="space-between stretch">
+    <div appUploadFiles [files]="itemImages" [multiple]=false (mouseOver)="isOverDrop = $event" (change)="setCardBackground($event)"
+      (fileSrc)="imageSrc = $event" [ngClass]="{ 'file-over': isOverDrop }" class="drop-zone" fxFlex>
       <div *ngIf="imageSrc ; else dropImage" id="template-background">
         <button mat-raised-button (click)="quitImage()">
           <mat-icon>close</mat-icon>
@@ -21,14 +17,14 @@
         </div>
       </ng-template>
     </div>
-    <input type="file" appUploadFiles [files]="itemImages" [multiple]=false (fileSrc)="imgB64=imageSrc=$event" (change)="picked($event)"  />
+    <input id="inputBackgroundEditor" type="file" appUploadFiles [files]="itemImages" [multiple]=false (fileSrc)="imageSrc=$event" (change)="setCardBackground($event)"/>
   </div>
   <!-- Edit text -->
-  <div fxFlex="66" fxLayout="row" fxLayoutAlign="space-between center" class="container">
+  <div fxFlex="75" fxLayout="row" fxLayoutAlign="space-between center" class="container">
     <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)" fxFlex>
       <div class="form-group">
-        <jodit-editor #editor formControlName="description" (input)="showHTML()" [(ngModel)]="mycontent"
-          [(config)]="config"></jodit-editor>
+        <jodit-editor #editor id ="editor" formControlName="description" [(ngModel)]="myContent"
+          [(config)]="config" (change)="editorContentVerify()" (keydown)="deleteEvent($event)"></jodit-editor>
         <div *ngIf="formdata.controls.description.errors && formdata.controls.description.touched" class="error">
           Máximo 400 carácteres.</div>
       </div>
