@@ -9,9 +9,9 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { ID } from '@shared/models/mail-users.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { ID } from 'src/app/shared/models/mail-users.model';
 
 import { EmailUsersService } from '../services/email-users.service';
 import {

@@ -6,9 +6,9 @@ import {
   Output,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { AuthService } from '@auth/services/auth.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { AuthService } from 'src/app/auth/services/auth.service';
 
 import { PlatformUserResponse } from '../../models/platform-users.model';
 import {

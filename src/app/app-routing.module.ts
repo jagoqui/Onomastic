@@ -1,14 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { QuicklinkStrategy } from 'ngx-quicklink';
-
 import {
   PageNotFoundComponent,
-} from './shared/components/page-not-found/page-not-found.component';
-import { CheckLoginGuard } from './shared/guards/check-login.guard';
-import {
-  NegateCheckLoginGuard,
-} from './shared/guards/negate-check-login.guard';
+} from '@shared/components/page-not-found/page-not-found.component';
+import { CheckLoginGuard } from '@shared/guards/check-login.guard';
+import { NegateCheckLoginGuard } from '@shared/guards/negate-check-login.guard';
+import { QuicklinkStrategy } from 'ngx-quicklink';
 
 
 const routes: Routes = [

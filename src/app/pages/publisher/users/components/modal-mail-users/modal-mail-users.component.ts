@@ -18,13 +18,13 @@ import {
 } from '@angular/material/core';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import * as moment from 'moment';
-import { Subscription } from 'rxjs';
 import {
   ByNameId,
   ProgramaAcademicoPorUsuarioCorreo,
-} from 'src/app/shared/models/mail-users.model';
-import { BaseFormMailUsers } from 'src/app/shared/utils/base-form-mail-users';
+} from '@shared/models/mail-users.model';
+import { BaseFormMailUsers } from '@shared/utils/base-form-mail-users';
+import * as moment from 'moment';
+import { Subscription } from 'rxjs';
 
 import { EmailUsersService } from '../../../services/email-users.service';
 

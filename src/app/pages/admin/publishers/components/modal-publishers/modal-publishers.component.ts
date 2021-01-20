@@ -1,9 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { AuthService } from 'src/app/auth/services/auth.service';
-import {
-  BaseFormPlatformUsers,
-} from 'src/app/shared/utils/base-form-platform-users';
+import { AuthService } from '@auth/services/auth.service';
+import { BaseFormPlatformUsers } from '@shared/utils/base-form-platform-users';
 
 enum Action {
   EDIT = 'edit',

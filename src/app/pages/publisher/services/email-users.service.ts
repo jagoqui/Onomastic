@@ -1,14 +1,14 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { environment } from '@env/environment';
 import {
   ByNameId,
   ID,
   MailUsers,
   MailUsersResponse,
   ProgramaAcademicoPorUsuarioCorreo,
-} from 'src/app/shared/models/mail-users.model';
-import { environment } from 'src/environments/environment';
+} from '@shared/models/mail-users.model';
+import { Observable } from 'rxjs';
 
 @Injectable({ providedIn: 'root' })
 export class EmailUsersService {

@@ -1,13 +1,13 @@
 import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  ThemeSwitcherControllerService,
+} from '@shared/services/theme-switcher-controller.service';
+import { FileUpload } from '@shared/upload-files/models/file-upload';
 import { JoditAngularComponent } from 'jodit-angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import {
-  ThemeSwitcherControllerService,
-} from 'src/app/shared/services/theme-switcher-controller.service';
-import { FileUpload } from 'src/app/shared/upload-files/models/file-upload';
 
 import {
   ModalMailUsersComponent,
@@ -49,7 +49,7 @@ export class ModalComponent implements OnInit, OnDestroy {
   deleteEvent(event): void {
     const key = event.key; // const {key} = event; ES6+
     if (key === 'Backspace') {
-      console.log('The key was deleted');
+      console.log(this.joditEditor.editor.selection);
     }
   }
 
@@ -88,7 +88,7 @@ export class ModalComponent implements OnInit, OnDestroy {
   }
 
   quitImage() {
-    // TODO: Error al quitar la imagen, al cargar de nuevo debe ser una imagen diferente para que carge.
+    // TODO: Error al quitar la imagen, al cargar de nuevo debe ser una imagen diferente para que carge. Solo paasa en algunos navegadores
     this.itemImages[0] = null;
     this.imageSrc = '';
     const content = document.getElementById('editorContent');
