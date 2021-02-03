@@ -2,16 +2,16 @@ import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
+  TemplateCardsService,
+} from '@app/pages/publisher/services/template-cards.service';
+import { TemplateCard } from '@app/shared/models/template-card.model';
+import {
   ThemeSwitcherControllerService,
 } from '@shared/services/theme-switcher-controller.service';
 import { FileUpload } from '@shared/upload-files/models/file-upload';
 import { JoditAngularComponent } from 'jodit-angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-
-import {
-  ModalMailUsersComponent,
-} from '../../../users/components/modal-mail-users/modal-mail-users.component';
 
 @Component({
   selector: 'app-modal',
@@ -25,6 +25,10 @@ export class ModalComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<any>();
   itemImages: FileUpload[] = [];
   imageSrc: string = null;
+  card: TemplateCard = {
+    htmlContent: '',
+    backgroundImage: new FormData()
+  };
   isOverDrop = false;
   initialContent = `
     <div id="editorContent">
@@ -38,10 +42,11 @@ export class ModalComponent implements OnInit, OnDestroy {
   formdata: FormGroup;
 
   constructor(
-    private dialogRef: MatDialogRef<ModalMailUsersComponent>,
+    private dialogRef: MatDialogRef<ModalComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
-    private themeSwitcherController: ThemeSwitcherControllerService
+    private themeSwitcherController: ThemeSwitcherControllerService,
+    private templateCardsSevice: TemplateCardsService
   ) {
     this.myContent = this.initialContent;
   }
@@ -141,6 +146,17 @@ export class ModalComponent implements OnInit, OnDestroy {
       this.formdata.reset();
       this.dialogRef.close();
     }
+  }
+
+  onSave() {
+    this.card.htmlContent = this.myContent;
+    this.card.backgroundImage.append('file', this.itemImages[0].file, this.itemImages[0].file.name);
+    this.templateCardsSevice.newCardTemplate(this.card).subscribe((card) => {
+      console.log('Card created:>', card);
+      this.onClose(true);
+    }, (err) => {
+      console.log('Error in saving card template! :> ', err);
+    });
   }
 
   ngOnInit() {
