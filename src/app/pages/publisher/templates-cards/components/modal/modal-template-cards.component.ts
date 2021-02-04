@@ -15,11 +15,11 @@ import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-modal',
-  templateUrl: './modal.component.html',
-  styleUrls: ['./modal.component.scss']
+  templateUrl: './modal-template-cards.component.html',
+  styleUrls: ['./modal-template-cards.component.scss']
 })
 
-export class ModalComponent implements OnInit, OnDestroy {
+export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   @ViewChild('editor') joditEditor: JoditAngularComponent;
 
   private destroy$ = new Subject<any>();
@@ -42,7 +42,7 @@ export class ModalComponent implements OnInit, OnDestroy {
   formdata: FormGroup;
 
   constructor(
-    private dialogRef: MatDialogRef<ModalComponent>,
+    private dialogRef: MatDialogRef<ModalTemplateCardsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
     private themeSwitcherController: ThemeSwitcherControllerService,
@@ -168,9 +168,6 @@ export class ModalComponent implements OnInit, OnDestroy {
       autofocus: true,
       maxWidth: 800,
       maxHeight: 600,
-      uploader: {
-        insertImageAsBase64URI: true
-      },
       language: 'es',
       enter: 'BR',
       theme: 'default',
@@ -178,6 +175,7 @@ export class ModalComponent implements OnInit, OnDestroy {
       placeholder: 'Ingrese el texto aquí',
       showXPathInStatusbar: false,
       toolbarAdaptive: false,
+      disablePlugins: 'iframe,video,media,file,image,image-processor,image-properties,xpath',
       buttons: [
         'bold', 'underline', 'italic', 'strikethrough', '|',
         'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
@@ -187,8 +185,7 @@ export class ModalComponent implements OnInit, OnDestroy {
         '\n',
         'ol', 'ul', '|',
         'indent', 'outdent', '|',
-        'table', 'hr', '|',
-        'link', 'image', 'video', 'fullsize', '|',
+        'table', 'hr', '|', 'fullsize',
         'selectall', 'source', 'preview', 'print', 'find', 'about'
       ],
       buttonsMD: [
@@ -200,8 +197,7 @@ export class ModalComponent implements OnInit, OnDestroy {
         '\n',
         'ol', 'ul', '|',
         'indent', 'outdent', '|',
-        'table', 'hr', '|',
-        'link', 'image', 'video', 'fullsize', '|',
+        'table', 'hr', '|', 'fullsize',
         'selectall', 'source', 'preview', 'print', 'find', 'about'
       ],
       buttonsSM: [
@@ -213,8 +209,7 @@ export class ModalComponent implements OnInit, OnDestroy {
         '\n',
         'ol', 'ul', '|',
         'indent', 'outdent', '|',
-        'table', 'hr', '|',
-        'link', 'image', 'video', 'fullsize', '|',
+        'table', 'hr', '|', 'fullsize',
         'selectall', 'source', 'preview', 'print', 'find', 'about'
       ],
       buttonsXS: [
@@ -226,10 +221,9 @@ export class ModalComponent implements OnInit, OnDestroy {
         '\n',
         'ol', 'ul', '|',
         'indent', 'outdent', '|',
-        'table', 'hr', '|',
-        'link', 'image', 'video', 'fullsize', '|',
+        'table', 'hr', '|', 'fullsize',
         'selectall', 'source', 'preview', 'print', 'find', 'about'
-      ],
+      ]
     };
     this.themeSwitcherController.themeClass$
       .pipe(takeUntil(this.destroy$))

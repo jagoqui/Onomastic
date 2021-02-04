@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
-import { ModalComponent } from './components/modal/modal.component';
+import {
+  ModalTemplateCardsComponent,
+} from './components/modal/modal-template-cards.component';
 
 @Component({
   selector: 'app-templates-cards',
@@ -16,7 +18,7 @@ export class TemplatesCardsComponent implements OnInit {
   }
 
   onOpenModal(): void {
-    this.dialog.open(ModalComponent, {
+    this.dialog.open(ModalTemplateCardsComponent, {
       height: 'auto',
       width: '95%',
       panelClass: 'app-full-bleed-dialog',
