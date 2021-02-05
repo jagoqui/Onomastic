@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 import { EventsDayRoutingModule } from './events-day-routing.module';
 import { EventsDayComponent } from './events-day.component';
@@ -10,7 +11,8 @@ import { ModalEventDayComponent } from './components/modal-event-day/modal-event
   declarations: [EventsDayComponent, ModalEventDayComponent],
   imports: [
     CommonModule,
-    EventsDayRoutingModule
+    EventsDayRoutingModule,
+    SharedModule
   ]
 })
 export class EventsDayModule { }
