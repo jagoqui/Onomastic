@@ -1,11 +1,11 @@
 export type Role = 'PUBLISHER' | 'ADMIN';
 
-export class PlatformUser {
+export interface PlatformUser {
   userEmail: string;
   password: string;
 }
 
-export class PlatformUserResponse {
+export interface PlatformUserResponse {
   userEmail: string;
   name: string;
   role: Role;

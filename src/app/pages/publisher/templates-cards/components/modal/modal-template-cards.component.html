@@ -21,11 +21,11 @@
   </div>
   <!-- Edit text -->
   <div fxFlex="75" fxLayout="row" fxLayoutAlign="space-between center" class="container">
-    <form [formGroup]="formdata" (ngSubmit)="onClickSubmit(formdata.value)" fxFlex>
+    <form [formGroup]="editorForm" (ngSubmit)="onClickSubmit(editorForm.value)" fxFlex>
       <div class="form-group">
-        <jodit-editor #editor id ="editor" formControlName="description" [(ngModel)]="myContent"
+        <jodit-editor #editor id ="editor" formControlName="description"
           [(config)]="config" (change)="editorContentVerify()" (keydown)="deleteEvent($event)"></jodit-editor>
-        <div *ngIf="formdata.controls.description.errors && formdata.controls.description.touched" class="error">
+        <div *ngIf="editorForm.controls.description.errors && editorForm.controls.description.touched" class="error">
           Máximo 400 carácteres.</div>
       </div>
     </form>

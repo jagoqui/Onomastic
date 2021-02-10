@@ -1,12 +1,19 @@
-export class TemplateCard {
-  htmlContent: string;
-  backgroundImage: FormData;
+export interface TemplateCard {
+  uploadFileResponse?: UploadFileResponse;
+  plantilla: Plantilla;
 }
 
-export class TemplateCardResponse {
+export interface UploadFileResponse {
+  FileDownloadUri: string;
+}
+
+export interface Plantilla {
+  id?: number;
+  texto: string;
+  asociacionesPorPlantilla: AsociacionesPorPlantilla[];
+}
+
+export interface AsociacionesPorPlantilla {
   id: number;
-  cuerpoTexto: string;
-  urlBackgroundImage?: string;
+  nombre: string;
 }
-
-

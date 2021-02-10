@@ -10,7 +10,7 @@ export interface MailUsersResponse {
   programaAcademicoPorUsuarioCorreo?: ProgramaAcademicoPorUsuarioCorreo[];
   plataformaPorUsuarioCorreo?: ByNameId[];
   vinculacionPorUsuarioCorreo?: ByNameId[];
-}
+}//TODO: Verificar ambiguedad de interface
 
 export interface MailUsers {
   id: ID;
@@ -22,8 +22,8 @@ export interface MailUsers {
   genero: string;
   asociacionPorUsuarioCorreo?: ByNameId[];
   programaAcademicoPorUsuarioCorreo?: ProgramaAcademicoPorUsuarioCorreo[];
-  vinculacionPorUsuarioCorreo?: ByNameId[];
   plataformaPorUsuarioCorreo?: ByNameId[];
+  vinculacionPorUsuarioCorreo?: ByNameId[];
 }
 
 export interface ByNameId {

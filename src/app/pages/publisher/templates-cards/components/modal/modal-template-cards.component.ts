@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import {
   TemplateCardsService,
 } from '@app/pages/publisher/services/template-cards.service';
-import { TemplateCard } from '@app/shared/models/template-card.model';
+import { Plantilla } from '@app/shared/models/template-card.model';
 import {
   ThemeSwitcherControllerService,
 } from '@shared/services/theme-switcher-controller.service';
@@ -25,10 +25,6 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<any>();
   itemImages: FileUpload[] = [];
   imageSrc: string = null;
-  card: TemplateCard = {
-    htmlContent: '',
-    backgroundImage: new FormData()
-  };
   isOverDrop = false;
   initialContent = `
     <div id="editorContent">
@@ -39,7 +35,8 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   `;
   myContent: string;
   config: any;
-  formdata: FormGroup;
+  uploadForm: FormGroup;
+  editorForm: FormGroup;
 
   constructor(
     private dialogRef: MatDialogRef<ModalTemplateCardsComponent>,
@@ -47,9 +44,7 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private themeSwitcherController: ThemeSwitcherControllerService,
     private templateCardsSevice: TemplateCardsService
-  ) {
-    this.myContent = this.initialContent;
-  }
+  ) { }
 
   deleteEvent(event): void {
     const key = event.key; // const {key} = event; ES6+
@@ -61,11 +56,11 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   editorContentVerify() {
     const content = document.getElementById('editorContent');
     if (!content) {
-      this.myContent = `
+      this.editorForm.get('description').setValue(`
         <div id="editorContent">
-          ${this.myContent}
-        </div>
-      `;
+          ${this.editorForm.value.description}
+        </div>`
+      );
       this.quitImage();
     }
   }
@@ -89,6 +84,7 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
     content.style.backgroundPosition = 'center';
     content.style.backgroundSize = 'cover';
     content.style.height = 'auto';
+    content.style.minHeight = '300px';
     content.style.color = 'white';
   }
 
@@ -104,7 +100,7 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   }
 
   resetEditor() {
-    this.myContent = null;
+    this.editorForm.get('description').setValue(null);
     this.joditEditor.resetEditor();
     this.imageSrc = null;
   }
@@ -112,8 +108,8 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   onClickSubmit(data) {
     console.log(this.joditEditor.editor.chars);
 
-    if (this.formdata.invalid) {
-      this.formdata.get('description').markAsTouched();
+    if (this.editorForm.invalid) {
+      this.editorForm.get('description').markAsTouched();
     }
   }
 
@@ -143,16 +139,31 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
 
   onClose(close?: boolean): void {
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
-      this.formdata.reset();
+      this.editorForm.reset();
       this.dialogRef.close();
     }
   }
 
   onSave() {
-    this.card.htmlContent = this.myContent;
-    this.card.backgroundImage.append('file', this.itemImages[0].file, this.itemImages[0].file.name);
-    this.templateCardsSevice.newCardTemplate(this.card).subscribe((card) => {
-      console.log('Card created:>', card);
+    const formData = new FormData();
+    const card: Plantilla = {
+      texto: this.editorForm.value.description,
+      asociacionesPorPlantilla: [
+        {
+          id: 7,
+          nombre: 'Escuela de Microbiología'
+        }
+      ]
+    };
+    const jsonCard = JSON.stringify(card);
+    console.log(jsonCard);
+
+    formData.append('file', this.itemImages[0].file, this.itemImages[0].file.name);
+    console.log(formData);
+
+    formData.append('plantilla', jsonCard);
+    this.templateCardsSevice.newCardTemplate(formData).subscribe((cardRes) => {
+      console.log('Card created:>', cardRes);
       this.onClose(true);
     }, (err) => {
       console.log('Error in saving card template! :> ', err);
@@ -160,7 +171,7 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.formdata = this.formBuilder.group({
+    this.editorForm = this.formBuilder.group({
       description: ['', [Validators.required,
       Validators.maxLength(400), Validators.minLength(5)]]
     });
@@ -225,12 +236,15 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
         'selectall', 'source', 'preview', 'print', 'find', 'about'
       ]
     };
+
+    this.editorForm.get('description').setValue(this.initialContent);
     this.themeSwitcherController.themeClass$
       .pipe(takeUntil(this.destroy$))
       .subscribe(
         (theme: string) => (this.config.theme = theme === 'light-theme' ? 'default' : 'dark')
         // TODO: Detectar evento de preview para poner tema claro.
       );
+
   }
 
   ngOnDestroy(): void {

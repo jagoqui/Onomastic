@@ -67,7 +67,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.toggleDarkThemeControl.valueChanges.subscribe((darkMode) => {
       this.darkMode = darkMode;
-      console.log(this.darkMode);
       this.themeSwitcher.setThemeClass(darkMode ? 'dark-theme' : 'light-theme');
     });
 
