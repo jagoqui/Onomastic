@@ -1,6 +1,9 @@
-import { Component, Inject, OnInit} from '@angular/core';
-
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import {
+  TemplateCardsService,
+} from '@app/pages/publisher/services/template-cards.service';
+import { Plantilla } from '@app/shared/models/template-card.model';
 
 @Component({
   selector: 'app-modal',
@@ -8,12 +11,18 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
   styleUrls: ['./modal-event-day.component.scss']
 })
 export class ModalEventDayComponent implements OnInit {
+  cards: Plantilla[] = [];
+  sidenavOpened = false;
 
   constructor(
     private dialogRef: MatDialogRef<ModalEventDayComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any) { }
+    @Inject(MAT_DIALOG_DATA) public data: any,
+    private templateCardsSevice: TemplateCardsService
+  ) { }
 
-  ngOnInit(): void {
+  loadCards() {
+    this.sidenavOpened = true;
+    this.templateCardsSevice.getAllCards().subscribe(cards => this.cards = cards);
   }
 
   onClose(close?: boolean): void {
@@ -23,5 +32,8 @@ export class ModalEventDayComponent implements OnInit {
   }
 
   onSave() {
+  }
+
+  ngOnInit(): void {
   }
 }

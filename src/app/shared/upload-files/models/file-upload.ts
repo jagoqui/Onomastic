@@ -5,7 +5,7 @@ export class FileUpload {
   public uploading = false;
   public uploadPercent: Observable<number>;
   public downloadURL: Observable<string>;
-
+  public path?: string;
   constructor(public file: File = file) {
     this.name = file.name;
   }
