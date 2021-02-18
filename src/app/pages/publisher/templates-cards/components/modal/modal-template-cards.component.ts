@@ -12,13 +12,13 @@ import { FileUpload } from '@shared/upload-files/models/file-upload';
 import { JoditAngularComponent } from 'jodit-angular';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import SwAlert from 'sweetalert2';
 
 @Component({
   selector: 'app-modal',
   templateUrl: './modal-template-cards.component.html',
   styleUrls: ['./modal-template-cards.component.scss']
 })
-
 export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   @ViewChild('editor') joditEditor: JoditAngularComponent;
 
@@ -164,6 +164,11 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
 
     this.templateCardsSevice.newCardTemplate(card, this.itemImages[0]?.file).subscribe((cardRes) => {
       console.log('Card created:>', cardRes);
+      SwAlert.fire(
+        'Guardado',
+        'La plantilla ha sido guardada.',
+        'success'
+      );
       this.onClose(true);
     }, (err) => {
       console.log('Error in saving card template! :> ', err);

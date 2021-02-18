@@ -27,9 +27,16 @@ export class ModalEventDayComponent implements OnInit {
     return this.sanitizer.bypassSecurityTrustHtml(cardText);
   }
 
-  loadCards() {
-    this.sidenavOpened = true;
-    this.templateCardsSevice.getAllCards().subscribe(cards => this.cards = cards);
+  loadCards(onChange?: boolean) {
+    if (onChange) {
+      if (confirm('Seguro que desea ver las plantillas?')) {
+        this.sidenavOpened = true;
+        this.templateCardsSevice.getAllCards().subscribe(cards => this.cards = cards);
+      }
+    } else {
+      this.sidenavOpened = true;
+      this.templateCardsSevice.getAllCards().subscribe(cards => this.cards = cards);
+    }
   }
 
   onSelectCard(card: Plantilla) {

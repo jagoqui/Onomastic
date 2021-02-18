@@ -1,11 +1,8 @@
 <h1 #tittle mat-dialog-title>{{data.title | uppercase }}</h1>
 <mat-sidenav-container>
   <mat-sidenav [(opened)]="sidenavOpened">
-    <mat-card *ngFor="let card of cards" appMaterialElevation (click)="onSelectCard(card)" title="Click para seleccionar"
-      class="card" fxLayout="row" fxLayoutGap="12px" [style.margin-top]="'12px'" [style.margin-left]="'10px'">
-      <!-- <mat-card-header>
-        <mat-card-title>Card title</mat-card-title>
-      </mat-card-header> -->
+    <mat-card *ngFor="let card of cards" appMaterialElevation  (click)="onSelectCard(card)"
+      title="Click para seleccionar" class="card" fxLayout="row" fxLayoutGap="12px" [style.margin]="'0.6667rem'">
       <mat-card-content>
         <p [innerHTML]="sanatizeHTML(card.texto)"></p>
       </mat-card-content>
@@ -13,12 +10,16 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
-      <div fxFlex="45" fxLayout="column" fxLayoutAlign="space-between stretch">
-        <img *ngIf="!selectCardHTML; else selectCard" src="https://www.w3schools.com/tags/img_girl.jpg">
+      <div  fxFlex="45" fxLayout="column" fxLayoutAlign="space-between stretch" class="select-card-container">
+        <div *ngIf="!selectCardHTML; else selectCard" class="btn-select-card" >
+          <button mat-button color="primary" (click)="loadCards()">
+            Seleccionar plantilla<br>
+            <mat-icon>image</mat-icon>
+          </button>
+        </div>
         <ng-template #selectCard>
-          <div [innerHTML]="selectCardHTML"></div>
+          <div [innerHTML]="selectCardHTML" appMaterialElevation (click)="loadCards(true)" title = 'click para cambiar plantilla'></div>
         </ng-template>
-        <button mat-raised-button fxFlex="20" color="primary" (click)="loadCards()">Ver plantillas</button>
       </div>
       <div fxFlex="50" fxLayout="column" fxLayoutAlign="space-between stretch" class="container">
         <div fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
