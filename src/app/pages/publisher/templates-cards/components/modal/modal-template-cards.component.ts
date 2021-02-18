@@ -155,14 +155,14 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
         }
       ]
     };
-    // const jsonCard = JSON.stringify(card);
-    // console.log(jsonCard);
 
-    // formData.append('file', this.itemImages[0].file, this.itemImages[0].file.name);
-    // console.log(formData);
+    const content = document.getElementById('editorContent');
+    if (content) {
+      content.style.backgroundImage = null;
+      content.style.color = 'black';
+    }
 
-    // formData.append('plantilla', jsonCard);
-    this.templateCardsSevice.newCardTemplate(card, this.itemImages[0].file).subscribe((cardRes) => {
+    this.templateCardsSevice.newCardTemplate(card, this.itemImages[0]?.file).subscribe((cardRes) => {
       console.log('Card created:>', cardRes);
       this.onClose(true);
     }, (err) => {

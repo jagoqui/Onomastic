@@ -1,13 +1,23 @@
 <h1 #tittle mat-dialog-title>{{data.title | uppercase }}</h1>
 <mat-sidenav-container>
-  mat-sidenav-
   <mat-sidenav [(opened)]="sidenavOpened">
-    <div *ngFor="let card of cards" [innerHTML]="card.texto"><br></div>
+    <mat-card *ngFor="let card of cards" appMaterialElevation (click)="onSelectCard(card)" title="Click para seleccionar"
+      class="card" fxLayout="row" fxLayoutGap="12px" [style.margin-top]="'12px'" [style.margin-left]="'10px'">
+      <!-- <mat-card-header>
+        <mat-card-title>Card title</mat-card-title>
+      </mat-card-header> -->
+      <mat-card-content>
+        <p [innerHTML]="sanatizeHTML(card.texto)"></p>
+      </mat-card-content>
+    </mat-card><br>
   </mat-sidenav>
   <mat-sidenav-content>
     <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
       <div fxFlex="45" fxLayout="column" fxLayoutAlign="space-between stretch">
-        <img src="https://www.w3schools.com/tags/img_girl.jpg">
+        <img *ngIf="!selectCardHTML; else selectCard" src="https://www.w3schools.com/tags/img_girl.jpg">
+        <ng-template #selectCard>
+          <div [innerHTML]="selectCardHTML"></div>
+        </ng-template>
         <button mat-raised-button fxFlex="20" color="primary" (click)="loadCards()">Ver plantillas</button>
       </div>
       <div fxFlex="50" fxLayout="column" fxLayoutAlign="space-between stretch" class="container">
@@ -25,7 +35,6 @@
               <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
               <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
-
           </div>
           <div fxFlex="auto" fxLayout="column" fxLayoutAlign="space-between center">
             <mat-form-field appearance="outline">
@@ -67,5 +76,5 @@
 
 <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end end">
   <button mat-raised-button fxFlex="20" color="warn" (click)="onClose(null)">Cancelar</button>
-  <button mat-raised-button fxFlex="20" color="primary" (click)="onSave()">Crear tarjeta</button>
+  <button mat-raised-button fxFlex="20" color="primary" (click)="onSave()">Crear evento</button>
 </div>
