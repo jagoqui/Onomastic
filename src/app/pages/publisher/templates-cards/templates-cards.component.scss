@@ -1,5 +1,26 @@
-.button-add-template-card{
+@import 'src/assets/custom_styles/material_custom_theme.scss';
+
+.button-add-template-card {
   &:before {
-    content      : "Agregar plantilla";
+    content: "Agregar plantilla";
   }
 }
+
+.wrapper {
+  margin-top: 20px;
+  display: grid;
+  grid-gap: 1.1111rem;
+  grid-template-columns: repeat(3, 1fr);
+
+  .card {
+    border: 0.1667rem solid mat-color($mat-primary, lighter);
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    &:hover {
+      border: 0.1667rem solid mat-color($mat-primary, darker);
+    }
+  }
+}
+
+

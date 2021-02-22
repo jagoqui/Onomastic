@@ -1,12 +1,13 @@
 import { Component, Inject, OnInit, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import { SafeHtml } from '@angular/platform-browser';
 import {
   TemplateCardsService,
 } from '@app/pages/publisher/services/template-cards.service';
 import { Plantilla } from '@app/shared/models/template-card.model';
 import { FormConditionsOptions } from '@app/pages/publisher/services/form-conditions-options.services';
 import { FormArray, FormBuilder } from '@angular/forms';
+import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
 
 @Component({
   selector: 'app-modal',
@@ -38,8 +39,8 @@ export class ModalEventDayComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private templateCardsSevice: TemplateCardsService,
     private formConditionsOptionsService: FormConditionsOptions,
-    private sanitizer: DomSanitizer,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private domSanitazerSvc: DomSanitizerService
   ) { }
 
   get conditionsOptions(){
@@ -56,7 +57,7 @@ export class ModalEventDayComponent implements OnInit {
   }
 
   sanatizeHTML(cardText: string): SafeHtml {
-    return this.sanitizer.bypassSecurityTrustHtml(cardText);
+    return this.domSanitazerSvc.sanatizeHTML(cardText);
   }
 
   loadCards(onChange?: boolean) {
@@ -77,6 +78,7 @@ export class ModalEventDayComponent implements OnInit {
       this.sidenavOpened = false;
     }
   }
+
   onClose(close?: boolean): void {
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.dialogRef.close();

@@ -2,4 +2,12 @@
   <div fxLayout = "row" >
     <button class="button-action button-add-template-card" fxFlex = "19"  mat-raised-button (click)="onOpenModal()" title="Pulse para agregar una nueva plantilla">Nueva plantilla</button>
   </div>
+  <div class="wrapper" *ngIf="cards">
+    <mat-card *ngFor="let card of cards" appMaterialElevation  (click)="onSelectCard(card)"
+      title="Click para seleccionar" class="card">
+      <mat-card-content>
+        <p   style="border: 1px solid red; width: 300px"[innerHTML]="sanatizeHTML(card.texto)"></p>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
