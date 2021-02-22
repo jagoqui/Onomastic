@@ -13,6 +13,10 @@ import {
 } from './components/onomastic-logo/onomastic-logo.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import {
+  MaterialElevationDirective,
+} from './directives/material-elevation.directive';
+import { DomPurifyPipe } from './pipes/dom-purify.pipe';
+import {
   UploadFilesDirective,
 } from './upload-files/directives/upload-files.directive';
 
@@ -22,7 +26,9 @@ import {
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
-    UploadFilesDirective
+    UploadFilesDirective,
+    DomPurifyPipe,
+    MaterialElevationDirective
   ],
   imports: [
     CommonModule,
@@ -44,7 +50,8 @@ import {
     FormsModule,
     ReactiveFormsModule,
     NgxCaptchaModule,
-    FooterComponent
+    FooterComponent,
+    MaterialElevationDirective
   ]
 })
 export class SharedModule { }

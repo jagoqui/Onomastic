@@ -2,18 +2,26 @@
 <mat-sidenav-container>
     mat-sidenav-
     <mat-sidenav [(opened)]="sidenavOpened">
-        <div *ngFor="let card of cards" [innerHTML]="card.texto"><br></div>
-    </mat-sidenav>
-    <mat-sidenav-content>
+        <mat-card *ngFor="let card of cards" appMaterialElevation  (click)="onSelectCard(card)"
+          title="Click para seleccionar" class="card" fxLayout="row" fxLayoutGap="12px" [style.margin]="'0.6667rem'">
+          <mat-card-content>
+            <p [innerHTML]="sanatizeHTML(card.texto)"></p>
+          </mat-card-content>
+        </mat-card><br>
+      </mat-sidenav>
+      <mat-sidenav-content>
         <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
-            <div fxFlex="45" fxLayout="column" fxLayoutAlign="space-between stretch" class="border1">
-                <div class="btn">
-                    <button mat-button color="primary" (click)="loadCards()">Seleccionar plantilla
-                        <br>
-                        <mat-icon>image</mat-icon>
-                    </button>
-                </div>
+          <div  fxFlex="45" fxLayout="column" fxLayoutAlign="space-between stretch" class="select-card-container">
+            <div *ngIf="!selectCardHTML; else selectCard" class="btn-select-card" >
+              <button mat-button color="primary" (click)="loadCards()">
+                Seleccionar plantilla<br>
+                <mat-icon>image</mat-icon>
+              </button>
             </div>
+            <ng-template #selectCard>
+              <div [innerHTML]="selectCardHTML" appMaterialElevation (click)="loadCards(true)" title = 'click para cambiar plantilla'></div>
+            </ng-template>
+          </div>
             <div [formGroup]="eventForm" fxFlex="50" fxLayout="column" fxLayoutAlign="space-between stretch"
                 class="container">
                 <div fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
@@ -110,6 +118,6 @@
 </mat-sidenav-container>
 
 <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end end">
-    <button mat-raised-button fxFlex="20" color="warn" (click)="onClose(null)">Cancelar</button>
-    <button mat-raised-button fxFlex="20" color="primary" (click)="onSave()">Crear tarjeta</button>
+  <button mat-raised-button fxFlex="20" color="warn" (click)="onClose(null)">Cancelar</button>
+  <button mat-raised-button fxFlex="20" color="primary" (click)="onSave()">Crear evento</button>
 </div>
