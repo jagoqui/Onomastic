@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormArray, FormBuilder } from '@angular/forms';
+import { FormArray, FormBuilder, FormGroup } from '@angular/forms';
+import { MatOptionSelectionChange } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
 import {
@@ -19,21 +20,23 @@ import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
 export class ModalEventDayComponent implements OnInit {
   name: string;
   cards: Plantilla[] = [];
-  selecCond = '';
   sidenavOpened = false;
   genders = ['MASCULINO', 'FEMENINO', 'OTRO'];
   schools: any[] = [];
+  prueba: any[] = [];
   associations: any[] = [];
   programs: any[] = [];
+  // conditions = [{name: 'Genero', isActive: true}, {name: 'Facultad/Escuela', isActive: true}, {name: 'Vinculacion', isActive: true}, {name: 'Programa', isActive: true}];
   conditions = ['Genero', 'Facultad/Escuela', 'Vinculación', 'Programa'];
   eventForm = this.fb.group({
     eventName: [''],
     eventDate: [''],
     enventRecurrency: [''],
-    conditionsOptions: this.fb.array([
-      this.fb.control('')
-    ])
+    conditionsOptions: this.fb.group({
+      default: ['default']
+    })
   });
+  countConditions = 1;
   selectCardHTML: SafeHtml = null;
 
   constructor(
@@ -41,31 +44,26 @@ export class ModalEventDayComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private templateCardsSevice: TemplateCardsService,
     private formConditionsOptionsService: FormConditionsOptions,
-    private fb: FormBuilder,
-    private domSanitazerSvc: DomSanitizerService
+    private domSanitazerSvc: DomSanitizerService,
+    private fb: FormBuilder
   ) { }
-
-  handleKeyDown(event: any) {
-    if (event.keyCode === 'Enter') {
-      event.default();
-    }
-  }
 
   get conditionsOptions() {
     return this.eventForm.get('conditionsOptions') as FormArray;
   }
 
-  addCondition() {
+  updateForm(event: MatOptionSelectionChange, condition: any, option: any) {
+
+    if (option !== '') {
+      (this.eventForm.get('conditionsOptions') as FormGroup).addControl(condition, this.fb.control(option));
+    }
+    this.countConditions = Object.keys(this.conditionsOptions.value).length;
     console.log(this.eventForm);
-    this.conditionsOptions.push(this.fb.control(''));
   }
 
-  removeCondition(indice: number) {
-    this.conditionsOptions.removeAt(indice);
-  }
-
-  sanatizeHTML(cardText: string): SafeHtml {
-    return this.domSanitazerSvc.sanatizeHTML(cardText);
+  removeCondition(key: string) {
+    (this.eventForm.get('conditionsOptions') as FormGroup).removeControl(key);
+    this.countConditions = Object.keys(this.conditionsOptions.value).length;
   }
 
   loadCards(onChange?: boolean) {
@@ -87,6 +85,10 @@ export class ModalEventDayComponent implements OnInit {
     }
   }
 
+  sanatizeHTML(cardText: string): SafeHtml {
+    return this.domSanitazerSvc.sanatizeHTML(cardText);
+  }
+
   onClose(close?: boolean): void {
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.dialogRef.close();
@@ -94,17 +96,19 @@ export class ModalEventDayComponent implements OnInit {
   }
 
   onSave() {
+    this.removeCondition('default');
+    console.log(this.eventForm);
   }
 
   ngOnInit(): void {
     this.formConditionsOptionsService.getSchools().subscribe(data => {
       this.schools = data;
     });
-    this.formConditionsOptionsService.getPrograms().subscribe(data => {
-      this.programs = data;
-    });
     this.formConditionsOptionsService.getAsociations().subscribe(data => {
       this.associations = data;
+    });
+    this.formConditionsOptionsService.getPrograms().subscribe(data => {
+      this.programs = data;
     });
   }
 }
