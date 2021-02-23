@@ -1,24 +1,25 @@
 <h1 #tittle mat-dialog-title>{{data.title | uppercase }}</h1>
 <mat-sidenav-container>
   <mat-sidenav [(opened)]="sidenavOpened">
-    <mat-card *ngFor="let card of cards" appMaterialElevation  (click)="onSelectCard(card)"
-      title="Click para seleccionar" class="card" fxLayout="row" fxLayoutGap="12px" [style.margin]="'0.6667rem'">
-      <mat-card-content>
-        <p [innerHTML]="sanatizeHTML(card.texto)"></p>
-      </mat-card-content>
-    </mat-card><br>
+    <mat-card *ngFor="let card of cards" appMaterialElevation  class="card" fxLayout="row"
+      fxLayoutGap="12px">
+      <p [innerHTML]="sanatizeHTML(card.texto)" title="Click para seleccionar" (click)="onSelectCard(card)"></p>
+      <!-- TODO: Solucionar error de deteccioón del click -->
+    </mat-card>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
-      <div  fxFlex="45" fxLayout="column" fxLayoutAlign="space-between stretch" class="select-card-container">
-        <div *ngIf="!selectCardHTML; else selectCard" class="btn-select-card" >
-          <button mat-button color="primary" (click)="loadCards()">
+    <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center" title="Click para ver las plantillas"
+      (click)="loadCards()">
+      <div fxFlex="45" fxLayout="column" fxLayoutAlign="space-between stretch" class="select-card-container">
+        <div *ngIf="!selectCardHTML; else selectCard" class="btn-select-card">
+          <button mat-button color="primary">
             Seleccionar plantilla<br>
             <mat-icon>image</mat-icon>
           </button>
         </div>
         <ng-template #selectCard>
-          <div [innerHTML]="selectCardHTML" appMaterialElevation (click)="loadCards(true)" title = 'click para cambiar plantilla'></div>
+          <div [innerHTML]="selectCardHTML" appMaterialElevation (click)="loadCards(true)"
+            title='click para cambiar plantilla'></div>
         </ng-template>
       </div>
       <div fxFlex="50" fxLayout="column" fxLayoutAlign="space-between stretch" class="container">
@@ -66,9 +67,7 @@
             <button mat-mini-fab color="warn">
               <mat-icon>remove</mat-icon>
             </button>
-
           </div>
-
         </div>
       </div>
     </div>
