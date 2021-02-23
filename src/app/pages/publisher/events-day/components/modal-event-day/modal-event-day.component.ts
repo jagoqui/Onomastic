@@ -1,12 +1,14 @@
-import { Component, Inject, OnInit, Output } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
+import { FormArray, FormBuilder } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
+import {
+  FormConditionsOptions,
+} from '@app/pages/publisher/services/form-conditions-options.services';
 import {
   TemplateCardsService,
 } from '@app/pages/publisher/services/template-cards.service';
 import { Plantilla } from '@app/shared/models/template-card.model';
-import { FormConditionsOptions } from '@app/pages/publisher/services/form-conditions-options.services';
-import { FormArray, FormBuilder } from '@angular/forms';
 import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
 
 @Component({
@@ -43,11 +45,17 @@ export class ModalEventDayComponent implements OnInit {
     private domSanitazerSvc: DomSanitizerService
   ) { }
 
-  get conditionsOptions(){
+  handleKeyDown(event: any) {
+    if (event.keyCode === 'Enter') {
+      event.default();
+    }
+  }
+
+  get conditionsOptions() {
     return this.eventForm.get('conditionsOptions') as FormArray;
   }
 
-  addCondition(){
+  addCondition() {
     console.log(this.eventForm);
     this.conditionsOptions.push(this.fb.control(''));
   }

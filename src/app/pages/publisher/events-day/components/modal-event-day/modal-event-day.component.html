@@ -1,120 +1,116 @@
 <h1 #tittle mat-dialog-title>{{data.title | uppercase }}</h1>
 <mat-sidenav-container>
-    mat-sidenav-
-    <mat-sidenav [(opened)]="sidenavOpened">
-        <mat-card *ngFor="let card of cards" appMaterialElevation  (click)="onSelectCard(card)"
-          title="Click para seleccionar" class="card" fxLayout="row" fxLayoutGap="12px" [style.margin]="'0.6667rem'">
-          <mat-card-content>
-            <p [innerHTML]="sanatizeHTML(card.texto)"></p>
-          </mat-card-content>
-        </mat-card><br>
-      </mat-sidenav>
-      <mat-sidenav-content>
-        <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
-          <div  fxFlex="45" fxLayout="column" fxLayoutAlign="space-between stretch" class="select-card-container">
-            <div *ngIf="!selectCardHTML; else selectCard" class="btn-select-card" >
-              <button mat-button color="primary" (click)="loadCards()">
-                Seleccionar plantilla<br>
-                <mat-icon>image</mat-icon>
-              </button>
-            </div>
-            <ng-template #selectCard>
-              <div [innerHTML]="selectCardHTML" appMaterialElevation (click)="loadCards(true)" title = 'click para cambiar plantilla'></div>
-            </ng-template>
-          </div>
-            <div [formGroup]="eventForm" fxFlex="50" fxLayout="column" fxLayoutAlign="space-between stretch"
-                class="container">
-                <div fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
-                    <mat-form-field fxFlex="40" appearance="outline" hideRequiredMarker>
-                        <mat-label>Nombre: </mat-label>
-                        <input matInput formControlName="eventName">
-                    </mat-form-field>
-                </div>
-                <div fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
-                    <div fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
-                        <mat-form-field appearance="outline" hideRequiredMarker>
-                            <mat-label>Fecha de inicio: </mat-label>
-                            <input readonly matInput [matDatepicker]="picker" size="12" formControlName="eventDate">
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                        </mat-form-field>
-                    </div>
-                    <div fxFlex="auto" fxLayout="column" fxLayoutAlign="space-between center">
-                        <mat-form-field appearance="outline" hideRequiredMarker>
-                            <mat-label>Recurrencia: </mat-label>
-                            <mat-select disableRipple formControlName="enventRecurrency">
-                                <mat-option value="daily">Diaria</mat-option>
-                                <mat-option value="yearly">Anual</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                </div>
-                <div fxFlex="90" fxLayout="row" fxLayoutAlign="space-between center">
-                    <div fxFlex="90" formArrayName="conditionsOptions" fxLayout="column">
-                        <div *ngFor="let conditionOption of conditionsOptions.controls; let i=index" fxLayout="row">
-                            <mat-form-field hideRequiredMarker appearance="outline" fxFlex="90">
-                                <mat-label for="cond">Condiciones:</mat-label>
-                                <mat-select  [formControlName]="i" id="cond">
-                                    <mat-option *ngFor="let condition of conditions" [value]="condition">
-                                        {{condition}}
-                                    </mat-option>
-                                </mat-select>
-                            </mat-form-field>
-                            <div [ngSwitch]="eventForm.value.conditionsOptions[i]">
-                                <mat-form-field *ngSwitchCase="'Genero'" hideRequiredMarker appearance="outline">
-                                    <mat-label for="gen">Genero</mat-label>
-                                    <mat-select class="form-control" id="gen">
-                                        <mat-option *ngFor="let gender of genders" [value]="gender">
-                                            {{gender}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <mat-form-field *ngSwitchCase="'Facultad/Escuela'" hideRequiredMarker
-                                    appearance="outline">
-                                    <mat-label for="sch">Facultad/Escuela</mat-label>
-                                    <mat-select id="sch">
-                                        <mat-option *ngFor="let school of schools" [value]="school">
-                                            {{school.nombre}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <mat-form-field *ngSwitchCase="'Vinculación'" hideRequiredMarker appearance="outline">
-                                    <mat-label for="vin">Vinculación</mat-label>
-                                    <mat-select id="vin">
-                                        <mat-option *ngFor="let association of associations" [value]="association">
-                                            {{association.nombre}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                                <mat-form-field *ngSwitchCase="'Programa'" hideRequiredMarker appearance="outline">
-                                    <mat-label for="prog">Programa</mat-label>
-                                    <mat-select id="prog">
-                                        <mat-option *ngFor="let program of programs" [value]="program">
-                                            {{program.nombre}}
-                                        </mat-option>
-                                    </mat-select>
-                                </mat-form-field>
-                            </div>
-                            <div fxFlex="22" fxLayout="row" fxLayoutAlign="space-around">
-                                <div fxFlex="49" >
-                                    <button mat-mini-fab color="primary" (click)="addCondition()">
-                                        <mat-icon>add</mat-icon>
-                                    </button>
-                                </div>
-                                <div fxFlex="5" *ngIf="conditionsOptions.length >1">
-                                    <button mat-mini-fab color="warn" (click)="removeCondition(i)">
-                                        <mat-icon>remove</mat-icon>
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-                    
-                </div>
-            </div>
+  <mat-sidenav [(opened)]="sidenavOpened">
+    <mat-card *ngFor="let card of cards" appMaterialElevation class="card" fxLayout="row" fxLayoutGap="12px">
+      <p [innerHTML]="sanatizeHTML(card.texto)" title="Click para seleccionar" (click)="onSelectCard(card)" ></p>
+      <!-- TODO: Solucionar error de deteccioón del click -->
+    </mat-card>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center" title="Click para ver las plantillas"
+      (click)="loadCards()">
+      <div fxFlex="45" fxLayout="column" fxLayoutAlign="space-between stretch" class="select-card-container">
+        <div *ngIf="!selectCardHTML; else selectCard" class="btn-select-card">
+          <button mat-button color="primary"  (keydown) = "handleKeyDown($event)">
+            Seleccionar plantilla<br>
+            <mat-icon>image</mat-icon>
+          </button>
         </div>
-    </mat-sidenav-content>
+        <ng-template #selectCard>
+          <div [innerHTML]="selectCardHTML" appMaterialElevation (click)="loadCards(true)"
+            title='click para cambiar plantilla'></div>
+        </ng-template>
+      </div>
+      <div [formGroup]="eventForm" fxFlex="50" fxLayout="column" fxLayoutAlign="space-between stretch"
+        class="container">
+        <div fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
+          <mat-form-field fxFlex="40" appearance="outline" hideRequiredMarker>
+            <mat-label>Nombre: </mat-label>
+            <input matInput formControlName="eventName">
+          </mat-form-field>
+        </div>
+        <div fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
+          <div fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
+            <mat-form-field appearance="outline" hideRequiredMarker>
+              <mat-label>Fecha de inicio: </mat-label>
+              <input readonly matInput [matDatepicker]="picker" size="12" formControlName="eventDate">
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </div>
+          <div fxFlex="auto" fxLayout="column" fxLayoutAlign="space-between center">
+            <mat-form-field appearance="outline" hideRequiredMarker>
+              <mat-label>Recurrencia: </mat-label>
+              <mat-select disableRipple formControlName="enventRecurrency">
+                <mat-option value="daily">Diaria</mat-option>
+                <mat-option value="yearly">Anual</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+        <div fxFlex="90" fxLayout="row" fxLayoutAlign="space-between center">
+          <div fxFlex="90" formArrayName="conditionsOptions" fxLayout="column">
+            <div *ngFor="let conditionOption of conditionsOptions.controls; let i=index" fxLayout="row">
+              <mat-form-field hideRequiredMarker appearance="outline" fxFlex="90">
+                <mat-label for="cond">Condiciones:</mat-label>
+                <mat-select [formControlName]="i" id="cond">
+                  <mat-option *ngFor="let condition of conditions" [value]="condition">
+                    {{condition}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <div [ngSwitch]="eventForm.value.conditionsOptions[i]">
+                <mat-form-field *ngSwitchCase="'Genero'" hideRequiredMarker appearance="outline">
+                  <mat-label for="gen">Genero</mat-label>
+                  <mat-select class="form-control" id="gen">
+                    <mat-option *ngFor="let gender of genders" [value]="gender">
+                      {{gender}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngSwitchCase="'Facultad/Escuela'" hideRequiredMarker appearance="outline">
+                  <mat-label for="sch">Facultad/Escuela</mat-label>
+                  <mat-select id="sch">
+                    <mat-option *ngFor="let school of schools" [value]="school">
+                      {{school.nombre}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngSwitchCase="'Vinculación'" hideRequiredMarker appearance="outline">
+                  <mat-label for="vin">Vinculación</mat-label>
+                  <mat-select id="vin">
+                    <mat-option *ngFor="let association of associations" [value]="association">
+                      {{association.nombre}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field *ngSwitchCase="'Programa'" hideRequiredMarker appearance="outline">
+                  <mat-label for="prog">Programa</mat-label>
+                  <mat-select id="prog">
+                    <mat-option *ngFor="let program of programs" [value]="program">
+                      {{program.nombre}}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+              <div fxFlex="22" fxLayout="row" fxLayoutAlign="space-around">
+                <div fxFlex="49">
+                  <button mat-mini-fab color="primary" (click)="addCondition()"  (keydown) = "handleKeyDown($event)">
+                    <mat-icon>add</mat-icon>
+                  </button>
+                </div>
+                <div fxFlex="5" *ngIf="conditionsOptions.length >1">
+                  <button mat-mini-fab color="warn" (click)="removeCondition(i)"  (keydown) = "handleKeyDown($event)">
+                    <mat-icon>remove</mat-icon>
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </mat-sidenav-content>
 </mat-sidenav-container>
 
 <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end end">
