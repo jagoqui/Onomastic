@@ -61,7 +61,6 @@ export class BaseFormMailUsers {
     } else {
       return new FormGroup({
         codigo: new FormControl('', Validators.required),
-        // id_facultad: new FormControl('', Validators.required),
         nombre: new FormControl('', Validators.required)
       });
     }
