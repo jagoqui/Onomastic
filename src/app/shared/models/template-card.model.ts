@@ -1,3 +1,5 @@
+import { ByNameId } from './mail-users.model';
+
 export interface TemplateCard {
   uploadFileResponse?: UploadFileResponse;
   plantilla: Plantilla;
@@ -10,10 +12,5 @@ export interface UploadFileResponse {
 export interface Plantilla {
   id?: number;
   texto: string;
-  asociacionesPorPlantilla: AsociacionesPorPlantilla[];
-}
-
-export interface AsociacionesPorPlantilla {
-  id: number;
-  nombre: string;
+  asociacionesPorPlantilla: ByNameId[];
 }

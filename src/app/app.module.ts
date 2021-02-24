@@ -25,7 +25,7 @@ import { AppComponent } from './app.component';
     HttpClientModule,
     NgxSpinnerModule,
     QuicklinkModule,
-    SharedModule,
+    SharedModule
   ],
   providers: [
     {

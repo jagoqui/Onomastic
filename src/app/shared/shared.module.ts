@@ -9,6 +9,9 @@ import { MaterialModule } from '../material-module.module';
 import { FooterComponent } from './components/footer/footer.component';
 import { HeaderComponent } from './components/header/header.component';
 import {
+  MailUsersSubscriptionStatusComponent,
+} from './components/mail-users-subscription-status/mail-users-subscription-status.component';
+import {
   OnomasticLogoComponent,
 } from './components/onomastic-logo/onomastic-logo.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
@@ -26,6 +29,7 @@ import {
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
+    MailUsersSubscriptionStatusComponent,
     UploadFilesDirective,
     DomPurifyPipe,
     MaterialElevationDirective
@@ -43,6 +47,7 @@ import {
     CommonModule,
     OnomasticLogoComponent,
     HeaderComponent,
+    MailUsersSubscriptionStatusComponent,
     SidebarComponent,
     UploadFilesDirective,
     MaterialModule,

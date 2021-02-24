@@ -24,7 +24,4 @@ export class NegateCheckLoginGuard implements CanActivate {
       })
     );
   }
-
-
-
 }

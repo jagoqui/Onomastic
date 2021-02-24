@@ -4,8 +4,8 @@ import { MatOptionSelectionChange } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
 import {
-  FormConditionsOptions,
-} from '@app/pages/publisher/services/form-conditions-options.services';
+  EventDayService,
+} from '@app/pages/publisher/services/event-day.services';
 import {
   TemplateCardsService,
 } from '@app/pages/publisher/services/template-cards.service';
@@ -26,7 +26,6 @@ export class ModalEventDayComponent implements OnInit {
   prueba: any[] = [];
   associations: any[] = [];
   programs: any[] = [];
-  // conditions = [{name: 'Genero', isActive: true}, {name: 'Facultad/Escuela', isActive: true}, {name: 'Vinculacion', isActive: true}, {name: 'Programa', isActive: true}];
   conditions = ['Genero', 'Facultad/Escuela', 'Vinculación', 'Programa'];
   eventForm = this.fb.group({
     eventName: [''],
@@ -43,7 +42,7 @@ export class ModalEventDayComponent implements OnInit {
     private dialogRef: MatDialogRef<ModalEventDayComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private templateCardsSevice: TemplateCardsService,
-    private formConditionsOptionsService: FormConditionsOptions,
+    private formConditionsOptionsService: EventDayService,
     private domSanitazerSvc: DomSanitizerService,
     private fb: FormBuilder
   ) { }

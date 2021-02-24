@@ -7,14 +7,18 @@ import { CheckLoginGuard } from '@shared/guards/check-login.guard';
 import { NegateCheckLoginGuard } from '@shared/guards/negate-check-login.guard';
 import { QuicklinkStrategy } from 'ngx-quicklink';
 
+import {
+  MailUsersSubscriptionStatusComponent,
+} from './shared/components/mail-users-subscription-status/mail-users-subscription-status.component';
+
 
 const routes: Routes = [
   {
-    path: '',
-    redirectTo: '/login',
+    path: 'login',
+    loadChildren: () => import('./auth/login/login.module').then(m => m.LoginModule),
+    canActivate: [NegateCheckLoginGuard],
     pathMatch: 'full',
   },
-
   {
     path: 'home',
     loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
@@ -24,12 +28,6 @@ const routes: Routes = [
     path: 'ADMIN',
     loadChildren: () => import('./pages/admin/admin.module').then(m => m.AdminModule),
     canActivate: [CheckLoginGuard]
-  },
-  {
-    path: 'login',
-    loadChildren: () => import('./auth/login/login.module').then(m => m.LoginModule),
-    // redirectTo: 'PUBLISHER/templates-cards',
-    canActivate: [NegateCheckLoginGuard]
   },
   {
     path: 'profile',
@@ -53,6 +51,10 @@ const routes: Routes = [
   {
     path: 'forgot-password', loadChildren: () => import('./auth/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule),
     canActivate: [NegateCheckLoginGuard]
+  },
+  {
+    path: 'mail-users-subscription-status/:email',
+    component: MailUsersSubscriptionStatusComponent
   },
   {
     path: '**',
