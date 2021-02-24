@@ -13,23 +13,24 @@ export class MailUsersSubscriptionStatusComponent implements OnInit {
 
   ngOnInit(): void {
     SwAlert.fire({
-      title: 'Desea desubcribirse de los correos de Onomástico?',
-      text: 'Si se desubcribe no recibirá más correos de Onomástico!',
+      title: 'Desea cancelar la subscripción de los correos de Onomástico?',
+      text: 'Si la cancela no recibirá más correos de Onomástico!',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, desubcribirme!'
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Sí, cancelarla!',
+      cancelButtonText: 'No, permanecer subscrito',
     }).then((result) => {
       if (result.isConfirmed) {
         SwAlert.fire(
-          'Desubcripción exitosa!',
+          'Subscripción cancelada!',
           `No recibirá más correos de Onomástico, para más información <a href="${this.route.navigate(['PUBLISHER/help'])}">Ayuda</a>.`,
           'success'
         );
       } else {
         SwAlert.fire(
-          'Desubcripción cancelada!',
+          'Subscripción renovada!',
           `
             Seguirá recibiendo los correos de Onomástico, para más información <a href="${this.route.navigate(['PUBLISHER/help'])}">Ayuda</a>.
           `,
