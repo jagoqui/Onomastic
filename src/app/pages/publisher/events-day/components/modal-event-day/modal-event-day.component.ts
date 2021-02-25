@@ -282,6 +282,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
           this.platformUserData = userRes;
         }
       });
+
     this.eventDayForm.baseForm.controls.asociacion.setValue(this.platformUserData.asociacion);
     console.log(this.eventDayForm.baseForm.controls.asociacion.value);
 

@@ -48,8 +48,6 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
     this.templateCardsSevice.getAllCards().subscribe(cards => {
       if (cards) {
         this.cards = cards;
-        console.log(this.cards);
-
       }
     });
   }
