@@ -7,7 +7,7 @@ export interface EventDay {
   fecha: Date;
   estado: string;
   recurrencia: string;
-  asociacion: ByNameId;
+  asociacion: ByNameId[];
   plantilla: Plantilla;
   condicionesEvento: CondicionesEvento[];
 }

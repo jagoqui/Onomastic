@@ -17,14 +17,14 @@ export class EventsDayComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onOpenModal(): void {
+  onOpenModal(event = {}): void {
     this.dialog.open(ModalEventDayComponent, {
       height: 'auto',
       width: '95%',
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
-      data: { title: 'Nuevo evento' },
+      data: { title: event ? 'EDITAR EVENTO' : 'NUEVO EVENTO', event },
     });
   }
 }

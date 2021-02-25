@@ -110,7 +110,7 @@
           <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let association of associations" [value]="association['nombre']"
-              (onSelectionChange)="setformGropuID(mailAssociation, association['id'])">
+              (onSelectionChange)="setformGroupID(mailAssociation, association['id'])">
               {{association['nombre']}}
             </mat-option>
           </mat-select>
@@ -146,7 +146,7 @@
           <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let program of programs" [value]="program['nombre']"
-              (onSelectionChange)="setformGropuCode(academicProgram, program['codigo'])">
+              (onSelectionChange)="setformGroupCode(academicProgram, program['codigo'])">
               {{program['nombre']}}</mat-option>
           </mat-select>
           <mat-icon matSuffix>school</mat-icon>
@@ -181,7 +181,7 @@
           <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let bondingType of bondingTypes" [value]="bondingType['nombre']"
-              (onSelectionChange)="setformGropuID(bonding, bondingType['id'])">
+              (onSelectionChange)="setformGroupID(bonding, bondingType['id'])">
               {{bondingType['nombre']}}</mat-option>
           </mat-select>
           <mat-icon matSuffix>group_work</mat-icon>
@@ -216,7 +216,7 @@
           <mat-select #platformSelect formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let platform of platforms" [value]="platform['nombre']"
-              (onSelectionChange)="setformGropuID(platformUser, platform['id'])">
+              (onSelectionChange)="setformGroupID(platformUser, platform['id'])">
               {{platform['nombre']}}
             </mat-option>
           </mat-select>

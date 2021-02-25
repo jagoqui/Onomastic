@@ -1,109 +1,55 @@
-<h1 #tittle mat-dialog-title>{{data.title | uppercase }}</h1>
+<h1 #tittle mat-dialog-title>{{data.title}}</h1>
 <mat-sidenav-container>
   <mat-sidenav [(opened)]="sidenavOpened">
-    <mat-card *ngFor="let card of cards" appMaterialElevation class="card" fxLayout="row" fxLayoutGap="12px">
-      <p [innerHTML]="sanatizeHTML(card.texto)" title="Click para seleccionar" (click)="onSelectCard(card)"></p>
-      <!-- TODO: Solucionar error de deteccioón del click -->
+    <mat-card *ngFor="let card of cards" appMaterialElevation (click)="onSelectCard(card)"
+      title="Click para seleccionar" class="card" fxLayout="row" fxLayoutGap="12px" [style.margin]="'0.6667rem'">
+      <mat-card-content>
+        <p [innerHTML]="sanatizeHTML(card.texto)"></p>
+      </mat-card-content>
     </mat-card>
   </mat-sidenav>
   <mat-sidenav-content>
-    <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center" title="Click para ver las plantillas">
-      <div fxFlex="45" fxLayout="column" fxLayoutAlign="space-between stretch" class="select-card-container">
-        <div *ngIf="!selectCardHTML; else selectCard" class="btn-select-card" (click)="loadCards()">
-          <button mat-button color="primary">
-            Seleccionar plantilla<br>
-            <mat-icon>image</mat-icon>
-          </button>
+    <div mat-dialog-content>
+      <form (formGroup)="eventDayForm" fxLayout="row" fxLayoutAlign="space-between stretch">
+        <div *ngIf="!selectCardHTML; else selectedCard" fxFlex="45" class="select-card-container">
+          <div class="btn-select-card">
+            <button mat-button color="primary" (click)="loadCards()">
+              Seleccionar plantilla<br>
+              <mat-icon>image</mat-icon>
+            </button>
+          </div>
+          <mat-error *ngIf="checkField('plantilla', null, null)">{{eventDayForm.errorsMessage.plantilla.texto}}</mat-error>
         </div>
-        <ng-template #selectCard>
-          <div [innerHTML]="selectCardHTML" appMaterialElevation (click)="loadCards(true)"
-            title='click para cambiar plantilla'></div>
+        <ng-template #selectedCard>
+          <div fxFlex="45" [innerHTML]="selectCardHTML" appMaterialElevation (click)="loadCards(true)"
+            class="select-card-container" title='click para cambiar plantilla'></div>
         </ng-template>
-      </div>
-      <form [formGroup]="eventForm" fxFlex="50" fxLayout="column" fxLayoutAlign="space-between stretch"
-        class="container">
-        <div fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
-          <mat-form-field fxFlex="40" appearance="outline" hideRequiredMarker>
-            <mat-label>Nombre: </mat-label>
-            <input matInput formControlName="eventName">
-          </mat-form-field>
-        </div>
-        <div fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
-          <div fxFlex="auto" fxLayout="row" fxLayoutAlign="space-between center">
-            <mat-form-field appearance="outline" hideRequiredMarker>
-              <mat-label>Fecha de inicio: </mat-label>
-              <input readonly matInput [matDatepicker]="picker" size="12" formControlName="eventDate">
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
+
+        <div fxFlex>
+          <div fxLayout="row" fxLayoutAlign="space-between center">
+            <!-- Name -->
+            <mat-form-field hideRequiredMarker appearance="outline" fxFlex="47">
+              <mat-label>Nombre</mat-label>
+              <input matInput type="text" matInput required formControlName="nombre">
+              <mat-icon matSuffix>event_note</mat-icon>
+              <!-- <mat-error *ngIf="checkField('nombre', null, null)">{{eventDayForm.errorsMessage.nombre}}</mat-error> -->
             </mat-form-field>
-          </div>
-          <div fxFlex="auto" fxLayout="column" fxLayoutAlign="space-between center">
-            <mat-form-field appearance="outline" hideRequiredMarker>
-              <mat-label>Recurrencia: </mat-label>
-              <mat-select disableRipple formControlName="enventRecurrency">
-                <mat-option value="daily">Diaria</mat-option>
-                <mat-option value="yearly">Anual</mat-option>
+            <!-- State -->
+            <!-- <mat-form-field fxFlex="47" hideRequiredMarker appearance="outline">
+              <mat-label>estado</mat-label>
+              <mat-select #state formControlName="estado">
+                <mat-option value= "d">-- Seleccione una opción --</mat-option>
+                <mat-option value="ACTIVO">ACTIVO</mat-option>
+                <mat-option value="INACTIVO">INACTIVO</mat-option>
               </mat-select>
-            </mat-form-field>
-          </div>
-        </div>
-        <div fxFlex="90" fxLayout="row" fxLayoutAlign="space-between center">
-          <div fxFlex="90" formGroupName="conditionsOptions" fxLayout="column">
-            <div *ngFor="let control of eventForm.get('conditionsOptions')['controls'] | keyvalue" fxLayout="row">
-              <mat-form-field hideRequiredMarker appearance="outline" fxFlex="90">
-                <mat-label for="cond">Condiciones:</mat-label>
-                <mat-select [(value)]="control.key" id="cond">
-                  <mat-option *ngFor="let condition of conditions" [value]="condition">
-                    <ng-container> {{condition}} </ng-container>
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-              <div [ngSwitch]="control.key">
-                <mat-form-field *ngSwitchCase="'Genero'" hideRequiredMarker appearance="outline">
-                  <mat-label for="gen">Genero</mat-label>
-                  <mat-select [(value)]="genders[0]" id="gen">
-                    <mat-option (onSelectionChange)="updateForm($event,'Genero',gender)" *ngFor="let gender of genders"
-                      [value]="gender">
-                      {{gender}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field *ngSwitchCase="'Facultad/Escuela'" hideRequiredMarker appearance="outline">
-                  <mat-label for="sch">Facultad/Escuela</mat-label>
-                  <mat-select [(value)]="schools[0]" id="sch">
-                    <mat-option (onSelectionChange)="updateForm($event,'Facultad/Escuela',school.nombre)"
-                      *ngFor="let school of schools" [value]="school">
-                      {{school.nombre}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field *ngSwitchCase="'Programa'" hideRequiredMarker appearance="outline">
-                  <mat-label for="prog">Programa</mat-label>
-                  <mat-select [(value)]="programs[0]" id="prog">
-                    <mat-option (onSelectionChange)="updateForm($event,'Programa',program.nombre)"
-                      *ngFor="let program of programs" [value]="program">
-                      {{program.nombre}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-                <mat-form-field *ngSwitchCase="'Vinculación'" hideRequiredMarker appearance="outline">
-                  <mat-label for="vin">Vinculacion</mat-label>
-                  <mat-select [(value)]="associations[1]" id="vin">
-                    <mat-option (onSelectionChange)="updateForm($event,'Vinculación',association.nombre)"
-                      *ngFor="let association of associations" [value]="association">
-                      {{association.nombre}}
-                    </mat-option>
-                  </mat-select>
-                </mat-form-field>
-              </div>
-              <div fxFlex="22" fxLayout="row" fxLayoutAlign="space-around">
-                <div fxFlex="5" *ngIf="countConditions >1 && control.key !=='default'">
-                  <button mat-mini-fab color="warn" (click)="removeCondition(control.key)">
-                    <mat-icon>remove</mat-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
+              <ng-container [ngSwitch]="state.value" matSuffix>
+                <mat-icon *ngSwitchCase="'ACTIVO'" matSuffix>notifications_active</mat-icon>
+                <mat-icon *ngSwitchCase="'INACTIVO'" matSuffix>notifications_off</mat-icon>
+                <mat-icon *ngSwitchDefault matSuffix>edit_notifications</mat-icon>
+              </ng-container>
+              <mat-error *ngIf="checkField('estado', null, null)">
+                {{eventDayForm.errorsMessage["estado"]}}</mat-error>
+            </mat-form-field> -->
           </div>
         </div>
       </form>

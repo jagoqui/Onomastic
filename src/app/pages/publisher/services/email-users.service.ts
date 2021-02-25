@@ -25,9 +25,19 @@ export class EmailUsersService {
       .get<ByNameId[]>(`${environment.API_URL}/asociaciones`);
   }
 
+  getAssociationById(id: string): Observable<ByNameId> {
+    return this.http
+      .get<ByNameId>(`${environment.API_URL}/asociaciones/${id}`);
+  }
+
   getAcademicPrograms(): Observable<ProgramaAcademicoPorUsuarioCorreo[]> {
     return this.http
       .get<ProgramaAcademicoPorUsuarioCorreo[]>(`${environment.API_URL}/programasacademicos`);
+  }
+
+  getAcademicProgramByCode(code: number): Observable<ProgramaAcademicoPorUsuarioCorreo> {
+    return this.http
+      .get<ProgramaAcademicoPorUsuarioCorreo>(`${environment.API_URL}/programasacademicos/${code}`);
   }
 
   getBondingTypes(): Observable<ByNameId[]> {
@@ -35,11 +45,20 @@ export class EmailUsersService {
       .get<ByNameId[]>(`${environment.API_URL}/vinculaciones`);
   }
 
+  getBondingTypeById(id: string): Observable<ByNameId> {
+    return this.http
+      .get<ByNameId>(`${environment.API_URL}/vinculaciones/${id}`);
+  }
+
   getPlatforms(): Observable<ByNameId[]> {
     return this.http
       .get<ByNameId[]>(`${environment.API_URL}/plataformas`);
   }
 
+  getPlatformById(id: string): Observable<ByNameId> {
+    return this.http
+      .get<ByNameId>(`${environment.API_URL}/plataformas/${id}`);
+  }
 
   new(user: MailUsers): Observable<MailUsersResponse> {
     return this.http

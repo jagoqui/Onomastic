@@ -1,6 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { CondicionesEvento } from '@app/shared/models/event-day.model';
 import { environment } from '@env/environment';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -9,18 +11,9 @@ export class EventDayService {
 
   constructor(private http: HttpClient) { }
 
-  // TODO: Todos éstos servicios estan en EmailUsersService en shared
-
-  getSchools() {
-    return this.http.get<any>(`${environment.API_URL}/asociaciones`);
-  }
-
-  getAsociations() {
-    return this.http.get<any>(`${environment.API_URL}/vinculaciones`);
-  }
-
-  getPrograms() {
-    return this.http.get<any>(`${environment.API_URL}/programasacademicos`);
+  getConditions(): Observable<CondicionesEvento[]> {
+    return this.http
+      .get<CondicionesEvento[]>(`${environment.API_URL}/condicion`);
   }
 
 }

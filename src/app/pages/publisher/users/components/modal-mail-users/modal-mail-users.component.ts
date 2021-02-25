@@ -125,11 +125,11 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     return this.mailUserForm.isValidField(field, group, iterator);
   }
 
-  setformGropuID(formGroup: FormGroup, id: number) {
+  setformGroupID(formGroup: FormGroup, id: number) {
     formGroup.controls.id.setValue(id);
   }
 
-  setformGropuCode(formGroup: FormGroup, code: number) {
+  setformGroupCode(formGroup: FormGroup, code: number) {
     formGroup.controls.codigo.setValue(code);
   }
 
@@ -167,6 +167,10 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     return (iterator === (this.getBodyTypesSize() - 1) && (this.getBodyTypesSize() < this.maxListsConfig.bodyType));
   }
 
+  getBodyTypesSize(): number {
+    return this.mailUserForm.baseForm.controls.vinculacionPorUsuarioCorreo.value.length;
+  }
+
   getPlatformsSize(): number {
     return this.mailUserForm.baseForm.controls.plataformaPorUsuarioCorreo.value.length;
   }
@@ -175,22 +179,18 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     return (iterator === (this.getPlatformsSize() - 1) && (this.getPlatformsSize() < this.maxListsConfig.platforms));
   }
 
-  getBodyTypesSize(): number {
-    return this.mailUserForm.baseForm.controls.vinculacionPorUsuarioCorreo.value.length;
-  }
-
   onClose(close?: boolean): void {
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.mailUserForm.onReset();
       this.dialogRef.close();
 
-      const associtions = this.mailUserForm.baseForm.controls.asociacionPorUsuarioCorreo.value;
+      const associations = this.mailUserForm.baseForm.controls.asociacionPorUsuarioCorreo.value;
       const bodyTypes = this.mailUserForm.baseForm.controls.vinculacionPorUsuarioCorreo.value;
       const programs = this.mailUserForm.baseForm.controls.programaAcademicoPorUsuarioCorreo.value;
       const platforms = this.mailUserForm.baseForm.controls.plataformaPorUsuarioCorreo.value;
 
-      for (const assocition of associtions) {
-        this.removeOrClearByName(assocition, 'asociacionPorUsuarioCorreo', true);
+      for (const association of associations) {
+        this.removeOrClearByName(association, 'asociacionPorUsuarioCorreo', true);
       }
       for (const bodyType of bodyTypes) {
         this.removeOrClearByName(bodyType, 'vinculacionPorUsuarioCorreo', true);
@@ -199,7 +199,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
         this.removeOrClearByName(program, 'programaAcademicoPorUsuarioCorreo', true);
       }
       for (const platform of platforms) {
-        this.removeOrClearByName(platforms, 'plataformaPorUsuarioCorreo', true);
+        this.removeOrClearByName(platform, 'plataformaPorUsuarioCorreo', true);
       }
     }
   }
