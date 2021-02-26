@@ -27,7 +27,7 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   imageSrc: string = null;
   isOverDrop = false;
   initialContent = `
-    <div id="editorContent">
+    <div id="editorContent" style="z-index: -1">
       <span>
         Hola&nbsp;<b><font color="#e74c3c">&lt;Nombre&gt;</font></b>&nbsp;en ésta&nbsp;<b><font color="#16a085">&lt;Fecha&gt;</font></b>&nbsp;la Universidad de Antioquia le desea un feliz cumpleaños 🥳.
       </span>
@@ -44,21 +44,25 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
     private formBuilder: FormBuilder,
     private themeSwitcherController: ThemeSwitcherControllerService,
     private templateCardsSevice: TemplateCardsService
-  ) { }
+  ) {
+    this.editorForm = this.formBuilder.group({
+      text: [this.initialContent, [Validators.required, Validators.maxLength(400), Validators.minLength(5)]]
+    });
+  }
 
   deleteEvent(event): void {
     const key = event.key; // const {key} = event; ES6+
     if (key === 'Backspace') {
-      console.log(this.joditEditor.editor.selection);
+      // console.log(this.joditEditor.editor.selection);
     }
   }
 
   editorContentVerify() {
     const content = document.getElementById('editorContent');
     if (!content) {
-      this.editorForm.get('description').setValue(`
+      this.editorForm.get('text').setValue(`
         <div id="editorContent">
-          ${this.editorForm.value.description}
+          ${this.editorForm.value.text}
         </div>`
       );
       this.quitImage();
@@ -100,16 +104,14 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   }
 
   resetEditor() {
-    this.editorForm.get('description').setValue(null);
+    this.editorForm.get('text').setValue(null);
     this.joditEditor.resetEditor();
     this.imageSrc = null;
   }
 
   onClickSubmit(data) {
-    console.log(this.joditEditor.editor.chars);
-
     if (this.editorForm.invalid) {
-      this.editorForm.get('description').markAsTouched();
+      this.editorForm.get('text').markAsTouched();
     }
   }
 
@@ -145,9 +147,17 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   }
 
   onSave() {
-    const formData = new FormData();
+    const content = document.getElementById('editorContent');
+    if (content) {
+      content.style.backgroundImage = null;
+      content.style.color = 'black';
+    }
+
+    const cardText = this.editorForm.value.text;
+    console.log(cardText);
+
     const card: Plantilla = {
-      texto: this.editorForm.value.description,
+      texto: cardText,
       asociacionesPorPlantilla: [
         {
           id: 7,
@@ -156,30 +166,35 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
       ]
     };
 
-    const content = document.getElementById('editorContent');
-    if (content) {
-      content.style.backgroundImage = null;
-      content.style.color = 'black';
-    }
-
     this.templateCardsSevice.newCardTemplate(card, this.itemImages[0]?.file).subscribe((cardRes) => {
-      console.log('Card created:>', cardRes);
-      SwAlert.fire(
-        'Guardado',
-        'La plantilla ha sido guardada.',
-        'success'
-      );
+      SwAlert.fire({
+        title: 'Guardado',
+        icon: 'success',
+        html: `${card.texto}`,
+        showCloseButton: true,
+        showCancelButton: true,
+        focusConfirm: false,
+        confirmButtonText:
+          '<i class="fa fa-thumbs-up"></i> Great!',
+        confirmButtonAriaLabel: 'Thumbs up, great!',
+        cancelButtonText:
+          '<i class="fa fa-thumbs-down"></i>',
+        cancelButtonAriaLabel: 'Thumbs down',
+        footer: 'La plantilla ha sido guardada'
+      });
       this.onClose(true);
     }, (err) => {
-      console.log('Error in saving card template! :> ', err);
+      SwAlert.fire({
+        icon: 'error',
+        html: '',
+        title: 'Oops...',
+        text: ' Algo salió mal!',
+        footer: `${err}`
+      });
     });
   }
 
   ngOnInit() {
-    this.editorForm = this.formBuilder.group({
-      description: ['', [Validators.required,
-      Validators.maxLength(400), Validators.minLength(5)]]
-    });
     this.config = {
       autofocus: true,
       maxWidth: 800,
@@ -242,7 +257,6 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
       ]
     };
 
-    this.editorForm.get('description').setValue(this.initialContent);
     this.themeSwitcherController.themeClass$
       .pipe(takeUntil(this.destroy$))
       .subscribe(

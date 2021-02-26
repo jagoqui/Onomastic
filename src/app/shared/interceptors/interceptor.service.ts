@@ -8,6 +8,7 @@ import {
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
 import { catchError, finalize } from 'rxjs/operators';
+import SwAlert from 'sweetalert2';
 
 import { LoaderService } from '../services/loader.service';
 
@@ -43,7 +44,13 @@ export class InterceptorService implements HttpInterceptor {
       errorMessage = `Error! ${error.message}`;
     }
     console.warn(errorMessage);
-    window.alert(errorMessage);
+    SwAlert.fire({
+      icon: 'error',
+      html: '',
+      title: 'Oops...',
+      text: ' Algo salió mal en la petición!',
+      footer: `${errorMessage}`
+    });
     return throwError(errorMessage);
   }
 }

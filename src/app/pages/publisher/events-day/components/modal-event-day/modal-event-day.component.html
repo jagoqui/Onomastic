@@ -3,7 +3,7 @@
   <mat-sidenav [(opened)]="sidenavOpened">
     <mat-card *ngFor="let card of cards" appMaterialElevation (click)="onSelectCard(card)"
       title="Click para seleccionar" class="card" fxLayout="row" fxLayoutGap="12px" [style.margin]="'0.6667rem'">
-      <mat-card-content>
+      <mat-card-content [style.width] = "'100vh'">
         <p [innerHTML]="sanatizeHTML(card.texto)"></p>
       </mat-card-content>
     </mat-card>
