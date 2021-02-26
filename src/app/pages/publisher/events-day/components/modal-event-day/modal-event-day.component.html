@@ -10,7 +10,7 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <div mat-dialog-content>
-      <form (formGroup)="eventDayForm" fxLayout="row" fxLayoutAlign="space-between stretch">
+      <form [formGroup]="eventDayForm.baseForm" fxLayout="row" fxLayoutAlign="space-between stretch">
         <div *ngIf="!selectCardHTML; else selectedCard" fxFlex="45" class="select-card-container">
           <div class="btn-select-card">
             <button mat-button color="primary" (click)="loadCards()">
@@ -18,27 +18,27 @@
               <mat-icon>image</mat-icon>
             </button>
           </div>
-          <mat-error *ngIf="checkField('plantilla', null, null)">{{eventDayForm.errorsMessage.plantilla.texto}}</mat-error>
+          <mat-error *ngIf="checkField('plantilla', null, null)">Seleccione la plantilla</mat-error>
         </div>
         <ng-template #selectedCard>
           <div fxFlex="45" [innerHTML]="selectCardHTML" appMaterialElevation (click)="loadCards(true)"
             class="select-card-container" title='click para cambiar plantilla'></div>
         </ng-template>
 
-        <div fxFlex>
+        <div fxFlex fxLayout="column">
           <div fxLayout="row" fxLayoutAlign="space-between center">
             <!-- Name -->
             <mat-form-field hideRequiredMarker appearance="outline" fxFlex="47">
               <mat-label>Nombre</mat-label>
               <input matInput type="text" matInput required formControlName="nombre">
               <mat-icon matSuffix>event_note</mat-icon>
-              <!-- <mat-error *ngIf="checkField('nombre', null, null)">{{eventDayForm.errorsMessage.nombre}}</mat-error> -->
+              <!-- <mat-error *ngIf="checkField('nombre', null, null)">El nombre es requerido</mat-error> -->
             </mat-form-field>
             <!-- State -->
             <mat-form-field fxFlex="47" hideRequiredMarker appearance="outline">
               <mat-label>estado</mat-label>
               <mat-select #state formControlName="estado">
-                <mat-option value= "d">-- Seleccione una opción --</mat-option>
+                <mat-option>-- Seleccione una opción --</mat-option>
                 <mat-option value="ACTIVO">ACTIVO</mat-option>
                 <mat-option value="INACTIVO">INACTIVO</mat-option>
               </mat-select>
@@ -47,20 +47,17 @@
                 <mat-icon *ngSwitchCase="'INACTIVO'" matSuffix>notifications_off</mat-icon>
                 <mat-icon *ngSwitchDefault matSuffix>edit_notifications</mat-icon>
               </ng-container>
-              <mat-error *ngIf="checkField('estado', null, null)">
-                {{eventDayForm.errorsMessage["estado"]}}</mat-error>
+              <!-- <mat-error *ngIf="checkField('estado', null, null)">El estado es requerido</mat-error> -->
             </mat-form-field>
           </div>
           <div fxLayout="row" fxLayoutAlign="space-between center">
             <!-- Start date-->
             <mat-form-field fxFlex="47" appearance="outline">
-              <mat-label>Fecha de naciemiento</mat-label>
+              <mat-label>Fecha de inicio</mat-label>
               <input matInput [matDatepicker]="dp" formControlName="fecha" (dateChange)="setDateFormat($event)"
                 placeholder="YYYY-MM-DD">
               <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
               <mat-datepicker #dp></mat-datepicker>
-              <!-- <mat-error *ngIf="checkField('fecha', null, null)">{{eventDayForm.errorsMessage["fecha"]}}
-              </mat-error> -->
             </mat-form-field>
             <!-- Recurrency -->
             <mat-form-field fxFlex="47" hideRequiredMarker appearance="outline">
@@ -75,67 +72,39 @@
                 <mat-icon *ngSwitchCase="'DIARIA'" matSuffix>update</mat-icon>
                 <mat-icon *ngSwitchDefault matSuffix>schedule</mat-icon>
               </ng-container>
-              <!-- <mat-error *ngIf="checkField('recurrencia', null, null)">
-                {{eventDayForm.errorsMessage["recurrencia"]}}</mat-error> -->
             </mat-form-field>
           </div>
-          <!-- Association -->
-          <!-- <div *ngFor="let association of platformUserData.asociacion;
-              let i = index" [formGroup]="association" fxLayout="row" fxFlexAlign="space-between center"> -->
-          <!-- {{association.nombre}} -->
-          <!-- Association -->
-          <!-- <div fxFlex="70">
-                <mat-form-field hideRequiredMarker fxFlex="90" appearance="outline">
-                  <mat-label>Asociaciones</mat-label>
-                  <mat-select formControlName="nombre">
-                    <mat-option *ngFor="let association of associations" [value]="association['nombre']"
-                      (onSelectionChange)="setformGroupID(association, association['id'])">
-                      {{association['nombre']}}
-                    </mat-option>
-                  </mat-select>
-                  <mat-icon matSuffix>account_balance</mat-icon>
-                  <mat-error *ngIf="checkField('nombre','asociacion',i)">
-                    {{eventDayForm.errorsMessage['asociacion'][i].nombre}}
-                  </mat-error>
-                </mat-form-field>
-              </div> -->
-          <!-- </div> -->
           <!-- Conditions -->
-          <div *ngFor="let condition of eventDayForm.baseForm.get('condicionesEvento')['controls'];
-            let i = index" [formGroup]="condition" fxLayout="row" fxFlexAlign="space-between center">
-            <!-- Association -->
-            <div fxFlex="70">
+          <div formArrayName="condicionesEvento"
+            *ngFor="let condition of eventDayForm.conditionsOptionsField.controls; let i=index" fxLayout="row"
+            fxFlexAlign="space-between center">
+            <div fxFlex="70" [formGroupName]="i">
               <mat-form-field hideRequiredMarker fxFlex="90" appearance="outline">
                 <mat-label>Condiciones</mat-label>
-                <mat-select #conditionSelected formControlName="condicion">
+                <mat-select #conditionSelected formControlName="condicion"
+                  (selectionChange)="setformGroupField(condition, $event.value, i)">
                   <mat-option>-- Seleccione una opción --</mat-option>
-                  <mat-option *ngFor="let conditionRes of conditions" [value]="conditionRes.condicion"
-                    (onSelectionChange)="setformGroupCondition(condition, conditionRes.id, conditionRes.parametro)">
-                    {{conditionRes['condicion']==="fecha_nacimiento"? "fecha de nacimiento" :
-                    conditionRes['condicion']}}
+                  <mat-option *ngFor="let condition of conditions" [value]="condition.condicion">
+                    <ng-container> {{condition.condicion}} </ng-container>
                   </mat-option>
                 </mat-select>
                 <mat-icon matSuffix>fact_check</mat-icon>
-                <mat-error *ngIf="checkField('condicion','condicionesEvento',i)">
-                  {{eventDayForm.errorsMessage['condicionesEvento'][i]["condicion"]}}
-                </mat-error>
               </mat-form-field>
             </div>
-            <!-- Actions list -->
-            <!-- <div fxFlex="15" fxLayout="row" fxFlexAlign="space-between center">
-                  <div *ngIf="getAssociationsSize() > 1" fxFlex="47">
-                    <button mat-mini-fab color="warn" title="Eliminar asociación"
-                      (click)="removeOrClearByName(i,'asociacionPorUsuarioCorreo', false)">
-                      <mat-icon>remove</mat-icon>
-                    </button>
-                  </div>
-                  <div *ngIf="onShowAddAssociation(i)" fxFlex="47">
-                    <button mat-mini-fab color="primary" title="Agregar asociación"
-                      (click)="addByNameFormGroup('asociacionPorUsuarioCorreo')">
-                      <mat-icon>playlist_add</mat-icon>
-                    </button>
-                  </div>
-                </div> -->
+            <!-- <div fxFlex="22" fxLayout="row" fxLayoutAlign="space-around">
+              <div>
+                <button mat-mini-fab color="warn" (click)="eventDayForm.removeCondition(i)">
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+            </div> -->
+          </div>
+          <div fxFlex="auto" fxLayout="row" fxLayoutAlign="center">
+            <h2>Condiciones</h2>
+            <button mat-mini-fab color="primary" title="Agregar condición"
+              (click)="eventDayForm.addConditionsOptions()">
+              <mat-icon>playlist_add</mat-icon>
+            </button>
           </div>
         </div>
       </form>

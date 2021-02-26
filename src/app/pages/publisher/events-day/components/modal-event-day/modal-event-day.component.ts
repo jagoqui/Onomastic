@@ -21,9 +21,6 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
 import { AuthService } from '@app/auth/services/auth.service';
 import {
-  EmailUsersService,
-} from '@app/pages/publisher/services/email-users.service';
-import {
   EventDayService,
 } from '@app/pages/publisher/services/event-day.services';
 import {
@@ -39,9 +36,8 @@ import { Plantilla } from '@app/shared/models/template-card.model';
 import { BaseFormEventDay } from '@app/shared/utils/base-form-event-day';
 import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
 import * as moment from 'moment';
-import { Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/internal/operators/takeUntil';
 import { Subject } from 'rxjs/internal/Subject';
-import { takeUntil } from 'rxjs/operators';
 
 export const MY_FORMATS = {
   parse: {
@@ -88,7 +84,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   cards: Plantilla[] = [];
   sidenavOpened = false;
   selectCardHTML: SafeHtml = null;
-  private subscripcion: Subscription = new Subscription();
+
   private destroy$ = new Subject<any>();
 
   // Para cargar campos dinamicamente en el HTML
@@ -103,7 +99,6 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     private templateCardsSevice: TemplateCardsService,
     private domSanitazerSvc: DomSanitizerService,
     public eventDayForm: BaseFormEventDay,
-    private userSvc: EmailUsersService,
     private eventDaySvc: EventDayService,
     private authSvc: AuthService
   ) { }
@@ -112,16 +107,16 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     const associations = this.data?.event.asociacion;
     const conditions = this.data?.event.condicionesEvento;
 
-    if (associations) {
-      for (let i = 0; i < associations.length - 1; i++) {
-        this.eventDayForm.addParameterFormGroup('asociacion');
-      }
-    }
-    if (conditions) {
-      for (let i = 0; i < conditions.length - 1; i++) {
-        this.eventDayForm.addParameterFormGroup('condicion');
-      }
-    }
+    // if (associations) {
+    //   for (let i = 0; i < associations.length - 1; i++) {
+    //     this.eventDayForm.addParameterFormGroup('asociacion');
+    //   }
+    // }
+    // if (conditions) {
+    //   for (let i = 0; i < conditions.length - 1; i++) {
+    //     this.eventDayForm.addParameterFormGroup('condicion');
+    //   }
+    // }
     this.eventDayForm.baseForm.patchValue(this.data?.event);
   }
 
@@ -129,53 +124,14 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     this.eventDayForm.baseForm.controls.fecha.setValue(moment(event.value).format('YYYY-MM-DD'));
   }
 
+  setformGroupField(formGroup: FormGroup, value: any, indexClear: number) {
+    // formGroup.controls.condicion.setValue(value.condicion);
+    formGroup.controls.id.setValue(value.id);
+    this.eventDayForm.conditionsOptionsField.at(indexClear).get('parametro').setValue('');
+  }
+
   checkField(field: string, group?: string, iterator?: number): boolean {
     return this.eventDayForm.isValidField(field, group, iterator);
-  }
-
-  setformGroupID(formGroup: FormGroup, id: number) {
-    formGroup.controls.id.setValue(id);
-  }
-
-  setformGroupCondition(formGroup: FormGroup, id: number, parametro: string) {
-    formGroup.controls.id.setValue(id);
-    formGroup.controls.parametro.setValue(parametro);
-
-    this.onAddConditions = formGroup.controls.parametro.value === 'cumpleaños' ? false : true;
-  }
-
-  setformGroupParameter(formGroup: FormGroup, parameter: string) {
-    formGroup.controls.parametro.setValue(parameter);
-  }
-
-  addParameterFormGroup(formGroup: string): void {
-    this.eventDayForm.addParameterFormGroup(formGroup);
-  }
-
-  removeOrClearParameter(iterator: number, formGroup: string, onClose?: boolean): void {
-    if (!onClose) {
-      if (confirm('Seguro que desea remover éste item de la lista?')) {
-        this.eventDayForm.removeOrClearParameter(iterator, formGroup);
-      }
-    } else {
-      this.eventDayForm.removeOrClearParameter(iterator, formGroup);
-    }
-  }
-
-  onShowAddAssociation(size: number): boolean {
-    return (size === (this.getAssociationsSize() - 1) && (this.getAssociationsSize() < this.maxListsConfig.associations));
-  }
-
-  getAssociationsSize(): number {
-    return this.eventDayForm.baseForm.controls.asociacion.value.length;
-  }
-
-  onShowAddCondition(size: number): boolean {
-    return (size === (this.getConditionsSize() - 1) && (this.getConditionsSize() < this.maxListsConfig.conditions));
-  }
-
-  getConditionsSize(): number {
-    return this.eventDayForm.baseForm.controls.condicionesEvento.value.length;
   }
 
   loadCards(onChange?: boolean) {
@@ -202,48 +158,6 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     return this.domSanitazerSvc.sanatizeHTML(cardText);
   }
 
-  getAssociationById(id: string): string {
-    let asociacion: string;
-    this.subscripcion.add(
-      this.userSvc.getAssociationById(id).subscribe(association => {
-        if (association) {
-          asociacion = association.nombre;
-        }
-      }, (err) => {
-        console.log('Get associations error! :> ', err);
-      })
-    );
-    return asociacion;
-  }
-
-  getBondingTypesById(id: string): string {
-    let bondingType: string;
-    this.subscripcion.add(
-      this.userSvc.getBondingTypeById(id).subscribe(BondingType => {
-        if (BondingType) {
-          bondingType = BondingType.nombre;
-        }
-      }, (err) => {
-        console.log('Get bondingType error! :> ', err);
-      })
-    );
-    return bondingType;
-  }
-
-  getAcademicProgramByCode(code: number): string {
-    let program: string;
-    this.subscripcion.add(
-      this.userSvc.getAcademicProgramByCode(code).subscribe(Program => {
-        if (Program) {
-          program = Program.nombre;
-        }
-      }, (err) => {
-        console.log('Get academic program error! :> ', err);
-      })
-    );
-    return program;
-  }
-
   onClose(close?: boolean): void {
     console.log(this.eventDayForm.baseForm.value);
 
@@ -251,15 +165,15 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
       this.eventDayForm.onReset();
       this.dialogRef.close();
 
-      const associations = this.eventDayForm.baseForm.controls.asociacion.value;
-      const conditions = this.eventDayForm.baseForm.controls.condicionesEvento.value;
+      // const associations = this.eventDayForm.baseForm.controls.asociacion.value;
+      // const conditions = this.eventDayForm.baseForm.controls.condicionesEvento.value;
 
-      for (const association of associations) {
-        this.removeOrClearParameter(association, 'asociacion', true);
-      }
-      for (const condition of conditions) {
-        this.removeOrClearParameter(condition, 'condicionesEvento', true);
-      }
+      // for (const association of associations) {
+      //   this.removeOrClearParameter(association, 'asociacion', true);
+      // }
+      // for (const condition of conditions) {
+      //   this.removeOrClearParameter(condition, 'condicionesEvento', true);
+      // }
     }
   }
 
@@ -275,30 +189,26 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
       this.actionTODO = Action.NEW;
     }
 
-    this.authSvc.userResponse$
+    // this.authSvc.userResponse$
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((userRes: PlatformUserResponse) => {
+    //     if (userRes) {
+    //       this.platformUserData = userRes;
+    //     }
+    //   });
+
+    this.eventDaySvc.getConditions()
       .pipe(takeUntil(this.destroy$))
-      .subscribe((userRes: PlatformUserResponse) => {
-        if (userRes) {
-          this.platformUserData = userRes;
-        }
-      });
-
-    this.eventDayForm.baseForm.controls.asociacion.setValue(this.platformUserData.asociacion);
-    console.log(this.eventDayForm.baseForm.controls.asociacion.value);
-
-    this.subscripcion.add(
-      this.eventDaySvc.getConditions().subscribe(conditions => {
+      .subscribe(conditions => {
         if (conditions) {
           this.conditions = conditions;
         }
       }, (err) => {
         console.log('Get condition error! :> ', err);
-      })
-    );
+      });
   }
 
   ngOnDestroy(): void {
-    this.subscripcion.unsubscribe();
     this.destroy$.next({});
     this.destroy$.complete();
   }
