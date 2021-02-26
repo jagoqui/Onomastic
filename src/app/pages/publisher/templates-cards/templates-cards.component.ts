@@ -19,6 +19,7 @@ import {
 })
 export class TemplatesCardsComponent implements OnInit, AfterViewInit {
   cards: Plantilla[];
+  onViewCard = true;
 
   constructor(
     private dialog: MatDialog,
@@ -32,13 +33,18 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
   }
 
   onOpenModal(): void {
-    this.dialog.open(ModalTemplateCardsComponent, {
+    this.onViewCard = false;
+    const dialogRef = this.dialog.open(ModalTemplateCardsComponent, {
       height: 'auto',
       width: '95%',
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
       data: { title: 'Nueva tarjeta' },
+    });
+    dialogRef.afterClosed().subscribe(res => {
+      this.onViewCard = true;
+      this.ngAfterViewInit();
     });
   }
 
