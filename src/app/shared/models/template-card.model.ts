@@ -1,4 +1,4 @@
-import { ByNameId } from './mail-users.model';
+import {ByNameId} from './mail-users.model';
 
 export interface TemplateCard {
   uploadFileResponse?: UploadFileResponse;

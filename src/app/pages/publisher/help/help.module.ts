@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { HelpRoutingModule } from './help-routing.module';
-import { HelpComponent } from './help.component';
+import {HelpRoutingModule} from './help-routing.module';
+import {HelpComponent} from './help.component';
 
 
 @NgModule({
@@ -12,4 +12,5 @@ import { HelpComponent } from './help.component';
     HelpRoutingModule
   ]
 })
-export class HelpModule { }
+export class HelpModule {
+}

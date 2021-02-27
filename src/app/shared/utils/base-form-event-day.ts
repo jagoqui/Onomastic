@@ -1,19 +1,14 @@
-import { Injectable } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import {Injectable} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators,} from '@angular/forms';
 import * as moment from 'moment';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class BaseFormEventDay {
 
   public baseForm = this.createBaseForm();
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {
+  }
 
   createBaseForm(): FormGroup {
     return this.fb.group({

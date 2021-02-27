@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { ForgotPasswordRoutingModule } from './forgot-password-routing.module';
-import { ForgotPasswordComponent } from './forgot-password.component';
+import {ForgotPasswordRoutingModule} from './forgot-password-routing.module';
+import {ForgotPasswordComponent} from './forgot-password.component';
 
 
 @NgModule({
@@ -12,4 +12,5 @@ import { ForgotPasswordComponent } from './forgot-password.component';
     ForgotPasswordRoutingModule
   ]
 })
-export class ForgotPasswordModule { }
+export class ForgotPasswordModule {
+}

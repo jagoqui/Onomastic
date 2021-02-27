@@ -1,12 +1,13 @@
-import { Pipe, PipeTransform, SecurityContext } from '@angular/core';
-import { DomSanitizer, SafeValue } from '@angular/platform-browser';
+import {Pipe, PipeTransform, SecurityContext} from '@angular/core';
+import {DomSanitizer, SafeValue} from '@angular/platform-browser';
 
 @Pipe({
   name: 'domPurify'
 })
 export class DomPurifyPipe implements PipeTransform {
 
-  constructor(private readonly domSanitizer: DomSanitizer) { }
+  constructor(private readonly domSanitizer: DomSanitizer) {
+  }
 
   // transform(
   //   value: {} | string | null,

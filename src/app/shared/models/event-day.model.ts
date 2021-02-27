@@ -1,5 +1,5 @@
-import { ByNameId } from './mail-users.model';
-import { Plantilla } from './template-card.model';
+import {ByNameId} from './mail-users.model';
+import {Plantilla} from './template-card.model';
 
 export interface EventDay {
   id?: number;

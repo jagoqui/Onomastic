@@ -1,21 +1,19 @@
-import { HttpClient } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import {
-  Plantilla,
-  TemplateCard,
-} from '@app/shared/models/template-card.model';
-import { environment } from '@env/environment';
-import { Observable } from 'rxjs';
+import {HttpClient} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Plantilla, TemplateCard,} from '@app/shared/models/template-card.model';
+import {environment} from '@env/environment';
+import {Observable} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TemplateCardsService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+  }
 
   newCardTemplate(plantilla: Plantilla, image: File): Observable<TemplateCard> {
-    const cardBlob = new Blob([JSON.stringify(plantilla)], { type: 'application/json' });
+    const cardBlob = new Blob([JSON.stringify(plantilla)], {type: 'application/json'});
     console.log(plantilla.texto, cardBlob);
 
     const formData = new FormData();

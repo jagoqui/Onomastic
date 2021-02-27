@@ -1,12 +1,15 @@
 <div class="container" fxFlex="98" fxLayout="column">
   <div fxLayout="row">
     <button class="button-action button-add-template-card" fxFlex="19" mat-raised-button (click)="onOpenModal()"
-      title="Pulse para agregar una nueva plantilla">Nueva plantilla</button>
+            title="Pulse para agregar una nueva plantilla">Nueva plantilla
+    </button>
   </div>
   <div class="wrapper" *ngIf="cards && onViewCard">
-    <mat-card *ngFor="let card of cards" appMaterialElevation (click)="onSelectCard(card)" title="Click para editar plantilla"
-      class="card">
-      <p [innerHTML]="sanitizeHTML(card.texto)" title="Click para editar plantilla"></p>
-    </mat-card>
+        <mat-card *ngFor="let card of cards" appMaterialElevation (click)="onSelectCard(card)"
+                  title="Click para editar plantilla" [innerHTML]="sanitizeHTML(card.texto)"
+                  class="card">
+        </mat-card>
+<!--    <div *ngFor="let card of cards" appMaterialElevation (click)="onSelectCard(card)" fxFlex="60"-->
+<!--         [innerHTML]="sanitizeHTML(card.texto)" class="select-card-container" title='click para cambiar plantilla'></div>-->
   </div>
 </div>

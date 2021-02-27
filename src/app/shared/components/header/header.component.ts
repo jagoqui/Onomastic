@@ -1,4 +1,4 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
 import {AuthService} from '@auth/services/auth.service';
 import {Subject} from 'rxjs';

@@ -16,7 +16,8 @@ import SwAlert from 'sweetalert2';
   styleUrls: ['./modal-template-cards.component.scss']
 })
 export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
-  @ViewChild('editor') joditEditor: JoditAngularComponent; itemImages: FileUpload[] = [];
+  @ViewChild('editor') joditEditor: JoditAngularComponent;
+  itemImages: FileUpload[] = [];
   imageSrc: string = null;
   isOverDrop = false;
   initialContent = `
@@ -43,19 +44,13 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
     });
   }
 
-  deleteEvent(event): void {
-    const key = event.key; // const {key} = event; ES6+
-    if (key === 'Backspace') {
-      // console.log(this.joditEditor.editor.selection);
-    }
-  }
 
   editorContentVerify() {
     const content = document.getElementById('editorContent');
     if (!content) {
       this.editorForm.get('text').setValue(`
         <div id="editorContent">
-          ${this.editorForm.value.text}
+          ${this.editorForm.value.text} <!-- TODO: Poner el cursor dentro del div-->
         </div>`
       );
       this.quitImage();

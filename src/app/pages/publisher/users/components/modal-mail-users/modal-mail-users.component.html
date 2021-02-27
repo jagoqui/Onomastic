@@ -1,13 +1,14 @@
-<h1  mat-dialog-title>{{data.title | uppercase }}</h1>
+<h1 mat-dialog-title>{{data.title | uppercase }}</h1>
 <div mat-dialog-content>
 
-  <form [formGroup]="mailUserForm.baseForm" (ngSubmit)="onSave()" fxLayout="column"  (keydown.enter)="$event.preventDefault()">
+  <form [formGroup]="mailUserForm.baseForm" (ngSubmit)="onSave()" fxLayout="column"
+        (keydown.enter)="$event.preventDefault()">
     <div fxLayout="row" fxLayoutAlign="space-between center">
       <!-- Name -->
       <mat-form-field hideRequiredMarker appearance="outline" fxFlex="47">
         <mat-label>Nombre</mat-label>
         <label>
-          <input  type="text" matInput required formControlName="nombre">
+          <input type="text" matInput required formControlName="nombre">
         </label>
         <mat-icon matSuffix>account_circle</mat-icon>
         <mat-error *ngIf="checkField('nombre', null, null)">{{mailUserForm.errorsMessage["nombre"]}}</mat-error>
@@ -16,7 +17,7 @@
       <mat-form-field hideRequiredMarker appearance="outline" fxFlex="47">
         <mat-label>Apellidos</mat-label>
         <label>
-          <input  type="text" matInput required formControlName="apellido">
+          <input type="text" matInput required formControlName="apellido">
         </label>
         <mat-icon matSuffix>account_circle</mat-icon>
         <mat-error *ngIf="checkField('apellido',null, null)">{{mailUserForm.errorsMessage["apellido"]}}</mat-error>
@@ -47,7 +48,7 @@
         <mat-label>Número de identificación</mat-label>
         <label>
           <input type="text" matInput required formControlName="numeroIdentificacion"
-           >
+          >
         </label>
         <mat-icon matSuffix>account_box</mat-icon>
         <mat-error *ngIf="checkField('numeroIdentificacion','id', null )">
@@ -61,7 +62,7 @@
         <mat-label>Fecha de naciemiento</mat-label>
         <label>
           <input matInput [matDatepicker]="dp" [max]="today" formControlName="fechaNacimiento"
-            (dateChange)="setBirtdayFormat($event)" placeholder="YYYY-MM-DD">
+                 (dateChange)="setBirtdayFormat($event)" placeholder="YYYY-MM-DD">
         </label>
         <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
         <mat-datepicker #dp></mat-datepicker>
@@ -120,7 +121,7 @@
           <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let association of associations" [value]="association['nombre']"
-              (onSelectionChange)="setformGroupID(mailAssociation, association['id'])">
+                        (onSelectionChange)="setformGroupID(mailAssociation, association['id'])">
               {{association['nombre']}}
             </mat-option>
           </mat-select>
@@ -134,13 +135,13 @@
       <div fxFlex="15" fxLayout="row" fxFlexAlign="space-between center">
         <div *ngIf="getAssociationsSize() > 1" fxFlex="47">
           <button mat-mini-fab color="warn" title="Eliminar asociación"
-            (click)="removeOrClearByName(i,'asociacionPorUsuarioCorreo', false)">
+                  (click)="removeOrClearByName(i,'asociacionPorUsuarioCorreo', false)">
             <mat-icon>remove</mat-icon>
           </button>
         </div>
         <div *ngIf="onShowAddAssociation(i)" fxFlex="47">
           <button mat-mini-fab color="primary" title="Agregar asociación"
-            (click)="addByNameFormGroup('asociacionPorUsuarioCorreo')">
+                  (click)="addByNameFormGroup('asociacionPorUsuarioCorreo')">
             <mat-icon>playlist_add</mat-icon>
           </button>
         </div>
@@ -156,7 +157,7 @@
           <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let program of programs" [value]="program['nombre']"
-              (onSelectionChange)="setFormGroupCode(academicProgram, program['codigo'])">
+                        (onSelectionChange)="setFormGroupCode(academicProgram, program['codigo'])">
               {{program['nombre']}}</mat-option>
           </mat-select>
           <mat-icon matSuffix>school</mat-icon>
@@ -169,13 +170,13 @@
       <div fxFlex="15" fxLayout="row" fxFlexAlign="space-between center">
         <div *ngIf="getProgramsSize() > 1" fxFlex="47">
           <button mat-mini-fab color="warn" title="Eliminar programa"
-            (click)="removeOrClearByName(i,'programaAcademicoPorUsuarioCorreo', false)">
+                  (click)="removeOrClearByName(i,'programaAcademicoPorUsuarioCorreo', false)">
             <mat-icon>remove</mat-icon>
           </button>
         </div>
         <div *ngIf="onShowAddProgram(i)" fxFlex="47">
           <button mat-mini-fab color="primary" title="Agregar programa"
-            (click)="addByNameFormGroup('programaAcademicoPorUsuarioCorreo')">
+                  (click)="addByNameFormGroup('programaAcademicoPorUsuarioCorreo')">
             <mat-icon>playlist_add</mat-icon>
           </button>
         </div>
@@ -191,7 +192,7 @@
           <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let bondingType of bondingTypes" [value]="bondingType['nombre']"
-              (onSelectionChange)="setformGroupID(bonding, bondingType['id'])">
+                        (onSelectionChange)="setformGroupID(bonding, bondingType['id'])">
               {{bondingType['nombre']}}</mat-option>
           </mat-select>
           <mat-icon matSuffix>group_work</mat-icon>
@@ -204,13 +205,13 @@
       <div fxFlex="15" fxLayout="row" fxFlexAlign="space-between center">
         <div *ngIf="getBodyTypesSize() > 1" fxFlex="47">
           <button mat-mini-fab color="warn" title="Eliminar vinculación"
-            (click)="removeOrClearByName(i,'vinculacionPorUsuarioCorreo', false)">
+                  (click)="removeOrClearByName(i,'vinculacionPorUsuarioCorreo', false)">
             <mat-icon>remove</mat-icon>
           </button>
         </div>
         <div *ngIf="onShowAddBodyType(i)" fxFlex="47">
           <button mat-mini-fab color="primary" title="Agregar vinculación"
-            (click)="addByNameFormGroup('vinculacionPorUsuarioCorreo')">
+                  (click)="addByNameFormGroup('vinculacionPorUsuarioCorreo')">
             <mat-icon>playlist_add</mat-icon>
           </button>
         </div>
@@ -226,7 +227,7 @@
           <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let platform of platforms" [value]="platform['nombre']"
-              (onSelectionChange)="setformGroupID(platformUser, platform['id'])">
+                        (onSelectionChange)="setformGroupID(platformUser, platform['id'])">
               {{platform['nombre']}}
             </mat-option>
           </mat-select>
@@ -240,13 +241,13 @@
       <div fxFlex="15" fxLayout="row" fxFlexAlign="space-between center">
         <div *ngIf="getPlatformsSize()> 1" fxFlex="47">
           <button mat-mini-fab color="warn" title="Eliminar plataforma"
-            (click)="removeOrClearByName(i,'plataformaPorUsuarioCorreo', false)">
+                  (click)="removeOrClearByName(i,'plataformaPorUsuarioCorreo', false)">
             <mat-icon>remove</mat-icon>
           </button>
         </div>
         <div *ngIf="onShowPlatforms(i)" fxFlex="47">
           <button mat-mini-fab color="primary" title="Agregar plataforma"
-            (click)="addByNameFormGroup('plataformaPorUsuarioCorreo')">
+                  (click)="addByNameFormGroup('plataformaPorUsuarioCorreo')">
             <mat-icon>playlist_add</mat-icon>
           </button>
         </div>

@@ -1,7 +1,7 @@
-import { Injectable } from '@angular/core';
-import { FormBuilder, Validators } from '@angular/forms';
+import {Injectable} from '@angular/core';
+import {FormBuilder, Validators} from '@angular/forms';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class BaseFormPlatformUsers {
   private emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
   // private passwordPattern = '(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&].{8,}';
@@ -14,7 +14,8 @@ export class BaseFormPlatformUsers {
     role: ''
   };
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {
+  }
 
   baseForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(10)]],
@@ -31,7 +32,7 @@ export class BaseFormPlatformUsers {
   }
 
   private getErrorMessage(field: string): void {
-    const { errors } = this.baseForm.get(field);
+    const {errors} = this.baseForm.get(field);
 
     if (errors) {
       const messages = {

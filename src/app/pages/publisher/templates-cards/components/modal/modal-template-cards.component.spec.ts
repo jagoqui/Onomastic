@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ModalTempalteCardsComponent } from './modal-template-cards.component';
+import {ModalTempalteCardsComponent} from './modal-template-cards.component';
 
 describe('ModalComponent', () => {
   let component: ModalTempalteCardsComponent;

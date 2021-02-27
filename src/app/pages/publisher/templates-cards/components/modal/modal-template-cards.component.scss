@@ -38,32 +38,40 @@
   }
 }
 
-.button-clear-text{
+.button-clear-text {
   &:before {
     content: "Limpiar";
   }
 }
 
-#template-background, #template-background-drop{
+#template-background, #template-background-drop {
   width: 100%;
 
   img {
-    width              : 90%;
-    height             : 90%;
-    border-radius      : 10%;
+    width: 90%;
+    height: 90%;
+    border-radius: 10%;
   }
 }
 
-::ng-deep .cdk-overlay-pane { max-width: 100vw !important; max-height: 95vh; }
-::ng-deep .cdk-overlay-pane .mat-dialog-container{
+::ng-deep .cdk-overlay-pane {
+  max-width: 100vw !important;
+  max-height: 95vh;
+}
+
+::ng-deep .cdk-overlay-pane .mat-dialog-container {
   max-width: 100vw;
   max-height: 95vh;
 }
-::ng-deep .cdk-overlay-pane .mat-dialog-container .mat-dialog-content { max-height: 95vh; }
+
+::ng-deep .cdk-overlay-pane .mat-dialog-container .mat-dialog-content {
+  max-height: 95vh;
+}
 
 .drop-zone {
   border: dotted 3px lightgray;
 }
+
 .file-over {
   border: dotted 3px #2196f3;
 }

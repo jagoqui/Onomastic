@@ -1,14 +1,8 @@
-import { Injectable } from '@angular/core';
-import {
-  FormArray,
-  FormBuilder,
-  FormControl,
-  FormGroup,
-  Validators,
-} from '@angular/forms';
+import {Injectable} from '@angular/core';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators,} from '@angular/forms';
 import * as moment from 'moment';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class BaseFormMailUsers {
   private emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
 
@@ -29,7 +23,8 @@ export class BaseFormMailUsers {
     plataformaPorUsuarioCorreo: this.createByNameArrayError('id')
   };
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder) {
+  }
 
   baseForm = this.createBaseForm();
 
@@ -143,14 +138,14 @@ export class BaseFormMailUsers {
     if (group) {
       if (i !== null) {
         const arrayControl = this.baseForm.get(group) as FormArray;
-        const { errors } = arrayControl.at(i).get(field);
+        const {errors} = arrayControl.at(i).get(field);
         errorField = errors;
       } else {
-        const { errors } = this.baseForm.get([group, field]);
+        const {errors} = this.baseForm.get([group, field]);
         errorField = errors;
       }
     } else {
-      const { errors } = this.baseForm.get(field);
+      const {errors} = this.baseForm.get(field);
       errorField = errors;
     }
 

@@ -1,11 +1,9 @@
-import { NgModule } from '@angular/core';
-import { SharedModule } from 'src/app/shared/shared.module';
+import {NgModule} from '@angular/core';
+import {SharedModule} from 'src/app/shared/shared.module';
 
-import {
-  ModalMailUsersComponent,
-} from './components/modal-mail-users/modal-mail-users.component';
-import { UsersRoutingModule } from './users-routing.module';
-import { UsersComponent } from './users.component';
+import {ModalMailUsersComponent,} from './components/modal-mail-users/modal-mail-users.component';
+import {UsersRoutingModule} from './users-routing.module';
+import {UsersComponent} from './users.component';
 
 
 @NgModule({
@@ -15,4 +13,5 @@ import { UsersComponent } from './users.component';
     SharedModule
   ]
 })
-export class UsersModule { }
+export class UsersModule {
+}

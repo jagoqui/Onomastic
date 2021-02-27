@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { ModalEventDayComponent } from './modal-event-day.component';
+import {ModalEventDayComponent} from './modal-event-day.component';
 
 describe('ModalComponent', () => {
   let component: ModalEventDayComponent;

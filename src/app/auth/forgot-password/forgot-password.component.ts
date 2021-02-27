@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 
 @Component({
   selector: 'app-forgot-password',
@@ -7,7 +7,8 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 })
 export class ForgotPasswordComponent implements OnInit, OnDestroy {
 
-  constructor() { }
+  constructor() {
+  }
 
   ngOnInit(): void {
   }

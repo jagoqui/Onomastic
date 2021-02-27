@@ -1,10 +1,10 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
 
-import { PublisherComponent } from './publisher.component';
+import {PublisherComponent} from './publisher.component';
 
 const routes: Routes = [
-  { path: '', component: PublisherComponent },
+  {path: '', component: PublisherComponent},
   {
     path: 'users',
     loadChildren: () => import('./users/users.module').then(m => m.UsersModule)
@@ -27,4 +27,5 @@ const routes: Routes = [
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule]
 })
-export class PublisherRoutingModule { }
+export class PublisherRoutingModule {
+}

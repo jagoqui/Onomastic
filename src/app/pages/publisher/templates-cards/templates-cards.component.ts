@@ -1,16 +1,12 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { SafeHtml } from '@angular/platform-browser';
-import { Plantilla } from '@app/shared/models/template-card.model';
-import {
-  DomSanitizerService,
-} from '@app/shared/services/dom-sanitizer.service';
-import { LoaderService } from '@app/shared/services/loader.service';
+import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {SafeHtml} from '@angular/platform-browser';
+import {Plantilla} from '@app/shared/models/template-card.model';
+import {DomSanitizerService,} from '@app/shared/services/dom-sanitizer.service';
+import {LoaderService} from '@app/shared/services/loader.service';
 
-import { TemplateCardsService } from '../services/template-cards.service';
-import {
-  ModalTemplateCardsComponent,
-} from './components/modal/modal-template-cards.component';
+import {TemplateCardsService} from '../services/template-cards.service';
+import {ModalTemplateCardsComponent,} from './components/modal/modal-template-cards.component';
 
 @Component({
   selector: 'app-templates-cards',
@@ -26,7 +22,8 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
     private domSanitizerSvc: DomSanitizerService,
     private templateCardsService: TemplateCardsService,
     public loaderSvc: LoaderService
-  ) { }
+  ) {
+  }
 
   sanitizeHTML(card: string): SafeHtml {
     return this.domSanitizerSvc.sanitizeHTML(card);
@@ -40,7 +37,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
-      data: { title: 'Nueva tarjeta' },
+      data: {title: 'Nueva tarjeta'},
     });
     dialogRef.afterClosed().subscribe(res => {
       this.onViewCard = true;
@@ -48,7 +45,8 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onSelectCard(card: Plantilla): void { }
+  onSelectCard(card: Plantilla): void {
+  }
 
   ngAfterViewInit(): void {
     this.templateCardsService.getAllCards().subscribe(cards => {
@@ -58,5 +56,6 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  ngOnInit(): void { }
+  ngOnInit(): void {
+  }
 }

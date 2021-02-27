@@ -3,8 +3,8 @@
   <!-- Image load -->
   <div fxFlex="20" fxLayout="column" fxLayoutAlign="space-between stretch">
     <div appUploadFiles [files]="itemImages" [multiple]=false (mouseOver)="isOverDrop = $event"
-      (change)="setCardBackground($event)" (fileSrc)="imageSrc = $event" [ngClass]="{ 'file-over': isOverDrop }"
-      class="drop-zone" fxFlex>
+         (change)="setCardBackground($event)" (fileSrc)="imageSrc = $event" [ngClass]="{ 'file-over': isOverDrop }"
+         class="drop-zone" fxFlex>
       <div *ngIf="imageSrc ; else dropImage" id="template-background">
         <button mat-raised-button (click)="quitImage()">
           <mat-icon>close</mat-icon>
@@ -19,33 +19,43 @@
       </ng-template>
     </div>
     <input id="inputBackgroundEditor" type="file" appUploadFiles [files]="itemImages" [multiple]=false
-      (fileSrc)="imageSrc=$event" (change)="setCardBackground($event)" />
+           (fileSrc)="imageSrc=$event" (change)="setCardBackground($event)"/>
   </div>
   <!-- Edit text -->
   <div fxFlex="75" fxLayout="row" fxLayoutAlign="space-between center" class="container">
     <form [formGroup]="editorForm" (ngSubmit)="onClickSubmit(editorForm.value)" fxFlex>
-      <jodit-editor #editor id="editor" formControlName="text" [config]="config" (change)="editorContentVerify()"
-        (keydown)="deleteEvent($event)"></jodit-editor>
-        <mat-error *ngIf="editorForm.controls.text.hasError('requerido') && editorForm.controls.text.touched">
-          El campo es requerido.</mat-error>
-      <mat-error *ngIf="editorForm.controls.text.hasError('minlength') && (editorForm.controls.text.touched || editorForm.controls.text.dirty)">
-        Ingrese mínimo 5 carácteres.</mat-error>
-        <mat-error *ngIf="editorForm.controls.text.hasError('maxlength') && (editorForm.controls.text.touched || editorForm.controls.text.dirty)">
-          Ingrese máximo 400 carácteres.</mat-error>
+      <jodit-editor #editor id="editor" formControlName="text" [config]="config"
+                    (change)="editorContentVerify()"></jodit-editor>
+      <mat-error *ngIf="editorForm.controls.text.hasError('requerido') && editorForm.controls.text.touched">
+        El campo es requerido.
+      </mat-error>
+      <mat-error
+        *ngIf="editorForm.controls.text.hasError('minlength') && (editorForm.controls.text.touched || editorForm.controls.text.dirty)">
+        Ingrese mínimo 5 carácteres.
+      </mat-error>
+      <mat-error
+        *ngIf="editorForm.controls.text.hasError('maxlength') && (editorForm.controls.text.touched || editorForm.controls.text.dirty)">
+        Ingrese máximo 400 carácteres.
+      </mat-error>
     </form>
 
     <div id="actions_buttons" fxFlex="25" fxLayout="column" fxLayoutAlign="space-between stretch">
       <h2 mat-dialog-title>Etiquetas</h2>
       <button id="name" mat-raised-button class="button-action button-add-name" (click)="addName()"
-        title="Pulse para agregar etiqueta de nombre.">Nombre</button>
+              title="Pulse para agregar etiqueta de nombre.">Nombre
+      </button>
       <button id="date" mat-raised-button class="button-action button-add-date" (click)="addDate()"
-        title="Pulse para agregar etiqueta de fecha.">Fecha</button>
+              title="Pulse para agregar etiqueta de fecha.">Fecha
+      </button>
       <button id="school" mat-raised-button class="button-action button-add-school" (click)="addSchool()"
-        title="Pulse para agregar etoqueta de facultad/escuela.">Facultad</button>
+              title="Pulse para agregar etoqueta de facultad/escuela.">Facultad
+      </button>
       <button mat-raised-button class="button-action button-add-association" (click)="addAssociation()"
-        title="Pulse para agregar etiqueta de estamento.">Estamento</button>
+              title="Pulse para agregar etiqueta de estamento.">Estamento
+      </button>
       <button mat-raised-button color="warn" class="button-action button-clear-text" (click)="resetEditor()"
-        title="Pulse para eliminar todo el texto.">Limpiar texto</button>
+              title="Pulse para eliminar todo el texto.">Limpiar texto
+      </button>
     </div>
   </div>
 </div>

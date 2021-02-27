@@ -1,32 +1,15 @@
-import {
-  Component,
-  EventEmitter,
-  Inject,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import {
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-  MomentDateAdapter,
-} from '@angular/material-moment-adapter';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {
-  ByNameId,
-  ProgramaAcademicoPorUsuarioCorreo,
-} from '@shared/models/mail-users.model';
-import { BaseFormMailUsers } from '@shared/utils/base-form-mail-users';
+import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output,} from '@angular/core';
+import {FormGroup} from '@angular/forms';
+import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter,} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE,} from '@angular/material/core';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {ByNameId, ProgramaAcademicoPorUsuarioCorreo,} from '@shared/models/mail-users.model';
+import {BaseFormMailUsers} from '@shared/utils/base-form-mail-users';
 import * as moment from 'moment';
-import { Subscription } from 'rxjs';
+import {Subscription} from 'rxjs';
 
-import { EmailUsersService } from '../../../services/email-users.service';
+import {EmailUsersService} from '../../../services/email-users.service';
 
 export const MY_FORMATS = {
   parse: {
@@ -57,7 +40,7 @@ enum Action {
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
     },
 
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   ],
 })
 export class ModalMailUsersComponent implements OnInit, OnDestroy {
@@ -84,7 +67,8 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private userSvc: EmailUsersService,
     public mailUserForm: BaseFormMailUsers
-  ) { }
+  ) {
+  }
 
   private pathFormData(): void {
     const associations = this.data?.user.asociacionPorUsuarioCorreo;

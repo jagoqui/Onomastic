@@ -1,8 +1,8 @@
-import { CommonModule } from '@angular/common';
-import { NgModule } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {NgModule} from '@angular/core';
 
-import { PublisherRoutingModule } from './publisher-routing.module';
-import { PublisherComponent } from './publisher.component';
+import {PublisherRoutingModule} from './publisher-routing.module';
+import {PublisherComponent} from './publisher.component';
 
 
 @NgModule({
@@ -12,4 +12,5 @@ import { PublisherComponent } from './publisher.component';
     PublisherRoutingModule,
   ]
 })
-export class PublisherModule { }
+export class PublisherModule {
+}

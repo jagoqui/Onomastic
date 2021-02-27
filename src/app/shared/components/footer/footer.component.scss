@@ -3,10 +3,12 @@ mat-toolbar {
   min-height: $heigth-footer !important;
   height: $heigth-footer !important;
   padding: 1.3889rem 0;
-  span{
+
+  span {
     font-size: 0.8333rem;
   }
-  div span{
+
+  div span {
     font-size: 0.7222rem;
   }
 }

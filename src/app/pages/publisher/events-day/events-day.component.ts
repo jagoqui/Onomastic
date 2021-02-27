@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
+import {Component, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
 
-import {
-  ModalEventDayComponent,
-} from './components/modal-event-day/modal-event-day.component';
+import {ModalEventDayComponent,} from './components/modal-event-day/modal-event-day.component';
 
 @Component({
   selector: 'app-events-day',
@@ -12,7 +10,8 @@ import {
 })
 export class EventsDayComponent implements OnInit {
 
-  constructor(private dialog: MatDialog) { }
+  constructor(private dialog: MatDialog) {
+  }
 
   ngOnInit(): void {
   }
@@ -24,7 +23,7 @@ export class EventsDayComponent implements OnInit {
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
-      data: { title: event ? 'EDITAR EVENTO' : 'NUEVO EVENTO', event },
+      data: {title: event ? 'EDITAR EVENTO' : 'NUEVO EVENTO', event},
     });
   }
 }

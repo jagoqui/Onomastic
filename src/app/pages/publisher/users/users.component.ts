@@ -1,22 +1,14 @@
-import {
-  AfterViewInit,
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { ID } from '@shared/models/mail-users.model';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild,} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSort} from '@angular/material/sort';
+import {MatTableDataSource} from '@angular/material/table';
+import {ID} from '@shared/models/mail-users.model';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
-import { EmailUsersService } from '../services/email-users.service';
-import {
-  ModalMailUsersComponent,
-} from './components/modal-mail-users/modal-mail-users.component';
+import {EmailUsersService} from '../services/email-users.service';
+import {ModalMailUsersComponent,} from './components/modal-mail-users/modal-mail-users.component';
 
 @Component({
   selector: 'app-users',
@@ -24,7 +16,7 @@ import {
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
   private numUsers = 0;
@@ -39,7 +31,8 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
   dataSource = new MatTableDataSource();
   private destroy$ = new Subject<any>();
 
-  constructor(private dialog: MatDialog, private userSvc: EmailUsersService) { }
+  constructor(private dialog: MatDialog, private userSvc: EmailUsersService) {
+  }
 
   getParcialUsers(): string {
     let x = ('' + this.numUsers).length;
@@ -60,7 +53,7 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
       disableClose: true,
       height: 'auto',
       width: '45%',
-      data: { title: user ? 'Actualizar destinatario' : 'Nuevo destinatario', user },
+      data: {title: user ? 'Actualizar destinatario' : 'Nuevo destinatario', user},
     });
     if (dialogRef.afterClosed()) {
       dialogRef.componentInstance.refresh.subscribe((refresh) => {

@@ -5,7 +5,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {SafeHtml} from '@angular/platform-browser';
-import {EventDayService } from '@app/pages/publisher/services/event-day.services';
+import {EventDayService} from '@app/pages/publisher/services/event-day.services';
 import {TemplateCardsService} from '@app/pages/publisher/services/template-cards.service';
 import {CondicionesEvento} from '@app/shared/models/event-day.model';
 import {ByNameId, ProgramaAcademicoPorUsuarioCorreo} from '@app/shared/models/mail-users.model';

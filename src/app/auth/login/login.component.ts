@@ -26,6 +26,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     type: 'image',
     success: false
   };
+
   constructor(
     private authSvc: AuthService,
     private router: Router,
@@ -56,17 +57,22 @@ export class LoginComponent implements OnInit, OnDestroy {
     return this.loginForm.isValidField(field);
   }
 
-  handleResetRecaptcha() { }
+  handleResetRecaptcha() {
+  }
 
-  handleExpireRecaptcha() { this.recaptchaConfig.success = false; }
+  handleExpireRecaptcha() {
+    this.recaptchaConfig.success = false;
+  }
 
-  handleLoadRecaptcha() { }
+  handleLoadRecaptcha() {
+  }
 
   handleSuccessRecaptcha() {
     this.recaptchaConfig.success = true;
   }
 
-  handleErrorRecaptcha() { }
+  handleErrorRecaptcha() {
+  }
 
   private onResetCaptcha(): void {
     this.captchaElem?.resetCaptcha();

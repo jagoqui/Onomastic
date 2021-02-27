@@ -1,8 +1,8 @@
-import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
 
-import { ConfirmationEmailRoutingModule } from './confirmation-email-routing.module';
-import { ConfirmationEmailComponent } from './confirmation-email.component';
+import {ConfirmationEmailRoutingModule} from './confirmation-email-routing.module';
+import {ConfirmationEmailComponent} from './confirmation-email.component';
 
 
 @NgModule({
@@ -12,4 +12,5 @@ import { ConfirmationEmailComponent } from './confirmation-email.component';
     ConfirmationEmailRoutingModule
   ]
 })
-export class ConfirmationEmailModule { }
+export class ConfirmationEmailModule {
+}
