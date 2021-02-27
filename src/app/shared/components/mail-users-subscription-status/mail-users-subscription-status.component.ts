@@ -27,7 +27,7 @@ export class MailUsersSubscriptionStatusComponent implements OnInit {
           'Subscripción cancelada!',
           `No recibirá más correos de Onomástico, para más información <a href="${this.route.navigate(['PUBLISHER/help'])}">Ayuda</a>.`,
           'success'
-        );
+        ).then(r => console.log(r));
       } else {
         SwAlert.fire(
           'Subscripción renovada!',
@@ -35,7 +35,7 @@ export class MailUsersSubscriptionStatusComponent implements OnInit {
             Seguirá recibiendo los correos de Onomástico, para más información <a href="${this.route.navigate(['PUBLISHER/help'])}">Ayuda</a>.
           `,
           'info'
-        );
+        ).then(r => console.log(r));
       }
     });
   }

@@ -8,14 +8,18 @@
         <!-- userEmail -->
         <mat-form-field id="user-input" hideRequiredMarker appearance="outline">
           <mat-label>correo</mat-label>
-          <input matInput type="text" matInput required formControlName="userEmail">
+          <label>
+            <input matInput type="text" required formControlName="userEmail">
+          </label>
           <mat-error *ngIf="checkField('userEmail')">{{loginForm.errorMessage["userEmail"]}}</mat-error>
         </mat-form-field>
         <!-- Password -->
         <mat-form-field id="password-input" hideRequiredMarker appearance="outline">
           <mat-label>contraseña</mat-label>
-          <input matInput [type]="hidePassword? 'password':'text'" matInput required formControlName="password"
-          >
+          <label>
+            <input matInput [type]="hidePassword? 'password':'text'" required formControlName="password"
+            >
+          </label>
           <button id="hide-password-button" mat-icon-button matSuffix (click)="hidePassword= !hidePassword"
             [title]="hidePassword ? 'Show password': 'Hide password'">
             <mat-icon>{{hidePassword ? "visibility_off" :"visibility"}}</mat-icon>
@@ -25,12 +29,12 @@
         <!-- Captcha -->
         <ngx-recaptcha2 #captchaElem [siteKey]="recaptchaConfig.siteKey" (reset)="handleResetRecaptcha()"
           (expire)="handleExpireRecaptcha()" (error)="handleErrorRecaptcha()" (load)="handleLoadRecaptcha()"
-          (success)="handleSuccessRecaptcha($event)" [useGlobalDomain]="false" [size]="recaptchaConfig.size"
+          (success)="handleSuccessRecaptcha()" [useGlobalDomain]="false" [size]="recaptchaConfig.size"
           [hl]="recaptchaConfig.lang" [theme]="recaptchaConfig.theme" [type]="recaptchaConfig.type">
         </ngx-recaptcha2>
         <!-- Login -->
-        <button id="login-buttton" type="submit" mat-button mat-raised-button color="primary"
-          [disabled]="isValidForm()">conectar</button>
+        <button id="login-button" type="submit" mat-button mat-raised-button color="primary"
+                [disabled]="isValidForm()">conectar</button>
       </form>
       <!-- Password recovery -->
       <a mat-hint class="forgot-password" fxFlex="20" fxFlexAlign="center" routerLink="/forgot-password" mat-menu-item>

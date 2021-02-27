@@ -9,7 +9,7 @@ import { QuicklinkStrategy } from 'ngx-quicklink';
 
 import {
   MailUsersSubscriptionStatusComponent,
-} from './shared/components/mail-users-subscription-status/mail-users-subscription-status.component';
+} from '@shared/components/mail-users-subscription-status/mail-users-subscription-status.component';
 
 
 const routes: Routes = [

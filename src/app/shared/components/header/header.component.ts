@@ -1,19 +1,11 @@
-import {
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { AuthService } from '@auth/services/auth.service';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import {FormControl} from '@angular/forms';
+import {AuthService} from '@auth/services/auth.service';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
-import { PlatformUserResponse } from '../../models/platform-users.model';
-import {
-  ThemeSwitcherControllerService,
-} from '../../services/theme-switcher-controller.service';
+import {PlatformUserResponse} from '../../models/platform-users.model';
+import {ThemeSwitcherControllerService} from '../../services/theme-switcher-controller.service';
 
 @Component({
   selector: 'app-header',
@@ -32,7 +24,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private authSvc: AuthService, private themeSwitcher: ThemeSwitcherControllerService) {
     const AppTheme = localStorage.getItem('AppTheme') || null;
     if (AppTheme) {
-      this.toggleDarkThemeControl.setValue(AppTheme === 'dark-theme' ? true : false);
+      this.toggleDarkThemeControl.setValue(AppTheme === 'dark-theme');
     }
   }
 
@@ -40,16 +32,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.toggleSidenav.emit();
   }
 
-  onLogout() {
-    this.authSvc.logout();
-  }
-
   ngOnInit(): void {
     const AppTheme = localStorage.getItem('AppTheme') || null;
     if (AppTheme) {
-      this.darkMode = AppTheme === 'dark-theme' ? true : false;
+      this.darkMode = AppTheme === 'dark-theme';
     }
-    this.authSvc.isLoggged$
+    this.authSvc.isLogged$
       .pipe(takeUntil(this.destroy$))
       .subscribe((isLogged: boolean) => {
         if (isLogged) {

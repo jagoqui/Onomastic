@@ -8,7 +8,7 @@ export class DomSanitizerService {
 
   constructor(private sanitizer: DomSanitizer) { }
 
-  sanatizeHTML(cardText: string): SafeHtml {
+  sanitizeHTML(cardText: string): SafeHtml {
     return this.sanitizer.bypassSecurityTrustHtml(cardText);
   }
 }

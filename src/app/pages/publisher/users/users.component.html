@@ -10,7 +10,7 @@
         <mat-icon>autorenew</mat-icon>
       </div>
     </button>
-    <button fxFlex mat-raised-button fxFlex fxLayout="row" fxLayoutAlign="center center" class="mat-headline">
+    <button fxFlex mat-raised-button fxLayout="row" fxLayoutAlign="center center" class="mat-headline">
       <div fxLayout="column" fxLayoutAlign="center start">
         <span class="button-title">Total de usuarios</span>
         <span class="mat-title">{{getParcialUsers()}}</span>
@@ -29,8 +29,9 @@
         <!-- Filter/ Refresh-->
         <mat-form-field fxFlex="95">
           <mat-label>Buscar</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Ingrese el valor del campo a buscar" #input
-            autocomplete="off">
+          <label>
+            <input matInput (keyup)="applyFilter($event)" placeholder="Ingrese el valor del campo a buscar" autocomplete="off">
+          </label>
         </mat-form-field>
         <div>
           <button mat-mini-fab color="primary" title="Refresh" (click)="onRefresh()">

@@ -9,8 +9,7 @@ body {
 
 // Create your Sass color vars (will be available in all the project)
 .container {
-  margin    : 0 auto;
-  margin-top: 2%;
+  margin: 2% auto 0;
   padding   : 0;
 
   div .button-action {
@@ -19,13 +18,13 @@ body {
 
     &:before {
       position     : fixed;
-      left         : 0%;
+      left         : 0;
       width        : 100%;
       height       : 100%;
       border-radius: 2.7778rem;
       color        : white;
       transition   : all 0.35s ease;
-      font-weight  : 1.1111rem;
+      font-weight  : 800;
       background: mat-color($mat-primary, main);
     }
 
@@ -59,7 +58,7 @@ body {
     .mat-header-cell {
       word-wrap     : initial;
       display       : table-cell;
-      padding       : 0px 0.2778rem;
+      padding       : 0 0.2778rem;
       line-break    : unset;
       width         : auto;
       white-space   : nowrap;

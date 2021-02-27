@@ -18,7 +18,7 @@ export class InterceptorService implements HttpInterceptor {
   constructor(private loaderSvc: LoaderService) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.loaderSvc.setLaoding(true);
+    this.loaderSvc.setLoading(true);
     // const headers = new HttpHeaders({
     //   'token-mail-user': ''
     // });
@@ -32,7 +32,7 @@ export class InterceptorService implements HttpInterceptor {
       catchError(this.handlerError),
       finalize(
         () => {
-          this.loaderSvc.setLaoding(false);
+          this.loaderSvc.setLoading(false);
         }
       )
     );
@@ -50,7 +50,7 @@ export class InterceptorService implements HttpInterceptor {
       title: 'Oops...',
       text: ' Algo salió mal en la petición!',
       footer: `${errorMessage}`
-    });
+    }).then(r => console.log(r));
     return throwError(errorMessage);
   }
 }

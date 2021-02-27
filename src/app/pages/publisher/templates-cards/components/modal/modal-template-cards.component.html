@@ -1,4 +1,4 @@
-<h1 #tittle mat-dialog-title>{{data.title | uppercase }}</h1>
+<h1 mat-dialog-title>{{data.title | uppercase }}</h1>
 <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
   <!-- Image load -->
   <div fxFlex="20" fxLayout="column" fxLayoutAlign="space-between stretch">
@@ -9,12 +9,12 @@
         <button mat-raised-button (click)="quitImage()">
           <mat-icon>close</mat-icon>
         </button>
-        <img [src]="imageSrc" fxFlex>
+        <img [src]="imageSrc" fxFlex alt="Background">
       </div>
       <ng-template #dropImage>
         <div id="template-background-drop" fxLayout="column" fxFlexAlign="center center">
           <h4 fxFlex>Arrastra imagen</h4>
-          <img alt="drop-images" />
+          <img alt="drop-images" src=""/>
         </div>
       </ng-template>
     </div>
@@ -24,7 +24,7 @@
   <!-- Edit text -->
   <div fxFlex="75" fxLayout="row" fxLayoutAlign="space-between center" class="container">
     <form [formGroup]="editorForm" (ngSubmit)="onClickSubmit(editorForm.value)" fxFlex>
-      <jodit-editor #editor id="editor" formControlName="text" [(config)]="config" (change)="editorContentVerify()"
+      <jodit-editor #editor id="editor" formControlName="text" [config]="config" (change)="editorContentVerify()"
         (keydown)="deleteEvent($event)"></jodit-editor>
         <mat-error *ngIf="editorForm.controls.text.hasError('requerido') && editorForm.controls.text.touched">
           El campo es requerido.</mat-error>
@@ -35,7 +35,7 @@
     </form>
 
     <div id="actions_buttons" fxFlex="25" fxLayout="column" fxLayoutAlign="space-between stretch">
-      <h2 #tittle mat-dialog-title>Etiquetas</h2>
+      <h2 mat-dialog-title>Etiquetas</h2>
       <button id="name" mat-raised-button class="button-action button-add-name" (click)="addName()"
         title="Pulse para agregar etiqueta de nombre.">Nombre</button>
       <button id="date" mat-raised-button class="button-action button-add-date" (click)="addDate()"

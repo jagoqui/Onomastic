@@ -12,9 +12,15 @@ export interface EventDay {
   condicionesEvento: CondicionesEvento[];
 }
 
+export interface CondicionesEventoRes {
+  id?: number;
+  condicion?: string;
+  parametro: ByNameId[];
+}
+
 export interface CondicionesEvento {
   id?: number;
-  condicion: string;
+  condicion?: string;
   parametro: string;
 }
 

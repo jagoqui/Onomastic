@@ -1,7 +1,6 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
 import {
   AfterViewInit,
-  ChangeDetectorRef,
   Component,
   HostBinding,
   OnDestroy,
@@ -31,6 +30,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
   opened = false;
   private destroy$ = new Subject<any>();
+  title = 'Onomastic';
 
   constructor(
     public authSvc: AuthService,
@@ -38,8 +38,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private sidenavController: SidenavControllerService,
     private themeSwitcherController: ThemeSwitcherControllerService,
     private spinner: NgxSpinnerService,
-    public loaderSvc: LoaderService,
-    private cdRef: ChangeDetectorRef
+    public loaderSvc: LoaderService
   ) { }
 
   onSetTheme(classTheme: string) {
@@ -47,7 +46,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     this.overlayContainer.getContainerElement().classList.add(classTheme);
 
     if (classTheme === 'dark-theme') {
-      this.overlayContainer.getContainerElement().classList.remove('ligth-theme');
+      this.overlayContainer.getContainerElement().classList.remove('light-theme');
     } else {
       this.overlayContainer.getContainerElement().classList.remove('dark-theme');
     }

@@ -24,12 +24,12 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
   constructor(
     private dialog: MatDialog,
     private domSanitizerSvc: DomSanitizerService,
-    private templateCardsSevice: TemplateCardsService,
+    private templateCardsService: TemplateCardsService,
     public loaderSvc: LoaderService
   ) { }
 
-  sanatizeHTML(card: string): SafeHtml {
-    return this.domSanitizerSvc.sanatizeHTML(card);
+  sanitizeHTML(card: string): SafeHtml {
+    return this.domSanitizerSvc.sanitizeHTML(card);
   }
 
   onOpenModal(): void {
@@ -51,7 +51,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
   onSelectCard(card: Plantilla): void { }
 
   ngAfterViewInit(): void {
-    this.templateCardsSevice.getAllCards().subscribe(cards => {
+    this.templateCardsService.getAllCards().subscribe(cards => {
       if (cards) {
         this.cards = cards;
       }

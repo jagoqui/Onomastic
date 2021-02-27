@@ -7,7 +7,7 @@
   </span>
   <span class="spacer"></span>
   <div class="option-list-nav">
-    <button *ngIf="platformUserData.name" mat-raised-button color = "primary"  routerLink="/profile" title="Perfil" title = "Perfil">{{ platformUserData.name}}</button>
+    <button *ngIf="platformUserData.name" mat-raised-button color = "primary"  routerLink="/profile" title = "Perfil">{{ platformUserData.name}}</button>
     <button *ngIf="platformUserData.role" mat-raised-button color = "primary" [routerLink]="'/'+platformUserData.role" title="Role" >{{platformUserData.role }}</button>
   </div>
   <mat-slide-toggle [formControl]="toggleDarkThemeControl">

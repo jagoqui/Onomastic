@@ -72,7 +72,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   };
   today = new Date();
   close = false;
-  private subscripcion: Subscription = new Subscription();
+  private subscription: Subscription = new Subscription();
 
   associations: ByNameId[];
   programs: ProgramaAcademicoPorUsuarioCorreo[];
@@ -129,7 +129,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     formGroup.controls.id.setValue(id);
   }
 
-  setformGroupCode(formGroup: FormGroup, code: number) {
+  setFormGroupCode(formGroup: FormGroup, code: number) {
     formGroup.controls.codigo.setValue(code);
   }
 
@@ -236,7 +236,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
       this.actionTODO = Action.NEW;
     }
 
-    this.subscripcion.add(
+    this.subscription.add(
       this.userSvc.getAssociations().subscribe(associations => {
         if (associations) {
           this.associations = associations;
@@ -246,7 +246,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.subscripcion.add(
+    this.subscription.add(
       this.userSvc.getAcademicPrograms().subscribe(programs => {
         if (programs) {
           this.programs = programs;
@@ -256,7 +256,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.subscripcion.add(
+    this.subscription.add(
       this.userSvc.getBondingTypes().subscribe(types => {
         if (types) {
           this.bondingTypes = types;
@@ -266,7 +266,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
       })
     );
 
-    this.subscripcion.add(
+    this.subscription.add(
       this.userSvc.getPlatforms().subscribe(platforms => {
         if (platforms) {
           this.platforms = platforms;
@@ -278,7 +278,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscripcion.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
 }

@@ -6,7 +6,7 @@
   <div class="wrapper" *ngIf="cards && onViewCard">
     <mat-card *ngFor="let card of cards" appMaterialElevation (click)="onSelectCard(card)" title="Click para editar plantilla"
       class="card">
-      <p [innerHTML]="sanatizeHTML(card.texto)" title="Click para editar plantilla"></p>
+      <p [innerHTML]="sanitizeHTML(card.texto)" title="Click para editar plantilla"></p>
     </mat-card>
   </div>
 </div>

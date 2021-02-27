@@ -1,43 +1,20 @@
-import {
-  Component,
-  EventEmitter,
-  Inject,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { FormGroup } from '@angular/forms';
-import {
-  MAT_MOMENT_DATE_ADAPTER_OPTIONS,
-  MomentDateAdapter,
-} from '@angular/material-moment-adapter';
-import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-} from '@angular/material/core';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { SafeHtml } from '@angular/platform-browser';
-import { AuthService } from '@app/auth/services/auth.service';
-import {
-  EventDayService,
-} from '@app/pages/publisher/services/event-day.services';
-import {
-  TemplateCardsService,
-} from '@app/pages/publisher/services/template-cards.service';
-import { CondicionesEvento } from '@app/shared/models/event-day.model';
-import {
-  ByNameId,
-  ProgramaAcademicoPorUsuarioCorreo,
-} from '@app/shared/models/mail-users.model';
-import { PlatformUserResponse } from '@app/shared/models/platform-users.model';
-import { Plantilla } from '@app/shared/models/template-card.model';
-import { BaseFormEventDay } from '@app/shared/utils/base-form-event-day';
-import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
+import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
+import {AbstractControl, FormGroup} from '@angular/forms';
+import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {SafeHtml} from '@angular/platform-browser';
+import {EventDayService } from '@app/pages/publisher/services/event-day.services';
+import {TemplateCardsService} from '@app/pages/publisher/services/template-cards.service';
+import {CondicionesEvento} from '@app/shared/models/event-day.model';
+import {ByNameId, ProgramaAcademicoPorUsuarioCorreo} from '@app/shared/models/mail-users.model';
+import {Plantilla} from '@app/shared/models/template-card.model';
+import {BaseFormEventDay} from '@app/shared/utils/base-form-event-day';
+import {DomSanitizerService} from '@shared/services/dom-sanitizer.service';
 import * as moment from 'moment';
-import { takeUntil } from 'rxjs/internal/operators/takeUntil';
-import { Subject } from 'rxjs/internal/Subject';
+import {takeUntil} from 'rxjs/internal/operators/takeUntil';
+import {Subject} from 'rxjs/internal/Subject';
 
 export const MY_FORMATS = {
   parse: {
@@ -67,7 +44,7 @@ enum Action {
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
     },
 
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   ],
 })
 export class ModalEventDayComponent implements OnInit, OnDestroy {
@@ -77,21 +54,16 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     associations: 5,
     conditions: 5,
   };
-  maxConditionsNumber = 5;
 
-  platformUserData: PlatformUserResponse;
-  onAddConditions = false;
   cards: Plantilla[] = [];
   sidenavOpened = false;
   selectCardHTML: SafeHtml = null;
-
-  private destroy$ = new Subject<any>();
-
   // Para cargar campos dinamicamente en el HTML
   associations: ByNameId[];
   conditions: CondicionesEvento[];
   programs: ProgramaAcademicoPorUsuarioCorreo[];
   bondingTypes: ByNameId[];
+  private destroy$ = new Subject<any>();
 
   constructor(
     private dialogRef: MatDialogRef<ModalEventDayComponent>,
@@ -100,33 +72,17 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     private domSanitazerSvc: DomSanitizerService,
     public eventDayForm: BaseFormEventDay,
     private eventDaySvc: EventDayService,
-    private authSvc: AuthService
-  ) { }
-
-  private pathFormData(): void {
-    const associations = this.data?.event.asociacion;
-    const conditions = this.data?.event.condicionesEvento;
-
-    // if (associations) {
-    //   for (let i = 0; i < associations.length - 1; i++) {
-    //     this.eventDayForm.addParameterFormGroup('asociacion');
-    //   }
-    // }
-    // if (conditions) {
-    //   for (let i = 0; i < conditions.length - 1; i++) {
-    //     this.eventDayForm.addParameterFormGroup('condicion');
-    //   }
-    // }
-    this.eventDayForm.baseForm.patchValue(this.data?.event);
+  ) {
   }
 
-  setDateFormat(event: MatDatepickerInputEvent<Date>) {
+  setDateFormat(event: MatDatepickerInputEvent<unknown>) {
     this.eventDayForm.baseForm.controls.fecha.setValue(moment(event.value).format('YYYY-MM-DD'));
   }
 
-  setformGroupField(formGroup: FormGroup, value: any, indexClear: number) {
+  setformGroupField(formGroup: AbstractControl, value: any, indexClear: number) {
     // formGroup.controls.condicion.setValue(value.condicion);
-    formGroup.controls.id.setValue(value.id);
+    const group = formGroup as FormGroup;
+    group.controls.id.setValue(value.id);
     this.eventDayForm.conditionsOptionsField.at(indexClear).get('parametro').setValue('');
   }
 
@@ -148,14 +104,14 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
 
   onSelectCard(card: Plantilla) {
     if (confirm('Seguro que desea seleccionar ésta plantilla?')) {
-      this.selectCardHTML = this.sanatizeHTML(card.texto);
+      this.selectCardHTML = this.sanitizeHTML(card.texto);
       this.eventDayForm.baseForm.controls.plantilla.setValue(card);
       this.sidenavOpened = false;
     }
   }
 
-  sanatizeHTML(cardText: string): SafeHtml {
-    return this.domSanitazerSvc.sanatizeHTML(cardText);
+  sanitizeHTML(cardText: string): SafeHtml {
+    return this.domSanitazerSvc.sanitizeHTML(cardText);
   }
 
   onClose(close?: boolean): void {
@@ -211,6 +167,23 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next({});
     this.destroy$.complete();
+  }
+
+  private pathFormData(): void {
+    const associations = this.data?.event.asociacion;
+    const conditions = this.data?.event.condicionesEvento;
+
+    // if (associations) {
+    //   for (let i = 0; i < associations.length - 1; i++) {
+    //     this.eventDayForm.addParameterFormGroup('asociacion');
+    //   }
+    // }
+    // if (conditions) {
+    //   for (let i = 0; i < conditions.length - 1; i++) {
+    //     this.eventDayForm.addParameterFormGroup('condicion');
+    //   }
+    // }
+    this.eventDayForm.baseForm.patchValue(this.data?.event);
   }
 
 }

@@ -1,17 +1,13 @@
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import {
-  TemplateCardsService,
-} from '@app/pages/publisher/services/template-cards.service';
-import { Plantilla } from '@app/shared/models/template-card.model';
-import {
-  ThemeSwitcherControllerService,
-} from '@shared/services/theme-switcher-controller.service';
-import { FileUpload } from '@shared/upload-files/models/file-upload';
-import { JoditAngularComponent } from 'jodit-angular';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {TemplateCardsService} from '@app/pages/publisher/services/template-cards.service';
+import {Plantilla} from '@app/shared/models/template-card.model';
+import {ThemeSwitcherControllerService} from '@shared/services/theme-switcher-controller.service';
+import {FileUpload} from '@shared/upload-files/models/file-upload';
+import {JoditAngularComponent} from 'jodit-angular';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 
 @Component({
@@ -20,30 +16,27 @@ import SwAlert from 'sweetalert2';
   styleUrls: ['./modal-template-cards.component.scss']
 })
 export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
-  @ViewChild('editor') joditEditor: JoditAngularComponent;
-
-  private destroy$ = new Subject<any>();
-  itemImages: FileUpload[] = [];
+  @ViewChild('editor') joditEditor: JoditAngularComponent; itemImages: FileUpload[] = [];
   imageSrc: string = null;
   isOverDrop = false;
   initialContent = `
     <div id="editorContent" style="z-index: -1">
       <span>
-        Hola&nbsp;<b><font color="#e74c3c">&lt;Nombre&gt;</font></b>&nbsp;en ésta&nbsp;<b><font color="#16a085">&lt;Fecha&gt;</font></b>&nbsp;la Universidad de Antioquia le desea un feliz cumpleaños 🥳.
+        Hola&nbsp;<b style="color: #e74c3c">&lt;Nombre&gt;</b>&nbsp;en ésta&nbsp;<b style="color: #16a085">&lt;Fecha&gt;</b>&nbsp;la Universidad de Antioquia le desea un feliz cumpleaños 🥳.
       </span>
     </div>
   `;
   myContent: string;
   config: any;
-  uploadForm: FormGroup;
   editorForm: FormGroup;
+  private destroy$ = new Subject<any>();
 
   constructor(
     private dialogRef: MatDialogRef<ModalTemplateCardsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private formBuilder: FormBuilder,
     private themeSwitcherController: ThemeSwitcherControllerService,
-    private templateCardsSevice: TemplateCardsService
+    private templateCardsService: TemplateCardsService
   ) {
     this.editorForm = this.formBuilder.group({
       text: [this.initialContent, [Validators.required, Validators.maxLength(400), Validators.minLength(5)]]
@@ -110,32 +103,32 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   }
 
   onClickSubmit(data) {
-    if (this.editorForm.invalid) {
+    if (this.editorForm.invalid && data) {
       this.editorForm.get('text').markAsTouched();
     }
   }
 
   addName() {
     const content = document.getElementById('editorContent');
-    const spanName = `<span id="name"><b><font color="#e74c3c">&lt;Nombre&gt;</font></b>&nbsp;</span>`;
+    const spanName = `<span id="name"><b style="color: #e74c3c">&lt;Nombre&gt;</b>&nbsp;</span>`;
     content.innerHTML += spanName;
   }
 
   addDate() {
     const content = document.getElementById('editorContent');
-    const spanDate = `<span id="date"><b><font color="#16a085">&lt;Fecha&gt;</font></b>&nbsp;</span>`;
+    const spanDate = `<span id="date"><b style="color: #16a085">&lt;Fecha&gt;</b>&nbsp;</span>`;
     content.innerHTML += spanDate;
   }
 
   addSchool() {
     const content = document.getElementById('editorContent');
-    const spanSchool = `<span id="school"><b><font color="#9b59b6">&lt;Falcultad/Escuela&gt;</font></b>&nbsp;</span>`;
+    const spanSchool = `<span id="school"><b style="color: #9b59b6">&lt;Falcultad/Escuela&gt;</b>&nbsp;</span>`;
     content.innerHTML += spanSchool;
   }
 
   addAssociation() {
     const content = document.getElementById('editorContent');
-    const spanAssociation = `<span id="association"><b><font color="#f39c12">&lt;Asociación&gt;</font></b>&nbsp;</span>`;
+    const spanAssociation = `<span id="association"><b style="color: #f39c12">&lt;Asociación&gt;</b>&nbsp;</span>`;
     content.innerHTML += spanAssociation;
   }
 
@@ -166,23 +159,26 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
       ]
     };
 
-    this.templateCardsSevice.newCardTemplate(card, this.itemImages[0]?.file).subscribe((cardRes) => {
-      SwAlert.fire({
-        title: 'Guardado',
-        icon: 'success',
-        html: `${card.texto}`,
-        showCloseButton: true,
-        showCancelButton: true,
-        focusConfirm: false,
-        confirmButtonText:
-          '<i class="fa fa-thumbs-up"></i> Great!',
-        confirmButtonAriaLabel: 'Thumbs up, great!',
-        cancelButtonText:
-          '<i class="fa fa-thumbs-down"></i>',
-        cancelButtonAriaLabel: 'Thumbs down',
-        footer: 'La plantilla ha sido guardada'
-      });
-      this.onClose(true);
+    this.templateCardsService.newCardTemplate(card, this.itemImages[0]?.file).subscribe((cardRes) => {
+      if (cardRes) {
+        SwAlert.fire({
+          title: 'Guardado',
+          icon: 'success',
+          html: `${card.texto}`,
+          showCloseButton: true,
+          showCancelButton: true,
+          focusConfirm: false,
+          confirmButtonText:
+            '<i class="fa fa-thumbs-up"></i> Great!',
+          confirmButtonAriaLabel: 'Thumbs up, great!',
+          cancelButtonText:
+            '<i class="fa fa-thumbs-down"></i>',
+          cancelButtonAriaLabel: 'Thumbs down',
+          footer: 'La plantilla ha sido guardada'
+        }).then(r => console.log(r));
+        this.onClose(true);
+      }
+
     }, (err) => {
       SwAlert.fire({
         icon: 'error',
@@ -190,7 +186,7 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
         title: 'Oops...',
         text: ' Algo salió mal!',
         footer: `${err}`
-      });
+      }).then(r => console.log(r));
     });
   }
 

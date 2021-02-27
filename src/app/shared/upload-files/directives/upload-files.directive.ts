@@ -1,14 +1,8 @@
-import {
-  Directive,
-  EventEmitter,
-  HostListener,
-  Input,
-  Output,
-} from '@angular/core';
+import {Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
 import SwAlert from 'sweetalert2';
 
-import { ImageValidator } from '../helpers/image-validators';
-import { FileUpload } from '../models/file-upload';
+import {ImageValidator} from '../helpers/image-validators';
+import {FileUpload} from '../models/file-upload';
 
 
 @Directive({
@@ -25,9 +19,18 @@ export class UploadFilesDirective extends ImageValidator {
     super();
   }
 
+  private static getDataTransfer(event: any) {
+    return event.dataTransfer ? event.dataTransfer : event.originalEvent.dataTransfer;
+  }
+
+  private static avoidOpeningBrowser(event: Event) {
+    event.preventDefault();
+    event.stopPropagation();
+  }
+
   @HostListener('dragover', ['$event'])
   onDragEnter(event: Event) {
-    this.avoidOpeningBrowser(event);
+    UploadFilesDirective.avoidOpeningBrowser(event);
     this.mouseOver.emit(true);
   }
 
@@ -38,13 +41,19 @@ export class UploadFilesDirective extends ImageValidator {
 
   @HostListener('drop', ['$event'])
   onDrop(event: any) {
-    const dataTransfer = this.getDataTransfer(event);
+    const dataTransfer = UploadFilesDirective.getDataTransfer(event);
     if (!dataTransfer) {
       return;
     }
-    this.avoidOpeningBrowser(event);
+    UploadFilesDirective.avoidOpeningBrowser(event);
     this.extractFiles(event, dataTransfer.files);
     this.mouseOver.emit(false);
+  }
+
+  get_FileSrc(file: any) {
+    const reader = new FileReader();
+    reader.onload = () => this.fileSrc.emit(reader.result);
+    reader.readAsDataURL(file);
   }
 
   @HostListener('change', ['$event'])
@@ -60,17 +69,6 @@ export class UploadFilesDirective extends ImageValidator {
     }
   }
 
-
-  get_FileSrc(file: any) {
-    const reader = new FileReader();
-    reader.onload = e => this.fileSrc.emit(reader.result);
-    reader.readAsDataURL(file);
-  }
-
-  private getDataTransfer(event: any) {
-    return event.dataTransfer ? event.dataTransfer : event.originalEvent.dataTransfer;
-  }
-
   private canBeUploaded(file: File): boolean {
     if (!this.checkDropped(file.name, this.files, this.multiple) && this.validateType(file.type)) {
       return true;
@@ -79,15 +77,10 @@ export class UploadFilesDirective extends ImageValidator {
         icon: 'warning',
         title: 'Oops...',
         text: 'Ha ocurrido un error!',
-        footer: this.multiple ? '<span href>Recuerda no subir archivos duplicados y que cumpla solo con el formato: png, jpeg</span>' :
+        footer: this.multiple ? '<span>Recuerda no subir archivos duplicados y que cumpla solo con el formato: png, jpeg</span>' :
           '<span href>Recuerda subir solo archivos que cumpla solo con el formato: png, jpeg</span>'
-      });
+      }).then(r => console.log(r));
       return false;
     }
-  }
-
-  private avoidOpeningBrowser(event: Event) {
-    event.preventDefault();
-    event.stopPropagation();
   }
 }

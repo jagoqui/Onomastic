@@ -8,7 +8,7 @@
 // have to load a single css file for Angular Material in your app.
 
 // Fonts
-@import 'https://fonts.googleapis.com/css?family=Material+Icons';
+@import url('https://fonts.googleapis.com/css?family=Material+Icons');
 @import url('https://fonts.googleapis.com/css?family=Poppins:300,400,500');
 
 $fontConfig: (
@@ -241,9 +241,9 @@ $mat-theming-theme-dark: mat-dark-theme($theme-primary, $theme-accent, $theme-wa
 
 .material-icons {
   font-size: 24px;
-  font-family: 'Material Icons', 'Material Icons';
+  font-family: 'Material Icons', 'Material Icons', sans-serif;
   .mat-badge-content {
-    font-family: 'Poppins';
+    font-family: 'Poppins', sans-serif;
   }
 }
 
@@ -251,5 +251,4 @@ $mat-theming-theme-dark: mat-dark-theme($theme-primary, $theme-accent, $theme-wa
 .active-list-item {
   font-weight: bold;
   color: mat-color($theme-primary, main) !important;
-
 }

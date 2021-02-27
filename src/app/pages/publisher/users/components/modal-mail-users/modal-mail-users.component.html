@@ -1,4 +1,4 @@
-<h1 #tittle mat-dialog-title>{{data.title | uppercase }}</h1>
+<h1  mat-dialog-title>{{data.title | uppercase }}</h1>
 <div mat-dialog-content>
 
   <form [formGroup]="mailUserForm.baseForm" (ngSubmit)="onSave()" fxLayout="column"  (keydown.enter)="$event.preventDefault()">
@@ -6,14 +6,18 @@
       <!-- Name -->
       <mat-form-field hideRequiredMarker appearance="outline" fxFlex="47">
         <mat-label>Nombre</mat-label>
-        <input matInput type="text" matInput required formControlName="nombre">
+        <label>
+          <input  type="text" matInput required formControlName="nombre">
+        </label>
         <mat-icon matSuffix>account_circle</mat-icon>
         <mat-error *ngIf="checkField('nombre', null, null)">{{mailUserForm.errorsMessage["nombre"]}}</mat-error>
       </mat-form-field>
       <!-- Lastname -->
       <mat-form-field hideRequiredMarker appearance="outline" fxFlex="47">
         <mat-label>Apellidos</mat-label>
-        <input matInput type="text" matInput required formControlName="apellido">
+        <label>
+          <input  type="text" matInput required formControlName="apellido">
+        </label>
         <mat-icon matSuffix>account_circle</mat-icon>
         <mat-error *ngIf="checkField('apellido',null, null)">{{mailUserForm.errorsMessage["apellido"]}}</mat-error>
       </mat-form-field>
@@ -41,8 +45,10 @@
       <!-- ID number -->
       <mat-form-field hideRequiredMarker appearance="outline" fxFlex="47" formGroupName="id">
         <mat-label>Número de identificación</mat-label>
-        <input matInput type="text" matInput required formControlName="numeroIdentificacion"
-         >
+        <label>
+          <input type="text" matInput required formControlName="numeroIdentificacion"
+           >
+        </label>
         <mat-icon matSuffix>account_box</mat-icon>
         <mat-error *ngIf="checkField('numeroIdentificacion','id', null )">
           {{mailUserForm.errorsMessage['id'].numeroIdentificacion}}</mat-error>
@@ -53,8 +59,10 @@
       <!-- Birhtday -->
       <mat-form-field fxFlex="47" appearance="outline">
         <mat-label>Fecha de naciemiento</mat-label>
-        <input matInput [matDatepicker]="dp" [max]="today" formControlName="fechaNacimiento"
-          (dateChange)="setBirtdayFormat($event)" placeholder="YYYY-MM-DD">
+        <label>
+          <input matInput [matDatepicker]="dp" [max]="today" formControlName="fechaNacimiento"
+            (dateChange)="setBirtdayFormat($event)" placeholder="YYYY-MM-DD">
+        </label>
         <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
         <mat-datepicker #dp></mat-datepicker>
         <mat-error *ngIf="checkField('fechaNacimiento', null, null)">{{mailUserForm.errorsMessage["fechaNacimiento"]}}
@@ -79,7 +87,9 @@
       <!-- Email -->
       <mat-form-field fxFlex="47" appearance="outline">
         <mat-label>Email</mat-label>
-        <input matInput type="text" matInput required formControlName="email">
+        <label>
+          <input type="text" matInput required formControlName="email">
+        </label>
         <mat-error *ngIf="checkField('email', null, null)">{{mailUserForm.errorsMessage["email"]}}</mat-error>
         <mat-icon matSuffix>contact_mail</mat-icon>
       </mat-form-field>
@@ -146,7 +156,7 @@
           <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let program of programs" [value]="program['nombre']"
-              (onSelectionChange)="setformGroupCode(academicProgram, program['codigo'])">
+              (onSelectionChange)="setFormGroupCode(academicProgram, program['codigo'])">
               {{program['nombre']}}</mat-option>
           </mat-select>
           <mat-icon matSuffix>school</mat-icon>
@@ -213,7 +223,7 @@
       <div fxFlex="70" fxLayout="row">
         <mat-form-field hideRequiredMarker fxFlex="90" appearance="outline">
           <mat-label>Plataforma</mat-label>
-          <mat-select #platformSelect formControlName="nombre">
+          <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let platform of platforms" [value]="platform['nombre']"
               (onSelectionChange)="setformGroupID(platformUser, platform['id'])">

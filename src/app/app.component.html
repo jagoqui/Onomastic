@@ -6,13 +6,13 @@
     <app-sidebar></app-sidebar>
   </mat-sidenav>
   <mat-sidenav-content fxFlex fxLayout="column">
-   <app-header *ngIf="authSvc.isLoggged$|async" (toggleSidenav)="sidenav.toggle()"></app-header>
+   <app-header *ngIf="authSvc.isLogged$|async" (toggleSidenav)="sidenav.toggle()"></app-header>
     <main fxFlex fxLayout="column">
       <ngx-spinner *ngIf="loaderSvc.isLoading$ | async"></ngx-spinner>
       <router-outlet></router-outlet>
     </main>
     <footer>
-      <app-footer *ngIf="authSvc.isLoggged$|async"></app-footer>
+      <app-footer *ngIf="authSvc.isLogged$|async"></app-footer>
     </footer>
   </mat-sidenav-content>
 </mat-sidenav-container>

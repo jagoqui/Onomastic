@@ -11,7 +11,7 @@ mat-card {
       align-items: center;
 
       .mat-form-field,
-      #login-buttton,
+      #login-button,
       .forgot-password {
         width        : 79.39%;
         border-radius: 1.875rem;
@@ -21,7 +21,7 @@ mat-card {
         font-size: 2.1875rem;
       }
 
-      // Standar
+      // Standard
       ::ng-deep .mat-form-field {
 
         .mat-input-element {
@@ -70,7 +70,7 @@ mat-card {
         @include recaptcha-transform(1.4);
       }
 
-      #login-buttton {
+      #login-button {
         padding  : 1.5625rem;
         font-size: 2.375rem;
         color    : white;

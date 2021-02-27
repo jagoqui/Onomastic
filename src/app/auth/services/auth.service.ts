@@ -33,7 +33,7 @@ export class AuthService {
     return this.PlatformUserRes.getValue();
   }
 
-  get isLoggged$(): Observable<boolean> {
+  get isLogged$(): Observable<boolean> {
     return this.isLogged.asObservable();
   }
 
@@ -49,7 +49,7 @@ export class AuthService {
           name: decode.nombre,
           userEmail: authData.userEmail,
           role: decode.rol,
-          // asociacion: decode.asociacion, // TODO: Obtine el tipo de asociación
+          // asociacion: decode.asociacion, // TODO: Obtiene el tipo de asociación
           asociacion: [
             {
               id: 1,
@@ -114,7 +114,7 @@ export class AuthService {
         this.isLogged.next(true);
       }
     } else {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/login']).then(r => console.log(r));
     }
   }
 
@@ -122,6 +122,6 @@ export class AuthService {
     localStorage.clear();
     this.PlatformUserRes.next(null);
     this.isLogged.next(false);
-    this.router.navigate(['']);
+    this.router.navigate(['']).then(r => console.log(r));
   }
 }

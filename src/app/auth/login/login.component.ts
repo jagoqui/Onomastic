@@ -1,14 +1,12 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { ReCaptcha2Component } from 'ngx-captcha';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Subscription } from 'rxjs';
-import {
-  BaseFormPlatformUsers,
-} from 'src/app/shared/utils/base-form-platform-users';
-import { environment } from 'src/environments/environment';
+import {Component, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Router} from '@angular/router';
+import {ReCaptcha2Component} from 'ngx-captcha';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Subscription} from 'rxjs';
+import {BaseFormPlatformUsers} from 'src/app/shared/utils/base-form-platform-users';
+import {environment} from 'src/environments/environment';
 
-import { AuthService } from '../services/auth.service';
+import {AuthService} from '../services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -19,13 +17,13 @@ export class LoginComponent implements OnInit, OnDestroy {
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
 
   hidePassword = true;
-  private subscripcion: Subscription = new Subscription();
+  private subscription: Subscription = new Subscription();
   recaptchaConfig = {
     siteKey: `${environment.RECAPTCHA_KEY}`,
-    size: 'Normal',
+    size: 'normal',
     lang: 'es',
-    theme: 'Ligtht',
-    type: 'Image',
+    theme: 'light',
+    type: 'image',
     success: false
   };
   constructor(
@@ -40,10 +38,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onLogin(): void {
     const formValue = this.loginForm.baseForm.value;
-    this.subscripcion.add(
+    this.subscription.add(
       this.authSvc.login(formValue).subscribe(userRes => {
         if (userRes) {
-          this.router.navigate(['/home']);
+          this.router.navigate(['/home']).then(r => console.log(r));
           this.loginForm.baseForm.reset();
         }
       })
@@ -64,7 +62,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   handleLoadRecaptcha() { }
 
-  handleSuccessRecaptcha(event: any) {
+  handleSuccessRecaptcha() {
     this.recaptchaConfig.success = true;
   }
 
@@ -90,7 +88,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscripcion.unsubscribe();
+    this.subscription.unsubscribe();
   }
 
 }
