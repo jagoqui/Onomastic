@@ -10,7 +10,6 @@
     <mat-card *ngFor="let card of cards" appMaterialElevation (click)="onSelectCard(card)"
               title="Click para seleccionar" class="card" fxLayout="row" fxLayoutGap="12px"
               [innerHTML]="sanitizeHTML(card.texto)">
-
     </mat-card>
   </mat-sidenav>
   <mat-sidenav-content>

@@ -135,17 +135,10 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   }
 
   onSave() {
-    const content = document.getElementById('editorContent');
-    if (content) {
-      content.style.backgroundImage = null;
-      content.style.color = 'black';
-    }
-
-    const cardText = this.editorForm.value.text;
-    console.log(cardText);
+    const editorContent = document.getElementById('editorContent').innerHTML;
 
     const card: Plantilla = {
-      texto: cardText,
+      texto: editorContent,
       asociacionesPorPlantilla: [
         {
           id: 7,
