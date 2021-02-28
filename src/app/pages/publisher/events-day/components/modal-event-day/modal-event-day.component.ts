@@ -114,27 +114,21 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     return this.domSanitizerSvc.sanitizeHTML(cardText);
   }
 
+  onRefresh() {
+    this.loadCards();
+  }
+
+  onSave() {
+    console.log(this.eventDayForm);
+  }
+
   onClose(close?: boolean): void {
     console.log(this.eventDayForm.baseForm.value);
 
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.eventDayForm.onReset();
       this.dialogRef.close();
-
-      // const associations = this.eventDayForm.baseForm.controls.asociacion.value;
-      // const conditions = this.eventDayForm.baseForm.controls.condicionesEvento.value;
-
-      // for (const association of associations) {
-      //   this.removeOrClearParameter(association, 'asociacion', true);
-      // }
-      // for (const condition of conditions) {
-      //   this.removeOrClearParameter(condition, 'condicionesEvento', true);
-      // }
     }
-  }
-
-  onSave() {
-    console.log(this.eventDayForm);
   }
 
   ngOnInit(): void {

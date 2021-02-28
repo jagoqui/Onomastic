@@ -1,4 +1,10 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
+<div class="reloadCard" align="right">
+  <button mat-mini-fab color="primary" title="Recargar plantillas" (click)="onRefresh()" >
+    <mat-icon>refresh</mat-icon>
+  </button>
+</div>
+
 <mat-sidenav-container mat-dialog-content>
   <mat-sidenav [(opened)]="sidenavOpened">
     <mat-card *ngFor="let card of cards" appMaterialElevation (click)="onSelectCard(card)"
