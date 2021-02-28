@@ -1,12 +1,13 @@
 @import 'src/assets/custom_styles/material_custom_theme.scss';
 
-#actions_buttons {
-  button {
-    margin-bottom: 10%;
-  }
-}
+//#actions_buttons {
+//  button {
+//    top: -30px;
+//  }
+//}
 
 .button-add-name {
+  top: 1.111rem;
   background-color: tomato;
 
   &:before {
@@ -15,6 +16,7 @@
 }
 
 .button-add-date {
+  top: -1.111rem;
   background-color: aqua;
 
   &:before {
@@ -23,6 +25,7 @@
 }
 
 .button-add-school {
+  top: -3.333rem;
   background-color: chocolate;
 
   &:before {
@@ -31,6 +34,7 @@
 }
 
 .button-add-association {
+  top: -5.555rem;
   background-color: teal;
 
   &:before {
@@ -39,8 +43,10 @@
 }
 
 .button-clear-text {
+  top: -6.666rem;
   &:before {
     content: "Limpiar";
+    background: mat-color($mat-warn, darker) !important;
   }
 }
 

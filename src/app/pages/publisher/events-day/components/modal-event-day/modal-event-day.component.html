@@ -1,15 +1,15 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
-<mat-sidenav-container>
+<mat-sidenav-container mat-dialog-content>
   <mat-sidenav [(opened)]="sidenavOpened">
     <mat-card *ngFor="let card of cards" appMaterialElevation (click)="onSelectCard(card)"
               title="Click para seleccionar" class="card" fxLayout="row" fxLayoutGap="12px"
-              [innerHTML]="sanitizeHTML(card.texto)" >
+              [innerHTML]="sanitizeHTML(card.texto)">
 
     </mat-card>
   </mat-sidenav>
   <mat-sidenav-content>
     <div mat-dialog-content>
-      <form [formGroup]="eventDayForm.baseForm" fxLayout="row" fxLayoutAlign="space-between stretch">
+      <form [formGroup]="eventDayForm.baseForm" fxLayout="row" fxLayoutAlign="space-around center">
         <div *ngIf="!selectCardHTML; else selectedCard" fxFlex="60" class="select-card-container">
           <div class="btn-select-card">
             <button mat-button color="primary" (click)="loadCards()">
@@ -94,20 +94,22 @@
                 <mat-icon matSuffix>fact_check</mat-icon>
               </mat-form-field>
             </div>
-             <div fxFlex="22" fxLayout="row" fxLayoutAlign="space-around">
-              <div>
-                <button mat-mini-fab color="warn" (click)="eventDayForm.removeCondition(i)">
+            <!-- Actions list -->
+            <div fxFlex="25" fxLayout="row" fxFlexAlign="space-around center">
+              <div *ngIf="eventDayForm.baseForm.controls.condicionesEvento.value.length>1" fxFlex="45">
+                <button mat-mini-fab color="warn" title="Eliminar condición" (click)="eventDayForm.removeCondition(i)">
                   <mat-icon>remove</mat-icon>
                 </button>
               </div>
+              <div
+                *ngIf="eventDayForm.baseForm.controls.condicionesEvento.value.length<5 && eventDayForm.baseForm.controls.condicionesEvento.value.length === i+1"
+                fxFlex="45">
+                <button mat-mini-fab color="primary" title="Agregar condición"
+                        (click)="eventDayForm.addConditionsOptions()">
+                  <mat-icon>playlist_add</mat-icon>
+                </button>
+              </div>
             </div>
-          </div>
-          <div fxFlex="auto" fxLayout="row" fxLayoutAlign="center">
-            <h2>Condiciones</h2>
-            <button mat-mini-fab color="primary" title="Agregar condición"
-                    (click)="eventDayForm.addConditionsOptions()">
-              <mat-icon>playlist_add</mat-icon>
-            </button>
           </div>
         </div>
       </form>
@@ -117,5 +119,5 @@
 
 <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end end">
   <button mat-raised-button fxFlex="20" color="warn" (click)="onClose(null)">Cancelar</button>
-  <button mat-raised-button fxFlex="20" color="primary" (click)="onSave()">Crear tarjeta</button>
+  <button mat-raised-button fxFlex="20" color="primary" (click)="onSave()">Crear evento</button>
 </div>

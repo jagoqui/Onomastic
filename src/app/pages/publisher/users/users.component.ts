@@ -49,10 +49,11 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
 
   onOpenModal(user = {}) {
     const dialogRef = this.dialog.open(ModalMailUsersComponent, {
-      hasBackdrop: true,
-      disableClose: true,
       height: 'auto',
       width: '45%',
+      panelClass: 'app-full-bleed-dialog',
+      hasBackdrop: true,
+      disableClose: true,
       data: {title: user ? 'Actualizar destinatario' : 'Nuevo destinatario', user},
     });
     if (dialogRef.afterClosed()) {

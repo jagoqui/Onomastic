@@ -68,8 +68,8 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   constructor(
     private dialogRef: MatDialogRef<ModalEventDayComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private templateCardsSevice: TemplateCardsService,
-    private domSanitazerSvc: DomSanitizerService,
+    private templateCardsService: TemplateCardsService,
+    private domSanitizerSvc: DomSanitizerService,
     public eventDayForm: BaseFormEventDay,
     private eventDaySvc: EventDayService,
   ) {
@@ -94,11 +94,11 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     if (onChange) {
       if (confirm('Seguro que desea ver las plantillas?')) {
         this.sidenavOpened = true;
-        this.templateCardsSevice.getAllCards().subscribe(cards => this.cards = cards);
+        this.templateCardsService.getAllCards().subscribe(cards => this.cards = cards);
       }
     } else {
       this.sidenavOpened = true;
-      this.templateCardsSevice.getAllCards().subscribe(cards => this.cards = cards);
+      this.templateCardsService.getAllCards().subscribe(cards => this.cards = cards);
     }
   }
 
@@ -111,7 +111,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   }
 
   sanitizeHTML(cardText: string): SafeHtml {
-    return this.domSanitazerSvc.sanitizeHTML(cardText);
+    return this.domSanitizerSvc.sanitizeHTML(cardText);
   }
 
   onClose(close?: boolean): void {

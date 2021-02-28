@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators,} from '@angular/forms';
+import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment';
 
 @Injectable({providedIn: 'root'})
@@ -10,6 +10,14 @@ export class BaseFormEventDay {
   constructor(private fb: FormBuilder) {
   }
 
+  get conditionsAssociationField() {
+    return this.baseForm.get('asociacion') as FormArray;
+  }
+
+  get conditionsOptionsField() {
+    return this.baseForm.get('condicionesEvento') as FormArray;
+  }
+
   createBaseForm(): FormGroup {
     return this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(5)]],
@@ -17,7 +25,7 @@ export class BaseFormEventDay {
       estado: ['', [Validators.required]], // TODO: Crear tipo de dato ACTIVO, INACTIVO
       recurrencia: ['', [Validators.required]], // TODO: Crear tipo de dato ANUAL, DIARIA
       asociacion: this.fb.array([]),
-      condicionesEvento: this.fb.array([]),
+      condicionesEvento: this.fb.array([this.createConditionField()]),
       plantilla: this.fb.group({
         id: ['', [Validators.required]],
         texto: ['', [Validators.required]],
@@ -41,17 +49,6 @@ export class BaseFormEventDay {
     this.conditionsAssociationField.push(this.createAssociationField());
   }
 
-  get conditionsAssociationField() {
-    return this.baseForm.get('asociacion') as FormArray;
-  }
-
-  private createAssociationField() {
-    return this.fb.group({
-      id: ['', Validators.required],
-      nombre: ['', Validators.required]
-    });
-  }
-
   removeAssociation(key: number) {
     this.conditionsAssociationField.removeAt(key);
   }
@@ -60,20 +57,10 @@ export class BaseFormEventDay {
     this.conditionsOptionsField.push(this.createConditionField());
   }
 
-  get conditionsOptionsField() {
-    return this.baseForm.get('condicionesEvento') as FormArray;
-  }
-
-  private createConditionField() {
-    return this.fb.group({
-      id: ['', Validators.required],
-      condicion: ['', Validators.required],
-      parametro: ['', Validators.required]
-    });
-  }
-
   removeCondition(key: number) {
-    this.conditionsOptionsField.removeAt(key);
+    if (confirm('Seguro que desea quitar ésta condición?')) {
+      this.conditionsOptionsField.removeAt(key);
+    }
   }
 
   clearCondition(index: number) {
@@ -101,7 +88,25 @@ export class BaseFormEventDay {
   }
 
   onReset(): void {
+    for (let i = 0; i <  this.baseForm.controls.condicionesEvento.value.length; i++) {
+      this.conditionsOptionsField.removeAt(i);
+    }
     this.baseForm.reset();
+  }
+
+  private createAssociationField() {
+    return this.fb.group({
+      id: ['', Validators.required],
+      nombre: ['', Validators.required]
+    });
+  }
+
+  private createConditionField() {
+    return this.fb.group({
+      id: [null, Validators.required],
+      condicion: [null, Validators.required],
+      parametro: [null, Validators.required]
+    });
   }
 }
 
