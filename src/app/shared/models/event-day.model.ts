@@ -23,6 +23,6 @@ export interface ConditionRes {
 
 export interface Parameter {
   id: number;
-  valor: ByNameId[];
+  valores: ByNameId[];
 }
 

@@ -103,7 +103,7 @@
                 <mat-label>Filtro por asociacíon</mat-label>
                 <mat-select (selectionChange)="setIdAssociation($event.value, i)" [(value)]="selectedIdAssociation">
                   <mat-option [value]="null">-- Seleccione una opción --</mat-option>
-                  <mat-option *ngFor="let associationFilterRes of conditionsRes[2].parametros[0].valor"
+                  <mat-option *ngFor="let associationFilterRes of conditionsRes[2].parametros[0].valores"
                               [value]="associationFilterRes.id">
                     <ng-container> {{associationFilterRes.nombre}} </ng-container>
                   </mat-option>
@@ -118,7 +118,7 @@
                   <mat-option>-- Seleccione una opción --</mat-option>
                   <ng-container *ngIf="conditionSelect.value === 'programa'? parameterRes.id=== selectedIdAssociation: true">
                     <mat-option
-                      *ngFor="let valor of parameterRes.valor" [value]="valor.id">
+                      *ngFor="let valor of parameterRes.valores" [value]="valor.id">
                       <ng-container> {{valor.nombre}} </ng-container>
                     </mat-option>
                   </ng-container>

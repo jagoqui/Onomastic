@@ -18,7 +18,7 @@ export class EventDayService {
             "parametros": [
                 {
                     "id": 1,
-                    "valor": [
+                    "valores": [
                         {
                             "id": 1,
                             "nombre": "cumpleaños"
@@ -32,7 +32,7 @@ export class EventDayService {
             "parametros": [
                 {
                     "id": 1,
-                    "valor": [
+                    "valores": [
                         {
                             "id": 1,
                             "nombre": "Másculino"
@@ -54,7 +54,7 @@ export class EventDayService {
             "parametros": [
                 {
                     "id": 1,
-                    "valor": [
+                    "valores": [
                         {
                             "id": 1,
                             "nombre": "Facultad de Ingenieria"
@@ -76,7 +76,7 @@ export class EventDayService {
             "parametros": [
                 {
                     "id": 1,
-                    "valor": [
+                    "valores": [
                         {
                             "id": 501,
                             "nombre": "Ingenieria de Materiales"
@@ -102,7 +102,7 @@ export class EventDayService {
             "parametros": [
                 {
                     "id": 1,
-                    "valor": [
+                    "valores": [
                         {
                             "id": 1,
                             "nombre": "Estudiante"
@@ -148,7 +148,7 @@ export class EventDayService {
       }
     });
     return this.http
-      .get<ConditionRes[]>(`${environment.API_URL}/evento/condicones/${id}`);
+      .get<ConditionRes[]>(`${environment.API_URL}/evento/condiciones/${id}`);
   }
 
 }

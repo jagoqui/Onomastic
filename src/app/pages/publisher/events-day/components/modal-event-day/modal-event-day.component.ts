@@ -12,6 +12,7 @@ import {BaseFormEventDay} from '@app/shared/utils/base-form-event-day';
 import {DomSanitizerService} from '@shared/services/dom-sanitizer.service';
 import * as moment from 'moment';
 import {Subject} from 'rxjs/internal/Subject';
+import {takeUntil} from 'rxjs/operators';
 
 export const MY_FORMATS = {
   parse: {
@@ -156,7 +157,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     //   .pipe(takeUntil(this.destroy$))
     //   .subscribe(conditions => {
     //     if (conditions) {
-    //       this.conditions = conditions;
+    //       this.conditionsRes = conditions;
     //     }
     //   }, (err) => {
     //     console.log('Get condition error! :> ', err);
