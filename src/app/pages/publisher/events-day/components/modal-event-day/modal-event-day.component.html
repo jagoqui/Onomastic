@@ -89,7 +89,7 @@
               <mat-form-field hideRequiredMarker [fxFlex]="conditionSelect.value === 'programa'? 24 : 36"
                               appearance="outline" title="Condición">
                 <mat-label>Condiciones</mat-label>
-                <mat-select #conditionSelect formControlName="condicion">
+                <mat-select #conditionSelect formControlName="condicion" (selectionChange)="onClearParameter(i)">
                   <mat-option [value]="null">-- Seleccione una opción --</mat-option>
                   <mat-option *ngFor="let conditionRes of conditionsRes" [value]="conditionRes.condicion">
                     <ng-container> {{conditionSelect.value === conditionRes.condicion ? setParameters(conditionRes) : conditionRes.condicion}} </ng-container>
@@ -101,7 +101,7 @@
                               [fxFlex]="conditionSelect.value === 'programa'? 24 : 36"
                               appearance="outline" title="Filtro por asociación">
                 <mat-label>Filtro por asociacíon</mat-label>
-                <mat-select (selectionChange)="setIdAssociation($event.value)">
+                <mat-select (selectionChange)="setIdAssociation($event.value, i)" [(value)]="selectedIdAssociation">
                   <mat-option [value]="null">-- Seleccione una opción --</mat-option>
                   <mat-option *ngFor="let associationFilterRes of conditionsRes[2].parametros[0].valor"
                               [value]="associationFilterRes.id">
@@ -110,18 +110,18 @@
                 </mat-select>
                 <mat-icon matSuffix>fact_check</mat-icon>
               </mat-form-field>
-              <mat-form-field *ngIf="selectedIdAssociation !== null? true : !conditionSelect.empty"
+              <mat-form-field *ngIf="conditionSelect.value === 'programa'? selectedIdAssociation !== null : !conditionSelect.empty"
                               hideRequiredMarker [fxFlex]="conditionSelect.value === 'programa'? 24 : 36"
                               appearance="outline" [title]="'Seleccione el valor de '+ conditionSelect.value">
                 <mat-label >Seleccione {{conditionSelect.value}}</mat-label>
-                <mat-select formControlName="parametro">
+                <mat-select formControlName="parametro" *ngFor="let parameterRes of parametersRes">
                   <mat-option>-- Seleccione una opción --</mat-option>
-                  <mat-option
-                    *ngFor="let valor of parametersRes[0].valor"
-                    [value]="valor.id">
-                    <ng-container
-                      *ngIf="conditionSelect.value === 'programa'? valor.id === selectedIdAssociation : true"> {{valor.nombre}} </ng-container>
-                  </mat-option>
+                  <ng-container *ngIf="conditionSelect.value === 'programa'? parameterRes.id=== selectedIdAssociation: true">
+                    <mat-option
+                      *ngFor="let valor of parameterRes.valor" [value]="valor.id">
+                      <ng-container> {{valor.nombre}} </ng-container>
+                    </mat-option>
+                  </ng-container>
                 </mat-select>
                 <mat-icon matSuffix>fact_check</mat-icon>
               </mat-form-field>

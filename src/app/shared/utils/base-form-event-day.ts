@@ -57,8 +57,8 @@ export class BaseFormEventDay {
     }
   }
 
-  clearCondition(index: number) {
-    this.conditionsOptionsField.at(index).get('parametro').setValue('');
+  clearParameter(index: number) {
+    this.conditionsOptionsField.at(index).get('parametro').setValue(null);
   }
 
   isValidField(field: string, group?: string, i?: number): boolean {

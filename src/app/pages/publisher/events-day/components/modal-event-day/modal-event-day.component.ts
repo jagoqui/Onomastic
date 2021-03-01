@@ -84,13 +84,19 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     this.eventDayForm.baseForm.controls.fecha.setValue(moment(event.value).format('YYYY-MM-DD'));
   }
 
-  setIdAssociation(id: any) {
+  setIdAssociation(id: any, indexClear: number) {
     this.selectedIdAssociation = id;
+    this.eventDayForm.clearParameter(indexClear);
   }
 
   setParameters(condition: ConditionRes): string {
     this.parametersRes = condition.parametros;
     return condition.condicion;
+  }
+
+  onClearParameter(i: number) {
+    this.eventDayForm.clearParameter(i);
+    this.selectedIdAssociation = null;
   }
 
   checkField(field: string, group?: string, iterator?: number): boolean {
