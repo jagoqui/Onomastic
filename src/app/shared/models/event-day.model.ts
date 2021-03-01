@@ -7,20 +7,22 @@ export interface EventDay {
   fecha: Date;
   estado: string;
   recurrencia: string;
-  asociacion: ByNameId[];
   plantilla: Plantilla;
-  condicionesEvento: CondicionesEvento[];
+  condicionesEvento: Condition[];
 }
 
-export interface CondicionesEventoRes {
-  id?: number;
-  condicion?: string;
-  parametro: ByNameId[];
-}
-
-export interface CondicionesEvento {
-  id?: number;
-  condicion?: string;
+export interface Condition {
+  condicion: string;
   parametro: string;
+}
+
+export interface ConditionRes {
+  condicion: string;
+  parametros?: Parameter[];
+}
+
+export interface Parameter {
+  id: number;
+  valor: ByNameId[];
 }
 

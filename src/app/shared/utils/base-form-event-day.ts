@@ -10,21 +10,12 @@ export class BaseFormEventDay {
   constructor(private fb: FormBuilder) {
   }
 
-  get conditionsAssociationField() {
-    return this.baseForm.get('asociacion') as FormArray;
-  }
-
-  get conditionsOptionsField() {
-    return this.baseForm.get('condicionesEvento') as FormArray;
-  }
-
   createBaseForm(): FormGroup {
     return this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(5)]],
       fecha: ['', [Validators.required, this.validDate]],
       estado: ['', [Validators.required]], // TODO: Crear tipo de dato ACTIVO, INACTIVO
       recurrencia: ['', [Validators.required]], // TODO: Crear tipo de dato ANUAL, DIARIA
-      asociacion: this.fb.array([]),
       condicionesEvento: this.fb.array([this.createConditionField()]),
       plantilla: this.fb.group({
         id: ['', [Validators.required]],
@@ -45,12 +36,15 @@ export class BaseFormEventDay {
       };
   }
 
-  addAssociationOptions() {
-    this.conditionsAssociationField.push(this.createAssociationField());
+  get conditionsOptionsField() {
+    return this.baseForm.get('condicionesEvento') as FormArray;
   }
 
-  removeAssociation(key: number) {
-    this.conditionsAssociationField.removeAt(key);
+  private createConditionField() {
+    return this.fb.group({
+      condicion: [null, Validators.required],
+      parametro: [null, Validators.required]
+    });
   }
 
   addConditionsOptions() {
@@ -67,7 +61,6 @@ export class BaseFormEventDay {
     this.conditionsOptionsField.at(index).get('parametro').setValue('');
   }
 
-  // <mat-select formControlName="condition" (selectionChange)="limpiar(i)">
   isValidField(field: string, group?: string, i?: number): boolean {
     if (group) {
       if (i !== null) {
@@ -88,26 +81,12 @@ export class BaseFormEventDay {
   }
 
   onReset(): void {
-    for (let i = 0; i <  this.baseForm.controls.condicionesEvento.value.length; i++) {
+    for (let i = 0; i < this.baseForm.controls.condicionesEvento.value.length; i++) {
       this.conditionsOptionsField.removeAt(i);
     }
     this.baseForm.reset();
   }
 
-  private createAssociationField() {
-    return this.fb.group({
-      id: ['', Validators.required],
-      nombre: ['', Validators.required]
-    });
-  }
-
-  private createConditionField() {
-    return this.fb.group({
-      id: [null, Validators.required],
-      condicion: [null, Validators.required],
-      parametro: [null, Validators.required]
-    });
-  }
 }
 
 

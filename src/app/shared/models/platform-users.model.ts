@@ -8,9 +8,9 @@ export interface PlatformUser {
 }
 
 export interface PlatformUserResponse {
+  id: number;
   userEmail: string;
   name: string;
   role: Role;
-  asociacion?: ByNameId[];
   token: string;
 }

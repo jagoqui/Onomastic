@@ -43,44 +43,10 @@ export class AuthService {
       map((userResponse: any) => {
         const decode = jwtHelper.decodeToken(userResponse.accessToken);
         const userRes: PlatformUserResponse = {
+          id: decode.sub,
           name: decode.nombre,
           userEmail: authData.userEmail,
           role: decode.rol,
-          // asociacion: decode.asociacion, // TODO: Obtiene el tipo de asociación
-          asociacion: [
-            {
-              id: 1,
-              nombre: 'Facultad de Ingenieria'
-            },
-            {
-              id: 2,
-              nombre: 'Facultad de Comunicaciones'
-            },
-            {
-              id: 3,
-              nombre: 'Escuela de Idiomas'
-            },
-            {
-              id: 4,
-              nombre: 'Facultad de Medicina'
-            },
-            {
-              id: 5,
-              nombre: 'Facultad de Ciencias Agrarias'
-            },
-            {
-              id: 6,
-              nombre: 'Derecho y Ciencias Políticas'
-            },
-            {
-              id: 7,
-              nombre: 'Escuela de Microbiología'
-            },
-            {
-              id: 8,
-              nombre: 'Instituto de Filosofía'
-            }
-          ],
           token: userResponse.accessToken
         };
         localStorage.setItem('PlatformUser', JSON.stringify(userRes));

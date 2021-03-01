@@ -1,5 +1,4 @@
 import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
-import {AbstractControl, FormGroup} from '@angular/forms';
 import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
@@ -7,13 +6,11 @@ import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {SafeHtml} from '@angular/platform-browser';
 import {EventDayService} from '@app/pages/publisher/services/event-day.services';
 import {TemplateCardsService} from '@app/pages/publisher/services/template-cards.service';
-import {CondicionesEvento} from '@app/shared/models/event-day.model';
-import {ByNameId, ProgramaAcademicoPorUsuarioCorreo} from '@app/shared/models/mail-users.model';
+import {ConditionRes, Parameter} from '@app/shared/models/event-day.model';
 import {Plantilla} from '@app/shared/models/template-card.model';
 import {BaseFormEventDay} from '@app/shared/utils/base-form-event-day';
 import {DomSanitizerService} from '@shared/services/dom-sanitizer.service';
 import * as moment from 'moment';
-import {takeUntil} from 'rxjs/internal/operators/takeUntil';
 import {Subject} from 'rxjs/internal/Subject';
 
 export const MY_FORMATS = {
@@ -58,11 +55,9 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   cards: Plantilla[] = [];
   sidenavOpened = false;
   selectCardHTML: SafeHtml = null;
-  // Para cargar campos dinamicamente en el HTML
-  associations: ByNameId[];
-  conditions: CondicionesEvento[];
-  programs: ProgramaAcademicoPorUsuarioCorreo[];
-  bondingTypes: ByNameId[];
+  conditionsRes: ConditionRes[];
+  selectedIdAssociation: number = null;
+  parametersRes: Parameter[];
   private destroy$ = new Subject<any>();
 
   constructor(
@@ -75,15 +70,27 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   ) {
   }
 
+  private pathFormData(): void {
+    const conditions = this.data?.event.condicionesEvento;
+    // if (conditions) {
+    //   for (let i = 0; i < conditions.length - 1; i++) {
+    //     this.eventDayForm.addParameterFormGroup('condicion');
+    //   }
+    // }
+    this.eventDayForm.baseForm.patchValue(this.data?.event);
+  }
+
   setDateFormat(event: MatDatepickerInputEvent<unknown>) {
     this.eventDayForm.baseForm.controls.fecha.setValue(moment(event.value).format('YYYY-MM-DD'));
   }
 
-  setformGroupField(formGroup: AbstractControl, value: any, indexClear: number) {
-    // formGroup.controls.condicion.setValue(value.condicion);
-    const group = formGroup as FormGroup;
-    group.controls.id.setValue(value.id);
-    this.eventDayForm.conditionsOptionsField.at(indexClear).get('parametro').setValue('');
+  setIdAssociation(id: any) {
+    this.selectedIdAssociation = id;
+  }
+
+  setParameters(condition: ConditionRes): string {
+    this.parametersRes = condition.parametros;
+    return condition.condicion;
   }
 
   checkField(field: string, group?: string, iterator?: number): boolean {
@@ -139,45 +146,20 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
       this.actionTODO = Action.NEW;
     }
 
-    // this.authSvc.userResponse$
+    // this.eventDaySvc.getConditions()
     //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe((userRes: PlatformUserResponse) => {
-    //     if (userRes) {
-    //       this.platformUserData = userRes;
+    //   .subscribe(conditions => {
+    //     if (conditions) {
+    //       this.conditions = conditions;
     //     }
+    //   }, (err) => {
+    //     console.log('Get condition error! :> ', err);
     //   });
-
-    this.eventDaySvc.getConditions()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(conditions => {
-        if (conditions) {
-          this.conditions = conditions;
-        }
-      }, (err) => {
-        console.log('Get condition error! :> ', err);
-      });
+    this.conditionsRes = JSON.parse(this.eventDaySvc.conditions);
   }
 
   ngOnDestroy(): void {
     this.destroy$.next({});
     this.destroy$.complete();
   }
-
-  private pathFormData(): void {
-    const associations = this.data?.event.asociacion;
-    const conditions = this.data?.event.condicionesEvento;
-
-    // if (associations) {
-    //   for (let i = 0; i < associations.length - 1; i++) {
-    //     this.eventDayForm.addParameterFormGroup('asociacion');
-    //   }
-    // }
-    // if (conditions) {
-    //   for (let i = 0; i < conditions.length - 1; i++) {
-    //     this.eventDayForm.addParameterFormGroup('condicion');
-    //   }
-    // }
-    this.eventDayForm.baseForm.patchValue(this.data?.event);
-  }
-
 }
