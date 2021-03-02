@@ -153,16 +153,15 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
       this.actionTODO = Action.NEW;
     }
 
-    // this.eventDaySvc.getConditions()
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe(conditions => {
-    //     if (conditions) {
-    //       this.conditionsRes = conditions;
-    //     }
-    //   }, (err) => {
-    //     console.log('Get condition error! :> ', err);
-    //   });
-    this.conditionsRes = JSON.parse(this.eventDaySvc.conditions);
+    this.eventDaySvc.getConditions()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(conditions => {
+        if (conditions) {
+          this.conditionsRes = conditions;
+        }
+      }, (err) => {
+        console.log('Get condition error! :> ', err);
+      });
   }
 
   ngOnDestroy(): void {

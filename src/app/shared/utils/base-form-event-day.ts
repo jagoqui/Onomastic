@@ -81,9 +81,7 @@ export class BaseFormEventDay {
   }
 
   onReset(): void {
-    for (let i = 0; i < this.baseForm.controls.condicionesEvento.value.length; i++) {
-      this.conditionsOptionsField.removeAt(i);
-    }
+    this.baseForm.controls.condicionesEvento = this.fb.array([this.createConditionField()]),
     this.baseForm.reset();
   }
 
