@@ -57,7 +57,8 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   sidenavOpened = false;
   selectCardHTML: SafeHtml = null;
   conditionsRes: ConditionRes[];
-  selectedIdAssociation: number = null;
+  //selectedIdAssociation: number = null;
+  selecteIds;
   parametersRes: Parameter[];
   private destroy$ = new Subject<any>();
 
@@ -86,8 +87,14 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   }
 
   setIdAssociation(id: any, indexClear: number) {
-    this.selectedIdAssociation = id;
+    this.selecteIds[indexClear] = id;
     this.eventDayForm.clearParameter(indexClear);
+  }
+
+  removeCondition(i: number){
+    this.eventDayForm.removeCondition(i);
+    this.selecteIds.splice(i,1);
+    this.selecteIds.push(null);
   }
 
   setParameters(condition: ConditionRes): string {
@@ -97,7 +104,8 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
 
   onClearParameter(i: number) {
     this.eventDayForm.clearParameter(i);
-    this.selectedIdAssociation = null;
+    this.selecteIds[i] = -1;
+    //this.selectedIdAssociation = null;
   }
 
   checkField(field: string, group?: string, iterator?: number): boolean {
@@ -158,6 +166,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
       .subscribe(conditions => {
         if (conditions) {
           this.conditionsRes = conditions;
+          this.selecteIds = new Array(this.conditionsRes.length+1);
         }
       }, (err) => {
         console.log('Get condition error! :> ', err);

@@ -8,8 +8,8 @@
 <mat-sidenav-container mat-dialog-content>
   <mat-sidenav [(opened)]="sidenavOpened">
     <mat-card *ngFor="let card of cards" appMaterialElevation (click)="onSelectCard(card)"
-              title="Click para seleccionar" class="card" fxLayout="row" fxLayoutGap="12px"
-              [innerHTML]="sanitizeHTML(card.texto)">
+      title="Click para seleccionar" class="card" fxLayout="row" fxLayoutGap="12px"
+      [innerHTML]="sanitizeHTML(card.texto)">
     </mat-card>
   </mat-sidenav>
   <mat-sidenav-content>
@@ -26,7 +26,7 @@
         </div>
         <ng-template #selectedCard>
           <div fxFlex="60" [innerHTML]="selectCardHTML" appMaterialElevation (click)="loadCards(true)"
-               class="select-card-container" title='click para cambiar plantilla'></div>
+            class="select-card-container" title='click para cambiar plantilla'></div>
         </ng-template>
 
         <div fxFlex="38" fxLayout="column">
@@ -62,7 +62,7 @@
               <mat-label>Fecha de inicio</mat-label>
               <label>
                 <input matInput [matDatepicker]="dp" formControlName="fecha" (dateChange)="setDateFormat($event)"
-                       placeholder="YYYY-MM-DD">
+                  placeholder="YYYY-MM-DD">
               </label>
               <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
               <mat-datepicker #dp></mat-datepicker>
@@ -84,16 +84,18 @@
           </div>
           <!-- Conditions -->
           <div formArrayName="condicionesEvento"
-               *ngFor="let condition of eventDayForm.conditionsOptionsField.controls; let i=index">
+            *ngFor="let condition of eventDayForm.conditionsOptionsField.controls; let i=index">
             <div fxLayout="row" fxLayoutAlign="space-between center" [formGroupName]="i">
               <!--Condition-->
               <mat-form-field hideRequiredMarker [fxFlex]="conditionSelect.value === 'programa_academico'? 24 : 36"
-                              appearance="outline" title="Condición">
+                appearance="outline" title="Condición">
                 <mat-label>Condiciones</mat-label>
                 <mat-select #conditionSelect formControlName="condicion" (selectionChange)="onClearParameter(i)">
                   <mat-option [value]="null">-- Seleccione una opción --</mat-option>
                   <mat-option *ngFor="let conditionRes of conditionsRes" [value]="conditionRes.condicion">
-                    <ng-container> {{conditionSelect.value === conditionRes.condicion ? setParameters(conditionRes) : conditionRes.condicion}} </ng-container>
+                    <ng-container>
+                      {{conditionSelect.value === conditionRes.condicion ? setParameters(conditionRes) : conditionRes.condicion}}
+                    </ng-container>
                   </mat-option>
                 </mat-select>
                 <mat-icon matSuffix>fact_check</mat-icon>
@@ -101,13 +103,13 @@
               <!--Filter by association-->
               <ng-container *ngIf="conditionSelect.value === 'programa_academico'">
                 <ng-container *ngFor="let conditionRes of conditionsRes">
-                  <mat-form-field *ngIf="conditionRes.condicion === 'asociacion'" hideRequiredMarker
-                                  fxFlex="24" appearance="outline" title="Filtro por asociación">
+                  <mat-form-field *ngIf="conditionRes.condicion === 'asociacion'" hideRequiredMarker fxFlex="24"
+                    appearance="outline" title="Filtro por asociación">
                     <mat-label>Filtro por asociacíon</mat-label>
-                    <mat-select (selectionChange)="setIdAssociation($event.value, i)" [(value)]="selectedIdAssociation">
+                    <mat-select (selectionChange)="setIdAssociation($event.value, i)" [(value)]="selecteIds[i]">
                       <mat-option [value]="null">-- Seleccione una opción --</mat-option>
                       <mat-option *ngFor="let associationFilterRes of conditionRes.parametros[0].valores"
-                                  [value]="associationFilterRes.id">
+                        [value]="associationFilterRes.id">
                         <ng-container> {{associationFilterRes.nombre}} </ng-container>
                       </mat-option>
                     </mat-select>
@@ -117,29 +119,29 @@
               </ng-container>
               <!--Parameter-->
               <ng-container
-                *ngIf="conditionSelect.value === 'programa_academico'? selectedIdAssociation !== null : !conditionSelect.empty">
-                <ng-container *ngFor="let parameterRes of parametersRes">
-                  <mat-form-field
-                    *ngIf="conditionSelect.value === 'programa_academico'? parameterRes.id=== selectedIdAssociation: true"
-                    hideRequiredMarker [fxFlex]="conditionSelect.value === 'programa_academico'? 24 : 36"
-                    appearance="outline" [title]="'Seleccione el valor de '+ conditionSelect.value">
-                    <mat-label>Seleccione {{conditionSelect.value}}</mat-label>
-                    <mat-select formControlName="parametro">
-                      <mat-option>-- Seleccione una opción --</mat-option>
-                      <mat-option
-                        *ngFor="let valor of parameterRes.valores" [value]="valor.id">
-                        <ng-container> {{valor.nombre}} </ng-container>
-                      </mat-option>
-                    </mat-select>
-                    <mat-icon matSuffix>fact_check</mat-icon>
-                  </mat-form-field>
-                </ng-container>
+                *ngIf="conditionSelect.value === 'programa_academico'? selecteIds !== null : !conditionSelect.empty">
+                
+                  <ng-container *ngFor="let parameterRes of parametersRes">
+                    <mat-form-field
+                      *ngIf="conditionSelect.value === 'programa_academico' ? parameterRes.id=== selecteIds[i]: true"
+                      hideRequiredMarker [fxFlex]="conditionSelect.value === 'programa_academico'? 24 : 36"
+                      appearance="outline" [title]="'Seleccione el valor de '+ conditionSelect.value">
+                      <mat-label>Seleccione {{conditionSelect.value}}</mat-label>
+                      <mat-select formControlName="parametro">
+                        <mat-option>-- Seleccione una opción --</mat-option>
+                        <mat-option *ngFor="let valor of parameterRes.valores" [value]="valor.id">
+                          <ng-container> {{valor.nombre}} </ng-container>
+                        </mat-option>
+                      </mat-select>
+                      <mat-icon matSuffix>fact_check</mat-icon>
+                    </mat-form-field>
+                  </ng-container>
               </ng-container>
               <!-- Actions list -->
               <div fxFlex="25" fxLayout="row" fxFlexAlign="space-around center">
                 <div *ngIf="eventDayForm.baseForm.controls.condicionesEvento.value.length>1" fxFlex="45">
                   <button mat-mini-fab color="warn" title="Eliminar condición"
-                          (click)="eventDayForm.removeCondition(i)">
+                    (click)="removeCondition(i)">
                     <mat-icon>remove</mat-icon>
                   </button>
                 </div>
@@ -147,7 +149,7 @@
                   *ngIf="eventDayForm.baseForm.controls.condicionesEvento.value.length<5 && eventDayForm.baseForm.controls.condicionesEvento.value.length === i+1"
                   fxFlex="45">
                   <button mat-mini-fab color="primary" title="Agregar condición"
-                          (click)="eventDayForm.addConditionsOptions()">
+                    (click)="eventDayForm.addConditionsOptions()">
                     <mat-icon>playlist_add</mat-icon>
                   </button>
                 </div>
