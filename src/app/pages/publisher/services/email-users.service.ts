@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@env/environment';
-import {ByNameId, ID, MailUsers, MailUsersResponse, ProgramaAcademicoPorUsuarioCorreo,} from '@shared/models/mail-users.model';
+import {ByNameId, ID, MailUsers, MailUsersResponse, ProgramaAcademicoPorUsuarioCorreo} from '@shared/models/mail-users.model';
 import {Observable} from 'rxjs';
 
 @Injectable({providedIn: 'root'})
@@ -74,6 +74,11 @@ export class EmailUsersService {
   delete(id: ID): Observable<{}> {
     return this.http
       .delete<MailUsers>(`${environment.API_URL}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`);
+  }
+
+  unsubscribe(email: string): Observable<MailUsersResponse> {
+    return this.http
+      .delete<MailUsersResponse>(`${environment.API_URL}/usuariosemail/${email}`);
   }
 
 }
