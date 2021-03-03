@@ -3,6 +3,7 @@ import {MAT_DIALOG_DATA} from '@angular/material/dialog';
 import {AuthService} from '@auth/services/auth.service';
 import {BaseFormPlatformUsers} from '@shared/utils/base-form-platform-users';
 
+// eslint-disable-next-line no-shadow
 enum Action {
   edit = 'edit',
   new = 'new',

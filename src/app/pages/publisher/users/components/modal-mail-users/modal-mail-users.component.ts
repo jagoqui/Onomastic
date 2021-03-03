@@ -11,6 +11,7 @@ import {Subscription} from 'rxjs';
 
 import {EmailUsersService} from '../../../services/email-users.service';
 
+// eslint-disable-next-line no-shadow
 enum Action {
   edit = 'Actualizar',
   new = 'Agregar',

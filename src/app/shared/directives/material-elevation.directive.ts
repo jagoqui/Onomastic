@@ -34,11 +34,13 @@ export class MaterialElevationDirective implements OnChanges {
     this.renderer.addClass(this.element.nativeElement, newClass);
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   @HostListener('mouseenter')
   private onMouseEnter() {
     this.setElevation(this.raisedElevation);
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   @HostListener('mouseleave')
   private onMouseLeave() {
     this.setElevation(this.defaultElevation);

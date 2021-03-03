@@ -1,5 +1,5 @@
 <h1 mat-dialog-title>{{data.title}}</h1>
-<div class="reloadCard" align="right">
+<div class="reloadCard">
   <button mat-mini-fab color="primary" title="Recargar plantillas" (click)="onRefresh()">
     <mat-icon>refresh</mat-icon>
   </button>
@@ -120,7 +120,7 @@
               <!--Parameter-->
               <ng-container
                 *ngIf="conditionSelect.value === 'programa_academico'? selecteIds !== null : !conditionSelect.empty">
-                
+
                   <ng-container *ngFor="let parameterRes of parametersRes">
                     <mat-form-field
                       *ngIf="conditionSelect.value === 'programa_academico' ? parameterRes.id=== selecteIds[i]: true"

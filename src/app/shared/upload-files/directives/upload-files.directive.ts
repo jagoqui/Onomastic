@@ -34,17 +34,20 @@ export class UploadFilesDirective extends ImageValidator {
     reader.readAsDataURL(file);
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   @HostListener('dragover', ['$event'])
   private onDragEnter(event: Event) {
     UploadFilesDirective.avoidOpeningBrowser(event);
     this.mouseOver.emit(true);
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   @HostListener('dragleave', ['$event'])
   private onDragLeave() {
     this.mouseOver.emit(false);
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   @HostListener('drop', ['$event'])
   private onDrop(event: any) {
     const dataTransfer = UploadFilesDirective.getDataTransfer(event);
@@ -56,6 +59,7 @@ export class UploadFilesDirective extends ImageValidator {
     this.mouseOver.emit(false);
   }
 
+  // eslint-disable-next-line @typescript-eslint/member-ordering
   @HostListener('change', ['$event'])
   private extractFiles(event: any, fileList?: FileList): void {
     const filesListAux = fileList ? fileList : event.target.files;

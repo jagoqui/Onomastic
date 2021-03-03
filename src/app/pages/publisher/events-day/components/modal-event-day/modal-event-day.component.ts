@@ -14,6 +14,8 @@ import * as moment from 'moment';
 import {Subject} from 'rxjs/internal/Subject';
 import {takeUntil} from 'rxjs/operators';
 
+
+// eslint-disable-next-line no-shadow
 enum Action {
   edit = 'Editar',
   new = 'Crear',
