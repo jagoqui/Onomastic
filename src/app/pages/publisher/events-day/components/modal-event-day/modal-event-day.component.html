@@ -14,21 +14,27 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <div mat-dialog-content>
-      <form [formGroup]="eventDayForm.baseForm" fxLayout="row" fxLayoutAlign="space-around center">
-        <div *ngIf="!selectCardHTML; else selectedCard" fxFlex="60" class="select-card-container">
-          <div class="btn-select-card">
-            <button mat-button color="primary" (click)="loadCards()">
-              Seleccionar plantilla<br>
-              <mat-icon>image</mat-icon>
-            </button>
+      <form [formGroup]="eventDayForm.baseForm" fxLayout="row" fxLayoutAlign="space-between center">
+        <!--Template card-->
+        <div fxLayout="column" fxFlex="60">
+          <div *ngIf="!selectCardHTML; else selectedCard"
+               [ngClass]="eventDayForm.invalidField(eventDayForm.baseForm.controls.plantilla)? 'select-card-container-error' : 'select-card-container'">
+            <div class="btn-select-card">
+              <button mat-button color="primary" (click)="loadCards()">
+                Seleccionar plantilla<br>
+                <mat-icon>image</mat-icon>
+                <mat-error *ngIf="eventDayForm.invalidField(eventDayForm.baseForm.controls.plantilla)">
+                  Debe seleccionar una plantilla
+                </mat-error>
+              </button>
+            </div>
           </div>
-          <mat-error *ngIf="checkField('plantilla', null, null)">Seleccione la plantilla</mat-error>
+          <ng-template #selectedCard>
+            <div [innerHTML]="selectCardHTML" appMaterialElevation (click)="loadCards(true)"
+                 class="select-card-container" title='click para cambiar plantilla'></div>
+          </ng-template>
         </div>
-        <ng-template #selectedCard>
-          <div fxFlex="60" [innerHTML]="selectCardHTML" appMaterialElevation (click)="loadCards(true)"
-            class="select-card-container" title='click para cambiar plantilla'></div>
-        </ng-template>
-
+        <!--Event day form-->
         <div fxFlex="38" fxLayout="column">
           <div fxLayout="row" fxLayoutAlign="space-between center">
             <!-- Name -->
@@ -106,7 +112,7 @@
                   <mat-form-field *ngIf="conditionRes.condicion === 'asociacion'" hideRequiredMarker fxFlex="24"
                     appearance="outline" title="Filtro por asociación">
                     <mat-label>Filtro por asociacíon</mat-label>
-                    <mat-select (selectionChange)="setIdAssociation($event.value, i)" [(value)]="selecteIds[i]">
+                    <mat-select (selectionChange)="setIdAssociation($event.value, i)" [(value)]="selectedIdFilterAssociation[i]">
                       <mat-option [value]="null">-- Seleccione una opción --</mat-option>
                       <mat-option *ngFor="let associationFilterRes of conditionRes.parametros[0].valores"
                         [value]="associationFilterRes.id">
@@ -119,11 +125,11 @@
               </ng-container>
               <!--Parameter-->
               <ng-container
-                *ngIf="conditionSelect.value === 'programa_academico'? selecteIds !== null : !conditionSelect.empty">
+                *ngIf="conditionSelect.value === 'programa_academico'? selectedIdFilterAssociation !== null : !conditionSelect.empty">
 
                   <ng-container *ngFor="let parameterRes of parametersRes">
                     <mat-form-field
-                      *ngIf="conditionSelect.value === 'programa_academico' ? parameterRes.id=== selecteIds[i]: true"
+                      *ngIf="conditionSelect.value === 'programa_academico' ? parameterRes.id=== selectedIdFilterAssociation[i]: true"
                       hideRequiredMarker [fxFlex]="conditionSelect.value === 'programa_academico'? 24 : 36"
                       appearance="outline" [title]="'Seleccione el valor de '+ conditionSelect.value">
                       <mat-label>Seleccione {{conditionSelect.value}}</mat-label>

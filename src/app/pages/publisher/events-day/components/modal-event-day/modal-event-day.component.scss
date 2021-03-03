@@ -1,6 +1,6 @@
 @import 'src/assets/custom_styles/material_custom_theme.scss';
 
-.reloadCard{
+.reloadCard {
   text-align: right;
   margin: 0.5rem 0;
 }
@@ -17,10 +17,9 @@
   }
 }
 
-.select-card-container {
+.select-card-container, .select-card-container-error {
   width: 100%;
   height: 60vh;
-  border: 0.1667rem solid mat-color($mat-primary, darker);
   margin: 0.2778rem;
   display: flex;
   align-items: center;
@@ -32,8 +31,15 @@
   }
 
   &:hover {
-    border: 0.1667rem solid mat-color($mat-primary, lighter);
+    border: 0.1667rem solid mat-color($mat-primary, darker);
   }
+}
+.select-card-container{
+  border: 0.1667rem solid mat-color($mat-primary, lighter);
+}
+
+.select-card-container-error {
+  border: 0.1667rem solid mat-color($mat-warn, darker);
 }
 
 .mat-dialog-content {

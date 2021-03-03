@@ -50,17 +50,12 @@ export const MY_FORMATS = {
 export class ModalEventDayComponent implements OnInit, OnDestroy {
   @Output() refresh = new EventEmitter<boolean>(false);
   actionTODO = '';
-  maxListsConfig = {
-    associations: 5,
-    conditions: 5,
-  };
 
   cards: Plantilla[] = [];
   sidenavOpened = false;
   selectCardHTML: SafeHtml = null;
   conditionsRes: ConditionRes[];
-  // selectedIdAssociation: number = null;
-  selecteIds;
+  selectedIdFilterAssociation;
   parametersRes: Parameter[];
   private destroy$ = new Subject<any>();
 
@@ -79,14 +74,14 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   }
 
   setIdAssociation(id: any, indexClear: number) {
-    this.selecteIds[indexClear] = id;
+    this.selectedIdFilterAssociation[indexClear] = id;
     this.eventDayForm.clearParameter(indexClear);
   }
 
   removeCondition(i: number) {
     this.eventDayForm.removeCondition(i);
-    this.selecteIds.splice(i, 1);
-    this.selecteIds.push(null);
+    this.selectedIdFilterAssociation.splice(i, 1);
+    this.selectedIdFilterAssociation.push(null);
   }
 
   setParameters(condition: ConditionRes): string {
@@ -96,15 +91,16 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
 
   onClearParameter(i: number) {
     this.eventDayForm.clearParameter(i);
-    this.selecteIds[i] = -1;
-    // this.selectedIdAssociation = null;
-  }
-
-  checkField(field: string, group?: string, iterator?: number): boolean {
-    return this.eventDayForm.isValidField(field, group, iterator);
+    this.selectedIdFilterAssociation[i] = -1;
   }
 
   loadCards(onChange?: boolean) {
+    this.eventDayForm.baseForm.controls.plantilla.markAsTouched();
+    this.eventDayForm.baseForm.controls.plantilla.markAsDirty();
+    if(!this.selectCardHTML){
+      this.eventDayForm.baseForm.controls.plantilla.setErrors({incorrect: true});
+    }
+
     if (onChange) {
       if (confirm('Seguro que desea ver las plantillas?')) {
         this.sidenavOpened = true;
@@ -158,7 +154,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
       .subscribe(conditions => {
         if (conditions) {
           this.conditionsRes = conditions;
-          this.selecteIds = new Array(this.conditionsRes.length + 1);
+          this.selectedIdFilterAssociation = new Array(this.conditionsRes.length + 1);
         }
       }, (err) => {
         console.log('Get condition error! :> ', err);

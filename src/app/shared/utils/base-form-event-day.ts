@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
+import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment';
 
 @Injectable({providedIn: 'root'})
@@ -54,23 +54,8 @@ export class BaseFormEventDay {
     this.conditionsOptionsField.at(index).get('parametro').setValue(null);
   }
 
-  isValidField(field: string, group?: string, i?: number): boolean {
-    if (group) {
-      if (i !== null) {
-        const arrayControl = this.baseForm?.get(group) as FormArray;
-        return (
-          (arrayControl.at(i)?.get(field).touched || arrayControl.at(i)?.get(field).dirty) && arrayControl.at(i)?.get(field).invalid
-        );
-      } else {
-        const controlGroup = this.baseForm?.get(group) as FormGroup;
-        return (
-          (controlGroup?.get(field).touched || controlGroup?.get(field).dirty) && !controlGroup?.get(field).valid
-        );
-      }
-    } else {
-      const control = this.baseForm?.get(field) as FormControl;
+  invalidField(control: AbstractControl): boolean {
       return ((control.touched || control.dirty) && control.invalid);
-    }
   }
 
   onReset(): void {
