@@ -23,7 +23,9 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   initialContent = `
     <div id="editorContent" style="z-index: -1">
       <span>
-        Hola&nbsp;<b style="color: #e74c3c">&lt;Nombre&gt;</b>&nbsp;en ésta&nbsp;<b style="color: #16a085">&lt;Fecha&gt;</b>&nbsp;la Universidad de Antioquia le desea un feliz cumpleaños 🥳.
+        Hola&nbsp;<b style="color: #e74c3c">&lt;Nombre&gt;</b>&nbsp;en ésta&nbsp;
+        <b style="color: #16a085">&lt;Fecha&gt;</b>
+        &nbsp;la Universidad de Antioquia le desea un feliz cumpleaños 🥳.
       </span>
     </div>
   `;
@@ -60,12 +62,12 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   setCardBackground(event) {
     const file: File = event.target.files[0];
     const reader = new FileReader();
-    reader.onloadend = this._handleReaderLoaded.bind(this);
+    reader.onloadend = this.handleReaderLoaded.bind(this);
     reader.readAsDataURL(this.itemImages[0]?.file || file); // TODO: Aveces no carga la imagen('itemImages) en el editor,
     // entonces toca salta la validación y leer la imagen normal para que cargue la imagen.
   }
 
-  _handleReaderLoaded() {
+  handleReaderLoaded() {
     const content = document.getElementById('editorContent');
 
     if (!content.children[0]?.innerHTML) {

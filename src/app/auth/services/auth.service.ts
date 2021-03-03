@@ -15,7 +15,7 @@ const jwtHelper = new JwtHelperService();
 })
 export class AuthService {
 
-  private PlatformUserRes = new BehaviorSubject<PlatformUserResponse>(null);
+  private platformUserRes = new BehaviorSubject<PlatformUserResponse>(null);
   private isLogged = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private router: Router) {
@@ -23,11 +23,11 @@ export class AuthService {
   }
 
   get userResponse$(): Observable<PlatformUserResponse> {
-    return this.PlatformUserRes.asObservable();
+    return this.platformUserRes.asObservable();
   }
 
   get userResponseValue(): PlatformUserResponse {
-    return this.PlatformUserRes.getValue();
+    return this.platformUserRes.getValue();
   }
 
   get isLogged$(): Observable<boolean> {
@@ -39,7 +39,7 @@ export class AuthService {
   }
 
   login(authData: PlatformUser): Observable<PlatformUserResponse | void> {
-    return this.http.post<PlatformUserResponse>(`${environment.API_URL}/auth/signin`, authData).pipe(
+    return this.http.post<PlatformUserResponse>(`${environment.apiUrl}/auth/signin`, authData).pipe(
       map((userResponse: any) => {
         const decode = jwtHelper.decodeToken(userResponse.accessToken);
         const userRes: PlatformUserResponse = {
@@ -50,7 +50,7 @@ export class AuthService {
           token: userResponse.accessToken
         };
         localStorage.setItem('PlatformUser', JSON.stringify(userRes));
-        this.PlatformUserRes.next(userRes);
+        this.platformUserRes.next(userRes);
         this.isLogged.next(true);
         return userRes;
       })
@@ -58,12 +58,19 @@ export class AuthService {
   }
 
   register(userData: PlatformUser): Observable<PlatformUserResponse | void> {
-    return this.http.post<PlatformUserResponse>(`${environment.API_URL}/users`, userData).pipe(
-      map((user: PlatformUserResponse) => {
+    return this.http.post<PlatformUserResponse>(`${environment.apiUrl}/users`, userData).pipe(
+      map((user: PlatformUserResponse) =>
         // this.saveLocalStorage(user);
-        return user;
-      })
+        user
+      )
     );
+  }
+
+  logout() {
+    localStorage.clear();
+    this.platformUserRes.next(null);
+    this.isLogged.next(false);
+    this.router.navigate(['']).then(r => console.log(r));
   }
 
   private checkToken() {
@@ -73,18 +80,11 @@ export class AuthService {
       if (isExpired) {
         this.logout();
       } else {
-        this.PlatformUserRes.next(platformUser);
+        this.platformUserRes.next(platformUser);
         this.isLogged.next(true);
       }
     } else {
       this.router.navigate(['/login']).then(r => console.log(r));
     }
-  }
-
-  logout() {
-    localStorage.clear();
-    this.PlatformUserRes.next(null);
-    this.isLogged.next(false);
-    this.router.navigate(['']).then(r => console.log(r));
   }
 }

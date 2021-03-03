@@ -1,22 +1,12 @@
-import { OverlayContainer } from '@angular/cdk/overlay';
-import {
-  AfterViewInit,
-  Component,
-  HostBinding,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import { AuthService } from '@auth/services/auth.service';
-import { LoaderService } from '@shared/services/loader.service';
-import {
-  SidenavControllerService,
-} from '@shared/services/sidenav-controller.service';
-import {
-  ThemeSwitcherControllerService,
-} from '@shared/services/theme-switcher-controller.service';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {OverlayContainer} from '@angular/cdk/overlay';
+import {AfterViewInit, Component, HostBinding, OnDestroy, OnInit,} from '@angular/core';
+import {AuthService} from '@auth/services/auth.service';
+import {LoaderService} from '@shared/services/loader.service';
+import {SidenavControllerService,} from '@shared/services/sidenav-controller.service';
+import {ThemeSwitcherControllerService,} from '@shared/services/theme-switcher-controller.service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
 
 
 @Component({
@@ -29,8 +19,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   @HostBinding('class') className: string;
 
   opened = false;
-  private destroy$ = new Subject<any>();
   title = 'Onomastic';
+  private destroy$ = new Subject<any>();
 
   constructor(
     public authSvc: AuthService,
@@ -39,7 +29,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private themeSwitcherController: ThemeSwitcherControllerService,
     private spinner: NgxSpinnerService,
     public loaderSvc: LoaderService
-  ) { }
+  ) {
+  }
 
   onSetTheme(classTheme: string) {
     this.className = classTheme;

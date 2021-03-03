@@ -39,7 +39,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatTreeModule } from '@angular/material/tree';
 
-const MaterialLibs = [
+const materialLibs = [
   MatAutocompleteModule,
   MatBadgeModule,
   MatButtonModule,
@@ -81,7 +81,7 @@ const MaterialLibs = [
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, ...MaterialLibs],
-  exports: [...MaterialLibs]
+  imports: [CommonModule, ...materialLibs],
+  exports: [...materialLibs]
 })
 export class MaterialModule { }

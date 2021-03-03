@@ -12,73 +12,73 @@ export class EmailUsersService {
 
   getAll(): Observable<MailUsersResponse[]> {
     return this.http
-      .get<MailUsersResponse[]>(`${environment.API_URL}/usuariosemail`);
+      .get<MailUsersResponse[]>(`${environment.apiUrl}/usuariosemail`);
   }
 
   getAssociations(): Observable<ByNameId[]> {
     return this.http
-      .get<ByNameId[]>(`${environment.API_URL}/asociaciones`);
+      .get<ByNameId[]>(`${environment.apiUrl}/asociaciones`);
   }
 
   getAssociationById(id: string): Observable<ByNameId> {
     return this.http
-      .get<ByNameId>(`${environment.API_URL}/asociaciones/${id}`);
+      .get<ByNameId>(`${environment.apiUrl}/asociaciones/${id}`);
   }
 
   getAcademicPrograms(): Observable<ProgramaAcademicoPorUsuarioCorreo[]> {
     return this.http
-      .get<ProgramaAcademicoPorUsuarioCorreo[]>(`${environment.API_URL}/programasacademicos`);
+      .get<ProgramaAcademicoPorUsuarioCorreo[]>(`${environment.apiUrl}/programasacademicos`);
   }
 
   getAcademicProgramByCode(code: number): Observable<ProgramaAcademicoPorUsuarioCorreo> {
     return this.http
-      .get<ProgramaAcademicoPorUsuarioCorreo>(`${environment.API_URL}/programasacademicos/${code}`);
+      .get<ProgramaAcademicoPorUsuarioCorreo>(`${environment.apiUrl}/programasacademicos/${code}`);
   }
 
   getBondingTypes(): Observable<ByNameId[]> {
     return this.http
-      .get<ByNameId[]>(`${environment.API_URL}/vinculaciones`);
+      .get<ByNameId[]>(`${environment.apiUrl}/vinculaciones`);
   }
 
   getBondingTypeById(id: string): Observable<ByNameId> {
     return this.http
-      .get<ByNameId>(`${environment.API_URL}/vinculaciones/${id}`);
+      .get<ByNameId>(`${environment.apiUrl}/vinculaciones/${id}`);
   }
 
   getPlatforms(): Observable<ByNameId[]> {
     return this.http
-      .get<ByNameId[]>(`${environment.API_URL}/plataformas`);
+      .get<ByNameId[]>(`${environment.apiUrl}/plataformas`);
   }
 
   getPlatformById(id: string): Observable<ByNameId> {
     return this.http
-      .get<ByNameId>(`${environment.API_URL}/plataformas/${id}`);
+      .get<ByNameId>(`${environment.apiUrl}/plataformas/${id}`);
   }
 
   new(user: MailUsers): Observable<MailUsersResponse> {
     return this.http
-      .post<MailUsers>(`${environment.API_URL}/usuariosemail`, user);
+      .post<MailUsers>(`${environment.apiUrl}/usuariosemail`, user);
   }
 
   getById(id: ID): Observable<MailUsersResponse> {
     return this.http
-      .get<MailUsersResponse>(`${environment.API_URL}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`);
+      .get<MailUsersResponse>(`${environment.apiUrl}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`);
   }
 
 
   update(id: ID, user: MailUsers): Observable<MailUsersResponse> {
     return this.http
-      .put<MailUsersResponse>(`${environment.API_URL}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`, user);
+      .put<MailUsersResponse>(`${environment.apiUrl}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`, user);
   }
 
-  delete(id: ID): Observable<{}> {
+  delete(id: ID): Observable<MailUsers> {
     return this.http
-      .delete<MailUsers>(`${environment.API_URL}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`);
+      .delete<MailUsers>(`${environment.apiUrl}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`);
   }
 
   unsubscribe(email: string): Observable<MailUsersResponse> {
     return this.http
-      .delete<MailUsersResponse>(`${environment.API_URL}/usuariosemail/${email}`);
+      .delete<MailUsersResponse>(`${environment.apiUrl}/usuariosemail/${email}`);
   }
 
 }

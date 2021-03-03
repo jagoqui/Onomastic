@@ -4,8 +4,8 @@ import {AuthService} from '@auth/services/auth.service';
 import {BaseFormPlatformUsers} from '@shared/utils/base-form-platform-users';
 
 enum Action {
-  EDIT = 'edit',
-  NEW = 'new',
+  edit = 'edit',
+  new = 'new',
 }
 
 @Component({
@@ -15,7 +15,7 @@ enum Action {
 })
 export class ModalPublishersComponent implements OnInit {
 
-  actionTODO = Action.NEW;
+  actionTODO = Action.new;
   showPasswordField = true;
   hide = true;
 
@@ -28,7 +28,7 @@ export class ModalPublishersComponent implements OnInit {
 
   ngOnInit(): void {
     if (this.data?.user.hasOwnProperty('id')) {
-      this.actionTODO = Action.EDIT;
+      this.actionTODO = Action.edit;
     }
     this.newPublisherForm.baseForm.get('password').setValidators(null);
     this.newPublisherForm.baseForm.get('password').updateValueAndValidity();

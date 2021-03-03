@@ -1,18 +1,23 @@
-import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
-import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { SafeHtml } from '@angular/platform-browser';
-import { EventDayService } from '@app/pages/publisher/services/event-day.services';
-import { TemplateCardsService } from '@app/pages/publisher/services/template-cards.service';
-import { ConditionRes, Parameter } from '@app/shared/models/event-day.model';
-import { Plantilla } from '@app/shared/models/template-card.model';
-import { BaseFormEventDay } from '@app/shared/utils/base-form-event-day';
-import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
+import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
+import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {SafeHtml} from '@angular/platform-browser';
+import {EventDayService} from '@app/pages/publisher/services/event-day.services';
+import {TemplateCardsService} from '@app/pages/publisher/services/template-cards.service';
+import {ConditionRes, Parameter} from '@app/shared/models/event-day.model';
+import {Plantilla} from '@app/shared/models/template-card.model';
+import {BaseFormEventDay} from '@app/shared/utils/base-form-event-day';
+import {DomSanitizerService} from '@shared/services/dom-sanitizer.service';
 import * as moment from 'moment';
-import { Subject } from 'rxjs/internal/Subject';
-import { takeUntil } from 'rxjs/operators';
+import {Subject} from 'rxjs/internal/Subject';
+import {takeUntil} from 'rxjs/operators';
+
+enum Action {
+  edit = 'Editar',
+  new = 'Crear',
+}
 
 export const MY_FORMATS = {
   parse: {
@@ -26,11 +31,6 @@ export const MY_FORMATS = {
   }
 };
 
-enum Action {
-  EDIT = 'Editar',
-  NEW = 'Crear',
-}
-
 @Component({
   selector: 'app-modal',
   templateUrl: './modal-event-day.component.html',
@@ -42,7 +42,7 @@ enum Action {
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
     },
 
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS },
+    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
   ],
 })
 export class ModalEventDayComponent implements OnInit, OnDestroy {
@@ -70,16 +70,6 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     public eventDayForm: BaseFormEventDay,
     private eventDaySvc: EventDayService,
   ) {
-  }
-
-  private pathFormData(): void {
-    const conditions = this.data?.event.condicionesEvento;
-    // if (conditions) {
-    //   for (let i = 0; i < conditions.length - 1; i++) {
-    //     this.eventDayForm.addParameterFormGroup('condicion');
-    //   }
-    // }
-    this.eventDayForm.baseForm.patchValue(this.data?.event);
   }
 
   setDateFormat(event: MatDatepickerInputEvent<unknown>) {
@@ -155,10 +145,10 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.data?.event) {
-      this.actionTODO = Action.EDIT;
+      this.actionTODO = Action.edit;
       this.pathFormData();
     } else {
-      this.actionTODO = Action.NEW;
+      this.actionTODO = Action.new;
     }
 
     this.eventDaySvc.getConditions()
@@ -176,5 +166,15 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next({});
     this.destroy$.complete();
+  }
+
+  private pathFormData(): void {
+    const conditions = this.data?.event.condicionesEvento;
+    // if (conditions) {
+    //   for (let i = 0; i < conditions.length - 1; i++) {
+    //     this.eventDayForm.addParameterFormGroup('condicion');
+    //   }
+    // }
+    this.eventDayForm.baseForm.patchValue(this.data?.event);
   }
 }

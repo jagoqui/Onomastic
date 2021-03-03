@@ -22,9 +22,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<any>();
 
   constructor(private authSvc: AuthService, private themeSwitcher: ThemeSwitcherControllerService) {
-    const AppTheme = localStorage.getItem('AppTheme') || null;
-    if (AppTheme) {
-      this.toggleDarkThemeControl.setValue(AppTheme === 'dark-theme');
+    const appTheme = localStorage.getItem('AppTheme') || null;
+    if (appTheme) {
+      this.toggleDarkThemeControl.setValue(appTheme === 'dark-theme');
     }
   }
 
@@ -33,9 +33,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    const AppTheme = localStorage.getItem('AppTheme') || null;
-    if (AppTheme) {
-      this.darkMode = AppTheme === 'dark-theme';
+    const appTheme = localStorage.getItem('AppTheme') || null;
+    if (appTheme) {
+      this.darkMode = appTheme === 'dark-theme';
     }
     this.authSvc.isLogged$
       .pipe(takeUntil(this.destroy$))

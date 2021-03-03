@@ -1,4 +1,4 @@
-import {Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import {Directive, EventEmitter, HostListener, Input, Output} from '@angular/core';
 import SwAlert from 'sweetalert2';
 
 import {ImageValidator} from '../helpers/image-validators';
@@ -28,19 +28,25 @@ export class UploadFilesDirective extends ImageValidator {
     event.stopPropagation();
   }
 
+  public getFileSrc(file: any) {
+    const reader = new FileReader();
+    reader.onload = () => this.fileSrc.emit(reader.result);
+    reader.readAsDataURL(file);
+  }
+
   @HostListener('dragover', ['$event'])
-  onDragEnter(event: Event) {
+  private onDragEnter(event: Event) {
     UploadFilesDirective.avoidOpeningBrowser(event);
     this.mouseOver.emit(true);
   }
 
   @HostListener('dragleave', ['$event'])
-  onDragLeave() {
+  private onDragLeave() {
     this.mouseOver.emit(false);
   }
 
   @HostListener('drop', ['$event'])
-  onDrop(event: any) {
+  private onDrop(event: any) {
     const dataTransfer = UploadFilesDirective.getDataTransfer(event);
     if (!dataTransfer) {
       return;
@@ -48,12 +54,6 @@ export class UploadFilesDirective extends ImageValidator {
     UploadFilesDirective.avoidOpeningBrowser(event);
     this.extractFiles(event, dataTransfer.files);
     this.mouseOver.emit(false);
-  }
-
-  get_FileSrc(file: any) {
-    const reader = new FileReader();
-    reader.onload = () => this.fileSrc.emit(reader.result);
-    reader.readAsDataURL(file);
   }
 
   @HostListener('change', ['$event'])
@@ -64,7 +64,7 @@ export class UploadFilesDirective extends ImageValidator {
       if (this.canBeUploaded(tempFile)) {
         const newFile = new FileUpload(tempFile);
         this.files.push(newFile);
-        this.get_FileSrc(tempFile);
+        this.getFileSrc(tempFile);
       }
     }
   }

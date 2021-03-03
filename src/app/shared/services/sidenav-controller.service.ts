@@ -6,7 +6,7 @@ import {BehaviorSubject} from 'rxjs';
 })
 export class SidenavControllerService {
 
-  private sidebarOpened = new BehaviorSubject<boolean>(false);
+  sidebarOpened = new BehaviorSubject<boolean>(false);
   sidebarOpened$ = this.sidebarOpened.asObservable();
 
   openSidebar(value: boolean): void {

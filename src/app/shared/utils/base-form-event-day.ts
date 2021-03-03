@@ -10,6 +10,10 @@ export class BaseFormEventDay {
   constructor(private fb: FormBuilder) {
   }
 
+  get conditionsOptionsField() {
+    return this.baseForm.get('condicionesEvento') as FormArray;
+  }
+
   createBaseForm(): FormGroup {
     return this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(5)]],
@@ -34,17 +38,6 @@ export class BaseFormEventDay {
       null : {
         invalidDate: true
       };
-  }
-
-  get conditionsOptionsField() {
-    return this.baseForm.get('condicionesEvento') as FormArray;
-  }
-
-  private createConditionField() {
-    return this.fb.group({
-      condicion: [null, Validators.required],
-      parametro: [null, Validators.required]
-    });
   }
 
   addConditionsOptions() {
@@ -81,8 +74,15 @@ export class BaseFormEventDay {
   }
 
   onReset(): void {
-    this.baseForm.controls.condicionesEvento = this.fb.array([this.createConditionField()]),
+    this.baseForm.controls.condicionesEvento = this.fb.array([this.createConditionField()]);
     this.baseForm.reset();
+  }
+
+  private createConditionField() {
+    return this.fb.group({
+      condicion: [null, Validators.required],
+      parametro: [null, Validators.required]
+    });
   }
 
 }

@@ -17,15 +17,15 @@ export class LoginComponent implements OnInit, OnDestroy {
   @ViewChild('captchaElem') captchaElem: ReCaptcha2Component;
 
   hidePassword = true;
-  private subscription: Subscription = new Subscription();
   recaptchaConfig = {
-    siteKey: `${environment.RECAPTCHA_KEY}`,
+    siteKey: `${environment.recaptchaKey}`,
     size: 'normal',
     lang: 'es',
     theme: 'light',
     type: 'image',
     success: false
   };
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private authSvc: AuthService,
@@ -74,11 +74,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   handleErrorRecaptcha() {
   }
 
-  private onResetCaptcha(): void {
-    this.captchaElem?.resetCaptcha();
-
-  }
-
   ngOnInit(): void {
     this.spinner.show(undefined, {
       type: 'ball-triangle-path',
@@ -95,6 +90,11 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  private onResetCaptcha(): void {
+    this.captchaElem?.resetCaptcha();
+
   }
 
 }

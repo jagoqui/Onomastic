@@ -25,7 +25,7 @@ export class EventDayService {
       }
     });
     return this.http
-      .get<ConditionRes[]>(`${environment.API_URL}/evento/condiciones/${id}`);
+      .get<ConditionRes[]>(`${environment.apiUrl}/evento/condiciones/${id}`);
   }
 
 }

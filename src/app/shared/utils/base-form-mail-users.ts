@@ -4,8 +4,6 @@ import * as moment from 'moment';
 
 @Injectable({providedIn: 'root'})
 export class BaseFormMailUsers {
-  private emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
-
   errorsMessage = {
     nombre: '',
     apellido: '',
@@ -22,11 +20,11 @@ export class BaseFormMailUsers {
     vinculacionPorUsuarioCorreo: this.createByNameArrayError('id'),
     plataformaPorUsuarioCorreo: this.createByNameArrayError('id')
   };
+  baseForm = this.createBaseForm();
+  private emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
 
   constructor(private fb: FormBuilder) {
   }
-
-  baseForm = this.createBaseForm();
 
   createBaseForm(): FormGroup {
     return this.fb.group({
@@ -47,20 +45,6 @@ export class BaseFormMailUsers {
     });
   }
 
-  private createByNameFormGroup(id: string): FormGroup {
-    if (id === 'id') {
-      return new FormGroup({
-        id: new FormControl('', Validators.required),
-        nombre: new FormControl('', Validators.required)
-      });
-    } else {
-      return new FormGroup({
-        codigo: new FormControl('', Validators.required),
-        nombre: new FormControl('', Validators.required)
-      });
-    }
-  }
-
   createByNameArrayError(id: string) {
     if (id === 'id') {
       return new Array({
@@ -76,32 +60,32 @@ export class BaseFormMailUsers {
   }
 
   addByNameFormGroup(formGroup: string) {
-    const ByName = this.baseForm.get(formGroup) as FormArray;
-    ByName.push(this.createByNameFormGroup(formGroup === 'programaAcademicoPorUsuarioCorreo' ? 'codigo' : 'id'));
+    const byName = this.baseForm.get(formGroup) as FormArray;
+    byName.push(this.createByNameFormGroup(formGroup === 'programaAcademicoPorUsuarioCorreo' ? 'codigo' : 'id'));
     this.addByNameArrayError(formGroup);
   }
 
   removeOrClearByName(i: number, formGroup: string) {
-    const ByName = this.baseForm.get(formGroup) as FormArray;
-    if (ByName.length > 1) {
-      ByName.removeAt(i);
+    const byName = this.baseForm.get(formGroup) as FormArray;
+    if (byName.length > 1) {
+      byName.removeAt(i);
     } else {
-      ByName.reset();
+      byName.reset();
     }
     this.removeOrClearByNameArrayError(i, formGroup);
   }
 
-  addByNameArrayError(ArrayError: string) {
-    const ByNameErrorArray = this.errorsMessage[ArrayError] as Array<any>;
-    ByNameErrorArray.push(this.createByNameArrayError(ArrayError === 'programaAcademicoPorUsuarioCorreo' ? 'codigo' : 'id'));
+  addByNameArrayError(arrayError: string) {
+    const byNameErrorArray = this.errorsMessage[arrayError] as Array<any>;
+    byNameErrorArray.push(this.createByNameArrayError(arrayError === 'programaAcademicoPorUsuarioCorreo' ? 'codigo' : 'id'));
   }
 
-  removeOrClearByNameArrayError(i: number, ArrayError: string) {
-    const ByNameErrorArray = this.errorsMessage[ArrayError] as Array<any>;
-    if (ByNameErrorArray.length > 1) {
-      ByNameErrorArray.splice(i, i);
+  removeOrClearByNameArrayError(i: number, arrayError: string) {
+    const byNameErrorArray = this.errorsMessage[arrayError] as Array<any>;
+    if (byNameErrorArray.length > 1) {
+      byNameErrorArray.splice(i, i);
     } else {
-      ByNameErrorArray.splice(ByNameErrorArray.length + 1);
+      byNameErrorArray.splice(byNameErrorArray.length + 1);
     }
   }
 
@@ -130,6 +114,24 @@ export class BaseFormMailUsers {
     } else {
       const control = this.baseForm.get(field) as FormControl;
       return ((control.touched || control.dirty) && control.invalid);
+    }
+  }
+
+  onReset(): void {
+    this.baseForm.reset();
+  }
+
+  private createByNameFormGroup(id: string): FormGroup {
+    if (id === 'id') {
+      return new FormGroup({
+        id: new FormControl('', Validators.required),
+        nombre: new FormControl('', Validators.required)
+      });
+    } else {
+      return new FormGroup({
+        codigo: new FormControl('', Validators.required),
+        nombre: new FormControl('', Validators.required)
+      });
     }
   }
 
@@ -180,9 +182,5 @@ export class BaseFormMailUsers {
         this.errorsMessage[field] = null;
       }
     }
-  }
-
-  onReset(): void {
-    this.baseForm.reset();
   }
 }

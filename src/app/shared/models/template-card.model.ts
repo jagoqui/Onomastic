@@ -6,7 +6,7 @@ export interface TemplateCard {
 }
 
 export interface UploadFileResponse {
-  FileDownloadUri: string;
+  fileDownloadUri: string;
 }
 
 export interface Plantilla {

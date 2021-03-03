@@ -11,6 +11,11 @@ import {Subscription} from 'rxjs';
 
 import {EmailUsersService} from '../../../services/email-users.service';
 
+enum Action {
+  edit = 'Actualizar',
+  new = 'Agregar',
+}
+
 export const MY_FORMATS = {
   parse: {
     dateInput: 'LL'
@@ -22,11 +27,6 @@ export const MY_FORMATS = {
     monthYearA11yLabel: 'YYYY'
   }
 };
-
-enum Action {
-  EDIT = 'Actualizar',
-  NEW = 'Agregar',
-}
 
 @Component({
   selector: 'app-modal-mail-users',
@@ -55,12 +55,11 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   };
   today = new Date();
   close = false;
-  private subscription: Subscription = new Subscription();
-
   associations: ByNameId[];
   programs: ProgramaAcademicoPorUsuarioCorreo[];
   bondingTypes: ByNameId[];
   platforms: ByNameId[];
+  private subscription: Subscription = new Subscription();
 
   constructor(
     private dialogRef: MatDialogRef<ModalMailUsersComponent>,
@@ -69,37 +68,6 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     public mailUserForm: BaseFormMailUsers
   ) {
   }
-
-  private pathFormData(): void {
-    const associations = this.data?.user.asociacionPorUsuarioCorreo;
-    const programs = this.data?.user.programaAcademicoPorUsuarioCorreo;
-    const bonding = this.data?.user.vinculacionPorUsuarioCorreo;
-    const platform = this.data?.user.plataformaPorUsuarioCorreo;
-
-    if (associations) {
-      for (let i = 0; i < associations.length - 1; i++) {
-        this.mailUserForm.addByNameFormGroup('asociacionPorUsuarioCorreo');
-      }
-    }
-    if (programs) {
-      for (let i = 0; i < programs.length - 1; i++) {
-        this.mailUserForm.addByNameFormGroup('programaAcademicoPorUsuarioCorreo');
-      }
-    }
-    if (bonding) {
-      for (let i = 0; i < bonding.length - 1; i++) {
-        this.mailUserForm.addByNameFormGroup('vinculacionPorUsuarioCorreo');
-      }
-    }
-    if (platform) {
-      for (let i = 0; i < platform.length - 1; i++) {
-        this.mailUserForm.addByNameFormGroup('plataformaPorUsuarioCorreo');
-      }
-    }
-    this.mailUserForm.baseForm.patchValue(this.data?.user);
-
-  }
-
 
   setBirtdayFormat(event: MatDatepickerInputEvent<Date>) {
     this.mailUserForm.baseForm.controls.fechaNacimiento.setValue(moment(event.value).format('YYYY-MM-DD'));
@@ -190,7 +158,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
 
   onSave(): void {
     const formValue = this.mailUserForm.baseForm.value;
-    if (this.actionTODO === Action.NEW) {
+    if (this.actionTODO === Action.new) {
       this.userSvc.new(formValue).subscribe((user) => {
         console.log('New mailuser', user);
         this.onClose(true);
@@ -214,10 +182,10 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.data?.user) {
-      this.actionTODO = Action.EDIT;
+      this.actionTODO = Action.edit;
       this.pathFormData();
     } else {
-      this.actionTODO = Action.NEW;
+      this.actionTODO = Action.new;
     }
 
     this.subscription.add(
@@ -263,6 +231,36 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
+  }
+
+  private pathFormData(): void {
+    const associations = this.data?.user.asociacionPorUsuarioCorreo;
+    const programs = this.data?.user.programaAcademicoPorUsuarioCorreo;
+    const bonding = this.data?.user.vinculacionPorUsuarioCorreo;
+    const platform = this.data?.user.plataformaPorUsuarioCorreo;
+
+    if (associations) {
+      for (let i = 0; i < associations.length - 1; i++) {
+        this.mailUserForm.addByNameFormGroup('asociacionPorUsuarioCorreo');
+      }
+    }
+    if (programs) {
+      for (let i = 0; i < programs.length - 1; i++) {
+        this.mailUserForm.addByNameFormGroup('programaAcademicoPorUsuarioCorreo');
+      }
+    }
+    if (bonding) {
+      for (let i = 0; i < bonding.length - 1; i++) {
+        this.mailUserForm.addByNameFormGroup('vinculacionPorUsuarioCorreo');
+      }
+    }
+    if (platform) {
+      for (let i = 0; i < platform.length - 1; i++) {
+        this.mailUserForm.addByNameFormGroup('plataformaPorUsuarioCorreo');
+      }
+    }
+    this.mailUserForm.baseForm.patchValue(this.data?.user);
+
   }
 
 }

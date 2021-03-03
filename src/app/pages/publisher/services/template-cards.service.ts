@@ -20,7 +20,7 @@ export class TemplateCardsService {
     formData.append('file', image);
     formData.append('plantilla', cardBlob);
     return this.http
-      .post<TemplateCard>(`${environment.API_URL}/plantillas`, formData, {
+      .post<TemplateCard>(`${environment.apiUrl}/plantillas`, formData, {
         reportProgress: true,
         // headers: {
         //   'Content-Type': 'multipart/form-data',
@@ -30,6 +30,6 @@ export class TemplateCardsService {
 
   getAllCards(): Observable<Plantilla[]> {
     return this.http
-      .get<Plantilla[]>(`${environment.API_URL}/plantillas`);
+      .get<Plantilla[]>(`${environment.apiUrl}/plantillas`);
   }
 }

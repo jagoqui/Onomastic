@@ -5,13 +5,13 @@ import {BehaviorSubject} from 'rxjs';
   providedIn: 'root'
 })
 export class ThemeSwitcherControllerService {
-  private themeClass = new BehaviorSubject<string>('light-theme');
+  themeClass = new BehaviorSubject<string>('light-theme');
   themeClass$ = this.themeClass.asObservable();
 
   constructor() {
-    const AppTheme = localStorage.getItem('AppTheme') || null;
-    if (AppTheme) {
-      this.themeClass.next(AppTheme);
+    const appTheme = localStorage.getItem('AppTheme') || null;
+    if (appTheme) {
+      this.themeClass.next(appTheme);
     }
   }
 

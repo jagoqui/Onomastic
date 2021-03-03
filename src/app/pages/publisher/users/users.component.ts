@@ -18,8 +18,6 @@ import {ModalMailUsersComponent,} from './components/modal-mail-users/modal-mail
 export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-
-  private numUsers = 0;
   columnsToDisplay = [
     'id', 'plataformaPorUsuarioCorreo',
     'nombre', 'email', 'fechaNacimiento',
@@ -29,6 +27,7 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
     'estado', 'actions'
   ];
   dataSource = new MatTableDataSource();
+  private numUsers = 0;
   private destroy$ = new Subject<any>();
 
   constructor(private dialog: MatDialog, private userSvc: EmailUsersService) {
