@@ -1,13 +1,17 @@
 import {Injectable} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment';
+import {FormErrorsService} from '@shared/services/form-errors.service';
 
 @Injectable({providedIn: 'root'})
 export class BaseFormEventDay {
 
   public baseForm = this.createBaseForm();
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    private formErrorsSvc: FormErrorsService
+  ) {
   }
 
   get conditionsOptionsField() {
@@ -16,7 +20,7 @@ export class BaseFormEventDay {
 
   createBaseForm(): FormGroup {
     return this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(5)]],
+      nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
       fecha: ['', [Validators.required, this.validDate]],
       estado: ['', [Validators.required]], // TODO: Crear tipo de dato ACTIVO, INACTIVO
       recurrencia: ['', [Validators.required]], // TODO: Crear tipo de dato ANUAL, DIARIA
@@ -24,17 +28,20 @@ export class BaseFormEventDay {
       plantilla: this.fb.group({
         id: ['', [Validators.required]],
         texto: ['', [Validators.required]],
-        asociacionesPorPlantilla: this.fb.array([new FormGroup({
-          id: new FormControl('', Validators.required),
-          nombre: new FormControl('', Validators.required)
-        })])
+        asociacionesPorPlantilla: this.fb.array([new FormGroup(
+          {
+            id: new FormControl('', Validators.required),
+            nombre: new FormControl('', Validators.required)
+          })]
+        )
       }),
     });
   }
 
   validDate(control: FormControl): { [key: string]: any } | null {
-    const dateVal = control.value;
-    return moment(dateVal, 'YYYY-MM-DD', true).isValid() ?
+    const date = control.value;
+
+    return moment(date, 'YYYY-MM-DD', true).isValid() ?
       null : {
         invalidDate: true
       };
@@ -54,8 +61,12 @@ export class BaseFormEventDay {
     this.conditionsOptionsField.at(index).get('parametro').setValue(null);
   }
 
-  invalidField(control: AbstractControl): boolean {
-      return ((control.touched || control.dirty) && control.invalid);
+  mapErrors(control: AbstractControl, name: string): string[] {
+    return !this.isValidField(control) ? this.formErrorsSvc.mapErrors(control, name) : null;
+  }
+
+  isValidField(control: AbstractControl): boolean {
+    return !((control.touched || control.dirty) && control.invalid);
   }
 
   onReset(): void {
@@ -65,11 +76,10 @@ export class BaseFormEventDay {
 
   private createConditionField() {
     return this.fb.group({
-      condicion: [null, Validators.required],
-      parametro: [null, Validators.required]
+      condicion: ['', Validators.required],
+      parametro: ['', Validators.required]
     });
   }
-
 }
 
 

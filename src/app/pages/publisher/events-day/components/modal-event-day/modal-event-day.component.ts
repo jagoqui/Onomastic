@@ -55,7 +55,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   sidenavOpened = false;
   selectCardHTML: SafeHtml = null;
   conditionsRes: ConditionRes[];
-  selectedIdFilterAssociation;
+  selectedIdFilterAssociation: number[];
   parametersRes: Parameter[];
   private destroy$ = new Subject<any>();
 
@@ -73,7 +73,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     this.eventDayForm.baseForm.controls.fecha.setValue(moment(event.value).format('YYYY-MM-DD'));
   }
 
-  setIdAssociation(id: any, indexClear: number) {
+  setIdAssociation(id: number, indexClear: number) {
     this.selectedIdFilterAssociation[indexClear] = id;
     this.eventDayForm.clearParameter(indexClear);
   }
@@ -154,6 +154,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
       .subscribe(conditions => {
         if (conditions) {
           this.conditionsRes = conditions;
+          //TODO: Crear dinamicamente 'selectedIdFilterAssociation'
           this.selectedIdFilterAssociation = new Array(this.conditionsRes.length + 1);
         }
       }, (err) => {
