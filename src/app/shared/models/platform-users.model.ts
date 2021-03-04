@@ -1,5 +1,3 @@
-import {ByNameId} from './mail-users.model';
-
 export type Role = 'PUBLISHER' | 'ADMIN';
 
 export interface PlatformUser {

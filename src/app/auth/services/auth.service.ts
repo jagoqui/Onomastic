@@ -70,7 +70,7 @@ export class AuthService {
     localStorage.clear();
     this.platformUserRes.next(null);
     this.isLogged.next(false);
-    this.router.navigate(['']).then(r => console.log(r));
+    this.router.navigate(['/login']).then(r => console.log(r));
   }
 
   private checkToken() {
