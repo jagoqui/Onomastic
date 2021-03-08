@@ -1,11 +1,11 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {Router} from '@angular/router';
-import {JwtHelperService} from '@auth0/angular-jwt';
-import {BehaviorSubject, Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
-import {PlatformUser, PlatformUserResponse,} from 'src/app/shared/models/platform-users.model';
-import {environment} from 'src/environments/environment';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
+import { JwtHelperService } from '@auth0/angular-jwt';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { PlatformUser, PlatformUserResponse } from 'src/app/shared/models/platform-users.model';
+import { environment } from 'src/environments/environment';
 
 const jwtHelper = new JwtHelperService();
 
@@ -36,6 +36,16 @@ export class AuthService {
 
   get isLoggedValue(): boolean {
     return this.isLogged.getValue();
+  }
+
+  getUserId(): number {
+    let id: number = null;
+    this.userResponse$.subscribe((userRes: PlatformUserResponse) => {
+      if (userRes) {
+        id = userRes.id;
+      }
+    });
+    return id;
   }
 
   login(authData: PlatformUser): Observable<PlatformUserResponse | void> {

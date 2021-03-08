@@ -27,13 +27,7 @@ export class BaseFormEventDay {
       condicionesEvento: this.fb.array([this.createConditionField()]),
       plantilla: this.fb.group({
         id: ['', [Validators.required]],
-        texto: ['', [Validators.required]],
-        asociacionesPorPlantilla: this.fb.array([new FormGroup(
-          {
-            id: new FormControl('', Validators.required),
-            nombre: new FormControl('', Validators.required)
-          })]
-        )
+        texto: ['', [Validators.required]]
       }),
     });
   }

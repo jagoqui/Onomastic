@@ -1,18 +1,19 @@
-import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output} from '@angular/core';
-import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {SafeHtml} from '@angular/platform-browser';
-import {EventDayService} from '@app/pages/publisher/services/event-day.services';
-import {TemplateCardsService} from '@app/pages/publisher/services/template-cards.service';
-import {ConditionRes, Parameter} from '@app/shared/models/event-day.model';
-import {Plantilla} from '@app/shared/models/template-card.model';
-import {BaseFormEventDay} from '@app/shared/utils/base-form-event-day';
-import {DomSanitizerService} from '@shared/services/dom-sanitizer.service';
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { SafeHtml } from '@angular/platform-browser';
+import { EventDayService } from '@app/pages/publisher/services/event-day.services';
+import { TemplateCardsService } from '@app/pages/publisher/services/template-cards.service';
+import { CardEvent, ConditionRes, Parameter } from '@app/shared/models/event-day.model';
+import { Plantilla } from '@app/shared/models/template-card.model';
+import { BaseFormEventDay } from '@app/shared/utils/base-form-event-day';
+import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
 import * as moment from 'moment';
-import {Subject} from 'rxjs/internal/Subject';
-import {takeUntil} from 'rxjs/operators';
+import { Subject } from 'rxjs/internal/Subject';
+import { takeUntil } from 'rxjs/operators';
+import SwAlert from 'sweetalert2';
 
 
 // eslint-disable-next-line no-shadow
@@ -44,8 +45,8 @@ export const MY_FORMATS = {
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
     },
 
-    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-  ],
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ]
 })
 export class ModalEventDayComponent implements OnInit, OnDestroy {
   @Output() refresh = new EventEmitter<boolean>(false);
@@ -65,7 +66,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     private templateCardsService: TemplateCardsService,
     private domSanitizerSvc: DomSanitizerService,
     public eventDayForm: BaseFormEventDay,
-    private eventDaySvc: EventDayService,
+    private eventDaySvc: EventDayService
   ) {
   }
 
@@ -97,8 +98,8 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   loadCards(onChange?: boolean) {
     this.eventDayForm.baseForm.controls.plantilla.markAsTouched();
     this.eventDayForm.baseForm.controls.plantilla.markAsDirty();
-    if(!this.selectCardHTML){
-      this.eventDayForm.baseForm.controls.plantilla.setErrors({incorrect: true});
+    if (!this.selectCardHTML) {
+      this.eventDayForm.baseForm.controls.plantilla.setErrors({ incorrect: true });
     }
 
     if (onChange) {
@@ -115,7 +116,9 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   onSelectCard(card: Plantilla) {
     if (confirm('Seguro que desea seleccionar ésta plantilla?')) {
       this.selectCardHTML = this.sanitizeHTML(card.texto);
-      this.eventDayForm.baseForm.controls.plantilla.setValue(card);
+      const {id, texto}= card;
+      const cardEvent: CardEvent = { id, texto };
+      this.eventDayForm.baseForm.controls.plantilla.setValue(cardEvent);
       this.sidenavOpened = false;
     }
   }
@@ -129,12 +132,27 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   }
 
   onSave() {
-    console.log(this.eventDayForm);
+    this.eventDaySvc.new(this.eventDayForm.baseForm.value).subscribe(event => {
+      if (event) {
+        SwAlert.fire(
+          'Guardado!',
+          '<b>El evento ha sido guardado</b>',
+          'success').then(r => console.log(r)).then(r => console.log(r));
+        this.onClose(true);
+      }
+    }, (err) => {
+      console.table('Error guardando evento :> ', this.eventDayForm.baseForm.value);
+      SwAlert.fire({
+        icon: 'error',
+        html: '',
+        title: 'Oops...',
+        text: ' Algo salió mal!',
+        footer: `${err}`
+      }).then(r => console.log(r));
+    });
   }
 
   onClose(close?: boolean): void {
-    console.log(this.eventDayForm.baseForm.value);
-
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.eventDayForm.onReset();
       this.dialogRef.close();

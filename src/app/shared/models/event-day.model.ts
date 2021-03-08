@@ -1,5 +1,4 @@
-import {ByNameId} from './mail-users.model';
-import {Plantilla} from './template-card.model';
+import { ByNameId } from './mail-users.model';
 
 export interface EventDay {
   id?: number;
@@ -7,8 +6,13 @@ export interface EventDay {
   fecha: Date;
   estado: string;
   recurrencia: string;
-  plantilla: Plantilla;
+  plantilla: CardEvent;
   condicionesEvento: Condition[];
+}
+
+export interface CardEvent {
+  id: number;
+  texto: string;
 }
 
 export interface Condition {

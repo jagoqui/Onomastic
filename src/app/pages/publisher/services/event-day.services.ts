@@ -1,10 +1,9 @@
-import {HttpClient} from '@angular/common/http';
-import {Injectable} from '@angular/core';
-import {ConditionRes} from '@app/shared/models/event-day.model';
-import {environment} from '@env/environment';
-import {Observable} from 'rxjs';
-import {AuthService} from '@auth/services/auth.service';
-import {PlatformUserResponse} from '@shared/models/platform-users.model';
+import { HttpClient } from '@angular/common/http';
+import { Injectable } from '@angular/core';
+import { ConditionRes, EventDay } from '@app/shared/models/event-day.model';
+import { environment } from '@env/environment';
+import { Observable } from 'rxjs';
+import { AuthService } from '@auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,15 +16,13 @@ export class EventDayService {
   ) {
   }
 
-  getConditions(): Observable<ConditionRes[]> {
-    let id: number;
-    this.authSvc.userResponse$.subscribe((userRes: PlatformUserResponse) => {
-      if (userRes) {
-        id = userRes.id;
-      }
-    });
+  new(event: EventDay): Observable<EventDay> {
     return this.http
-      .get<ConditionRes[]>(`${environment.apiUrl}/evento/condiciones/${id}`);
+      .post<EventDay>(`${environment.apiUrl}/evento/${this.authSvc.getUserId()}`, event);
   }
 
+  getConditions(): Observable<ConditionRes[]> {
+    return this.http
+      .get<ConditionRes[]>(`${environment.apiUrl}/evento/condiciones/${this.authSvc.getUserId()}`);
+  }
 }

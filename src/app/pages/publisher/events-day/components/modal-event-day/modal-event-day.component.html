@@ -194,5 +194,5 @@
 
 <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end end">
   <button mat-raised-button fxFlex="20" color="warn" (click)="onClose(null)">Cancelar</button>
-  <button mat-raised-button fxFlex="20" color="primary" (click)="onSave()">Crear evento</button>
+  <button mat-raised-button fxFlex="20" color="primary" (click)="onSave()" [disabled]="eventDayForm.baseForm.invalid">Crear evento</button>
 </div>

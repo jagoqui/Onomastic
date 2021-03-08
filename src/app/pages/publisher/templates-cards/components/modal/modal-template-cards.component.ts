@@ -1,13 +1,13 @@
-import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {TemplateCardsService} from '@app/pages/publisher/services/template-cards.service';
-import {Plantilla} from '@app/shared/models/template-card.model';
-import {ThemeSwitcherControllerService} from '@shared/services/theme-switcher-controller.service';
-import {FileUpload} from '@shared/upload-files/models/file-upload';
-import {JoditAngularComponent} from 'jodit-angular';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { TemplateCardsService } from '@app/pages/publisher/services/template-cards.service';
+import { Plantilla } from '@app/shared/models/template-card.model';
+import { ThemeSwitcherControllerService } from '@shared/services/theme-switcher-controller.service';
+import { FileUpload } from '@shared/upload-files/models/file-upload';
+import { JoditAngularComponent } from 'jodit-angular';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 
 @Component({
@@ -21,10 +21,10 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   imageSrc: string = null;
   isOverDrop = false;
   initialContent = `
-    <div id="editorContent" style="z-index: -1">
+    <div id='editorContent' style='z-index: -1'>
       <span>
-        Hola&nbsp;<b style="color: #e74c3c">&lt;Nombre&gt;</b>&nbsp;en ésta&nbsp;
-        <b style="color: #16a085">&lt;Fecha&gt;</b>
+        Hola&nbsp;<b style='color: #e74c3c'>&lt;Nombre&gt;</b>&nbsp;en ésta&nbsp;
+        <b style='color: #16a085'>&lt;Fecha&gt;</b>
         &nbsp;la Universidad de Antioquia le desea un feliz cumpleaños 🥳.
       </span>
     </div>
@@ -51,7 +51,7 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
     const content = document.getElementById('editorContent');
     if (!content) {
       this.editorForm.get('text').setValue(`
-        <div id="editorContent">
+        <div id='editorContent'>
           ${this.editorForm.value.text} <!-- TODO: Poner el cursor dentro del div-->
         </div>`
       );
@@ -107,25 +107,25 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
 
   addName() {
     const content = document.getElementById('editorContent');
-    const spanName = `<span id="name"><b style="color: #e74c3c">&lt;Nombre&gt;</b>&nbsp;</span>`;
+    const spanName = `<span id='name'><b style='color: #e74c3c'>&lt;Nombre&gt;</b>&nbsp;</span>`;
     content.innerHTML += spanName;
   }
 
   addDate() {
     const content = document.getElementById('editorContent');
-    const spanDate = `<span id="date"><b style="color: #16a085">&lt;Fecha&gt;</b>&nbsp;</span>`;
+    const spanDate = `<span id='date'><b style='color: #16a085'>&lt;Fecha&gt;</b>&nbsp;</span>`;
     content.innerHTML += spanDate;
   }
 
   addSchool() {
     const content = document.getElementById('editorContent');
-    const spanSchool = `<span id="school"><b style="color: #9b59b6">&lt;Falcultad/Escuela&gt;</b>&nbsp;</span>`;
+    const spanSchool = `<span id='school'><b style='color: #9b59b6'>&lt;Falcultad/Escuela&gt;</b>&nbsp;</span>`;
     content.innerHTML += spanSchool;
   }
 
   addAssociation() {
     const content = document.getElementById('editorContent');
-    const spanAssociation = `<span id="association"><b style="color: #f39c12">&lt;Asociación&gt;</b>&nbsp;</span>`;
+    const spanAssociation = `<span id='association'><b style='color: #f39c12'>&lt;Asociación&gt;</b>&nbsp;</span>`;
     content.innerHTML += spanAssociation;
   }
 
@@ -151,21 +151,7 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
 
     this.templateCardsService.newCardTemplate(card, this.itemImages[0]?.file).subscribe((cardRes) => {
       if (cardRes) {
-        SwAlert.fire({
-          title: 'Guardado',
-          icon: 'success',
-          html: `${card.texto}`,
-          showCloseButton: true,
-          showCancelButton: true,
-          focusConfirm: false,
-          confirmButtonText:
-            '<i class="fa fa-thumbs-up"></i> Great!',
-          confirmButtonAriaLabel: 'Thumbs up, great!',
-          cancelButtonText:
-            '<i class="fa fa-thumbs-down"></i>',
-          cancelButtonAriaLabel: 'Thumbs down',
-          footer: 'La plantilla ha sido guardada'
-        }).then(r => console.log(r));
+        SwAlert.fire('Guardado!', '', 'success').then(r => console.log(r));
         this.onClose(true);
       }
 
@@ -192,7 +178,10 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
       placeholder: 'Ingrese el texto aquí',
       showXPathInStatusbar: false,
       toolbarAdaptive: false,
-      disablePlugins: 'iframe,video,media,file,image,image-processor,image-properties,xpath',
+      uploader: {
+        insertImageAsBase64URI: true
+      },
+      disablePlugins: 'iframe,video,media,image',
       buttons: [
         'bold', 'underline', 'italic', 'strikethrough', '|',
         'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
@@ -202,45 +191,45 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
         '\n',
         'ol', 'ul', '|',
         'indent', 'outdent', '|',
-        'table', 'hr', '|', 'fullsize',
-        'selectall', 'source', 'preview', 'print', 'find', 'about'
-      ],
-      buttonsMD: [
-        'bold', 'underline', 'italic', 'strikethrough', '|',
-        'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
-        'superscript', 'subscript', 'symbol', '|',
-        'cut', 'copy', 'paste', 'eraser', '|',
-        'undo', 'redo',
-        '\n',
-        'ol', 'ul', '|',
-        'indent', 'outdent', '|',
-        'table', 'hr', '|', 'fullsize',
-        'selectall', 'source', 'preview', 'print', 'find', 'about'
-      ],
-      buttonsSM: [
-        'bold', 'underline', 'italic', 'strikethrough', '|',
-        'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
-        'superscript', 'subscript', 'symbol', '|',
-        'cut', 'copy', 'paste', 'eraser', '|',
-        'undo', 'redo',
-        '\n',
-        'ol', 'ul', '|',
-        'indent', 'outdent', '|',
-        'table', 'hr', '|', 'fullsize',
-        'selectall', 'source', 'preview', 'print', 'find', 'about'
-      ],
-      buttonsXS: [
-        'bold', 'underline', 'italic', 'strikethrough', '|',
-        'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
-        'superscript', 'subscript', 'symbol', '|',
-        'cut', 'copy', 'paste', 'eraser', '|',
-        'undo', 'redo',
-        '\n',
-        'ol', 'ul', '|',
-        'indent', 'outdent', '|',
-        'table', 'hr', '|', 'fullsize',
-        'selectall', 'source', 'preview', 'print', 'find', 'about'
+        'table', 'hr', '|',
+        'selectall', 'source', 'file', 'image', 'print', 'find', 'fullsize', 'preview', 'about'
       ]
+      // buttonsMD: [
+      //   'bold', 'underline', 'italic', 'strikethrough', '|',
+      //   'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
+      //   'superscript', 'subscript', 'symbol', '|',
+      //   'cut', 'copy', 'paste', 'eraser', '|',
+      //   'undo', 'redo',
+      //   '\n',
+      //   'ol', 'ul', '|',
+      //   'indent', 'outdent', '|',
+      //   'table', 'hr', '|', 'fullsize',
+      //   'selectall', 'source', 'preview', 'print', 'find', 'about'
+      // ],
+      // buttonsSM: [
+      //   'bold', 'underline', 'italic', 'strikethrough', '|',
+      //   'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
+      //   'superscript', 'subscript', 'symbol', '|',
+      //   'cut', 'copy', 'paste', 'eraser', '|',
+      //   'undo', 'redo',
+      //   '\n',
+      //   'ol', 'ul', '|',
+      //   'indent', 'outdent', '|',
+      //   'table', 'hr', '|', 'fullsize',
+      //   'selectall', 'source', 'preview', 'print', 'find', 'about'
+      // ],
+      // buttonsXS: [
+      //   'bold', 'underline', 'italic', 'strikethrough', '|',
+      //   'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
+      //   'superscript', 'subscript', 'symbol', '|',
+      //   'cut', 'copy', 'paste', 'eraser', '|',
+      //   'undo', 'redo',
+      //   '\n',
+      //   'ol', 'ul', '|',
+      //   'indent', 'outdent', '|',
+      //   'table', 'hr', '|', 'fullsize',
+      //   'selectall', 'source', 'preview', 'print', 'find', 'about'
+      // ]
     };
 
     this.themeSwitcherController.themeClass$
