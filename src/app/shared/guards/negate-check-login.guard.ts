@@ -10,8 +10,7 @@ import {PlatformUserResponse} from '../models/platform-users.model';
   providedIn: 'root'
 })
 export class NegateCheckLoginGuard implements CanActivate {
-  constructor(private authSvc: AuthService, private route: Router) {
-  }
+  constructor(private authSvc: AuthService, private route: Router) {}
 
   canActivate(): Observable<boolean> {
     return this.authSvc.userResponse$.pipe(

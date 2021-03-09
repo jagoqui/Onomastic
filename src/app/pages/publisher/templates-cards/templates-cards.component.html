@@ -1,11 +1,16 @@
 <div class="container" fxFlex="98" fxLayout="column">
   <div fxLayout="row">
-    <button class="button-action button-add-template-card" fxFlex="19" mat-raised-button (click)="onOpenModal()"
+    <button class="button-action button-add-template-card" fxFlex="19" mat-raised-button (click)="onOpenModal(null)"
             title="Pulse para agregar una nueva plantilla">Nueva plantilla
     </button>
   </div>
+  <div class="reloadCard">
+    <button mat-mini-fab color="primary" title="Recargar plantillas" (click)="onRefresh()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
   <div class="wrapper" *ngIf="cards && onViewCard">
-        <mat-card *ngFor="let card of cards" appMaterialElevation (click)="onSelectCard(card)"
+        <mat-card *ngFor="let card of cards" appMaterialElevation (click)="onEditCard(card)"
                   title="Click para editar plantilla" [innerHTML]="sanitizeHTML(card.texto)"
                   class="card">
         </mat-card>

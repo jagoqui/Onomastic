@@ -1,12 +1,13 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {SafeHtml} from '@angular/platform-browser';
-import {Plantilla} from '@app/shared/models/template-card.model';
-import {DomSanitizerService,} from '@app/shared/services/dom-sanitizer.service';
-import {LoaderService} from '@app/shared/services/loader.service';
+import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { SafeHtml } from '@angular/platform-browser';
+import { Plantilla } from '@app/shared/models/template-card.model';
+import { DomSanitizerService } from '@app/shared/services/dom-sanitizer.service';
+import { LoaderService } from '@app/shared/services/loader.service';
 
-import {TemplateCardsService} from '../services/template-cards.service';
-import {ModalTemplateCardsComponent,} from './components/modal/modal-template-cards.component';
+import { TemplateCardsService } from '../services/template-cards.service';
+import { ModalTemplateCardsComponent } from './components/modal/modal-template-cards.component';
+import SwAlert from 'sweetalert2';
 
 @Component({
   selector: 'app-templates-cards',
@@ -29,7 +30,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
     return this.domSanitizerSvc.sanitizeHTML(card);
   }
 
-  onOpenModal(): void {
+  onOpenModal(card = {}): void {
     this.onViewCard = false;
     const dialogRef = this.dialog.open(ModalTemplateCardsComponent, {
       height: 'auto',
@@ -37,7 +38,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
-      data: {title: 'Nueva tarjeta'},
+      data: { title: card ? 'EDITAR PLANTILLA' : 'NUEVA PLANTILLA', card }
     });
     dialogRef.afterClosed().subscribe(res => {
       this.onViewCard = true;
@@ -45,7 +46,51 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onSelectCard(card: Plantilla): void {
+  onEditCard(card: Plantilla): void {
+    SwAlert.fire({
+      title: 'Qué desea hacer?',
+      showDenyButton: true,
+      showCloseButton: true,
+      showCancelButton: true,
+      confirmButtonText: `Editar`,
+      denyButtonText: `Eliminar`
+    }).then((result) => {
+      /* Read more about isConfirmed, isDenied below */
+      if (result.isConfirmed) {
+        this.onOpenModal();
+      } else if (result.isDenied) {
+        SwAlert.fire({
+          title: 'Está seguro?',
+          text: 'Si elimina ésta plantilla se eliminará tambien los eventos asociados, lo cambios no podrán revertirse!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarla!',
+          cancelButtonText: 'Cancelar'
+        }).then((resultDelete) => {
+          if (resultDelete.isConfirmed) {
+            this.templateCardsService.delete(card.id).subscribe((cardRes) => {
+              SwAlert.fire('Eliminado!', 'La plantilla se ha eliminado', 'success');
+              this.ngAfterViewInit();
+
+            }, (err) => {
+              SwAlert.fire({
+                icon: 'error',
+                html: '',
+                title: 'Oops...',
+                text: ' Algo salió mal!',
+                footer: `${err}`
+              }).then(r => console.log(r));
+            });
+          }
+        });
+      }
+    });
+  }
+
+  onRefresh() {
+    this.ngAfterViewInit();
   }
 
   ngAfterViewInit(): void {

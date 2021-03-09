@@ -10,12 +10,19 @@ import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 
+// eslint-disable-next-line no-shadow
+enum Action {
+  edit = 'Actualizar',
+  new = 'Agregar',
+}
+
 @Component({
   selector: 'app-modal',
   templateUrl: './modal-template-cards.component.html',
   styleUrls: ['./modal-template-cards.component.scss']
 })
 export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
+  actionTODO = '';
   @ViewChild('editor') joditEditor: JoditAngularComponent;
   itemImages: FileUpload[] = [];
   imageSrc: string = null;
@@ -167,6 +174,12 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    if (this.data?.card) {
+      this.actionTODO = Action.edit;
+    } else {
+      this.actionTODO = Action.new;
+    }
+
     this.config = {
       autofocus: true,
       maxWidth: 800,

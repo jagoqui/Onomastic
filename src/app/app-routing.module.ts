@@ -14,7 +14,7 @@ import {
 
 const routes: Routes = [
   {
-    path: 'login',
+    path: '',
     redirectTo: '/login',
     pathMatch: 'full',
   },
@@ -58,12 +58,13 @@ const routes: Routes = [
     canActivate: [NegateCheckLoginGuard]
   },
   {
+    /*TODO: Permitir acceso de forma pública.*/
     path: 'mail-users-subscription-status/:email',
     component: MailUsersSubscriptionStatusComponent
   },
   {
     path: '**',
-    component: PageNotFoundComponent
+    component: PageNotFoundComponent,
   }
 ];
 
