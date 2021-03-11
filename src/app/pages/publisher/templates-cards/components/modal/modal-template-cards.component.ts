@@ -242,16 +242,16 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
       },
       disablePlugins: 'iframe,video,media,image',
       buttons: [
+        'font', 'paragraph','fontsize', 'brush', '|',
         'bold', 'underline', 'italic', 'strikethrough', '|',
-        'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
-        'superscript', 'subscript', 'symbol', '|',
-        'cut', 'copy', 'paste', 'eraser', '|',
-        'undo', 'redo',
-        '\n',
+        'align','indent', 'outdent', '|',
         'ol', 'ul', '|',
-        'indent', 'outdent', '|',
+        '\n',
         'table', 'hr', '|',
-        'selectall', 'source', 'file', 'image', 'print', 'find', 'fullsize', 'preview', 'about'
+        'superscript', 'subscript', 'symbol', '|',
+        'eraser', 'selectall','|', 'image','print','|','undo', 'redo',
+        '\n',
+        'preview', 'fullsize','|','source','about'
       ]
       // buttonsMD: [
       //   'bold', 'underline', 'italic', 'strikethrough', '|',
