@@ -3,13 +3,17 @@ import { Injectable } from '@angular/core';
 import { Plantilla, TemplateCard } from '@app/shared/models/template-card.model';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
+import { EmailUsersService } from '@pages/¨publisher/services/email-users.service';
+import { AuthService } from '@auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TemplateCardsService {
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private authSvc: AuthService) {
   }
 
   newCardTemplate(plantilla: Plantilla, image: File): Observable<TemplateCard> {
@@ -20,11 +24,8 @@ export class TemplateCardsService {
     formData.append('file', image);
     formData.append('plantilla', cardBlob);
     return this.http
-      .post<TemplateCard>(`${environment.apiUrl}/plantillas`, formData, {
+      .post<TemplateCard>(`${environment.apiUrl}/plantillas/${this.authSvc.getUserId()}`, formData, {
         reportProgress: true
-        // headers: {
-        //   'Content-Type': 'multipart/form-data',
-        // }
       });
   }
 

@@ -22,8 +22,9 @@ enum Action {
   styleUrls: ['./modal-template-cards.component.scss']
 })
 export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
-  actionTODO = '';
   @ViewChild('editor') joditEditor: JoditAngularComponent;
+
+  actionTODO = '';
   itemImages: FileUpload[] = [];
   imageSrc: string = null;
   isOverDrop = false;
@@ -191,8 +192,53 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
       placeholder: 'Ingrese el texto aquí',
       showXPathInStatusbar: false,
       toolbarAdaptive: false,
+      download: {
+        url: 'https://xdsoft.net/jodit/finder/?action=fileUpload'
+        // format: 'json',
+        // method: 'POST',
+      },
       uploader: {
-        insertImageAsBase64URI: true
+        url: 'https://xdsoft.net/jodit/finder/?action=fileUpload',
+        insertImageAsBase64URI: false,
+        imagesExtensions: [
+          'jpg',
+          'png',
+          'jpeg',
+          'gif'
+        ],
+        headers: null,
+        data: null,
+        filesVariableName: (e) => 'files[' + e + ']',
+        withCredentials: false,
+        pathVariableName: 'path',
+        format: 'json',
+        method: 'POST',
+        prepareData: (e) => e,
+        isSuccess: (e) => e.success,
+        // getMessage: (e) => void 0 !== e.data.messages && this.joditEditor.editor.s.isArray(e.data.messages) ?
+        //   e.data.messages.join(' ') : '',
+        process: (e) => e.data,
+        error: (e) => {
+          this.joditEditor.editor.e.fire('errorMessage', e.message, 'error', 4e3);
+        },
+        // defaultHandlerSuccess: (e) => {
+        //   const t = this.joditEditor.editor || this;
+        //   this.joditEditor.editor.s.isJoditObject(t) && e.files && e.files.length && e.files.forEach(((n, r) => {
+        //     const o = e.isImages && e.isImages[r] ? ['img', 'src'] : ['a', 'href'];
+        //     const i = o[0];
+        //     const a = o[1];
+        //     const s = t.createInside.element(i);
+        //     this.joditEditor.editor.s.setAttribute(a, e.baseurl + n), 'a' === i && (s.textContent = e.baseurl + n),
+        //       'img' === i ? t.s.insertImage(s, null, t.o.imageDefaultWidth) : t.s.insertNode(s);
+        //   }));
+        // },
+        defaultHandlerError: (e) => {
+          console.log('errorMessage', e.message);
+          this.joditEditor.editor.e.fire('errorMessage', e.message);
+        },
+        contentType(e) {
+          return (void 0 === this.j.ow.FormData || 'string' == typeof e) && 'application/x-www-form-urlencoded; charset=UTF-8';
+        }
       },
       disablePlugins: 'iframe,video,media,image',
       buttons: [
@@ -252,10 +298,10 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
         // TODO: Detectar evento de preview para poner tema claro.
       );
 
-  }
+  };
 
   ngOnDestroy(): void {
     this.destroy$.next({});
     this.destroy$.complete();
-  }
+  };
 }
