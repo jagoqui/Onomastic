@@ -1,29 +1,29 @@
 <h1 mat-dialog-title>{{data.title | uppercase }}</h1>
 <div mat-dialog-content fxLayout="row" fxLayoutAlign="space-between center">
   <!-- Image load -->
-  <div fxFlex="20" fxLayout="column" fxLayoutAlign="space-between stretch">
-    <div appUploadFiles [files]="itemImages" [multiple]=false (mouseOver)="isOverDrop = $event"
-         (change)="setCardBackground($event)" (fileSrc)="imageSrc = $event" [ngClass]="{ 'file-over': isOverDrop }"
-         class="drop-zone" fxFlex>
-      <div *ngIf="imageSrc ; else dropImage" id="template-background">
-        <button mat-raised-button (click)="quitImage()">
-          <mat-icon>close</mat-icon>
-        </button>
-        <img [src]="imageSrc" fxFlex alt="Background">
-      </div>
-      <ng-template #dropImage>
-        <div id="template-background-drop" fxLayout="column" fxFlexAlign="center center">
-          <h4 fxFlex>Arrastra imagen</h4>
-          <img alt="drop-images" src=""/>
-        </div>
-      </ng-template>
-    </div>
-    <input id="inputBackgroundEditor" type="file" appUploadFiles [files]="itemImages" [multiple]=false
-           (fileSrc)="imageSrc=$event" (change)="setCardBackground($event)"/>
-  </div>
+<!--  <div fxFlex="20" fxLayout="column" fxLayoutAlign="space-between stretch">-->
+<!--    <div appUploadFiles [files]="itemImages" [multiple]=false (mouseOver)="isOverDrop = $event"-->
+<!--         (change)="setCardBackground($event)" (fileSrc)="imageSrc = $event" [ngClass]="{ 'file-over': isOverDrop }"-->
+<!--         class="drop-zone" fxFlex>-->
+<!--      <div *ngIf="imageSrc ; else dropImage" id="template-background">-->
+<!--        <button mat-raised-button (click)="quitImage()">-->
+<!--          <mat-icon>close</mat-icon>-->
+<!--        </button>-->
+<!--        <img [src]="imageSrc" fxFlex alt="Background">-->
+<!--      </div>-->
+<!--      <ng-template #dropImage>-->
+<!--        <div id="template-background-drop" fxLayout="column" fxFlexAlign="center center">-->
+<!--          <h4 fxFlex>Arrastra imagen</h4>-->
+<!--          <img alt="drop-images" src=""/>-->
+<!--        </div>-->
+<!--      </ng-template>-->
+<!--    </div>-->
+<!--    <input id="inputBackgroundEditor" type="file" appUploadFiles [files]="itemImages" [multiple]=false-->
+<!--           (fileSrc)="imageSrc=$event" (change)="setCardBackground($event)"/>-->
+<!--  </div>-->
   <!-- Edit text -->
-  <div fxFlex="75" fxLayout="row" fxLayoutAlign="space-between center" class="container">
-    <form [formGroup]="editorForm" (ngSubmit)="onClickSubmit(editorForm.value)" fxFlex>
+  <div fxFlex='100' fxLayout="row" fxLayoutAlign="space-between center" class="container">
+    <form fxFlex="24" [formGroup]="editorForm" (ngSubmit)="onClickSubmit(editorForm.value)" fxFlex>
       <jodit-editor #editor id="editor" formControlName="text" [config]="config"
                     (change)="editorContentVerify()"></jodit-editor>
       <mat-error *ngIf="editorForm.controls.text.hasError('requerido') && editorForm.controls.text.touched">
@@ -39,7 +39,7 @@
       </mat-error>
     </form>
 
-    <div id="actions_buttons" fxFlex="25" fxLayout="column" fxLayoutAlign="space-between stretch">
+    <div id="actions_buttons" fxFlex="24" fxLayout="column" fxLayoutAlign="space-between stretch">
       <h2 mat-dialog-title>Etiquetas</h2>
       <button id="name" mat-raised-button class="button-action button-add-name" (click)="addName()"
               title="Pulse para agregar etiqueta de nombre.">Nombre

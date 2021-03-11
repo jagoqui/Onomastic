@@ -180,7 +180,6 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
     } else {
       this.actionTODO = Action.new;
     }
-
     this.config = {
       autofocus: true,
       maxWidth: 800,
@@ -192,112 +191,59 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
       placeholder: 'Ingrese el texto aquí',
       showXPathInStatusbar: false,
       toolbarAdaptive: false,
-      download: {
-        url: 'https://xdsoft.net/jodit/finder/?action=fileUpload'
-        // format: 'json',
-        // method: 'POST',
-      },
       uploader: {
         url: 'https://xdsoft.net/jodit/finder/?action=fileUpload',
-        insertImageAsBase64URI: false,
-        imagesExtensions: [
-          'jpg',
-          'png',
-          'jpeg',
-          'gif'
-        ],
-        headers: null,
-        data: null,
-        filesVariableName: (e) => 'files[' + e + ']',
-        withCredentials: false,
-        pathVariableName: 'path',
-        format: 'json',
-        method: 'POST',
-        prepareData: (e) => e,
-        isSuccess: (e) => e.success,
-        // getMessage: (e) => void 0 !== e.data.messages && this.joditEditor.editor.s.isArray(e.data.messages) ?
-        //   e.data.messages.join(' ') : '',
-        process: (e) => e.data,
-        error: (e) => {
-          this.joditEditor.editor.e.fire('errorMessage', e.message, 'error', 4e3);
+        imagesExtensions: ['jpg', 'png', 'jpeg', 'gif'],
+        data: {
+          dir: this.itemImages[0]
         },
-        // defaultHandlerSuccess: (e) => {
-        //   const t = this.joditEditor.editor || this;
-        //   this.joditEditor.editor.s.isJoditObject(t) && e.files && e.files.length && e.files.forEach(((n, r) => {
-        //     const o = e.isImages && e.isImages[r] ? ['img', 'src'] : ['a', 'href'];
-        //     const i = o[0];
-        //     const a = o[1];
-        //     const s = t.createInside.element(i);
-        //     this.joditEditor.editor.s.setAttribute(a, e.baseurl + n), 'a' === i && (s.textContent = e.baseurl + n),
-        //       'img' === i ? t.s.insertImage(s, null, t.o.imageDefaultWidth) : t.s.insertNode(s);
-        //   }));
+        // baseurl: 'relativePathURL',
+        // process: (response) => {
+        //   const files = [];
+        //   response.list.map((file) => {
+        //     files.push(file.name);
+        //   });
+        //   return {
+        //     files,
+        //     path: 'relativePathURL',
+        //     baseurl: '/content/assets',
+        //     error: (response.success ? 0 : 1),
+        //     msg: response.message
+        //   };
         // },
-        defaultHandlerError: (e) => {
-          console.log('errorMessage', e.message);
-          this.joditEditor.editor.e.fire('errorMessage', e.message);
-        },
-        contentType(e) {
-          return (void 0 === this.j.ow.FormData || 'string' == typeof e) && 'application/x-www-form-urlencoded; charset=UTF-8';
+        defaultHandlerSuccess: (response) => {
+          if (response.files && response.files.length) {
+            console.log(this.itemImages[0]?.file);
+            // eslint-disable-next-line @typescript-eslint/prefer-for-of
+            for (let i = 0; i < response.files.length; i++) {
+              const fullFilePath = response.path + response.files[i];
+              this.joditEditor.editor.selection.insertImage(
+                'http://arquimedes.udea.edu.co:8096/onomastico/images/12background.jpg'
+              );
+            }
+          }
         }
       },
       disablePlugins: 'iframe,video,media,image',
       buttons: [
-        'font', 'paragraph','fontsize', 'brush', '|',
+        'font', 'paragraph', 'fontsize', 'brush', '|',
         'bold', 'underline', 'italic', 'strikethrough', '|',
-        'align','indent', 'outdent', '|',
+        'align', 'indent', 'outdent', '|',
         'ol', 'ul', '|',
         '\n',
         'table', 'hr', '|',
         'superscript', 'subscript', 'symbol', '|',
-        'eraser', 'selectall','|', 'image','print','|','undo', 'redo',
+        'eraser', 'selectall', '|', 'image', 'print', '|', 'undo', 'redo',
         '\n',
-        'preview', 'fullsize','|','source','about'
+        'preview', 'fullsize', '|', 'source', 'about'
       ]
-      // buttonsMD: [
-      //   'bold', 'underline', 'italic', 'strikethrough', '|',
-      //   'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
-      //   'superscript', 'subscript', 'symbol', '|',
-      //   'cut', 'copy', 'paste', 'eraser', '|',
-      //   'undo', 'redo',
-      //   '\n',
-      //   'ol', 'ul', '|',
-      //   'indent', 'outdent', '|',
-      //   'table', 'hr', '|', 'fullsize',
-      //   'selectall', 'source', 'preview', 'print', 'find', 'about'
-      // ],
-      // buttonsSM: [
-      //   'bold', 'underline', 'italic', 'strikethrough', '|',
-      //   'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
-      //   'superscript', 'subscript', 'symbol', '|',
-      //   'cut', 'copy', 'paste', 'eraser', '|',
-      //   'undo', 'redo',
-      //   '\n',
-      //   'ol', 'ul', '|',
-      //   'indent', 'outdent', '|',
-      //   'table', 'hr', '|', 'fullsize',
-      //   'selectall', 'source', 'preview', 'print', 'find', 'about'
-      // ],
-      // buttonsXS: [
-      //   'bold', 'underline', 'italic', 'strikethrough', '|',
-      //   'font', 'fontsize', 'align', 'brush', 'paragraph', '|',
-      //   'superscript', 'subscript', 'symbol', '|',
-      //   'cut', 'copy', 'paste', 'eraser', '|',
-      //   'undo', 'redo',
-      //   '\n',
-      //   'ol', 'ul', '|',
-      //   'indent', 'outdent', '|',
-      //   'table', 'hr', '|', 'fullsize',
-      //   'selectall', 'source', 'preview', 'print', 'find', 'about'
-      // ]
     };
-
     this.themeSwitcherController.themeClass$
       .pipe(takeUntil(this.destroy$))
       .subscribe(
         (theme: string) => (this.config.theme = theme === 'light-theme' ? 'default' : 'dark')
         // TODO: Detectar evento de preview para poner tema claro.
       );
-
   };
 
   ngOnDestroy(): void {
