@@ -36,6 +36,6 @@ export class TemplateCardsService {
 
   delete(id: number): Observable<any> {
     return this.http
-      .delete<any>(`${environment.apiUrl}/plantillas/${id}`);
+      .delete<any>(`${environment.apiUrl}/plantillas/${id}/${this.authSvc.getUserId()}`);
   }
 }

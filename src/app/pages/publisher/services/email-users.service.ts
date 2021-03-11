@@ -78,7 +78,7 @@ export class EmailUsersService {
 
   unsubscribe(email: string): Observable<MailUsersResponse> {
     return this.http
-      .put<MailUsersResponse>(`${environment.apiUrl}/usuariosemail/${email}`,null);
+      .put<MailUsersResponse>(`${environment.apiUrl}/unsuscribe/${email}`,null);
   }
 
 }
