@@ -7,10 +7,8 @@ import { ThemeSwitcherControllerService } from '@shared/services/theme-switcher-
 import { FileUpload } from '@shared/upload-files/models/file-upload';
 import { JoditAngularComponent } from 'jodit-angular';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 
-// eslint-disable-next-line no-shadow
 enum Action {
   edit = 'Actualizar',
   new = 'Agregar',
@@ -27,7 +25,6 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   actionTODO = '';
   itemImages: FileUpload[] = [];
   imageSrc: string = null;
-  isOverDrop = false;
   initialContent = `
     <div id='editorContent' style='z-index: -1'>
       <span>
@@ -63,41 +60,6 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
           ${this.editorForm.value.text} <!-- TODO: Poner el cursor dentro del div-->
         </div>`
       );
-      this.quitImage();
-    }
-  }
-
-  setCardBackground(event) {
-    const file: File = event.target.files[0];
-    const reader = new FileReader();
-    reader.onloadend = this.handleReaderLoaded.bind(this);
-    reader.readAsDataURL(this.itemImages[0]?.file || file); // TODO: Aveces no carga la imagen('itemImages) en el editor,
-    // entonces toca salta la validación y leer la imagen normal para que cargue la imagen.
-  }
-
-  handleReaderLoaded() {
-    const content = document.getElementById('editorContent');
-
-    if (!content.children[0]?.innerHTML) {
-      content.innerHTML = '&nbsp;';
-    }
-    content.style.backgroundImage = `url(${this.imageSrc})`;
-    content.style.backgroundRepeat = 'no-repeat';
-    content.style.backgroundPosition = 'center';
-    content.style.backgroundSize = 'cover';
-    content.style.height = 'auto';
-    content.style.minHeight = '300px';
-    content.style.color = 'white';
-  }
-
-  quitImage() {
-    // TODO: Error al quitar la imagen, al cargar de nuevo debe ser una imagen diferente para que carge. Solo paasa en algunos navegadores
-    this.itemImages[0] = null;
-    this.imageSrc = '';
-    const content = document.getElementById('editorContent');
-    if (content) {
-      content.style.backgroundImage = null;
-      content.style.color = 'black';
     }
   }
 
@@ -105,36 +67,6 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
     this.editorForm.get('text').setValue(null);
     this.joditEditor.resetEditor();
     this.imageSrc = null;
-  }
-
-  onClickSubmit(data) {
-    if (this.editorForm.invalid && data) {
-      this.editorForm.get('text').markAsTouched();
-    }
-  }
-
-  addName() {
-    const content = document.getElementById('editorContent');
-    const spanName = `<span id='name'><b style='color: #e74c3c'>&lt;Nombre&gt;</b>&nbsp;</span>`;
-    content.innerHTML += spanName;
-  }
-
-  addDate() {
-    const content = document.getElementById('editorContent');
-    const spanDate = `<span id='date'><b style='color: #16a085'>&lt;Fecha&gt;</b>&nbsp;</span>`;
-    content.innerHTML += spanDate;
-  }
-
-  addSchool() {
-    const content = document.getElementById('editorContent');
-    const spanSchool = `<span id='school'><b style='color: #9b59b6'>&lt;Falcultad/Escuela&gt;</b>&nbsp;</span>`;
-    content.innerHTML += spanSchool;
-  }
-
-  addAssociation() {
-    const content = document.getElementById('editorContent');
-    const spanAssociation = `<span id='association'><b style='color: #f39c12'>&lt;Asociación&gt;</b>&nbsp;</span>`;
-    content.innerHTML += spanAssociation;
   }
 
   onClose(close?: boolean): void {
@@ -146,7 +78,6 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
 
   onSave() {
     const editorContent = document.getElementById('editorContent').innerHTML;
-
     const card: Plantilla = {
       texto: editorContent,
       asociacionesPorPlantilla: [
@@ -156,13 +87,11 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
         }
       ]
     };
-
     this.templateCardsService.newCardTemplate(card, this.itemImages[0]?.file).subscribe((cardRes) => {
       if (cardRes) {
         SwAlert.fire('Guardado!', '', 'success').then(r => console.log(r));
         this.onClose(true);
       }
-
     }, (err) => {
       SwAlert.fire({
         icon: 'error',
@@ -174,16 +103,10 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
-    if (this.data?.card) {
-      this.actionTODO = Action.edit;
-    } else {
-      this.actionTODO = Action.new;
-    }
+  setEditorConfig() {
     this.config = {
       autofocus: true,
-      maxWidth: 800,
-      maxHeight: 600,
+      minHeight: 600,
       language: 'es',
       enter: 'BR',
       theme: 'default',
@@ -194,18 +117,18 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
       uploader: {
         url: 'https://xdsoft.net/jodit/finder/?action=fileUpload',
         imagesExtensions: ['jpg', 'png', 'jpeg', 'gif'],
-        data: {
-          dir: this.itemImages[0]
-        },
+        // data: {
+        //   dir: this.itemImages[0]
+        // },
         // baseurl: 'relativePathURL',
         // process: (response) => {
-        //   const files = [];
+        //   let files = [5];
         //   response.list.map((file) => {
         //     files.push(file.name);
         //   });
         //   return {
         //     files,
-        //     path: 'relativePathURL',
+        //     path: 'http://arquimedes.udea.edu.co:8096/onomastico/images/12background.jpg',
         //     baseurl: '/content/assets',
         //     error: (response.success ? 0 : 1),
         //     msg: response.message
@@ -213,36 +136,86 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
         // },
         defaultHandlerSuccess: (response) => {
           if (response.files && response.files.length) {
-            console.log(this.itemImages[0]?.file);
-            // eslint-disable-next-line @typescript-eslint/prefer-for-of
-            for (let i = 0; i < response.files.length; i++) {
-              const fullFilePath = response.path + response.files[i];
+            for (const resFile of response.files) {
+              const fullFilePath = response.path + response.files;
               this.joditEditor.editor.selection.insertImage(
                 'http://arquimedes.udea.edu.co:8096/onomastico/images/12background.jpg'
               );
+              // this.joditEditor.editor.selection.insertImage(
+              //   fullFilePath
+              // );
             }
           }
         }
       },
-      disablePlugins: 'iframe,video,media,image',
       buttons: [
         'font', 'paragraph', 'fontsize', 'brush', '|',
         'bold', 'underline', 'italic', 'strikethrough', '|',
         'align', 'indent', 'outdent', '|',
         'ol', 'ul', '|',
-        '\n',
         'table', 'hr', '|',
         'superscript', 'subscript', 'symbol', '|',
-        'eraser', 'selectall', '|', 'image', 'print', '|', 'undo', 'redo',
+        'eraser', 'selectall', '|', 'image', 'print', '|', 'name', 'date', 'school', 'bodyType', '|', 'theme',
         '\n',
-        'preview', 'fullsize', '|', 'source', 'about'
-      ]
+        'undo', 'redo', 'preview', 'fullsize', '|', 'source', 'about'
+      ],
+      controls: {
+        name: {
+          name: 'Nombre',
+          tooltip: 'Nombre del usuario de correo.',
+          exec: (editor) => {
+            editor.selection.insertHTML('<b title="Nombre del usuario de correo.">&lt;NOMBRE&gt;<b>&nbsp;');
+          }
+        },
+        date: {
+          name: 'Fecha',
+          tooltip: 'Día que se envia el evento',
+          exec: (editor) => {
+            editor.selection.insertHTML('<b title="Día que se envia el evento.">&lt;FECHA&gt;<b>&nbsp;');
+          }
+        },
+        school: {
+          name: 'Facultad/Escuela',
+          tooltip: 'Facultad de ingeniería, escuela de artes ...',
+          exec: (editor) => {
+            editor.selection.insertHTML('<b title="Facultad de ingeniería, escuela de artes ...">&lt;FALCUTAD/ESCUELA&gt;<b>&nbsp;');
+          }
+        },
+        bodyType: {
+          name: 'Estamento',
+          tooltip: 'Si es estudiante, profesor, auxiliar ...',
+          exec: (editor) => {
+            editor.value = '';
+            editor.selection.insertHTML('<b title="Si es estudiante, profesor, auxiliar ...">&lt;ESTAMENTO&gt;<b>&nbsp;');
+          }
+        },
+        theme: {
+          label: 'Theme',
+          name: 'theme',
+          value: 'dark',
+          radio: true,
+          options: [
+            { value: 'default', text: 'Light' },
+            { value: 'dark', text: 'Dark' }
+          ],
+          onChange: (values) => {
+            this.joditEditor.editor.state.theme = values[0].value as string;
+          }
+        }
+      }
     };
+  }
+
+  ngOnInit() {
+    if (this.data?.card) {
+      this.actionTODO = Action.edit;
+    } else {
+      this.actionTODO = Action.new;
+    }
+    this.setEditorConfig();
     this.themeSwitcherController.themeClass$
-      .pipe(takeUntil(this.destroy$))
       .subscribe(
         (theme: string) => (this.config.theme = theme === 'light-theme' ? 'default' : 'dark')
-        // TODO: Detectar evento de preview para poner tema claro.
       );
   };
 

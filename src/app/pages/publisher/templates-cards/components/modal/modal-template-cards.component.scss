@@ -1,65 +1,5 @@
 @import 'src/assets/custom_styles/material_custom_theme.scss';
 
-//#actions_buttons {
-//  button {
-//    top: -30px;
-//  }
-//}
-
-.button-add-name {
-  top: 1.111rem;
-  background-color: tomato;
-
-  &:before {
-    content: "Nombre";
-  }
-}
-
-.button-add-date {
-  top: -1.111rem;
-  background-color: aqua;
-
-  &:before {
-    content: "Fecha";
-  }
-}
-
-.button-add-school {
-  top: -3.333rem;
-  background-color: chocolate;
-
-  &:before {
-    content: "Facultad";
-  }
-}
-
-.button-add-association {
-  top: -5.555rem;
-  background-color: teal;
-
-  &:before {
-    content: "Estamento";
-  }
-}
-
-.button-clear-text {
-  top: -6.666rem;
-  &:before {
-    content: "Limpiar";
-    background: mat-color($mat-warn, darker) !important;
-  }
-}
-
-#template-background, #template-background-drop {
-  width: 100%;
-
-  img {
-    width: 90%;
-    height: 90%;
-    border-radius: 10%;
-  }
-}
-
 ::ng-deep .cdk-overlay-pane {
   max-width: 100vw !important;
   max-height: 95vh;
@@ -74,10 +14,3 @@
   max-height: 95vh;
 }
 
-.drop-zone {
-  border: dotted 3px lightgray;
-}
-
-.file-over {
-  border: dotted 3px #2196f3;
-}

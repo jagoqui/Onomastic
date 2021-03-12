@@ -94,11 +94,11 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
   }
 
   ngAfterViewInit(): void {
-    this.templateCardsService.getAllCards().subscribe(cards => {
-      if (cards) {
-        this.cards = cards;
-      }
-    });
+    // this.templateCardsService.getAllCards().subscribe(cards => {
+    //   if (cards) {
+    //     this.cards = cards;
+    //   }
+    // });
   }
 
   ngOnInit(): void {
