@@ -23,6 +23,7 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   @ViewChild('editor') joditEditor: JoditAngularComponent;
 
   jodit: JoditAngularComponent;
+  maxChars = 400;
   actionTODO = '';
   cardTemplateImage: File;
   initialContent = `
@@ -46,6 +47,15 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   }
 
   editorContentVerify() {
+    const editorContentText = this.joditEditor.editor.text;
+    if(editorContentText.length>this.maxChars){
+      SwAlert.fire({
+        title: `No puede agregar más texto!`,
+        html: `Sobrepasó  los <br>${this.maxChars}</b> de máximo de caracteres permitidos.`,
+        icon: 'warning',
+      }).then(r => console.log(r));
+    }
+
     const cardImg = document.getElementById('templateCardImage');
     this.onCompleteCard = !!cardImg;
   }
@@ -103,8 +113,20 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
       language: 'es',
       enter: 'BR',
       theme: 'default',
-      limitChars: 400,
-      placeholder: 'Ingrese el texto aquí',
+      limitChars: this.maxChars,
+      placeholder:
+        `
+          Ingrese el texto aquí:<br><br>
+          <hr><hr>
+          <b>Nota importane</b>:<br>
+          Recuerde que el texto debe contener <b>al menos una condición</b> y no puede superar los <b>${this.maxChars}</b></b>
+          caracteres,además recuerde que, debe subir una imagen con la plantilla que cumpla con el siguiente formato
+          <b>['image/jpg', 'image/png', 'image/jpeg', 'image/gif']</b>.<br>
+          Ejemplo:<br><br>
+           ${this.initialContent}<br>
+           <img src='http://arquimedes.udea.edu.co:8096/onomastico/images/3temp.jpg' id='templateCardImage'
+           style='display: block; margin: auto; max-width:30%'>
+        `,
       showXPathInStatusbar: false,
       toolbarAdaptive: false,
       uploader: {
@@ -130,11 +152,11 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
             }).then((resultReplace) => {
               if (resultReplace.isConfirmed) {
                 return this.loadCardImage(formData);
-              }else{
+              } else {
                 return null;
               }
             }).then(r => console.log(r));
-          }else{
+          } else {
             return this.loadCardImage(formData);
           }
         },
@@ -215,7 +237,7 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
           name: 'Reset',
           tooltip: 'Lleva el editor al estado inicial ...',
           exec: (editor) => {
-            //TODO: Posicionar cursor al final del dom
+            //TODO: Posicionar cursor al final del DOM
             editor.value = this.initialContent;
           }
         }
