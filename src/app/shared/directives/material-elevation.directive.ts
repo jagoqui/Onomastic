@@ -1,4 +1,4 @@
-import {Directive, ElementRef, HostListener, Input, OnChanges, Renderer2, SimpleChanges,} from '@angular/core';
+import { Directive, ElementRef, HostListener, Input, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
 
 @Directive({
   selector: '[appMaterialElevation]'
@@ -18,6 +18,14 @@ export class MaterialElevationDirective implements OnChanges {
     this.setElevation(this.defaultElevation);
   }
 
+  @HostListener('mouseenter') onMouseEnter = () => {
+    this.setElevation(this.raisedElevation);
+  };
+
+  @HostListener('mouseleave') onMouseLeave = () => {
+    this.setElevation(this.defaultElevation);
+  };
+
   ngOnChanges(changes: SimpleChanges) {
     this.setElevation(this.defaultElevation);
   }
@@ -32,17 +40,5 @@ export class MaterialElevationDirective implements OnChanges {
     // add the given elevation class
     const newClass = `mat-elevation-z${amount}`;
     this.renderer.addClass(this.element.nativeElement, newClass);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  @HostListener('mouseenter')
-  private onMouseEnter() {
-    this.setElevation(this.raisedElevation);
-  }
-
-  // eslint-disable-next-line @typescript-eslint/member-ordering
-  @HostListener('mouseleave')
-  private onMouseLeave() {
-    this.setElevation(this.defaultElevation);
   }
 }

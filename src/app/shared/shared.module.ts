@@ -19,9 +19,6 @@ import {
   MaterialElevationDirective,
 } from './directives/material-elevation.directive';
 import { DomPurifyPipe } from './pipes/dom-purify.pipe';
-import {
-  UploadFilesDirective,
-} from './upload-files/directives/upload-files.directive';
 
 @NgModule({
   declarations: [
@@ -30,7 +27,6 @@ import {
     SidebarComponent,
     FooterComponent,
     MailUsersSubscriptionStatusComponent,
-    UploadFilesDirective,
     DomPurifyPipe,
     MaterialElevationDirective
   ],
@@ -49,7 +45,6 @@ import {
     HeaderComponent,
     MailUsersSubscriptionStatusComponent,
     SidebarComponent,
-    UploadFilesDirective,
     MaterialModule,
     FlexLayoutModule,
     FormsModule,

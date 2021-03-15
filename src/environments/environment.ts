@@ -6,5 +6,5 @@ export const environment = {
   production: false,
   apiUrl: 'http://arquimedes.udea.edu.co:8096/onomastico',
   recaptchaKey: '6Le7wOIZAAAAAL4OZ9W0B-Xju1nca9uRiS02Iazx',
-  imagesServerURI: 'http://arquimedes.udea.edu.co:8096/onomastico/images/{id}/background.jpg'
+  uploadImagesServer:'http://arquimedes.udea.edu.co:8096/onomastico/upload',
 };
