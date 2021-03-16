@@ -4,10 +4,9 @@ import { TemplateCardsService } from '@app/pages/publisher/services/template-car
 import { ThemeSwitcherControllerService } from '@shared/services/theme-switcher-controller.service';
 import { JoditAngularComponent } from 'jodit-angular';
 import { Subject } from 'rxjs';
-import { AuthService } from '@auth/services/auth.service';
-import { environment } from '@env/environment';
 import { Plantilla } from '@shared/models/template-card.model';
 import SwAlert from 'sweetalert2';
+import { UploadImageService } from '@pages/¨publisher/services/upload-image.service';
 
 enum Action {
   edit = 'Actualizar',
@@ -42,17 +41,17 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
     @Inject(MAT_DIALOG_DATA) public data: any,
     private themeSwitcherController: ThemeSwitcherControllerService,
     private templateCardsService: TemplateCardsService,
-    private authSvc: AuthService
+    private uploadImagesSvc: UploadImageService
   ) {
   }
 
   editorContentVerify() {
     const editorContentText = this.joditEditor.editor.text;
-    if(editorContentText.length>this.maxChars){
+    if (editorContentText.length > this.maxChars) {
       SwAlert.fire({
         title: `No puede agregar más texto!`,
         html: `Sobrepasó  los <br>${this.maxChars}</b> de máximo de caracteres permitidos.`,
-        icon: 'warning',
+        icon: 'warning'
       }).then(r => console.log(r));
     }
 
@@ -62,9 +61,12 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
 
   onDelete(event: KeyboardEvent) {
     const { key } = event;
-    if (key === 'Backspace') {
+    if (key === 'Backspace' || key === 'Delete') {
+      console.log(this.joditEditor.editor.selection.j);
+
       const editor = document.getElementsByClassName('jodit-wysiwyg')[0];
-      console.log(editor);
+      // const srcRemove = imgCard.getAttributeNode('src').value;
+      //TODO: Eliminar imagen del servidor
       if (editor?.children[editor.children.length - 1]?.className === 'labels') {
         const id = editor.children[editor.children.length - 1].id;
         console.log(id);
@@ -92,7 +94,7 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
     };
     this.templateCardsService.newCardTemplate(card, this.cardTemplateImage).subscribe((cardRes) => {
       if (cardRes) {
-        SwAlert.fire('Guardado!', '', 'success').then(r => console.log(r));
+        SwAlert.fire('Guardado!', '', 'success').then(r => console.log('Se guardó la plantilla.', r));
         this.onClose(true);
       }
     }, (err) => {
@@ -102,7 +104,7 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
         title: 'Oops...',
         text: ' Algo salió mal!',
         footer: `${err}`
-      }).then(r => console.log(r));
+      }).then(r => console.warn('Error cargando guardando la plantilla.', r));
     });
   }
 
@@ -113,6 +115,7 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
       language: 'es',
       enter: 'BR',
       theme: 'default',
+      toolbarButtonSize: 'large',
       limitChars: this.maxChars,
       placeholder:
         `
@@ -127,61 +130,9 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
            <img src='http://arquimedes.udea.edu.co:8096/onomastico/images/3temp.jpg' id='templateCardImage'
            style='display: block; margin: auto; max-width:30%'>
         `,
-      showXPathInStatusbar: false,
+      showXPathInStatusbar: true,
       toolbarAdaptive: false,
-      uploader: {
-        url: `${environment.uploadImagesServer}/${this.authSvc.getUserId()}temp.jpg`,
-        imagesExtensions: ['jpg', 'png', 'jpeg', 'gif'],
-        format: 'json',
-        pathVariableName: `${this.authSvc.getUserId()}temp.jpg`,
-        fileVariableName: 'file',
-        withCredentials: false,
-        method: 'POST',
-        prepareData: (formData) => {
-          if (document.getElementById('templateCardImage')) {
-            //TODO: Posible problema de sincronización, puede que no reemplaze la plantilla
-            return SwAlert.fire({
-              title: 'Sólo puede cargarse una plantilla!',
-              text: ' Desea reemplazar la plantilla actual?',
-              icon: 'warning',
-              showCancelButton: true,
-              confirmButtonColor: '#3085d6',
-              cancelButtonColor: '#d33',
-              confirmButtonText: 'Sí, reemplazarla!',
-              cancelButtonText: 'Cancelar'
-            }).then((resultReplace) => {
-              if (resultReplace.isConfirmed) {
-                return this.loadCardImage(formData);
-              } else {
-                return null;
-              }
-            }).then(r => console.log(r));
-          } else {
-            return this.loadCardImage(formData);
-          }
-        },
-        isSuccess: (resp) => !resp.error,
-        getMsg: (resp) => resp.msg.join !== undefined ? resp.msg.join(' ') : resp.msg,
-        process: (res) => res.fileDownloadUri,
-        error: (error) => {
-          this.joditEditor.editor.events.fire('errorMessage', error.message, 'error', 4e3);
-        },
-        defaultHandlerSuccess: (fileDownloadUri) => {
-          if (fileDownloadUri) {
-            const image = document.createElement('img') as HTMLImageElement;
-            image.src = fileDownloadUri;
-            image.id = 'templateCardImage';
-            image.style.display = 'block';
-            image.style.margin = 'auto';
-            this.joditEditor.editor.selection.insertImage(image);
-          }
-        },
-        defaultHandlerError: (error) => {
-          this.joditEditor.editor.events.fire('errorMessage', error.message);
-        },
-        contentType: (e) => (void 0 === this.joditEditor.editor.ownerWindow.FormData || 'string' == typeof e) &&
-          'application/x-www-form-urlencoded; charset=UTF-8'
-      },
+      insertImageAsBase64URI: false,
       buttons: [
         'font', 'paragraph', 'fontsize', 'brush', '|',
         'bold', 'underline', 'italic', 'strikethrough', '|',
@@ -189,13 +140,22 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
         'ol', 'ul', '|',
         'table', 'hr', '|',
         'superscript', 'subscript', 'symbol', '|',
-        'eraser', 'selectall', '|', 'image', 'print', '|', 'labels', '|',
+        'eraser', 'selectall', 'copyTrash', '|', 'imageUpload', 'print', '|', 'labels', '|',
         '\n',
-        'undo', 'redo', 'reset', 'preview', 'fullsize', '|', 'source', 'about', 'theme'
+        'undo', 'redo', 'reset', 'preview', 'fullsize', '|', 'source', 'about', 'theme', 'info'
       ],
       controls: {
+        copyTrash: {
+          name: 'copy',
+          tooltip: 'Copiar a la papelera',
+          exec: (editor) => {
+            editor.execCommand('selectall');
+            editor.execCommand('copy');
+            alert('Text in your clipboard');
+          }
+        },
         labels: {
-          name: 'Estiquetas',
+          name: 'copyformat',
           tooltip: 'Etiquetas para automatizar la plantilla',
           list: {
             name: 'Nombre',
@@ -233,35 +193,99 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
             return;
           }
         },
+        imageUpload: {
+          name: 'image',
+          tooltip: 'Subir imagen de la plantilla prediseñada',
+          exec: (async (editor) => {
+            const imgCard = document.getElementById('templateCardImage');
+            if (imgCard && this.joditEditor.editor.value !== '') {
+              return await SwAlert.fire({
+                title: 'Sólo puede cargarse una plantilla!',
+                text: ' Desea reemplazar la plantilla actual?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sí, reemplazarla!',
+                cancelButtonText: 'Cancelar'
+              }).then((resultReplace) => {
+                if (resultReplace.isConfirmed) {
+                  const srcRemove = imgCard.getAttributeNode('src').value;
+                  //TODO: Eliminar imagen del servidor
+                  imgCard.remove();
+                  this.uploadImagesSvc.openExplorerWindows(editor);
+                  this.cardTemplateImage = this.uploadImagesSvc.img;
+                }
+                return null;
+              }).then(res => {
+                console.log('Plantilla cargada!.', res);
+                return null;
+              });
+            } else {
+              await this.uploadImagesSvc.openExplorerWindows(editor);
+              this.cardTemplateImage = this.uploadImagesSvc.img;
+            }
+          })
+        },
         reset: {
           name: 'Reset',
+          icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" ' +
+            'width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none"/><path d="M14 ' +
+            '12c0-1.1-.9-2-2-2s-2 .9-2 2 .9 2 2 2 2-.9 2-2zm-2-9c-4.97 0-9 4.03-9 9H0l4 4 4-4' +
+            'H5c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.51 0-2.91-.49-4.06-1.3l-1.42 1.44C8.' +
+            '04 20.3 9.94 21 12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>',
           tooltip: 'Lleva el editor al estado inicial ...',
           exec: (editor) => {
             //TODO: Posicionar cursor al final del DOM
             editor.value = this.initialContent;
           }
+        },
+        theme: {
+          name: 'Tema',
+          icon: '<i class="material-icons">\n' +
+            'new_label\n' +
+            '</i>',
+          tooltip: 'Cambiar tema del editor',
+          exec: (editor, _, btn) => {
+            console.log(btn);
+          }
+        },
+        info: {
+          name: 'info',
+          // iconURL: 'C:/Users/Jaidiver/Desktop/Varios/TRABAJO/Onomástico/Onosmatic/src/assets/icons/account_balance-black-18dp.svg',
+          popup: (editor) => {
+            const text = editor.editor.innerText;
+            const wordCount = text.split(/[\s\n\r\t]+/).filter((value) => value).length;
+            const charCount = text.replace(/[\s\n\r\t\w]+/, '').length;
+            console.log(editor.contentDocument.innerText.length);
+
+            return '<div style="padding: 10px; color: lightgrey">' +
+              'Words: ' + wordCount + '<br>' +
+              'Chars: ' + charCount + '<br>' +
+              '</div>';
+          }
         }
+      },
+      events: {
+        beforePaste: (pasteEvent) => {
+          const item = pasteEvent.clipboardData;
+          console.log(item);
+          // if (item?.type.indexOf('image') === 0) {
+          //   const blob = item.getAsFile();
+          //
+          //   const reader = new FileReader();
+          //   reader.onload = (event) =>{
+          //     console.log(event.target.result) ;
+          //   };
+          //
+          //   reader.readAsDataURL(blob);
+          // }
+          return false;
+        },
+        // afterPaste:(event) => false,
+
       }
     };
-  }
-
-  loadCardImage(formData) {
-    const file = formData.getAll('files[0]')[0];
-    const validFormatImage = ['image/jpg', 'image/png', 'image/jpeg', 'image/gif'];
-    if (validFormatImage.includes(file.type)) {
-      formData.append('file', file);
-      this.cardTemplateImage = file;
-      return formData;
-    } else {
-      SwAlert.fire(
-        {
-          icon: 'warning',
-          title: 'Oops...',
-          text: 'La plantilla sólo puede tener formato, [jpg, png, jpeg, gif]!'
-        }
-      ).then(r => console.log(r));
-      return null;
-    }
   }
 
   ngOnInit() {
@@ -282,3 +306,4 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   };
 }
+

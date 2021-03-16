@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Plantilla, TemplateCard } from '@app/shared/models/template-card.model';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
-import { EmailUsersService } from '@pages/¨publisher/services/email-users.service';
 import { AuthService } from '@auth/services/auth.service';
+import { ImageUpload } from '@shared/models/image-upload.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +14,15 @@ export class TemplateCardsService {
   constructor(
     private http: HttpClient,
     private authSvc: AuthService) {
+  }
+
+  imageUpload(img: File): Observable<ImageUpload> {
+    const formData = new FormData();
+    formData.append('file', img);
+    return this.http
+      .post<ImageUpload>(`${environment.uploadImagesServer}/${this.authSvc.getUserId()}${img.name}`, formData, {
+        reportProgress: true
+      });
   }
 
   newCardTemplate(plantilla: Plantilla, image: File): Observable<TemplateCard> {
