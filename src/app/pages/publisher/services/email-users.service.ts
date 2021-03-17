@@ -3,11 +3,15 @@ import {Injectable} from '@angular/core';
 import {environment} from '@env/environment';
 import {ByNameId, ID, MailUsers, MailUsersResponse, ProgramaAcademicoPorUsuarioCorreo} from '@shared/models/mail-users.model';
 import {Observable} from 'rxjs';
+import { AuthService } from '@auth/services/auth.service';
 
 @Injectable({providedIn: 'root'})
 export class EmailUsersService {
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private authSvc: AuthService
+  ) {
   }
 
   getAll(): Observable<MailUsersResponse[]> {
@@ -20,9 +24,9 @@ export class EmailUsersService {
       .get<ByNameId[]>(`${environment.apiUrl}/asociaciones`);
   }
 
-  getAssociationById(id: string): Observable<ByNameId> {
+  getAssociationsById(): Observable<ByNameId[]> {
     return this.http
-      .get<ByNameId>(`${environment.apiUrl}/asociaciones/${id}`);
+      .get<ByNameId[]>(`${environment.apiUrl}/usuarios/asociacion/${this.authSvc.getUserId()}`);
   }
 
   getAcademicPrograms(): Observable<ProgramaAcademicoPorUsuarioCorreo[]> {

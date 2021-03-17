@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import SwAlert from 'sweetalert2';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ImageUpload } from '@shared/models/image-upload.model';
 import { environment } from '@env/environment';
 import { HttpClient } from '@angular/common/http';
@@ -14,7 +14,6 @@ export class UploadImageService {
 
   constructor(
     private http: HttpClient,
-    private authSvc: AuthService
   ) {
   }
 
@@ -49,12 +48,15 @@ export class UploadImageService {
   };
 
   imageUpload(img: File): Observable<ImageUpload> {
-    const formData = new FormData();
-    formData.append('file', img);
-    return this.http
-      .post<ImageUpload>(`${environment.uploadImagesUriServer}/${new Date().getTime()}_${img.name}`, formData, {
-        reportProgress: true
-      });
+    if (img) {
+      const formData = new FormData();
+      formData.append('file', img);
+      return this.http
+        .post<ImageUpload>(`${environment.uploadImagesUriServer}/${new Date().getTime()}_${img.name}`, formData, {
+          reportProgress: true
+        });
+    }
+    return of(null);
   }
 
   async getFileFromUrl(url, name, defaultType = 'image/jpeg') {
