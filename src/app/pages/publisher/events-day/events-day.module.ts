@@ -15,4 +15,5 @@ import {EventsDayComponent} from './events-day.component';
   ]
 })
 export class EventsDayModule {
+
 }

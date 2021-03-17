@@ -25,4 +25,8 @@ export class EventDayService {
     return this.http
       .get<ConditionRes[]>(`${environment.apiUrl}/evento/condiciones/${this.authSvc.getUserId()}`);
   }
+
+  getEvents(): Observable<EventDay[]> {
+    return this.http.get<EventDay[]>(`${environment.apiUrl}/`);
+  }
 }
