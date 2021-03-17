@@ -50,8 +50,6 @@ export class UploadImageService {
     const image = document.createElement('img') as HTMLImageElement;
     image.src = url;
     image.id = 'templateCardImage';
-    image.style.display = 'block';
-    image.style.margin = 'auto';
     editor.selection.insertNode(image);
   };
 

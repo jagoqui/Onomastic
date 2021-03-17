@@ -1,4 +1,4 @@
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TemplateCardsService } from '@app/pages/publisher/services/template-cards.service';
 import { ThemeSwitcherControllerService } from '@shared/services/theme-switcher-controller.service';
@@ -18,7 +18,7 @@ enum Action {
   templateUrl: './modal-template-cards.component.html',
   styleUrls: ['./modal-template-cards.component.scss']
 })
-export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
+export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('editor') joditEditor: JoditAngularComponent;
 
   jodit: JoditAngularComponent;
@@ -27,10 +27,13 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
   cardTemplateImage: File;
   initialContent = `
     <span>
-        Hola&nbsp;<b id='name' class='labels' style='color: #e74c3c'>&lt;Nombre&gt;</b>&nbsp;en ésta&nbsp;
-        <b id='school' class='labels' style='color: #16a085'>&lt;Fecha&gt;</b>
-        &nbsp;la Universidad de Antioquia le desea un feliz cumpleaños 🥳.
-     </span>
+      Hola <b id='name' class='labels' title='Nombre del usuario de correo.'>&lt;NOMBRE&gt;</b> en ésta
+      <b id='date' class='labels' title='Día que se envia el evento.'>&lt;FECHA&gt;</b>, la
+      <b id='school' class='labels' title='Facultad de ingeniería, escuela de artes ...'>&lt;FALCUTAD/ESCUELA&gt;</b>
+      de la Universidad de Antioquia le queremos desear un feliz cumpleaños 🥳, tu cómo parte del grupo de
+      <b id='bodyType' class='labels' title='Estudiante, prodesor, auxiliar ...'>&ltESTAMENTO&gt;</b>, eres muy importante
+      para nosotros.
+    </span>
   `;
   config: any;
   onCompleteCard = false;
@@ -84,6 +87,7 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
 
   onSave() {
     const card: Plantilla = {
+      id: this.data?.card?.id? this.data.card.id : null,
       texto: this.joditEditor.editor.value,
       asociacionesPorPlantilla: [
         {
@@ -94,17 +98,18 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
     };
     this.templateCardsService.newCardTemplate(card, this.cardTemplateImage).subscribe((cardRes) => {
       if (cardRes) {
-        SwAlert.fire('Guardado!', '', 'success').then(r => console.log('Se guardó la plantilla.', r));
+        SwAlert.fire(this.data?.card? 'Actualizada!': 'Guardada!', '', 'success').
+          then(r => console.log(`Se ${this.data?.card? 'actualizó':'guardó'} la plantilla exitosamente.`, r));
         this.onClose(true);
       }
     }, (err) => {
       SwAlert.fire({
         icon: 'error',
-        html: '',
+        html: `La plantilla no se  ${this.data?.card? 'actualizó':'guardó'}`,
         title: 'Oops...',
-        text: ' Algo salió mal!',
-        footer: `${err}`
-      }).then(r => console.warn('Error cargando guardando la plantilla.', r));
+        text: 'Algo salió mal!',
+        footer: `<span style = "color:red">${err}</span>`,
+      }).then(r => console.warn(`Error la plantilla no se pudo ${this.data?.card? 'actualizar':'guardar'} la plantilla.`, r));
     });
   }
 
@@ -167,22 +172,22 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
             const key = $btn.control.text;
             switch (key) {
               case 'Nombre': {
-                editor.selection.insertHTML('<b id="name" class ="labels" title="Nombre del usuario de correo.">&lt;NOMBRE&gt;<b>&nbsp;');
+                editor.selection.insertHTML('<b id="name" class ="labels" title="Nombre del usuario de correo.">&lt;NOMBRE&gt;</b>&nbsp;');
                 break;
               }
               case 'Fecha': {
-                editor.selection.insertHTML('<b id="date" class ="labels" title="Día que se envia el evento.">&lt;FECHA&gt;<b>&nbsp;');
+                editor.selection.insertHTML('<b id="date" class ="labels" title="Día que se envia el evento.">&lt;FECHA&gt;</b>&nbsp;');
                 break;
               }
               case 'Facultad/Escuela': {
                 editor.selection.insertHTML(
-                  '<b id="school" class ="labels" title="Facultad de ingeniería, escuela de artes ...">&lt;FALCUTAD/ESCUELA&gt;<b>&nbsp;'
+                  '<b id="school" class ="labels" title="Facultad de ingeniería, escuela de artes ...">&lt;FALCUTAD/ESCUELA&gt;</b>&nbsp;'
                 );
                 break;
               }
               case 'Estamento': {
                 editor.selection.insertHTML(
-                  '<b id= "bodyType" class ="labels" title="Estudiante, prodesor, auxiliar ...">&ltESTAMENTO&gt;<b>&nbsp;'
+                  '<b id= "bodyType" class ="labels" title="Estudiante, prodesor, auxiliar ...">&ltESTAMENTO&gt;</b>&nbsp;'
                 );
                 break;
               }
@@ -214,7 +219,6 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
                   //TODO: Eliminar imagen del servidor
                   imgCard.remove();
                   this.uploadImagesSvc.openExplorerWindows(editor);
-                  this.cardTemplateImage = this.uploadImagesSvc.img;
                 }
                 return null;
               }).then(res => {
@@ -223,8 +227,8 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
               });
             } else {
               await this.uploadImagesSvc.openExplorerWindows(editor);
-              this.cardTemplateImage = this.uploadImagesSvc.img;
             }
+            this.cardTemplateImage = this.uploadImagesSvc.img;
           })
         },
         reset: {
@@ -281,25 +285,41 @@ export class ModalTemplateCardsComponent implements OnInit, OnDestroy {
           //   reader.readAsDataURL(blob);
           // }
           return false;
-        },
+        }
         // afterPaste:(event) => false,
 
       }
     };
   }
 
+  async getFileFromUrl(url, name, defaultType = 'image/jpeg'){
+    const response = await fetch(url);
+    const data = await response.blob();
+    return new File([data], name, {
+      type: response.headers.get('content-type') || defaultType,
+    });
+  }
+
   ngOnInit() {
-    if (this.data?.card) {
-      this.actionTODO = Action.edit;
-    } else {
-      this.actionTODO = Action.new;
-    }
     this.setEditorConfig();
     this.themeSwitcherController.themeClass$
       .subscribe(
         (theme: string) => (this.config.theme = theme === 'light-theme' ? 'default' : 'dark')
       );
   };
+
+  async ngAfterViewInit(){
+    if (this.data?.card) {
+      this.actionTODO = Action.edit;
+      this.joditEditor.editor.value = this.data.card.texto;
+      const imgCard = document.getElementById('templateCardImage');
+      const srcImg = imgCard.getAttributeNode('src').value;
+      this.cardTemplateImage = await
+        this.getFileFromUrl(srcImg, 'image.jpg');
+    } else {
+      this.actionTODO = Action.new;
+    }
+  }
 
   ngOnDestroy(): void {
     this.destroy$.next({});

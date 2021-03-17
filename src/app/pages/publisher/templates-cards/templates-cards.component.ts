@@ -57,7 +57,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
     }).then((result) => {
       /* Read more about isConfirmed, isDenied below */
       if (result.isConfirmed) {
-        this.onOpenModal();
+        this.onOpenModal(card);
       } else if (result.isDenied) {
         SwAlert.fire({
           title: 'Está seguro?',

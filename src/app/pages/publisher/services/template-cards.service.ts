@@ -27,8 +27,6 @@ export class TemplateCardsService {
 
   newCardTemplate(plantilla: Plantilla, image: File): Observable<TemplateCard> {
     const cardBlob = new Blob([JSON.stringify(plantilla)], { type: 'application/json' });
-    console.log(plantilla.texto, cardBlob);
-
     const formData = new FormData();
     formData.append('file', image);
     formData.append('plantilla', cardBlob);
