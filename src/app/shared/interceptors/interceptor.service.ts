@@ -19,8 +19,7 @@ export class InterceptorService implements HttpInterceptor {
 
   constructor(
     private loaderSvc: LoaderService,
-    private authSvc: AuthService,
-    private router: Router
+    public  authSvc: AuthService
   ) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
@@ -33,28 +32,26 @@ export class InterceptorService implements HttpInterceptor {
       )
     });
     return next.handle(requestClone).pipe(
-        catchError(this.handlerError),
-        finalize(
-          () => {
-            this.loaderSvc.setLoading(false);
-          }
-        )
-      );
-  }
-
-  handlerError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'Error unknown';
-    if (error) {
-      errorMessage = `Error! ${error.message}`;
-    }
-    console.warn(errorMessage);
-    SwAlert.fire({
-      icon: 'error',
-      html: '',
-      title: 'Oops...',
-      text: ' Algo salió mal en la petición!',
-      footer: `${errorMessage}`
-    }).then(r => console.log(r));
-    return throwError(errorMessage);
+      tap(
+        () => {},
+        err => {
+          SwAlert.fire({
+            icon: 'error',
+            html: '',
+            title: 'Oops...',
+            text: ` Algo salió mal en la petición!. ${err.status === 401? 'Por seguridad se cerrará la sesión':''}`,
+            footer: `<span style="color: red">Error! <b>${err.error.error}.</b></span>`
+          }).then(r => {
+            if(err.status === 401){
+              this.authSvc.logout();
+              this.loaderSvc.setLoading(false);
+            }
+          });
+        },
+        () =>{
+          this.loaderSvc.setLoading(false);
+        }
+      )
+    );
   }
 }

@@ -6,6 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { PlatformUser, PlatformUserResponse } from 'src/app/shared/models/platform-users.model';
 import { environment } from 'src/environments/environment';
+import { ThemeSwitcherControllerService } from '@shared/services/theme-switcher-controller.service';
 
 const jwtHelper = new JwtHelperService();
 
@@ -18,7 +19,10 @@ export class AuthService {
   private platformUserRes = new BehaviorSubject<PlatformUserResponse>(null);
   private isLogged = new BehaviorSubject<boolean>(false);
 
-  constructor(private http: HttpClient, private router: Router) {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private themeSwitcherController: ThemeSwitcherControllerService) {
     this.checkToken();
   }
 
@@ -87,10 +91,11 @@ export class AuthService {
   }
 
   logout() {
-    localStorage.clear();
     this.platformUserRes.next(null);
     this.isLogged.next(false);
     this.router.navigate(['/login']).then(r => console.log(r));
+    this.themeSwitcherController.setThemeClass('light-theme');
+    localStorage.clear();
   }
 
   private checkToken() {
