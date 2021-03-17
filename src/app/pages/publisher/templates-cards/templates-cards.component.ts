@@ -71,7 +71,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
         }).then((resultDelete) => {
           if (resultDelete.isConfirmed) {
             this.templateCardsService.delete(card.id).subscribe((cardRes) => {
-              SwAlert.fire('Eliminado!', 'La plantilla se ha eliminado', 'success');
+              SwAlert.fire('Eliminado!', 'La plantilla se ha eliminado', 'success').then(r => console.log(r));
               this.ngAfterViewInit();
 
             }, (err) => {

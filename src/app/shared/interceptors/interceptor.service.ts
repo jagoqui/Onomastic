@@ -1,17 +1,10 @@
-import {
-  HttpErrorResponse,
-  HttpEvent,
-  HttpHandler,
-  HttpInterceptor,
-  HttpRequest,
-} from '@angular/common/http';
+import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, throwError } from 'rxjs';
-import { catchError, finalize, tap } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 
 import { LoaderService } from '../services/loader.service';
-import { Router } from '@angular/router';
 import { AuthService } from '@auth/services/auth.service';
 
 @Injectable({ providedIn: 'root' })
@@ -20,7 +13,8 @@ export class InterceptorService implements HttpInterceptor {
   constructor(
     private loaderSvc: LoaderService,
     public  authSvc: AuthService
-  ) { }
+  ) {
+  }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.loaderSvc.setLoading(true);
@@ -33,22 +27,23 @@ export class InterceptorService implements HttpInterceptor {
     });
     return next.handle(requestClone).pipe(
       tap(
-        () => {},
+        () => {
+        },
         err => {
           SwAlert.fire({
             icon: 'error',
             html: '',
             title: 'Oops...',
-            text: ` Algo salió mal en la petición!. ${err.status === 401? 'Por seguridad se cerrará la sesión':''}`,
-            footer: `<span style="color: red">Error! <b>${err.error.error}.</b></span>`
+            text: ` Algo salió mal en la petición!. ${err.status === 401 ? 'Por seguridad se cerrará la sesión' : ''}`,
+            footer: `<span style='color: red'>Error! <b>${err.error.error}.</b></span>`
           }).then(r => {
-            if(err.status === 401){
+            if (err.status === 401) {
               this.authSvc.logout();
               this.loaderSvc.setLoading(false);
             }
           });
         },
-        () =>{
+        () => {
           this.loaderSvc.setLoading(false);
         }
       )

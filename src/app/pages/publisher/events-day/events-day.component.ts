@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import {animate, state, style, transition, trigger} from '@angular/animations';
+import { animate, state, style, transition, trigger } from '@angular/animations';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -18,27 +18,31 @@ import { EventDay } from '@app/shared/models/event-day.model';
   styleUrls: ['./events-day.component.scss'],
   animations: [
     trigger('detailExpand', [
-      state('collapsed', style({height: '0px', minHeight: '0'})),
-      state('expanded', style({height: '*'})),
-      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)')),
-    ]),
-  ],
+      state('collapsed', style({ height: '0px', minHeight: '0' })),
+      state('expanded', style({ height: '*' })),
+      transition('expanded <=> collapsed', animate('225ms cubic-bezier(0.4, 0.0, 0.2, 1)'))
+    ])
+  ]
 })
 export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
-  constructor(private dialog: MatDialog, private eventsSvc: EventDayService, private domSanitizerSvc: DomSanitizerService) {
-  }
-  private numEvents = 0;
   dataSource = new MatTableDataSource();
   columnsToDisplay = [
     'nombre', 'fecha',
     'recurrencia',
-    'estado'
+    'estado','acciones'
   ];
-  private destroy$ = new Subject<any>();
   cards: Plantilla[];
   expandedElement: EventDay;
+  private numEvents = 0;
+  private destroy$ = new Subject<any>();
+
+  constructor(
+    private dialog: MatDialog,
+    private eventsSvc: EventDayService,
+    private domSanitizerSvc: DomSanitizerService) {
+  }
 
   ngOnInit(): void {
     this.eventsSvc.getEvents().subscribe((event) => {
@@ -55,16 +59,16 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
-      data: { title: event ? 'EDITAR EVENTO' : 'NUEVO EVENTO', event },
+      data: { title: event ? 'EDITAR EVENTO' : 'NUEVO EVENTO', event }
     });
   }
 
   getPageSizeOptions(): number[] {
-    const maxall = 100;
-    if (this.dataSource.data.length > maxall) {
+    const maxAll = 100;
+    if (this.dataSource.data.length > maxAll) {
       return [5, 10, 20, 50, this.dataSource.data.length];
     } else {
-      return [5, 10, 20, 50, maxall];
+      return [5, 10, 20, 50, maxAll];
     }
   }
 

@@ -133,7 +133,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           Ejemplo:<br><br>
            ${this.initialContent}<br>
            <img src='http://arquimedes.udea.edu.co:8096/onomastico/images/3temp.jpg' id='templateCardImage'
-           style='display: block; margin: auto; max-width:30%'>
+           style='display: block; margin: auto; max-width:30%' alt=''>
         `,
       showXPathInStatusbar: true,
       toolbarAdaptive: false,
