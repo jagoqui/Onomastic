@@ -48,6 +48,16 @@ export class AuthService {
     return id;
   }
 
+  getUserToken(): string {
+    let token: string = null;
+    this.userResponse$.subscribe((userRes: PlatformUserResponse) => {
+      if (userRes) {
+        token = userRes.token;
+      }
+    });
+    return token;
+  }
+
   login(authData: PlatformUser): Observable<PlatformUserResponse | void> {
     return this.http.post<PlatformUserResponse>(`${environment.apiUrl}/auth/signin`, authData).pipe(
       map((userResponse: any) => {

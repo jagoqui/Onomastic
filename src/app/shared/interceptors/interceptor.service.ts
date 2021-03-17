@@ -7,35 +7,39 @@ import {
 } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable, throwError } from 'rxjs';
-import { catchError, finalize } from 'rxjs/operators';
+import { catchError, finalize, tap } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 
 import { LoaderService } from '../services/loader.service';
+import { Router } from '@angular/router';
+import { AuthService } from '@auth/services/auth.service';
 
 @Injectable({ providedIn: 'root' })
 export class InterceptorService implements HttpInterceptor {
 
-  constructor(private loaderSvc: LoaderService) { }
+  constructor(
+    private loaderSvc: LoaderService,
+    private authSvc: AuthService,
+    private router: Router
+  ) { }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.loaderSvc.setLoading(true);
-    // const headers = new HttpHeaders({
-    //   'token-mail-user': ''
-    // });
 
-    // const requestClone = req.clone({
-    //   headers
-    // });
-    const requestClone = req.clone();
-
-    return next.handle(requestClone).pipe(
-      catchError(this.handlerError),
-      finalize(
-        () => {
-          this.loaderSvc.setLoading(false);
-        }
+    const requestClone = req.clone({
+      headers: req.headers.set(
+        'Authorization',
+        `Bearer ${this.authSvc.getUserToken()}`
       )
-    );
+    });
+    return next.handle(requestClone).pipe(
+        catchError(this.handlerError),
+        finalize(
+          () => {
+            this.loaderSvc.setLoading(false);
+          }
+        )
+      );
   }
 
   handlerError(error: HttpErrorResponse): Observable<never> {
