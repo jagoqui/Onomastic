@@ -7,7 +7,7 @@ import { SafeHtml } from '@angular/platform-browser';
 import { EventDayService } from '@app/pages/publisher/services/event-day.services';
 import { TemplateCardsService } from '@app/pages/publisher/services/template-cards.service';
 import { CardEvent, ConditionRes, Parameter } from '@app/shared/models/event-day.model';
-import { Plantilla } from '@app/shared/models/template-card.model';
+import { TemplateCard } from '@app/shared/models/template-card.model';
 import { BaseFormEventDay } from '@app/shared/utils/base-form-event-day';
 import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
 import * as moment from 'moment';
@@ -52,7 +52,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   @Output() refresh = new EventEmitter<boolean>(false);
   actionTODO = '';
 
-  cards: Plantilla[] = [];
+  cards: TemplateCard[] = [];
   sidenavOpened = false;
   selectCardHTML: SafeHtml = null;
   conditionsRes: ConditionRes[];
@@ -113,7 +113,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     }
   }
 
-  onSelectCard(card: Plantilla) {
+  onSelectCard(card: TemplateCard) {
     if (confirm('Seguro que desea seleccionar ésta plantilla?')) {
       this.selectCardHTML = this.sanitizeHTML(card.texto);
       const {id, texto}= card;

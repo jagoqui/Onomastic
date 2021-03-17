@@ -4,9 +4,11 @@ import { TemplateCardsService } from '@app/pages/publisher/services/template-car
 import { ThemeSwitcherControllerService } from '@shared/services/theme-switcher-controller.service';
 import { JoditAngularComponent } from 'jodit-angular';
 import { Subject } from 'rxjs';
-import { Plantilla } from '@shared/models/template-card.model';
+import { TemplateCard } from '@shared/models/template-card.model';
 import SwAlert from 'sweetalert2';
 import { UploadImageService } from '@pages/¨publisher/services/upload-image.service';
+import { environment } from '@env/environment';
+import { takeUntil } from 'rxjs/operators';
 
 enum Action {
   edit = 'Actualizar',
@@ -24,7 +26,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   jodit: JoditAngularComponent;
   maxChars = 400;
   actionTODO = '';
-  cardTemplateImage: File;
   initialContent = `
     <span>
       Hola <b id='name' class='labels' title='Nombre del usuario de correo.'>&lt;NOMBRE&gt;</b> en ésta
@@ -86,31 +87,55 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   }
 
   onSave() {
-    const card: Plantilla = {
-      id: this.data?.card?.id? this.data.card.id : null,
-      texto: this.joditEditor.editor.value,
-      asociacionesPorPlantilla: [
-        {
-          id: 7,
-          nombre: 'Escuela de Microbiología'
+    this.uploadImagesSvc.imageUpload(this.uploadImagesSvc.img)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(res => {
+        if (res.fileDownloadUri) {
+          const imgCard = document.getElementById('templateCardImage');
+          imgCard.setAttribute('src', res.fileDownloadUri);
+          const card: TemplateCard = {
+            id: this.data?.card?.id ? this.data.card.id : null,
+            texto: this.joditEditor.editor.value,
+            asociacionesPorPlantilla: [
+              {
+                id: 7,
+                nombre: 'Escuela de Microbiología'
+              }
+            ]
+          };
+          this.templateCardsService.newCardTemplate(card, this.uploadImagesSvc.img)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((cardRes) => {
+              if (cardRes) {
+                SwAlert.fire(this.data?.card ? 'Actualizada!' : 'Guardada!', '', 'success')
+                  .then(r => console.log(`Se ${this.data?.card ? 'actualizó' : 'guardó'} la plantilla exitosamente.`, r));
+                this.onClose(true);
+              }
+            }, (err) => {
+              SwAlert.fire({
+                icon: 'error',
+                html: `La plantilla no se  ${this.data?.card ? 'actualizó' : 'guardó'}`,
+                title: 'Oops...',
+                text: 'Algo salió mal!',
+                footer: `<span style = 'color:red'>${err}</span>`
+              }).then(r => {
+                this.deleteImage();
+                console.warn(`Error la plantilla no se pudo ${this.data?.card ? 'actualizar' : 'guardar'} la plantilla.`, r);
+              });
+            });
         }
-      ]
-    };
-    this.templateCardsService.newCardTemplate(card, this.cardTemplateImage).subscribe((cardRes) => {
-      if (cardRes) {
-        SwAlert.fire(this.data?.card? 'Actualizada!': 'Guardada!', '', 'success').
-          then(r => console.log(`Se ${this.data?.card? 'actualizó':'guardó'} la plantilla exitosamente.`, r));
-        this.onClose(true);
-      }
-    }, (err) => {
-      SwAlert.fire({
-        icon: 'error',
-        html: `La plantilla no se  ${this.data?.card? 'actualizó':'guardó'}`,
-        title: 'Oops...',
-        text: 'Algo salió mal!',
-        footer: `<span style = "color:red">${err}</span>`,
-      }).then(r => console.warn(`Error la plantilla no se pudo ${this.data?.card? 'actualizar':'guardar'} la plantilla.`, r));
-    });
+      },(err) => {
+        SwAlert.fire({
+          icon: 'error',
+          html: `La imagen de la plantilla no se  guardó, por integridad de los datos no se creará la plantilla.`,
+          title: 'Oops...',
+          text: 'Algo salió mal!',
+          footer: `<span style = 'color:red'>${err}</span>`
+        }).then(r => {
+          this.deleteImage();
+          console.warn(`Error la plantilla no se pudo ${this.data?.card ? 'actualizar' : 'guardar'} la plantilla.`, r);
+        });
+      });
   }
 
   setEditorConfig() {
@@ -214,21 +239,16 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                 confirmButtonText: 'Sí, reemplazarla!',
                 cancelButtonText: 'Cancelar'
               }).then((resultReplace) => {
+                console.log('Plantilla cargada!.', resultReplace);
                 if (resultReplace.isConfirmed) {
-                  const srcRemove = imgCard.getAttributeNode('src').value;
-                  //TODO: Eliminar imagen del servidor
                   imgCard.remove();
                   this.uploadImagesSvc.openExplorerWindows(editor);
                 }
-                return null;
-              }).then(res => {
-                console.log('Plantilla cargada!.', res);
                 return null;
               });
             } else {
               await this.uploadImagesSvc.openExplorerWindows(editor);
             }
-            this.cardTemplateImage = this.uploadImagesSvc.img;
           })
         },
         reset: {
@@ -292,30 +312,33 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     };
   }
 
-  async getFileFromUrl(url, name, defaultType = 'image/jpeg'){
-    const response = await fetch(url);
-    const data = await response.blob();
-    return new File([data], name, {
-      type: response.headers.get('content-type') || defaultType,
-    });
+  deleteImage() {
+    const imgCard = document.getElementById('templateCardImage');
+    const srcImg = imgCard.getAttributeNode('src').value;
+    const imgName = srcImg.replace(environment.downloadImagesUriServer + '/', '');
+    console.log(imgName);
+    this.uploadImagesSvc.deleteImage(imgName)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((res) => {
+        console.log('Imagen eliminada! ', res);
+      }, (err) => {
+        console.log('Error en eliminar la imagen! :> ', err);
+      });
   }
 
   ngOnInit() {
     this.setEditorConfig();
     this.themeSwitcherController.themeClass$
+      .pipe(takeUntil(this.destroy$))
       .subscribe(
         (theme: string) => (this.config.theme = theme === 'light-theme' ? 'default' : 'dark')
       );
   };
 
-  async ngAfterViewInit(){
+  async ngAfterViewInit() {
     if (this.data?.card) {
       this.actionTODO = Action.edit;
       this.joditEditor.editor.value = this.data.card.texto;
-      const imgCard = document.getElementById('templateCardImage');
-      const srcImg = imgCard.getAttributeNode('src').value;
-      this.cardTemplateImage = await
-        this.getFileFromUrl(srcImg, 'image.jpg');
     } else {
       this.actionTODO = Action.new;
     }
@@ -325,5 +348,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     this.destroy$.next({});
     this.destroy$.complete();
   };
+
+
 }
 

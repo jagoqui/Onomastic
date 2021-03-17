@@ -9,7 +9,7 @@ import { EventDayService } from '../services/event-day.services';
 import { ModalEventDayComponent } from './components/modal-event-day/modal-event-day.component';
 import { DomSanitizerService } from '@app/shared/services/dom-sanitizer.service';
 import { SafeHtml } from '@angular/platform-browser';
-import { Plantilla } from '@app/shared/models/template-card.model';
+import { TemplateCard } from '@app/shared/models/template-card.model';
 import { EventDay } from '@app/shared/models/event-day.model';
 
 @Component({
@@ -33,7 +33,7 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
     'recurrencia',
     'estado','acciones'
   ];
-  cards: Plantilla[];
+  cards: TemplateCard[];
   expandedElement: EventDay;
   private numEvents = 0;
   private destroy$ = new Subject<any>();

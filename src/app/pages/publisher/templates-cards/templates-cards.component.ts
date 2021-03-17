@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
-import { Plantilla } from '@app/shared/models/template-card.model';
+import { TemplateCard } from '@app/shared/models/template-card.model';
 import { DomSanitizerService } from '@app/shared/services/dom-sanitizer.service';
 import { LoaderService } from '@app/shared/services/loader.service';
 
@@ -15,7 +15,7 @@ import SwAlert from 'sweetalert2';
   styleUrls: ['./templates-cards.component.scss']
 })
 export class TemplatesCardsComponent implements OnInit, AfterViewInit {
-  cards: Plantilla[];
+  cards: TemplateCard[];
   onViewCard = true;
 
   constructor(
@@ -46,7 +46,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
     });
   }
 
-  onEditCard(card: Plantilla): void {
+  onEditCard(card: TemplateCard): void {
     SwAlert.fire({
       title: 'Qué desea hacer?',
       showDenyButton: true,

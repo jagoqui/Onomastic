@@ -1,6 +1,10 @@
 import { Injectable } from '@angular/core';
 import SwAlert from 'sweetalert2';
-import { TemplateCardsService } from '@pages/¨publisher/services/template-cards.service';
+import { Observable } from 'rxjs';
+import { ImageUpload } from '@shared/models/image-upload.model';
+import { environment } from '@env/environment';
+import { HttpClient } from '@angular/common/http';
+import { AuthService } from '@auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,7 +12,10 @@ import { TemplateCardsService } from '@pages/¨publisher/services/template-cards
 export class UploadImageService {
   private imgFile: File = null;
 
-  constructor(private templateCardsSvc: TemplateCardsService) {
+  constructor(
+    private http: HttpClient,
+    private authSvc: AuthService
+  ) {
   }
 
   get img() {
@@ -21,7 +28,7 @@ export class UploadImageService {
     input.setAttribute('accept', 'image/*');
     input.click();
 
-    input.onchange = async () => {
+    return input.onchange = async () => {
       const file = input.files[0];
       if (!file) {
         return;
@@ -36,15 +43,27 @@ export class UploadImageService {
         ).then(r => console.warn('Error en  el formato de la imagen!', r));
         return;
       }
-
-      this.templateCardsSvc.imageUpload(file).subscribe(res => {
-        if (res.fileDownloadUri) {
-          this.insertImage(editor, res.fileDownloadUri);
-          this.imgFile = file;
-        }
-      });
+      this.imgFile = file;
+      this.insertImage(editor, URL.createObjectURL(file));
     };
   };
+
+  imageUpload(img: File): Observable<ImageUpload> {
+    const formData = new FormData();
+    formData.append('file', img);
+    return this.http
+      .post<ImageUpload>(`${environment.uploadImagesUriServer}/${new Date().getTime()}_${img.name}`, formData, {
+        reportProgress: true
+      });
+  }
+
+  async getFileFromUrl(url, name, defaultType = 'image/jpeg') {
+    const response = await fetch(url);
+    const data = await response.blob();
+    return new File([data], name, {
+      type: response.headers.get('content-type') || defaultType
+    });
+  }
 
   insertImage = (editor, url) => {
     const image = document.createElement('img') as HTMLImageElement;
@@ -53,4 +72,8 @@ export class UploadImageService {
     editor.selection.insertNode(image);
   };
 
+  deleteImage(imgName: string): Observable<any> {
+    return this.http
+      .delete<any>(`${environment.apiUrl}/delete/${imgName}`);
+  }
 }

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Plantilla, TemplateCard } from '@app/shared/models/template-card.model';
+import { TemplateCard } from '@app/shared/models/template-card.model';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 import { AuthService } from '@auth/services/auth.service';
@@ -16,16 +16,7 @@ export class TemplateCardsService {
     private authSvc: AuthService) {
   }
 
-  imageUpload(img: File): Observable<ImageUpload> {
-    const formData = new FormData();
-    formData.append('file', img);
-    return this.http
-      .post<ImageUpload>(`${environment.uploadImagesServer}/${this.authSvc.getUserId()}${img.name}`, formData, {
-        reportProgress: true
-      });
-  }
-
-  newCardTemplate(plantilla: Plantilla, image: File): Observable<TemplateCard> {
+  newCardTemplate(plantilla: TemplateCard, image: File): Observable<TemplateCard> {
     const cardBlob = new Blob([JSON.stringify(plantilla)], { type: 'application/json' });
     const formData = new FormData();
     formData.append('file', image);
@@ -36,9 +27,9 @@ export class TemplateCardsService {
       });
   }
 
-  getAllCards(): Observable<Plantilla[]> {
+  getAllCards(): Observable<TemplateCard[]> {
     return this.http
-      .get<Plantilla[]>(`${environment.apiUrl}/plantillas`);
+      .get<TemplateCard[]>(`${environment.apiUrl}/plantillas`);
   }
 
   delete(id: number): Observable<any> {
