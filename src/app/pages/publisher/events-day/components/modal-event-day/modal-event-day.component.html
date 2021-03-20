@@ -29,10 +29,10 @@
               </button>
             </div>
           </div>
-          <ng-template #selectedCard>
-            <div [innerHTML]="selectCardHTML" appMaterialElevation (click)="loadCards(true)"
-                 class="select-card-container" title='click para cambiar plantilla'></div>
-          </ng-template>
+            <ng-template #selectedCard>
+              <div [innerHTML]="selectCardHTML" (click)="loadCards(true)" 
+                   class="select-card-container" title='click para cambiar plantilla'></div>
+            </ng-template>
         </div>
         <!--Event day form-->
         <div fxFlex="38" fxLayout="column">

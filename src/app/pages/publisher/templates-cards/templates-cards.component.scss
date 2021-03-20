@@ -19,23 +19,27 @@
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
-.card{
+
+.card {
   width: 380px;
   height: 300px;
   overflow: hidden;
-  white-space: nowrap;
+  white-space: pre;
   border: 0.1667rem solid mat-color($mat-primary, lighter);
+  object-fit: cover;
+  display: flex;
 
   &:hover {
-          border: 0.1667rem solid mat-color($mat-primary, darker);
-        }
+    border: 0.1667rem solid mat-color($mat-primary, darker);
+  }
 }
-@supports(object-fit: cover){
-    .card mat-card{
-      height: 100%;
-      object-fit: cover;
-      object-position: center center;
-    }
-}
+
+// @supports(object-fit: cover){
+//     .card mat-card{
+//       height: 100%;
+//       object-fit: cover;
+//       object-position: center center;
+//     }
+// }
 
 

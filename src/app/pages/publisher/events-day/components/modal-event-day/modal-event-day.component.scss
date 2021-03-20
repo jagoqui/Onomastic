@@ -5,48 +5,44 @@
   margin: 0.5rem 0;
 }
 
-// .card {
-//   margin: 18px;
-//   padding: 0;
-//   min-height: 11.1111rem;
-//   width: 100vh;
-//   border: 0.1667rem solid mat-color($mat-primary, lighter);
-
-//   &:hover {
-//     border: 0.1667rem solid mat-color($mat-primary, darker);
-//   }
-// }
-
-.card{
+.card {
   width: 600px;
   height: 300px;
   overflow: hidden;
-  white-space: nowrap;
+  white-space: normal;
   border: 0.1667rem solid mat-color($mat-primary, lighter);
+  object-fit: cover;
 
   &:hover {
-          border: 0.1667rem solid mat-color($mat-primary, darker);
-        }
+    border: 0.1667rem solid mat-color($mat-primary, darker);
+  }
 }
 
-.select-card-container, .select-card-container-error {
-  width: 100%;
-  height: 60vh;
-  margin: 0.2778rem;
-  display: flex;
-  align-items: center;
+.select-card-container,
+.select-card-container-error {
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  white-space: normal;
+  border: 0.1667rem solid mat-color($mat-primary, lighter);
+  object-fit: cover;
 
   .btn-select-card {
     padding: 0;
     margin: auto;
     line-height: 11.6667rem;
+    display: flex;
+    align-items: center;
+   justify-content: center;
+    
   }
 
   &:hover {
     border: 0.1667rem solid mat-color($mat-primary, darker);
   }
 }
-.select-card-container{
+
+.select-card-container {
   border: 0.1667rem solid mat-color($mat-primary, lighter);
 }
 
@@ -56,4 +52,8 @@
 
 .mat-dialog-content {
   height: 70vh;
+}
+
+form{
+padding-top: 7%;
 }

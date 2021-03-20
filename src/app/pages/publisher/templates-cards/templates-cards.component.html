@@ -11,7 +11,7 @@
     </button>
   </div>
   <div class='wrapper' *ngIf='cards && onViewCard'>
-    <mat-card *ngFor='let card of cards' appMaterialElevation (click)='onEditCard(card)'
+    <mat-card *ngFor='let card of cards' (click)='onEditCard(card)'
               title='Click para editar plantilla' [innerHTML]='sanitizeHTML(card.texto)'
               class='card'>
     </mat-card>
