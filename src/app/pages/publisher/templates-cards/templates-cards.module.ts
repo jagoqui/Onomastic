@@ -5,6 +5,7 @@ import {SharedModule} from 'src/app/shared/shared.module';
 import {ModalTemplateCardsComponent,} from './components/modal/modal-template-cards.component';
 import {TemplatesCardsRoutingModule} from './templates-cards-routing.module';
 import {TemplatesCardsComponent} from './templates-cards.component';
+import { PublisherModule } from '@pages/¨publisher/publisher.module';
 
 @NgModule({
   declarations: [TemplatesCardsComponent, ModalTemplateCardsComponent],
@@ -12,6 +13,7 @@ import {TemplatesCardsComponent} from './templates-cards.component';
     TemplatesCardsRoutingModule,
     JoditAngularModule,
     SharedModule,
+    PublisherModule
   ]
 })
 export class TemplatesCardsModule {
