@@ -21,7 +21,7 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./auth/login/login.module').then(m => m.LoginModule),
-    // redirectTo: 'PUBLISHER/templates-cards',
+    // redirectTo: 'PUBLISHER/templates-cards/2',
     canActivate: [NegateCheckLoginGuard]
   },
   {
@@ -51,7 +51,7 @@ const routes: Routes = [
   {
     path: 'PUBLISHER',
     loadChildren: () => import('./pages/publisher/publisher.module').then(m => m.PublisherModule),
-    canActivate: [CheckLoginGuard]
+    // canActivate: [CheckLoginGuard]
   },
   {
     path: 'forgot-password', loadChildren: () => import('./auth/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule),

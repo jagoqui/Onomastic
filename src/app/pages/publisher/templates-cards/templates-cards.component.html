@@ -10,10 +10,13 @@
       <mat-icon>refresh</mat-icon>
     </button>
   </div>
-  <div class='wrapper' *ngIf='cards && onViewCard'>
-    <mat-card *ngFor='let card of cards' (click)='onEditCard(card)'
-              title='Click para editar plantilla' [innerHTML]='sanitizeHTML(card.texto)'
-              class='card'>
-    </mat-card>
-  </div>
-</div> 
+<!--  <div class='wrapper' *ngIf='cards && onViewCard'>-->
+<!--    <mat-card *ngFor='let card of cards' appMaterialElevation (click)='onEditCard(card)'-->
+<!--              title='Click para editar plantilla' [innerHTML]='sanitizeHTML(card.texto)'-->
+<!--              class='card'>-->
+<!--    </mat-card>-->
+<!--  </div>-->
+  <section class="container">
+    <app-template-card *ngFor="let card of cards" [card]="card"></app-template-card>
+  </section>
+</div>

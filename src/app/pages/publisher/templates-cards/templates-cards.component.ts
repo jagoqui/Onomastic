@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
 import { TemplateCard } from '@app/shared/models/template-card.model';
@@ -8,6 +8,7 @@ import { LoaderService } from '@app/shared/services/loader.service';
 import { TemplateCardsService } from '../services/template-cards.service';
 import { ModalTemplateCardsComponent } from './components/modal/modal-template-cards.component';
 import SwAlert from 'sweetalert2';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-templates-cards',
@@ -20,6 +21,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
 
   constructor(
     private dialog: MatDialog,
+    private route: ActivatedRoute,
     private domSanitizerSvc: DomSanitizerService,
     private templateCardsService: TemplateCardsService,
     public loaderSvc: LoaderService
@@ -102,5 +104,9 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
+    const card = this.route.snapshot.paramMap.get('card');
+    if(card){
+      this.onOpenModal(card);
+    }
   }
 }

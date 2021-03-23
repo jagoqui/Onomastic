@@ -1,0 +1,56 @@
+.card {
+  margin: 0.556rem;
+  border: 0.278rem solid transparent;
+  box-shadow: 0.111rem 0.111rem 0.333rem 0 rgba(0, 0, 0, 0.3);
+  max-width: 19.444rem;
+  transition: all 0.6s;
+  border-radius: 0.5rem;
+  cursor: pointer;
+
+  .card_text {
+    height: 16.667rem;
+    background: linear-gradient(90deg, rgba(73, 35, 120, 1) 0%, rgba(73, 35, 120, 1) 38%, rgba(73, 35, 120, 1) 100%);
+  }
+
+  .card__details {
+    padding: 0 0.556rem 0.556rem;
+    position: relative;
+
+    h3 {
+      color: #fff;
+    }
+  }
+
+  .card__list {
+    margin-top: 1rem;
+    padding: 0;
+  }
+
+  img {
+    max-width: 100%;
+    opacity: 0.5;
+    transition: opacity 0.5s;
+    border-radius: 0.2rem;
+    width: 100%;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .card__favorite {
+    position: absolute;
+    width: 1.667rem;
+    height: 1.667rem;
+    right: .4rem;
+    opacity: 0.7;
+    cursor: pointer;
+  }
+
+  &:hover {
+    border: 0.278rem solid #fff;
+    box-shadow: 0.278rem 0.278rem 0.056rem rgba(250, 246, 246, 0.5);
+    -webkit-box-shadow: 0.278rem 0.278rem 1.111rem rgba(250, 246, 246, 0.5);
+    -moz-box-shadow: 0.278rem 0.278rem 1.111rem rgba(250, 246, 246, 0.5);
+  }
+}
