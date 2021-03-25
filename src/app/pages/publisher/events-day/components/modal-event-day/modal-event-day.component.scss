@@ -1,0 +1,59 @@
+@import '../../../../../../assets/custom_styles/material_custom_theme';
+
+.reloadCard {
+  text-align: right;
+  margin: 0.5rem 0;
+}
+
+.card {
+  width: 600px;
+  height: 300px;
+  overflow: hidden;
+  white-space: normal;
+  border: 0.1667rem solid mat-color($mat-primary, lighter);
+  object-fit: cover;
+
+  &:hover {
+    border: 0.1667rem solid mat-color($mat-primary, darker);
+  }
+}
+
+.select-card-container,
+.select-card-container-error {
+  max-width: 100%;
+  max-height: 100%;
+  overflow: hidden;
+  white-space: normal;
+  border: 0.1667rem solid mat-color($mat-primary, lighter);
+  object-fit: cover;
+
+  .btn-select-card {
+    padding: 0;
+    margin: auto;
+    line-height: 11.6667rem;
+    display: flex;
+    align-items: center;
+   justify-content: center;
+
+  }
+
+  &:hover {
+    border: 0.1667rem solid mat-color($mat-primary, darker);
+  }
+}
+
+.select-card-container {
+  border: 0.1667rem solid mat-color($mat-primary, lighter);
+}
+
+.select-card-container-error {
+  border: 0.1667rem solid mat-color($mat-warn, darker);
+}
+
+.mat-dialog-content {
+  height: 70vh;
+}
+
+form{
+padding-top: 7%;
+}

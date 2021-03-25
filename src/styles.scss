@@ -1,0 +1,86 @@
+@import 'assets/custom_styles/material_custom_theme.scss';
+
+html,
+body {
+  box-sizing: border-box;
+  height    : 100%;
+  margin    : 0
+}
+
+// Create your Sass color vars (will be available in all the project)
+.container {
+  margin: 2% auto 0;
+  padding   : 0;
+
+  div .button-action {
+    // TODO: Pasar texto del botón
+    margin-top: 2.7778rem;
+    border-radius: 2.7778rem;
+
+    &:before {
+      position     : fixed;
+      left         : 0;
+      width        : 100%;
+      height       : 100%;
+      border-radius: 2.7778rem;
+      color        : white;
+      transition   : all 0.35s ease;
+      font-weight  : 800;
+      background: mat-color($mat-primary, main);
+    }
+
+    &:hover:before {
+      content: "";
+      width  : 15%;
+    }
+  }
+
+  div {
+    .mat-toolbar {
+      margin-top: 1.6667rem;
+      font-size : 0.7778rem;
+    }
+  }
+
+  .table-responsive {
+    display   : block;
+    width     : 100%;
+    overflow-x: auto;
+
+    .mat-table {
+      width          : 100%;
+      max-width      : 100%;
+      margin-bottom  : 1rem;
+      display        : table;
+      border-collapse: collapse;
+    }
+
+    .mat-cell,
+    .mat-header-cell {
+      word-wrap     : initial;
+      display       : table-cell;
+      padding       : 0 0.2778rem;
+      line-break    : unset;
+      width         : auto;
+      white-space   : nowrap;
+      overflow      : hidden;
+      vertical-align: middle;
+    }
+  }
+}
+
+.mat-dialog-title {
+  margin     : 1.1111rem 0;
+  text-align : center;
+  font-weight: bold;
+}
+
+.mat-dialog-actions {
+  margin-top: 2%;
+}
+
+@function set-background-buttom-action($color: mat-color($mat-primary, main)) {
+  $background-buttom-action: $color;
+  @return 0;
+}
+

@@ -1,0 +1,23 @@
+.mat-toolbar {
+  .spacer {
+    flex: 1 1 auto;
+  }
+
+  #app-title {
+    margin: 0;
+    padding: 0;
+  }
+
+  button {
+    font-size: 1em;
+    outline: none;
+    box-shadow: none;
+    background-color: transparent;
+    color: white;
+  }
+}
+
+.main-toolbar {
+  z-index: 999;
+  position: fixed;
+}
