@@ -35,7 +35,7 @@ export class InterceptorService implements HttpInterceptor {
             html: '',
             title: 'Oops...',
             text: ` Algo salió mal en la petición!. ${err.status === 401 ? 'Por seguridad se cerrará la sesión' : ''}`,
-            footer: `<span style='color: red'>Error! <b>${err.error.error}</b>. ${err.statusText}/span>`
+            footer: `<span style='color: red'>Error! <b>${err.error.error}</b>. ${err.statusText}</span>`
           }).then(r => {
             console.log(err.statusText);
             this.loaderSvc.setLoading(false);

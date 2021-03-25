@@ -10,7 +10,11 @@ const routes: Routes = [
     loadChildren: () => import('./users/users.module').then(m => m.UsersModule)
   },
   {
-    path: 'templates-cards/:card',
+    path: 'templates-cards',
+    redirectTo:'templates-cards/'
+  },
+  {
+    path: 'templates-cards/:id',
     loadChildren: () => import('./templates-cards/templates-cards.module').then(m => m.TemplatesCardsModule)
   },
   {

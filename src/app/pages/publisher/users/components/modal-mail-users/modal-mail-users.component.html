@@ -62,7 +62,7 @@
         <mat-label>Fecha de naciemiento</mat-label>
         <label>
           <input matInput [matDatepicker]="dp" [max]="today" formControlName="fechaNacimiento"
-                 (dateChange)="setBirtdayFormat($event)" placeholder="YYYY-MM-DD">
+                 (dateChange)="setBirthdayFormat($event)" placeholder="YYYY-MM-DD">
         </label>
         <mat-datepicker-toggle matSuffix [for]="dp"></mat-datepicker-toggle>
         <mat-datepicker #dp></mat-datepicker>
@@ -121,7 +121,7 @@
           <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let association of associations" [value]="association['nombre']"
-                        (onSelectionChange)="setformGroupID(mailAssociation, association['id'])">
+                        (onSelectionChange)="setFormGroupID(mailAssociation, association['id'])">
               {{association['nombre']}}
             </mat-option>
           </mat-select>
@@ -192,7 +192,7 @@
           <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let bondingType of bondingTypes" [value]="bondingType['nombre']"
-                        (onSelectionChange)="setformGroupID(bonding, bondingType['id'])">
+                        (onSelectionChange)="setFormGroupID(bonding, bondingType['id'])">
               {{bondingType['nombre']}}</mat-option>
           </mat-select>
           <mat-icon matSuffix>group_work</mat-icon>
@@ -227,7 +227,7 @@
           <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
             <mat-option *ngFor="let platform of platforms" [value]="platform['nombre']"
-                        (onSelectionChange)="setformGroupID(platformUser, platform['id'])">
+                        (onSelectionChange)="setFormGroupID(platformUser, platform['id'])">
               {{platform['nombre']}}
             </mat-option>
           </mat-select>

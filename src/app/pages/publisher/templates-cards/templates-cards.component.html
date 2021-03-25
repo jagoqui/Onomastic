@@ -1,4 +1,4 @@
-<div class='container' fxFlex='98' fxLayout='column'>
+<div class='container ' fxFlex='98' fxLayout='column'>
   <div fxLayout='row'>
     <button class='button-action button-add-template-card' fxFlex='19' mat-raised-button (click)='onOpenModal(null)'
             title='Pulse para agregar una nueva plantilla'>Nueva plantilla
@@ -10,13 +10,7 @@
       <mat-icon>refresh</mat-icon>
     </button>
   </div>
-<!--  <div class='wrapper' *ngIf='cards && onViewCard'>-->
-<!--    <mat-card *ngFor='let card of cards' appMaterialElevation (click)='onEditCard(card)'-->
-<!--              title='Click para editar plantilla' [innerHTML]='sanitizeHTML(card.texto)'-->
-<!--              class='card'>-->
-<!--    </mat-card>-->
-<!--  </div>-->
-  <section class="container">
-    <app-template-card *ngFor="let card of cards" [card]="card"></app-template-card>
+  <section class="html_section" *ngIf='this.onViewCard' fxLayoutAlign='center center'>
+    <app-template-card #cardHtml *ngFor="let card of cards" [card]="card" (refreshCards)='onRefresh($event)'></app-template-card>
   </section>
 </div>

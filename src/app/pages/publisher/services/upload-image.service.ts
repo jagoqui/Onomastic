@@ -4,7 +4,6 @@ import { Observable, of } from 'rxjs';
 import { ImageUpload } from '@shared/models/image-upload.model';
 import { environment } from '@env/environment';
 import { HttpClient } from '@angular/common/http';
-import { AuthService } from '@auth/services/auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +12,16 @@ export class UploadImageService {
   private imgFile: File = null;
 
   constructor(
-    private http: HttpClient,
+    private http: HttpClient
   ) {
   }
 
   get img() {
     return this.imgFile;
+  }
+
+  setImgNull() {
+    this.imgFile = null;
   }
 
   openExplorerWindows = (editor) => {
@@ -59,7 +62,7 @@ export class UploadImageService {
     return of(null);
   }
 
-  async getFileFromUrl(url, name, defaultType = 'image/jpeg') {
+  async getFileFromUrl(url, name, defaultType = 'image/jpeg'): Promise<File> {
     const response = await fetch(url);
     const data = await response.blob();
     return new File([data], name, {

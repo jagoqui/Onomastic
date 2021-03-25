@@ -1,14 +1,14 @@
-import { AfterViewInit, Component, Input, OnInit } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
-import { TemplateCard } from '@app/shared/models/template-card.model';
-import { DomSanitizerService } from '@app/shared/services/dom-sanitizer.service';
-import { LoaderService } from '@app/shared/services/loader.service';
+import { TemplateCard } from '@shared/models/template-card.model';
+import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
+import { LoaderService } from '@shared/services/loader.service';
 
 import { TemplateCardsService } from '../services/template-cards.service';
 import { ModalTemplateCardsComponent } from './components/modal/modal-template-cards.component';
 import SwAlert from 'sweetalert2';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-templates-cards',
@@ -24,7 +24,8 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
     private route: ActivatedRoute,
     private domSanitizerSvc: DomSanitizerService,
     private templateCardsService: TemplateCardsService,
-    public loaderSvc: LoaderService
+    public loaderSvc: LoaderService,
+    private router: Router
   ) {
   }
 
@@ -33,6 +34,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
   }
 
   onOpenModal(card = {}): void {
+    console.log('Modal');
     this.onViewCard = false;
     const dialogRef = this.dialog.open(ModalTemplateCardsComponent, {
       height: 'auto',
@@ -44,55 +46,16 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(res => {
       this.onViewCard = true;
+      this.router.navigate(['PUBLISHER/templates-cards/', '']).then(r => console.log('Open route: ,',r));
       this.ngAfterViewInit();
     });
   }
 
-  onEditCard(card: TemplateCard): void {
-    SwAlert.fire({
-      title: 'Qué desea hacer?',
-      showDenyButton: true,
-      showCloseButton: true,
-      showCancelButton: true,
-      confirmButtonText: `Editar`,
-      denyButtonText: `Eliminar`
-    }).then((result) => {
-      /* Read more about isConfirmed, isDenied below */
-      if (result.isConfirmed) {
-        this.onOpenModal(card);
-      } else if (result.isDenied) {
-        SwAlert.fire({
-          title: 'Está seguro?',
-          text: 'Si elimina ésta plantilla se eliminará tambien los eventos asociados, lo cambios no podrán revertirse!',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Sí, eliminarla!',
-          cancelButtonText: 'Cancelar'
-        }).then((resultDelete) => {
-          if (resultDelete.isConfirmed) {
-            this.templateCardsService.delete(card.id).subscribe((cardRes) => {
-              SwAlert.fire('Eliminado!', 'La plantilla se ha eliminado', 'success').then(r => console.log(r));
-              this.ngAfterViewInit();
-
-            }, (err) => {
-              SwAlert.fire({
-                icon: 'error',
-                html: '',
-                title: 'Oops...',
-                text: ' Algo salió mal!',
-                footer: `${err}`
-              }).then(r => console.log(r));
-            });
-          }
-        });
-      }
-    });
-  }
-
-  onRefresh() {
-    this.ngAfterViewInit();
+  onRefresh(refreshEvent?: boolean) {
+    console.log(refreshEvent);
+    if(refreshEvent || refreshEvent !== false){
+      this.ngAfterViewInit();
+    }
   }
 
   ngAfterViewInit(): void {
@@ -104,9 +67,13 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
   }
 
   ngOnInit(): void {
-    const card = this.route.snapshot.paramMap.get('card');
-    if(card){
-      this.onOpenModal(card);
+    const id= this.route.snapshot.paramMap.get('id');
+    if(id){
+      this.templateCardsService.getCardById(+id as number).subscribe((card) =>{
+        if(card){
+          this.onOpenModal(card);
+        }
+      });
     }
   }
 }

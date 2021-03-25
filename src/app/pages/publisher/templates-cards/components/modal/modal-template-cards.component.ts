@@ -1,6 +1,6 @@
 import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TemplateCardsService } from '@app/pages/publisher/services/template-cards.service';
+import { TemplateCardsService } from '@pages/¨publisher/services/template-cards.service';
 import { ThemeSwitcherControllerService } from '@shared/services/theme-switcher-controller.service';
 import { JoditAngularComponent } from 'jodit-angular';
 import { Subject } from 'rxjs';
@@ -10,6 +10,7 @@ import { UploadImageService } from '@pages/¨publisher/services/upload-image.ser
 import { environment } from '@env/environment';
 import { takeUntil } from 'rxjs/operators';
 import { EmailUsersService } from '@pages/¨publisher/services/email-users.service';
+import { LoaderService } from '@shared/services/loader.service';
 
 enum Action {
   edit = 'Actualizar',
@@ -25,11 +26,10 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   @ViewChild('editor') joditEditor: JoditAngularComponent;
 
   jodit: JoditAngularComponent;
-  cardImageExample = 'https://lh3.googleusercontent.com/p' +
-    'roxy/a-nT6oZkV65q6rZa0nkDwdXWRVFN7WwZskQD6Wbx2c3b0nkfVyNfR13O7__TLWtqA9wAf-d' +
-    'xp4om_FrM-Tb2V061PtReyrIe5neUsjWZa46VEar2TbdWmSfkU7IfNi3dk0zq7AGyzvPyS5QpsP7H' +
-    'UZOXZ6cSxkNPPv20QaSJkn5zuZfX3YGzkOuabWDvpCly7FWGqEH1cQ';
+  cardImageExample = '/assets/images/templateCard_example.jpg';
   card: TemplateCard;
+  cardImageEdit: File = null;
+  urlImageEdit: string = null;
   maxChars = 400;
   actionTODO = '';
   initialContent = `
@@ -52,7 +52,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     private themeSwitcherController: ThemeSwitcherControllerService,
     private templateCardsService: TemplateCardsService,
     private uploadImagesSvc: UploadImageService,
-    private emailUserSvc: EmailUsersService
+    private emailUserSvc: EmailUsersService,
+    private loaderSvc: LoaderService
   ) {
   }
 
@@ -94,54 +95,70 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   }
 
   onSave() {
-    this.uploadImagesSvc.imageUpload(this.uploadImagesSvc.img)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(res => {
-        if (res?.fileDownloadUri) {
-          const imgCard = document.getElementById('templateCardImage');
-          imgCard.setAttribute('src', res.fileDownloadUri);
-        }
-        console.log(this.emailUserSvc.getAssociationsById()
-          .subscribe(associations => {
-            this.card = {
-              id: this.data?.card?.id ? this.data.card.id : null,
-              texto: this.joditEditor.editor.value,
-              asociacionesPorPlantilla: associations
-            };
-            this.templateCardsService.newCardTemplate(this.card, this.uploadImagesSvc.img)
-              .pipe(takeUntil(this.destroy$))
-              .subscribe((cardRes) => {
-                if (cardRes) {
-                  SwAlert.fire(`Plantilla ${this.data?.card ? 'Actualizada!' : 'Guardada!'} `, '', 'success')
-                    .then(r => console.log(`Se ${this.data?.card ? 'actualizó' : 'guardó'} la plantilla exitosamente.`, r));
-                  this.onClose(true);
-                }
-              }, (err) => {
-                SwAlert.fire({
-                  icon: 'error',
-                  html: `La plantilla no se  ${this.data?.card ? 'actualizó' : 'guardó'}`,
-                  title: 'Oops...',
-                  text: 'Algo salió mal!',
-                  footer: `<span style = 'color:red'>${err}</span>`
-                }).then(r => {
-                  this.deleteImage();
-                  console.warn(`Error la plantilla no se pudo ${this.data?.card ? 'actualizar' : 'guardar'} la plantilla.`, r, this.card);
-                });
-              });
-          }));
-      }, (err) => {
-        SwAlert.fire({
-          icon: 'error',
-          html: `La imagen de la plantilla no se  guardó, por integridad de los datos no se creará la plantilla.`,
-          title: 'Oops...',
-          text: 'Algo salió mal!',
-          footer: `<span style = 'color:red'>${err}</span>`
-        }).then(r => {
-          this.deleteImage();
-          console.warn(`Error la plantilla no se pudo ${this.data?.card ? 'actualizar' : 'guardar'} la plantilla.`, r);
-          console.table(this.card);
+    if(!this.uploadImagesSvc?.img){
+      this.getAssociations();
+    }else{
+      if(this.cardImageEdit){
+        this.deleteImage(this.urlImageEdit);
+      }
+      this.uploadImagesSvc.imageUpload(this.uploadImagesSvc.img)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(res => {
+          if (res?.fileDownloadUri) {
+            const imgCard = document.getElementById('templateCardImage');
+            imgCard.setAttribute('src', res.fileDownloadUri);
+          }
+          this.getAssociations();
+        }, (err) => {
+          SwAlert.fire({
+            icon: 'error',
+            html: `La imagen de la plantilla no se  guardó, por integridad de los datos no se creará la plantilla.`,
+            title: 'Oops...',
+            text: 'Algo salió mal!',
+            footer: `<span style = 'color:red'>${err}</span>`
+          }).then(r => {
+            this.loaderSvc.setLoading(false);
+            this.deleteImage();
+            console.warn(`Error la plantilla no se pudo ${this.data?.card ? 'actualizar' : 'guardar'} la plantilla.`, r);
+            console.table(this.card);
+          });
         });
+    }
+  }
+
+  getAssociations(){
+    this.emailUserSvc.getAssociationsById()
+      .subscribe(associations => {
+        this.card = {
+          id: this.data?.card?.id ? this.data.card.id : null,
+          texto: this.joditEditor.editor.value,
+          asociacionesPorPlantilla: associations
+        };
+        this.templateCardsService.newCardTemplate(
+          this.card,
+          this.uploadImagesSvc?.img? this.uploadImagesSvc.img : this.cardImageEdit)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((cardRes) => {
+            if (cardRes) {
+              SwAlert.fire(`Plantilla ${this.data?.card ? 'Actualizada!' : 'Guardada!'} `, '', 'success')
+                .then(r => console.log(`Se ${this.data?.card ? 'actualizó' : 'guardó'} la plantilla exitosamente.`, r));
+              this.onClose(true);
+            }
+          }, (err) => {
+            SwAlert.fire({
+              icon: 'error',
+              html: `La plantilla no se  ${this.data?.card ? 'actualizó' : 'guardó'}`,
+              title: 'Oops...',
+              text: 'Algo salió mal!',
+              footer: `<span style = 'color:red'>${err}</span>`
+            }).then(r => {
+              this.loaderSvc.setLoading(false);
+              this.deleteImage();
+              console.warn(`Error la plantilla no se pudo ${this.data?.card ? 'actualizar' : 'guardar'} la plantilla.`, r, this.card);
+            });
+          });
       });
+    this.uploadImagesSvc.setImgNull();
   }
 
   setEditorConfig() {
@@ -164,7 +181,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           Ejemplo:<br><br>
            ${this.initialContent}<br>
           <img src='${this.cardImageExample}' style='display: block;
-            margin: auto;' alt=''/>
+            margin: auto; width: 40vw' alt=''/>
         `,
       showXPathInStatusbar: true,
       toolbarAdaptive: false,
@@ -191,7 +208,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           }
         },
         labels: {
-          name: 'copyformat',
+          name: 'labels',
+          iconURL:'/assets/icons/user-tag-solid.svg',
           tooltip: 'Etiquetas para automatizar la plantilla',
           list: {
             name: 'Nombre',
@@ -259,11 +277,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         },
         reset: {
           name: 'Reset',
-          icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="black" ' +
-            'width="18px" height="18px"><path d="M0 0h24v24H0z" fill="none"/><path d="M14 ' +
-            '12c0-1.1-.9-2-2-2s-2 .9-2 2 .9 2 2 2 2-.9 2-2zm-2-9c-4.97 0-9 4.03-9 9H0l4 4 4-4' +
-            'H5c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.51 0-2.91-.49-4.06-1.3l-1.42 1.44C8.' +
-            '04 20.3 9.94 21 12 21c4.97 0 9-4.03 9-9s-4.03-9-9-9z"/></svg>',
+          iconURL:'/assets/icons/sync-solid.svg',
+          backgroundColor:'red',
           tooltip: 'Lleva el editor al estado inicial ...',
           exec: (editor) => {
             //TODO: Posicionar cursor al final del DOM
@@ -272,9 +287,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         },
         theme: {
           name: 'Tema',
-          icon: '<i class="material-icons">\n' +
-            'new_label\n' +
-            '</i>',
+          iconURL:'/assets/icons/toggle-on-solid.svg',
           tooltip: 'Cambiar tema del editor',
           exec: (editor, _, btn) => {
             console.log(btn);
@@ -282,7 +295,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         },
         info: {
           name: 'info',
-          // iconURL: 'C:/Users/Jaidiver/Desktop/Varios/TRABAJO/Onomástico/Onosmatic/src/assets/icons/account_balance-black-18dp.svg',
+          iconURL:'/assets/icons/info-circle-solid.svg',
           popup: (editor) => {
             const text = editor.editor.innerText;
             const wordCount = text.split(/[\s\n\r\t]+/).filter((value) => value).length;
@@ -300,8 +313,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         beforePaste: (pasteEvent) => {
           const item = pasteEvent.clipboardData;
           console.log(item);
-          // if (item?.type.indexOf('image') === 0) {
-          //   const blob = item.getAsFile();
+          //TODO: Detectar si se pega una imagen para eliminar si ya habia una.
           //
           //   const reader = new FileReader();
           //   reader.onload = (event) =>{
@@ -318,16 +330,20 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     };
   }
 
-  deleteImage() {
+  deleteImage(url?: string) {
     const imgCard = document.getElementById('templateCardImage');
-    const srcImg = imgCard.getAttributeNode('src').value;
+    let srcImg = imgCard.getAttributeNode('src').value;
+    if(url){
+      srcImg = url;
+    }
     const imgName = srcImg.replace(environment.downloadImagesUriServer + '/', '');
     this.uploadImagesSvc.deleteImage(imgName)
       .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
         console.log('Imagen eliminada! ', res);
       }, (err) => {
-        console.log('Error en eliminar la imagen! :> ', err);
+        this.loaderSvc.setLoading(false);
+        console.log('Error al eliminar la imagen! :> ', err);
       });
   }
 
@@ -344,6 +360,10 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     if (this.data?.card) {
       this.actionTODO = Action.edit;
       this.joditEditor.editor.value = this.data.card.texto;
+      this.urlImageEdit = document.getElementById('templateCardImage').getAttributeNode('src').value;
+      this.uploadImagesSvc.getFileFromUrl(this.urlImageEdit,'img').then((file) => {
+        this.cardImageEdit = file;
+      });
     } else {
       this.actionTODO = Action.new;
     }

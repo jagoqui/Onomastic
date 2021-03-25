@@ -4,7 +4,7 @@
     <mat-icon matListIcon>home</mat-icon>
     <span class="nav-link">home</span>
   </a>
-  <a mat-list-item routerLink="/PUBLISHER/templates-cards" routerLinkActive="active-list-item"
+  <a mat-list-item [routerLink]="['/PUBLISHER/templates-cards','']" routerLinkActive="active-list-item"
      (click)="sidenavController.openSidebar(false)">
     <mat-icon matListIcon>redeem</mat-icon>
     <span class="nav-link">Plantillas</span>

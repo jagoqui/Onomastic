@@ -4,16 +4,17 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
-import { EventDayService } from '@app/pages/publisher/services/event-day.services';
-import { TemplateCardsService } from '@app/pages/publisher/services/template-cards.service';
-import { CardEvent, ConditionRes, Parameter } from '@app/shared/models/event-day.model';
-import { TemplateCard } from '@app/shared/models/template-card.model';
-import { BaseFormEventDay } from '@app/shared/utils/base-form-event-day';
+import { EventDayService } from '@pages/¨publisher/services/event-day.services';
+import { TemplateCardsService } from '@pages/¨publisher/services/template-cards.service';
+import { CardEvent, ConditionRes, Parameter } from '@shared/models/event-day.model';
+import { TemplateCard } from '@shared/models/template-card.model';
+import { BaseFormEventDay } from '@shared/utils/base-form-event-day';
 import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
 import * as moment from 'moment';
 import { Subject } from 'rxjs/internal/Subject';
 import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
+import { LoaderService } from '@shared/services/loader.service';
 
 
 // eslint-disable-next-line no-shadow
@@ -66,7 +67,8 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     private templateCardsService: TemplateCardsService,
     private domSanitizerSvc: DomSanitizerService,
     public eventDayForm: BaseFormEventDay,
-    private eventDaySvc: EventDayService
+    private eventDaySvc: EventDayService,
+    private loaderSvc: LoaderService
   ) {
   }
 
@@ -132,6 +134,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   }
 
   onSave() {
+    //TODO: EL formulario deja activada el botón si se cambia de opción y queda vacio.
     this.eventDaySvc.new(this.eventDayForm.baseForm.value).subscribe(event => {
       if (event) {
         SwAlert.fire(
@@ -148,13 +151,16 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
         title: 'Oops...',
         text: ' Algo salió mal!',
         footer: `${err}`
-      }).then(r => console.log(r));
+      }).then(_ => {
+        this.loaderSvc.setLoading(false);
+      });
     });
   }
 
   onClose(close?: boolean): void {
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.eventDayForm.onReset();
+      this.refresh.emit(true);
       this.dialogRef.close();
     }
   }

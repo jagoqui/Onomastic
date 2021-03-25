@@ -1,0 +1,53 @@
+@import '../../../../assets/custom_styles/material_custom_theme';
+
+.card {
+  margin: 2em 0.556rem 0.556rem;
+  box-shadow: 0.111rem 0.111rem 0.333rem 0 rgba(0, 0, 0, 0.3);
+  border: 0.2rem solid mat-color($mat-primary, lighter);
+  transition: all 0.6s;
+  border-radius: 0.5rem;
+  position: relative;
+  width: 100%;
+
+  .card_text {
+    margin: 0;
+    padding: 1vw;
+    width: 25vw;
+    height: 55vh;
+    overflow-x: auto;
+    opacity: 0.65;
+    transition: opacity 0.5s;
+    border-radius: 0.2rem;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .card_actions {
+    text-align: right;
+    padding: 0 0.556rem 0.556rem;
+    position: relative;
+    background: linear-gradient(90deg, mat-color($mat-primary, darker) 0%, mat-color($mat-accent, darker) 38%, mat-color($mat-primary, lighter) 100%);
+
+    button {
+      margin: 0.5em;
+    }
+  }
+
+  &:hover {
+    border: 0.1667rem solid mat-color($mat-primary, darker);
+    box-shadow: 0.278rem 0.278rem 0.056rem rgba(250, 246, 246, 0.5);
+    -webkit-box-shadow: 0.278rem 0.278rem 1.111rem rgba(250, 246, 246, 0.5);
+    -moz-box-shadow: 0.278rem 0.278rem 1.111rem rgba(250, 246, 246, 0.5);
+  }
+}
+
+@media screen and (max-width: 20em) {
+  .card {
+    .card_text {
+      width: 60vh;
+      opacity: 1;
+    }
+  }
+}

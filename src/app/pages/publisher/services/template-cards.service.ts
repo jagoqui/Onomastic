@@ -16,8 +16,8 @@ export class TemplateCardsService {
     private authSvc: AuthService) {
   }
 
-  newCardTemplate(plantilla: TemplateCard, image: File): Observable<TemplateCard> {
-    const cardBlob = new Blob([JSON.stringify(plantilla)], { type: 'application/json' });
+  newCardTemplate(card: TemplateCard, image: File): Observable<TemplateCard> {
+    const cardBlob = new Blob([JSON.stringify(card)], { type: 'application/json' });
     const formData = new FormData();
     formData.append('file', image);
     formData.append('plantilla', cardBlob);
@@ -30,6 +30,11 @@ export class TemplateCardsService {
   getAllCards(): Observable<TemplateCard[]> {
     return this.http
       .get<TemplateCard[]>(`${environment.apiUrl}/plantillas`);
+  }
+
+  getCardById(id: number): Observable<TemplateCard> {
+    return this.http
+      .get<TemplateCard>(`${environment.apiUrl}/plantillas/${id}`);
   }
 
   delete(id: number): Observable<any> {

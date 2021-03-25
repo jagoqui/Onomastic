@@ -29,4 +29,14 @@ export class EventDayService {
   getEvents(): Observable<EventDay[]> {
     return this.http.get<EventDay[]>(`${environment.apiUrl}/`);
   }
+
+  delete(id: number): Observable<[]> {
+    return this.http
+      .delete<[]>(`${environment.apiUrl}/evento/${id}/${this.authSvc.getUserId()}`);
+  }
+
+  inactivateEvent(id: number): Observable<EventDay> {
+    return this.http
+      .put<EventDay>(`${environment.apiUrl}/evento/desactivar/${id}/${this.authSvc.getUserId()}`, null);
+  }
 }

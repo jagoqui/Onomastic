@@ -13,7 +13,7 @@
     <button fxFlex mat-raised-button fxLayout="row" fxLayoutAlign="center center" class="mat-headline">
       <div fxLayout="column" fxLayoutAlign="center start">
         <span class="button-title">Total de usuarios</span>
-        <span class="mat-title">{{getParcialUsers()}}</span>
+        <span class="mat-title">{{getPartialUsers()}}</span>
       </div>
       <div fxFlex class="circle">
         <mat-icon>people_outline</mat-icon>
@@ -112,11 +112,11 @@
                 <mat-icon>edit</mat-icon>
                 <span>Editar</span>
               </button>
-              <button mat-menu-item *ngIf="element.estado === 'ACTIVO'">
+              <button mat-menu-item *ngIf="element.estado === 'ACTIVO'" (click)='onSubscriptionStateChange(element.email, element.estado)'>
                 <mat-icon>unsubscribe</mat-icon>
                 <span>Desactivar</span>
               </button>
-              <button mat-menu-item *ngIf="element.estado === 'INACTIVO'">
+              <button mat-menu-item *ngIf="element.estado === 'INACTIVO'" (click)='onSubscriptionStateChange(element.email,element.estado)'>
                 <mat-icon>email</mat-icon>
                 <span>Activar</span>
               </button>

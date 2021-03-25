@@ -30,7 +30,8 @@ export class MailUsersSubscriptionStatusComponent implements OnInit {
       cancelButtonText: 'No, permanecer subscrito',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.emailUserService.unsubscribe(email).subscribe(res => {
+        const emailBase64 = btoa(email);
+        this.emailUserService.unsubscribe(emailBase64).subscribe(res => {
           if (res) {
             SwAlert.fire(
               'Subscripción cancelada!',

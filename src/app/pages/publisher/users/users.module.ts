@@ -1,5 +1,5 @@
 import {NgModule} from '@angular/core';
-import {SharedModule} from 'src/app/shared/shared.module';
+import {SharedModule} from '@shared/shared.module';
 
 import {ModalMailUsersComponent,} from './components/modal-mail-users/modal-mail-users.component';
 import {UsersRoutingModule} from './users-routing.module';

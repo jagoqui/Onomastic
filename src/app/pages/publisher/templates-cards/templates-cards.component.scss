@@ -1,45 +1,22 @@
-@import 'src/assets/custom_styles/material_custom_theme.scss';
+@import '../../../../assets/custom_styles/material_custom_theme';
+
+.container {
+  .reloadCard {
+    cursor: pointer;
+    position: absolute;
+    top: 5rem;
+    right: 2rem;
+  }
+
+  section.html_section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+  }
+}
 
 .button-add-template-card {
   &:before {
     content: "Agregar plantilla";
   }
 }
-
-.reloadCard {
-  cursor:pointer;
-  position: absolute;
-  top:70px;
-  right:2rem;
-}
-
-.wrapper{
-  grid-gap: 1rem;
-  margin: 1.1111rem;
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-}
-
-.card {
-  width: 380px;
-  height: 300px;
-  overflow: hidden;
-  white-space: pre;
-  border: 0.1667rem solid mat-color($mat-primary, lighter);
-  object-fit: cover;
-  display: flex;
-
-  &:hover {
-    border: 0.1667rem solid mat-color($mat-primary, darker);
-  }
-}
-
-// @supports(object-fit: cover){
-//     .card mat-card{
-//       height: 100%;
-//       object-fit: cover;
-//       object-position: center center;
-//     }
-// }
-
-

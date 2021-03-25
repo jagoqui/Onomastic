@@ -51,7 +51,7 @@ import { DomPurifyPipe } from './pipes/dom-purify.pipe';
     ReactiveFormsModule,
     NgxCaptchaModule,
     FooterComponent,
-    MaterialElevationDirective
+    MaterialElevationDirective,
   ]
 })
 export class SharedModule { }

@@ -80,9 +80,9 @@ export class EmailUsersService {
       .delete<MailUsers>(`${environment.apiUrl}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`);
   }
 
-  unsubscribe(email: string): Observable<MailUsersResponse> {
+  unsubscribe(emailEncrypt: string): Observable<MailUsersResponse> {
     return this.http
-      .put<MailUsersResponse>(`${environment.apiUrl}/unsuscribe/${email}`,null);
+      .put<MailUsersResponse>(`${environment.apiUrl}/unsuscribe/${emailEncrypt}`,null);
   }
 
 }

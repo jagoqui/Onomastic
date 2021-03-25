@@ -7,10 +7,12 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { EventDayService } from '../services/event-day.services';
 import { ModalEventDayComponent } from './components/modal-event-day/modal-event-day.component';
-import { DomSanitizerService } from '@app/shared/services/dom-sanitizer.service';
+import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
 import { SafeHtml } from '@angular/platform-browser';
-import { TemplateCard } from '@app/shared/models/template-card.model';
-import { EventDay } from '@app/shared/models/event-day.model';
+import { TemplateCard } from '@shared/models/template-card.model';
+import { EventDay } from '@shared/models/event-day.model';
+import SwAlert from 'sweetalert2';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-events-day',
@@ -31,7 +33,7 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
   columnsToDisplay = [
     'nombre', 'fecha',
     'recurrencia',
-    'estado','acciones'
+    'estado', 'acciones'
   ];
   cards: TemplateCard[];
   expandedElement: EventDay;
@@ -44,16 +46,8 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
     private domSanitizerSvc: DomSanitizerService) {
   }
 
-  ngOnInit(): void {
-    this.eventsSvc.getEvents().subscribe((event) => {
-      this.dataSource.data = event;
-      console.log(this.dataSource.data);
-      this.numEvents = this.dataSource.data.length;
-    });
-  }
-
   onOpenModal(event = {}): void {
-    this.dialog.open(ModalEventDayComponent, {
+    const dialogRef = this.dialog.open(ModalEventDayComponent, {
       height: 'auto',
       width: '95%',
       panelClass: 'app-full-bleed-dialog',
@@ -61,6 +55,18 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
       disableClose: true,
       data: { title: event ? 'EDITAR EVENTO' : 'NUEVO EVENTO', event }
     });
+    if (dialogRef.afterClosed()) {
+      dialogRef.componentInstance.refresh.subscribe((refresh) => {
+        if (refresh) {
+          this.onRefresh();
+        }
+      });
+    }
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
   getPageSizeOptions(): number[] {
@@ -72,29 +78,67 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  onDelete(eventId): void {
-    if (window.confirm('Esta seguro que desea eliminar éste evento?')) {
-      // this.eventsSvc
-      //   .delete(eventId)
-      //   .pipe(takeUntil(this.destroy$))
-      //   .subscribe((res) => {
-      //     this.ngOnInit();
-      //     window.alert('Evento eliminado!');
-      //   }, (err) => {
-      //     console.log('Error en eliminar el evento! :> ', err);
-      //   });
+  sanitizeHTML(card: string): SafeHtml {
+    return this.domSanitizerSvc.sanitizeHTML(card);
+  }
+
+  onEventStateChange(id: number, state: string) {
+    if(state === 'ACTIVO'){
+      this.eventsSvc.inactivateEvent(id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((event) => {
+          //TODO: No me está devolviendo el evento.
+          // if (event) {
+          //   SwAlert.fire(`El evento quedó desactivado! `, '', 'success')
+          //     .then(_ => {
+          //       this.onRefresh();
+          //     });
+          // }
+          SwAlert.fire(`El evento quedó desactivado! `, '', 'success')
+            .then(_ => {
+              this.onRefresh();
+            });
+        });
     }
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  onDelete(eventId): void {
+    SwAlert.fire({
+      title: 'Está seguro?',
+      text: 'Si elimina ésta plantilla se eliminará tambien los eventos asociados, lo cambios no podrán revertirse!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarla!',
+      cancelButtonText: 'Cancelar'
+    }).then((resultDelete) => {
+      if (resultDelete.isConfirmed) {
+        this.eventsSvc
+          .delete(eventId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((res) => {
+            SwAlert.fire(`El evento fue eliminado! `, '', 'success')
+              .then(r => {
+                this.onRefresh();
+              });
+          });
+      }
+    });
   }
 
   onRefresh(): void {
     this.destroy$.next({});
     this.destroy$.complete();
     this.ngOnInit();
+  }
+
+  ngOnInit(): void {
+    this.eventsSvc.getEvents().subscribe((event) => {
+      this.dataSource.data = event;
+      console.log(this.dataSource.data);
+      this.numEvents = this.dataSource.data.length;
+    });
   }
 
   ngAfterViewInit(): void {
@@ -106,10 +150,6 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next({});
     this.destroy$.complete();
-  }
-
-  sanitizeHTML(card: string): SafeHtml {
-    return this.domSanitizerSvc.sanitizeHTML(card);
   }
 
 }

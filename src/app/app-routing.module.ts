@@ -21,7 +21,7 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./auth/login/login.module').then(m => m.LoginModule),
-    // redirectTo: 'PUBLISHER/templates-cards/2',
+    // redirectTo: 'PUBLISHER/templates-cards/',
     canActivate: [NegateCheckLoginGuard]
   },
   {

@@ -1,14 +1,15 @@
-import {AfterViewInit, Component, OnDestroy, OnInit, ViewChild,} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
-import {MatPaginator} from '@angular/material/paginator';
-import {MatSort} from '@angular/material/sort';
-import {MatTableDataSource} from '@angular/material/table';
-import {ID} from '@shared/models/mail-users.model';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { ID } from '@shared/models/mail-users.model';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import {EmailUsersService} from '../services/email-users.service';
-import {ModalMailUsersComponent,} from './components/modal-mail-users/modal-mail-users.component';
+import { EmailUsersService } from '../services/email-users.service';
+import { ModalMailUsersComponent } from './components/modal-mail-users/modal-mail-users.component';
+import SwAlert from 'sweetalert2';
 
 @Component({
   selector: 'app-users',
@@ -16,7 +17,7 @@ import {ModalMailUsersComponent,} from './components/modal-mail-users/modal-mail
   styleUrls: ['./users.component.scss']
 })
 export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
-  @ViewChild(MatPaginator, {static: true}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   columnsToDisplay = [
     'id', 'plataformaPorUsuarioCorreo',
@@ -30,10 +31,12 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
   private numUsers = 0;
   private destroy$ = new Subject<any>();
 
-  constructor(private dialog: MatDialog, private userSvc: EmailUsersService) {
+  constructor(
+    private dialog: MatDialog, private mailUsersSvc: EmailUsersService
+  ) {
   }
 
-  getParcialUsers(): string {
+  getPartialUsers(): string {
     let x = ('' + this.numUsers).length;
     const p = Math.pow;
     const d = p(10, 1);
@@ -53,15 +56,31 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
-      data: {title: user ? 'Actualizar destinatario' : 'Nuevo destinatario', user},
+      data: { title: user ? 'Actualizar destinatario' : 'Nuevo destinatario', user }
     });
     if (dialogRef.afterClosed()) {
       dialogRef.componentInstance.refresh.subscribe((refresh) => {
-        // TODO: No está refrescando
-        // if (refresh) {
-        //   this.onRefresh();
-        // }
+        if (refresh) {
+          this.onRefresh();
+        }
       });
+    }
+  }
+
+  onSubscriptionStateChange(email: string, state: string) {
+    const emailEncrypt = btoa(email);
+    if (state === 'ACTIVO') {
+      this.mailUsersSvc.unsubscribe(emailEncrypt)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((user) => {
+          if (user) {
+            SwAlert.fire(`El usuario no recibirá más correos! `, '', 'success')
+              .then(r => {
+                this.onRefresh();
+                console.log(r);
+              });
+          }
+        });
     }
   }
 
@@ -76,7 +95,7 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
 
   onDelete(userId: ID): void {
     if (window.confirm('Esta seguro que desea eliminar éste usuario?')) {
-      this.userSvc
+      this.mailUsersSvc
         .delete(userId)
         .pipe(takeUntil(this.destroy$))
         .subscribe((res) => {
@@ -101,7 +120,7 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.userSvc.getAll().subscribe((user) => {
+    this.mailUsersSvc.getAll().subscribe((user) => {
       this.dataSource.data = user;
       this.numUsers = this.dataSource.data.length;
     });

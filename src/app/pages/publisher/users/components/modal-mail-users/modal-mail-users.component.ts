@@ -70,7 +70,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   ) {
   }
 
-  setBirtdayFormat(event: MatDatepickerInputEvent<Date>) {
+  setBirthdayFormat(event: MatDatepickerInputEvent<Date>) {
     this.mailUserForm.baseForm.controls.fechaNacimiento.setValue(moment(event.value).format('YYYY-MM-DD'));
   }
 
@@ -78,7 +78,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     return this.mailUserForm.isValidField(field, group, iterator);
   }
 
-  setformGroupID(formGroup: FormGroup, id: number) {
+  setFormGroupID(formGroup: FormGroup, id: number) {
     formGroup.controls.id.setValue(id);
   }
 
@@ -135,8 +135,6 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   onClose(close?: boolean): void {
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.mailUserForm.onReset();
-      this.dialogRef.close();
-
       const associations = this.mailUserForm.baseForm.controls.asociacionPorUsuarioCorreo.value;
       const bodyTypes = this.mailUserForm.baseForm.controls.vinculacionPorUsuarioCorreo.value;
       const programs = this.mailUserForm.baseForm.controls.programaAcademicoPorUsuarioCorreo.value;
@@ -154,6 +152,8 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
       for (const platform of platforms) {
         this.removeOrClearByName(platform, 'plataformaPorUsuarioCorreo', true);
       }
+      this.refresh.emit(true);
+      this.dialogRef.close();
     }
   }
 
