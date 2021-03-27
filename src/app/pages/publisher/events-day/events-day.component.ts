@@ -94,7 +94,7 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
           //       this.onRefresh();
           //     });
           // }
-          SwAlert.fire(`El evento quedó desactivado! `, '', 'success')
+          SwAlert.fire(`El evento se ha desactivado! `, '', 'success')
             .then(_ => {
               this.onRefresh();
             });
@@ -110,7 +110,7 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
           //       this.onRefresh();
           //     });
           // }
-          SwAlert.fire(`El evento esta activado! `, '', 'success')
+          SwAlert.fire(`El evento se ha activado! `, '', 'success')
             .then(_ => {
               this.onRefresh();
             });
@@ -133,9 +133,9 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
         this.eventsSvc
           .delete(eventId)
           .pipe(takeUntil(this.destroy$))
-          .subscribe((res) => {
+          .subscribe((_) => {
             SwAlert.fire(`El evento fue eliminado! `, '', 'success')
-              .then(r => {
+              .then(_ => {
                 this.onRefresh();
               });
           });

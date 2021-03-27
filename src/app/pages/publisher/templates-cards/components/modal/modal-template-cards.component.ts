@@ -26,7 +26,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   @ViewChild('editor') joditEditor: JoditAngularComponent;
 
   jodit: JoditAngularComponent;
-  cardImageExample = '/assets/images/templateCard_example.jpg';
   card: TemplateCard;
   cardImageEdit: File = null;
   urlImageEdit: string = null;
@@ -128,6 +127,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
 
   getAssociations(){
     this.emailUserSvc.getAssociationsById()
+      .pipe(takeUntil(this.destroy$))
       .subscribe(associations => {
         this.card = {
           id: this.data?.card?.id ? this.data.card.id : null,
@@ -180,7 +180,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           <b>['image/jpg', 'image/png', 'image/jpeg', 'image/gif']</b>.<br>
           Ejemplo:<br><br>
            ${this.initialContent}<br>
-          <img src='${this.cardImageExample}' style='display: block;
+          <img  src="assets/images/templateCard_example.jpg" style='display: block;
             margin: auto; width: 40vw' alt=''/>
         `,
       showXPathInStatusbar: true,
