@@ -26,6 +26,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   @ViewChild('editor') joditEditor: JoditAngularComponent;
 
   jodit: JoditAngularComponent;
+  config: any;
+  iconSwitchTheme: string;
   card: TemplateCard;
   cardImageEdit: File = null;
   urlImageEdit: string = null;
@@ -41,7 +43,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       para nosotros.
     </span>
   `;
-  config: any;
   onCompleteCard = false;
   private destroy$ = new Subject<any>();
 
@@ -56,36 +57,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   ) {
   }
 
-  editorContentVerify() {
-    const editorContentText = this.joditEditor.editor.text;
-    if (editorContentText.length > this.maxChars) {
-      SwAlert.fire({
-        title: `No puede agregar más texto!`,
-        html: `Sobrepasó  los <br>${this.maxChars}</b> de máximo de caracteres permitidos.`,
-        icon: 'warning'
-      }).then(r => console.log(r));
-    }
-
-    const cardImg = document.getElementById('templateCardImage');
-    this.onCompleteCard = !!cardImg;
-  }
-
-  onDelete(event: KeyboardEvent) {
-    const { key } = event;
-    if (key === 'Backspace' || key === 'Delete') {
-      console.log(this.joditEditor.editor.selection.j);
-
-      const editor = document.getElementsByClassName('jodit-wysiwyg')[0];
-      // const srcRemove = imgCard.getAttributeNode('src').value;
-      //TODO: Eliminar imagen del servidor
-      if (editor?.children[editor.children.length - 1]?.className === 'labels') {
-        const id = editor.children[editor.children.length - 1].id;
-        console.log(id);
-        document.getElementById(id).remove();
-      }
-    }
-  }
-
   onClose(close?: boolean): void {
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.joditEditor.resetEditor();
@@ -94,10 +65,10 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   }
 
   onSave() {
-    if(!this.uploadImagesSvc?.img){
+    if (!this.uploadImagesSvc?.img) {
       this.getAssociations();
-    }else{
-      if(this.cardImageEdit){
+    } else {
+      if (this.cardImageEdit) {
         this.deleteImage(this.urlImageEdit);
       }
       this.uploadImagesSvc.imageUpload(this.uploadImagesSvc.img)
@@ -125,7 +96,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     }
   }
 
-  getAssociations(){
+  getAssociations() {
     this.emailUserSvc.getAssociationsById()
       .pipe(takeUntil(this.destroy$))
       .subscribe(associations => {
@@ -136,7 +107,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         };
         this.templateCardsService.newCardTemplate(
           this.card,
-          this.uploadImagesSvc?.img? this.uploadImagesSvc.img : this.cardImageEdit)
+          this.uploadImagesSvc?.img ? this.uploadImagesSvc.img : this.cardImageEdit)
           .pipe(takeUntil(this.destroy$))
           .subscribe((cardRes) => {
             if (cardRes) {
@@ -161,15 +132,16 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     this.uploadImagesSvc.setImgNull();
   }
 
-  setEditorConfig() {
+  setEditorConfig(themeEditor: string) {
+    const iconSwitchTheme = `assets/icons/toggle-${themeEditor === 'dark' ? 'on' : 'off'}-solid.svg`;
     this.config = {
       autofocus: true,
       minHeight: 600,
       language: 'es',
-      enter: 'BR',
-      theme: 'default',
+      enter: 'P',
       toolbarButtonSize: 'large',
       limitChars: this.maxChars,
+      theme: themeEditor,
       placeholder:
         `
           Ingrese el texto aquí:<br><br>
@@ -180,7 +152,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           <b>['image/jpg', 'image/png', 'image/jpeg', 'image/gif']</b>.<br>
           Ejemplo:<br><br>
            ${this.initialContent}<br>
-          <img  src="assets/images/templateCard_example.jpg" style='display: block;
+          <img  src='assets/images/templateCard_example.jpg' style='display: block;
             margin: auto; width: 40vw' alt=''/>
         `,
       showXPathInStatusbar: true,
@@ -195,7 +167,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         'superscript', 'subscript', 'symbol', '|',
         'eraser', 'selectall', 'copyTrash', '|', 'imageUpload', 'print', '|', 'labels', '|',
         '\n',
-        'undo', 'redo', 'reset', 'preview', 'fullsize', '|', 'source', 'about', 'theme', 'info'
+        'undo', 'redo', 'reset', 'preview', 'fullsize', '|', 'about', 'theme', 'info'
       ],
       controls: {
         copyTrash: {
@@ -204,12 +176,13 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           exec: (editor) => {
             editor.execCommand('selectall');
             editor.execCommand('copy');
-            alert('Text in your clipboard');
+            SwAlert.fire('Texto quedó copiado en el clipboard', '', 'success').then(_ => {
+            });
           }
         },
         labels: {
           name: 'labels',
-          iconURL:'/assets/icons/user-tag-solid.svg',
+          iconURL: '/assets/icons/user-tag-solid.svg',
           tooltip: 'Etiquetas para automatizar la plantilla',
           list: {
             name: 'Nombre',
@@ -277,30 +250,31 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         },
         reset: {
           name: 'Reset',
-          iconURL:'/assets/icons/sync-solid.svg',
-          backgroundColor:'red',
+          iconURL: 'assets/icons/sync-solid.svg',
+          backgroundColor: 'red',
           tooltip: 'Lleva el editor al estado inicial ...',
           exec: (editor) => {
-            //TODO: Posicionar cursor al final del DOM
-            editor.value = this.initialContent;
+            editor.value = '';
+            editor.selection.insertHTML(this.initialContent);
           }
         },
         theme: {
           name: 'Tema',
-          iconURL:'/assets/icons/toggle-on-solid.svg',
-          tooltip: 'Cambiar tema del editor',
+          iconURL: iconSwitchTheme,
+          tooltip: 'Doble click para cambiar de tema',
+          value: 'default',
           exec: (editor, _, btn) => {
             console.log(btn);
+            //Todo: Cambiar el tema al editor
           }
         },
         info: {
           name: 'info',
-          iconURL:'/assets/icons/info-circle-solid.svg',
+          iconURL: 'assets/icons/info-circle-solid.svg',
           popup: (editor) => {
             const text = editor.editor.innerText;
             const wordCount = text.split(/[\s\n\r\t]+/).filter((value) => value).length;
-            const charCount = text.replace(/[\s\n\r\t\w]+/, '').length;
-            console.log(editor.contentDocument.innerText.length);
+            const charCount = text.replace(/[\s\n\r\t]+/, '').length;
 
             return '<div style="padding: 10px; color: lightgrey">' +
               'Words: ' + wordCount + '<br>' +
@@ -310,22 +284,45 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         }
       },
       events: {
-        beforePaste: (pasteEvent) => {
-          const item = pasteEvent.clipboardData;
-          console.log(item);
-          //TODO: Detectar si se pega una imagen para eliminar si ya habia una.
-          //
-          //   const reader = new FileReader();
-          //   reader.onload = (event) =>{
-          //     console.log(event.target.result) ;
-          //   };
-          //
-          //   reader.readAsDataURL(blob);
-          // }
-          return false;
+        keypress:()=>{
+          const text = this.joditEditor.editor.editor.innerText;
+          //Todo: No coincide con el contador por defecto del editor
+          const charCount = text.replace(/[\s\n\r\t]+/, '').length;
+          if(charCount >= this.maxChars){
+            return SwAlert.fire({
+              title: `No puede agregar más texto!`,
+              html: `Sobrepasó  los <br>${this.maxChars}</b> de máximo de caracteres permitidos.`,
+              icon: 'warning'
+            }).then(_ => false);
+          }
+        },
+        keydown:(event)=>{
+          const { key } = event;
+          if (key === 'Backspace' || key === 'Delete') {
+            const selection: any = this.joditEditor.editor.ownerDocument.getSelection();
+            const {id, className}: HTMLElement = selection.focusNode.parentElement;
+            if (className === 'labels') {
+              document.getElementById(id).remove();
+            }
+          }
+        },
+        change: () => {
+          const cardImg = document.getElementById('templateCardImage');
+          this.onCompleteCard = !!cardImg;
+        },
+        beforePaste: (event) => {
+          if (event.clipboardData.types.length === 0) {
+            SwAlert.fire('No puedes cargar la plantilla de esta forma, utiliza la herramienta de cargar imágenes!', '', 'error').then(_ => {
+            });
+            return false;
+          }
+        },
+        drop: (event) => {
+          SwAlert.fire('No puedes cargar la plantilla de esta forma, utiliza la herramienta de cargar imágenes!', '', 'error').then(_ => {
+          });
+          event.preventDefault();
+          event.stopPropagation();
         }
-        // afterPaste:(event) => false,
-
       }
     };
   }
@@ -333,7 +330,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   deleteImage(url?: string) {
     const imgCard = document.getElementById('templateCardImage');
     let srcImg = imgCard.getAttributeNode('src').value;
-    if(url){
+    if (url) {
       srcImg = url;
     }
     const imgName = srcImg.replace(environment.downloadImagesUriServer + '/', '');
@@ -348,11 +345,13 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   }
 
   ngOnInit() {
-    this.setEditorConfig();
     this.themeSwitcherController.themeClass$
       .pipe(takeUntil(this.destroy$))
       .subscribe(
-        (theme: string) => (this.config.theme = theme === 'light-theme' ? 'default' : 'dark')
+        (theme: string) => {
+          const themeEditor = theme === 'light-theme' ? 'default' : 'dark';
+          this.setEditorConfig(themeEditor);
+        }
       );
   };
 
@@ -361,7 +360,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       this.actionTODO = Action.edit;
       this.joditEditor.editor.value = this.data.card.texto;
       this.urlImageEdit = document.getElementById('templateCardImage').getAttributeNode('src').value;
-      this.uploadImagesSvc.getFileFromUrl(this.urlImageEdit,'img').then((file) => {
+      this.uploadImagesSvc.getFileFromUrl(this.urlImageEdit, 'img').then((file) => {
         this.cardImageEdit = file;
       });
     } else {
@@ -373,7 +372,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     this.destroy$.next({});
     this.destroy$.complete();
   };
-
 
 }
 

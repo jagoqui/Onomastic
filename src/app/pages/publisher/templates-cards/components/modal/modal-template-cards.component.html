@@ -1,7 +1,6 @@
 <div fxLayout='column' fxLayoutAlign='space-between stretch'>
   <h1 mat-dialog-title>{{data.title | uppercase }}</h1>
-  <jodit-editor #editor id='editor' [config]='config' (keydown)='onDelete($event)'
-                (change)='editorContentVerify()' fxFlex></jodit-editor>
+  <jodit-editor #editor id='editor' [config]='config' fxFlex></jodit-editor>
 </div>
 
 <div mat-dialog-actions fxLayout='row' fxLayoutAlign='end end'>

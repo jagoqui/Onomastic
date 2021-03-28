@@ -34,7 +34,6 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
   }
 
   onOpenModal(card = {}): void {
-    console.log('Modal');
     this.onViewCard = false;
     const dialogRef = this.dialog.open(ModalTemplateCardsComponent, {
       height: 'auto',
@@ -46,7 +45,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
     });
     dialogRef.afterClosed().subscribe(res => {
       this.onViewCard = true;
-      this.router.navigate(['PUBLISHER/templates-cards/', '']).then(r => console.log('Open route: ,',r));
+      this.router.navigate(['PUBLISHER/templates-cards/', '']).then(_ => {});
       this.ngAfterViewInit();
     });
   }
