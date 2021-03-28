@@ -39,4 +39,9 @@ export class EventDayService {
     return this.http
       .put<EventDay>(`${environment.apiUrl}/evento/desactivar/${id}/${this.authSvc.getUserId()}`, null);
   }
+
+  activateEvent(id: number): Observable<EventDay> {
+    return this.http
+      .put<EventDay>(`${environment.apiUrl}/evento/activar/${id}/${this.authSvc.getUserId()}`, null);
+  }
 }

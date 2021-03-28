@@ -81,6 +81,18 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
               });
           }
         });
+    } else {
+      this.mailUsersSvc.subscribe(emailEncrypt)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((user) => {
+          if (user) {
+            SwAlert.fire(`El usuario comenzará a recibir correos! `, '', 'success')
+              .then(r => {
+                this.onRefresh();
+                console.log(r);
+              });
+          }
+        });
     }
   }
 

@@ -85,4 +85,9 @@ export class EmailUsersService {
       .put<MailUsersResponse>(`${environment.apiUrl}/unsuscribe/${emailEncrypt}`,null);
   }
 
+  subscribe(email: string): Observable<MailUsersResponse> {
+    return this.http
+      .put<MailUsersResponse>(`${environment.apiUrl}/usuariosemail/suscribe/${email}`,null);
+  }
+
 }

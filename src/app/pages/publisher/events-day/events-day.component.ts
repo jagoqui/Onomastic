@@ -83,7 +83,7 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   onEventStateChange(id: number, state: string) {
-    if(state === 'ACTIVO'){
+    if (state === 'ACTIVO') {
       this.eventsSvc.inactivateEvent(id)
         .pipe(takeUntil(this.destroy$))
         .subscribe((event) => {
@@ -94,7 +94,23 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
           //       this.onRefresh();
           //     });
           // }
-          SwAlert.fire(`El evento quedó desactivado! `, '', 'success')
+          SwAlert.fire(`El evento se ha desactivado! `, '', 'success')
+            .then(_ => {
+              this.onRefresh();
+            });
+        });
+    } else {
+      this.eventsSvc.activateEvent(id)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((event) => {
+          //TODO: No me está devolviendo el evento.
+          // if (event) {
+          //   SwAlert.fire(`El evento quedó desactivado! `, '', 'success')
+          //     .then(_ => {
+          //       this.onRefresh();
+          //     });
+          // }
+          SwAlert.fire(`El evento se ha activado! `, '', 'success')
             .then(_ => {
               this.onRefresh();
             });
@@ -105,21 +121,21 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
   onDelete(eventId): void {
     SwAlert.fire({
       title: 'Está seguro?',
-      text: 'Si elimina ésta plantilla se eliminará tambien los eventos asociados, lo cambios no podrán revertirse!',
+      text: 'Si elimina este evento los cambios no podrán revertirse!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
-      confirmButtonText: 'Sí, eliminarla!',
+      confirmButtonText: 'Sí, eliminarlo!',
       cancelButtonText: 'Cancelar'
     }).then((resultDelete) => {
       if (resultDelete.isConfirmed) {
         this.eventsSvc
           .delete(eventId)
           .pipe(takeUntil(this.destroy$))
-          .subscribe((res) => {
+          .subscribe((_) => {
             SwAlert.fire(`El evento fue eliminado! `, '', 'success')
-              .then(r => {
+              .then(_ => {
                 this.onRefresh();
               });
           });
