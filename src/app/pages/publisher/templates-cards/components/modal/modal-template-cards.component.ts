@@ -182,7 +182,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         },
         labels: {
           name: 'labels',
-          iconURL: '/assets/icons/user-tag-solid.svg',
+          iconURL: 'assets/icons/user-tag-solid.svg',
           tooltip: 'Etiquetas para automatizar la plantilla',
           list: {
             name: 'Nombre',
