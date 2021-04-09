@@ -6,16 +6,14 @@
   border: 0.2rem solid mat-color($mat-primary, lighter);
   transition: all 0.6s;
   border-radius: 0.5rem;
-  position: relative;
-  width: 100%;
 
   .card_text {
     margin: 0;
-    padding: 1vw;
-    width: 25vw;
+    padding: 0;
     height: 55vh;
+    width: 25vw;
     overflow-x: auto;
-    opacity: 0.65;
+    opacity: 0.5;
     transition: opacity 0.5s;
     border-radius: 0.2rem;
 
@@ -36,6 +34,7 @@
   }
 
   &:hover {
+    transform: scale(1.1);
     border: 0.1667rem solid mat-color($mat-primary, darker);
     box-shadow: 0.278rem 0.278rem 0.056rem rgba(250, 246, 246, 0.5);
     -webkit-box-shadow: 0.278rem 0.278rem 1.111rem rgba(250, 246, 246, 0.5);

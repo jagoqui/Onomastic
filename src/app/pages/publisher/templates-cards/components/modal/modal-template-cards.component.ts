@@ -188,7 +188,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
             name: 'Nombre',
             date: 'Fecha',
             school: 'Facultad/Escuela',
-            bodyType: 'Estamento'
+            bodyType: 'Estamento',
+            program:'Programa acádemico'
           },
           exec: (editor, _, $btn) => {
             const key = $btn.control.text;
@@ -210,6 +211,12 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
               case 'Estamento': {
                 editor.selection.insertHTML(
                   '<b id= "bodyType" class ="labels" title="Estudiante, prodesor, auxiliar ...">&ltESTAMENTO&gt;</b>&nbsp;'
+                );
+                break;
+              }
+              case 'Programa acádemico': {
+                editor.selection.insertHTML(
+                  '<b id= "academicProgram" class ="labels" title="Programa acádemico ...">&ltPROGRAMA&gt;</b>&nbsp;'
                 );
                 break;
               }
