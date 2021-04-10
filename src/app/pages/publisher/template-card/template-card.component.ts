@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 })
 export class TemplateCardComponent{
   @Input() card: TemplateCard | undefined;
+  @Input() actions = true;
   @Output() refreshCards = new EventEmitter(false);
 
   constructor(
@@ -19,6 +20,7 @@ export class TemplateCardComponent{
     private templateCardsService: TemplateCardsService,
     private router: Router
   ) {
+
   }
 
   onEditCard(id: number): void {

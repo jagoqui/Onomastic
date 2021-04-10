@@ -55,7 +55,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
 
   cards: TemplateCard[] = [];
   sidenavOpened = false;
-  selectCardHTML: SafeHtml = null;
+  selectCard: TemplateCard = null;
   conditionsRes: ConditionRes[];
   selectedIdFilterAssociation: number[];
   parametersRes: Parameter[];
@@ -100,7 +100,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   loadCards(onChange?: boolean) {
     this.eventDayForm.baseForm.controls.plantilla.markAsTouched();
     this.eventDayForm.baseForm.controls.plantilla.markAsDirty();
-    if (!this.selectCardHTML) {
+    if (!this.selectCard) {
       this.eventDayForm.baseForm.controls.plantilla.setErrors({ incorrect: true });
     }
 
@@ -117,10 +117,8 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
 
   onSelectCard(card: TemplateCard) {
     if (confirm('Seguro que desea seleccionar ésta plantilla?')) {
-      this.selectCardHTML = this.sanitizeHTML(card.texto);
-      const {id, texto}= card;
-      const cardEvent: CardEvent = { id, texto };
-      this.eventDayForm.baseForm.controls.plantilla.setValue(cardEvent);
+      this.selectCard = card;
+      this.eventDayForm.baseForm.controls.plantilla.setValue(card);
       this.sidenavOpened = false;
     }
   }
@@ -129,8 +127,10 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     return this.domSanitizerSvc.sanitizeHTML(cardText);
   }
 
-  onRefresh() {
-    this.loadCards();
+  onRefresh(refreshEvent?: boolean) {
+    if (refreshEvent || refreshEvent !== false) {
+      this.loadCards();
+    }
   }
 
   onSave() {

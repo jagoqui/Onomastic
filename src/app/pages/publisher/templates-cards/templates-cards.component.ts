@@ -51,7 +51,6 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
   }
 
   onRefresh(refreshEvent?: boolean) {
-    console.log(refreshEvent);
     if(refreshEvent || refreshEvent !== false){
       this.ngAfterViewInit();
     }
