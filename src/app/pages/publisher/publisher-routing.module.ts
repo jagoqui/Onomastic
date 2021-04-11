@@ -7,7 +7,7 @@ const routes: Routes = [
   {path: '', component: PublisherComponent},
   {
     path: 'users',
-    loadChildren: () => import('./users/users.module').then(m => m.UsersModule)
+    loadChildren: () => import('./users/mail-users.module').then(m => m.MailUsersModule)
   },
   {
     path: 'templates-cards',

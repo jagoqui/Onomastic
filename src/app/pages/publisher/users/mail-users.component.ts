@@ -13,10 +13,10 @@ import SwAlert from 'sweetalert2';
 
 @Component({
   selector: 'app-users',
-  templateUrl: './users.component.html',
-  styleUrls: ['./users.component.scss']
+  templateUrl: './mail-users.component.html',
+  styleUrls: ['./mail-users.component.scss']
 })
-export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
+export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
   columnsToDisplay = [
@@ -110,7 +110,7 @@ export class UsersComponent implements AfterViewInit, OnInit, OnDestroy {
       this.mailUsersSvc
         .delete(userId)
         .pipe(takeUntil(this.destroy$))
-        .subscribe((res) => {
+        .subscribe((_) => {
           this.ngOnInit();
           window.alert('Usuario eliminado!');
         }, (err) => {

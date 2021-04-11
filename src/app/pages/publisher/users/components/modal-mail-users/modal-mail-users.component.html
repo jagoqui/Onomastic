@@ -156,6 +156,7 @@
           <mat-label>Programa</mat-label>
           <mat-select formControlName="nombre">
             <mat-option>-- Seleccione una opción --</mat-option>
+
             <mat-option *ngFor="let program of programs" [value]="program['nombre']"
                         (onSelectionChange)="setFormGroupCode(academicProgram, program['codigo'])">
               {{program['nombre']}}</mat-option>

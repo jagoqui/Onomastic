@@ -6,7 +6,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
 import { EventDayService } from '@pages/¨publisher/services/event-day.services';
 import { TemplateCardsService } from '@pages/¨publisher/services/template-cards.service';
-import { CardEvent, ConditionRes, Parameter } from '@shared/models/event-day.model';
+import { ConditionRes, Parameter } from '@shared/models/event-day.model';
 import { TemplateCard } from '@shared/models/template-card.model';
 import { BaseFormEventDay } from '@shared/utils/base-form-event-day';
 import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
@@ -107,11 +107,15 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     if (onChange) {
       if (confirm('Seguro que desea ver las plantillas?')) {
         this.sidenavOpened = true;
-        this.templateCardsService.getAllCards().subscribe(cards => this.cards = cards);
+        this.templateCardsService.getAllCards()
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(cards => this.cards = cards);
       }
     } else {
       this.sidenavOpened = true;
-      this.templateCardsService.getAllCards().subscribe(cards => this.cards = cards);
+      this.templateCardsService.getAllCards()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(cards => this.cards = cards);
     }
   }
 
@@ -135,26 +139,28 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
 
   onSave() {
     //TODO: EL formulario deja activada el botón si se cambia de opción y queda vacio.
-    this.eventDaySvc.new(this.eventDayForm.baseForm.value).subscribe(event => {
-      if (event) {
-        SwAlert.fire(
-          'Guardado!',
-          '<b>El evento ha sido guardado</b>',
-          'success').then(r => console.log(r)).then(r => console.log(r));
-        this.onClose(true);
-      }
-    }, (err) => {
-      console.table('Error guardando evento :> ', this.eventDayForm.baseForm.value);
-      SwAlert.fire({
-        icon: 'error',
-        html: '',
-        title: 'Oops...',
-        text: ' Algo salió mal!',
-        footer: `${err}`
-      }).then(_ => {
-        this.loaderSvc.setLoading(false);
+    this.eventDaySvc.new(this.eventDayForm.baseForm.value)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        if (event) {
+          SwAlert.fire(
+            'Guardado!',
+            '<b>El evento ha sido guardado</b>',
+            'success').then(r => console.log(r)).then(r => console.log(r));
+          this.onClose(true);
+        }
+      }, (err) => {
+        console.table('Error guardando evento :> ', this.eventDayForm.baseForm.value);
+        SwAlert.fire({
+          icon: 'error',
+          html: '',
+          title: 'Oops...',
+          text: ' Algo salió mal!',
+          footer: `${err}`
+        }).then(_ => {
+          this.loaderSvc.setLoading(false);
+        });
       });
-    });
   }
 
   onClose(close?: boolean): void {
