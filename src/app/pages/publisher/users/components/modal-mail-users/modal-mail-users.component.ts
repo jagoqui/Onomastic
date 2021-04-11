@@ -161,12 +161,12 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     const formValue = this.mailUserForm.baseForm.value;
     if (this.actionTODO === Action.new) {
       this.userSvc.new(formValue).subscribe((user) => {
-        console.log('New mailuser', user);
+        console.log('New mailUser', user);
         this.onClose(true);
         this.refresh.emit(true);
         this.mailUserForm.onReset();
       }, (err) => {
-        console.log('Error in create new mail user! :> ', err);
+        console.error('Error in create new mail user! :> ', err);
       });
     } else {
       const userId = this.data?.user?.id;
@@ -176,7 +176,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
         this.refresh.emit(true);
         this.mailUserForm.onReset();
       }, (err) => {
-        console.log('Error in update mail user! :> ', err);
+        console.error('Error in update mail user! :> ', err);
       });
     }
   }
@@ -205,7 +205,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
           this.programs = programs;
         }
       }, (err) => {
-        console.log('Get program error! :> ', err);
+        console.error('Get program error! :> ', err);
       })
     );
 
@@ -215,7 +215,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
           this.bondingTypes = types;
         }
       }, (err) => {
-        console.log('Get bonding type error! :> ', err);
+        console.error('Get bonding type error! :> ', err);
       })
     );
 
@@ -225,7 +225,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
           this.platforms = platforms;
         }
       }, (err) => {
-        console.log('Get platforms error! :> ', err);
+        console.error('Get platforms error! :> ', err);
       })
     );
   }

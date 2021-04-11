@@ -41,10 +41,6 @@ tr.example-element-row:not(.example-expanded-row):active {
 .example-element-detail {
   overflow: hidden;
   display: flex;
+  justify-content:center;
 }
 
-.example-element-description {
-  margin-left: auto;
-  margin-right: auto;
-  display: block;
-}

@@ -10,7 +10,7 @@
       <mat-icon>refresh</mat-icon>
     </button>
   </div>
-  <section class="html_section" *ngIf='this.onViewCard' fxLayoutAlign='center center'>
-    <app-template-card #cardHtml *ngFor="let card of cards" [card]="card" (refreshCards)='onRefresh($event)'></app-template-card>
+  <section class='card_container' *ngIf='this.onViewCard' fxLayoutAlign='center center'>
+    <app-template-card *ngFor="let card of cards" [card]="card" (refreshCards)='onRefresh($event)'></app-template-card>
   </section>
 </div>
