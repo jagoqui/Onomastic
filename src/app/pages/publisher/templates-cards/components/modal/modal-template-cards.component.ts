@@ -178,7 +178,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       toolbarAdaptive: false,
       insertImageAsBase64URI: false,
       buttons: [
-        'source', 'font', 'paragraph', 'fontsize', 'brush', '|',
+        'font', 'paragraph', 'fontsize', 'brush', '|',
         'bold', 'underline', 'italic', 'strikethrough', '|',
         'align', 'indent', 'outdent', '|',
         'ol', 'ul', '|',
