@@ -1,4 +1,4 @@
-import { OnDestroy, Component, Input, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { TemplateCard } from '@shared/models/template-card.model';
 import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
 import SwAlert from 'sweetalert2';
@@ -10,7 +10,7 @@ import { Router } from '@angular/router';
   templateUrl: './template-card.component.html',
   styleUrls: ['./template-card.component.scss']
 })
-export class TemplateCardComponent{
+export class TemplateCardComponent {
   @Input() card: TemplateCard | undefined;
   @Input() actions = true;
   @Output() refreshCards = new EventEmitter(false);
@@ -20,7 +20,6 @@ export class TemplateCardComponent{
     private templateCardsService: TemplateCardsService,
     private router: Router
   ) {
-
   }
 
   onEditCard(id: number): void {

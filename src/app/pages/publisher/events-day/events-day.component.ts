@@ -154,7 +154,6 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit(): void {
     this.eventsSvc.getEvents().subscribe((event) => {
       this.dataSource.data = event;
-      console.log(this.dataSource.data);
       this.numEvents = this.dataSource.data.length;
     });
   }

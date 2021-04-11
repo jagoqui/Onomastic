@@ -33,6 +33,24 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   urlImageEdit: string = null;
   maxChars = 400;
   actionTODO = '';
+  cardImageStyles = `
+    <style>
+        #templateCardImage{
+                display: block;
+                margin: auto;
+                width:50vw;
+                max-width: 85%!important;
+                height: auto;
+        }
+        @supports(object-fit: cover){
+                #templateCardImage{
+                        height: 100%!important;
+                        object-fit: cover!important;
+                        object-position: center center!important;
+                }
+        }
+    </style>
+  `;
   initialContent = `
     <span>
       Hola <b id='name' class='labels' title='Nombre del usuario de correo.'>&lt;NOMBRE&gt;</b> en ésta
@@ -42,6 +60,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       <b id='bodyType' class='labels' title='Estudiante, prodesor, auxiliar ...'>&ltESTAMENTO&gt;</b>, eres muy importante
       para nosotros.
     </span>
+    ${this.cardImageStyles}
   `;
   onCompleteCard = false;
   private destroy$ = new Subject<any>();
@@ -159,7 +178,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       toolbarAdaptive: false,
       insertImageAsBase64URI: false,
       buttons: [
-        'font', 'paragraph', 'fontsize', 'brush', '|',
+        'source', 'font', 'paragraph', 'fontsize', 'brush', '|',
         'bold', 'underline', 'italic', 'strikethrough', '|',
         'align', 'indent', 'outdent', '|',
         'ol', 'ul', '|',
@@ -167,7 +186,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         'superscript', 'subscript', 'symbol', '|',
         'eraser', 'selectall', 'copyTrash', '|', 'imageUpload', 'print', '|', 'labels', '|',
         '\n',
-        'undo', 'redo', 'reset', 'preview', 'fullsize', '|', 'about', 'theme', 'info'
+        'undo', 'redo', 'reset', 'preview', 'fullsize', '|', 'theme', 'info', 'about'
       ],
       controls: {
         copyTrash: {
@@ -189,7 +208,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
             date: 'Fecha',
             school: 'Facultad/Escuela',
             bodyType: 'Estamento',
-            program:'Programa acádemico'
+            program: 'Programa acádemico'
           },
           exec: (editor, _, $btn) => {
             const key = $btn.control.text;
@@ -231,6 +250,9 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           name: 'image',
           tooltip: 'Subir imagen de la plantilla prediseñada',
           exec: (async (editor) => {
+            if (this.joditEditor.editor.value === '') {
+              this.joditEditor.editor.value = this.cardImageStyles;
+            }
             const imgCard = document.getElementById('templateCardImage');
             if (imgCard) {
               return await SwAlert.fire({
@@ -291,11 +313,14 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         }
       },
       events: {
-        keypress:()=>{
+        keypress: () => {
+          if (this.joditEditor.editor.value === '') {
+            this.joditEditor.editor.value = this.cardImageStyles;
+          }
           const text = this.joditEditor.editor.editor.innerText;
           //Todo: No coincide con el contador por defecto del editor
           const charCount = text.replace(/[\s\n\r\t]+/, '').length;
-          if(charCount >= this.maxChars){
+          if (charCount >= this.maxChars) {
             return SwAlert.fire({
               title: `No puede agregar más texto!`,
               html: `Sobrepasó  los <br>${this.maxChars}</b> de máximo de caracteres permitidos.`,
@@ -303,11 +328,11 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
             }).then(_ => false);
           }
         },
-        keydown:(event)=>{
+        keydown: (event) => {
           const { key } = event;
           if (key === 'Backspace' || key === 'Delete') {
             const selection: any = this.joditEditor.editor.ownerDocument.getSelection();
-            const {id, className}: HTMLElement = selection.focusNode.parentElement;
+            const { id, className }: HTMLElement = selection.focusNode.parentElement;
             if (className === 'labels') {
               document.getElementById(id).remove();
             }

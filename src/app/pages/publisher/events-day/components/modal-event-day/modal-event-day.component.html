@@ -18,31 +18,28 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <div mat-dialog-content>
-      <form [formGroup]='eventDayForm.baseForm' fxLayout='row' fxLayoutAlign='space-between center'>
+      <form [formGroup]='eventDayForm.baseForm' fxLayout='row' fxLayoutAlign='space-between center' [fxLayoutGap]="'1.667rem'">
         <!--Template card-->
-        <div fxLayout='column' fxFlex='60' class='card-select-container'>
-          <div *ngIf='!selectCard; else selectedCard'
-               [ngClass]="!eventDayForm.isValidField(eventDayForm.baseForm.controls.plantilla)? 'select-card-container-error' : 'select-card-container'">
-            <div class='btn-select-card'>
-              <button mat-button color='primary' (click)='loadCards()'>
-                Seleccionar plantilla<br>
-                <mat-icon>image</mat-icon>
-                <mat-error *ngIf='!eventDayForm.isValidField(eventDayForm.baseForm.controls.plantilla)'>
-                  Debe seleccionar una plantilla
-                </mat-error>
-              </button>
-            </div>
+        <div *ngIf='!selectCard; else selectedCard'
+             [ngClass]="!eventDayForm.isValidField(eventDayForm.baseForm.controls.plantilla)? 'select-card-container-error' : 'select-card-container'"
+            fxFlex='40'>
+          <div class='btn-select-card'>
+            <button mat-button color='primary' (click)='loadCards()'>
+              Seleccionar plantilla<br>
+              <mat-icon>image</mat-icon>
+              <mat-error *ngIf='!eventDayForm.isValidField(eventDayForm.baseForm.controls.plantilla)'>
+                Debe seleccionar una plantilla
+              </mat-error>
+            </button>
           </div>
-          <ng-template #selectedCard>
-            <div class='template-container'>
-              <app-template-card
-                #cardHtml *ngIf='selectCard' [card]='selectCard' [actions]='false' title='click para cambiar plantilla'
-                (refreshCards)='onRefresh($event)' (click)='loadCards(true)'></app-template-card>
-            </div>
-          </ng-template>
         </div>
+        <ng-template #selectedCard>
+          <app-template-card
+            #cardHtml *ngIf='selectCard' [card]='selectCard' [actions]='false' title='click para cambiar plantilla'
+            (refreshCards)='onRefresh($event)' (click)='loadCards(true)'></app-template-card>
+        </ng-template>
         <!--Event day form-->
-        <div fxFlex='38' fxLayout='column'>
+        <div fxFlex='60' fxLayout='column'>
           <div fxLayout='row' fxLayoutAlign='space-between center'>
             <!-- Name -->
             <mat-form-field hideRequiredMarker appearance='outline' fxFlex='47'>
