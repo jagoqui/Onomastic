@@ -68,7 +68,7 @@ const routes: Routes = [
   imports: [RouterModule.forRoot(routes, {
       enableTracing: true,
       preloadingStrategy: QuicklinkStrategy,
-      // onSameUrlNavigation: 'reload'
+      onSameUrlNavigation: 'reload'
     }
   )],
   exports: [RouterModule]
