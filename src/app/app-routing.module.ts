@@ -1,22 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import {
-  PageNotFoundComponent,
-} from '@shared/components/page-not-found/page-not-found.component';
+import { PageNotFoundComponent } from '@shared/components/page-not-found/page-not-found.component';
 import { CheckLoginGuard } from '@shared/guards/check-login.guard';
 import { NegateCheckLoginGuard } from '@shared/guards/negate-check-login.guard';
 import { QuicklinkStrategy } from 'ngx-quicklink';
 
-import {
-  MailUsersSubscriptionStatusComponent,
-} from '@shared/components/mail-users-subscription-status/mail-users-subscription-status.component';
+import { MailUsersSubscriptionStatusComponent } from '@shared/components/mail-users-subscription-status/mail-users-subscription-status.component';
 
 
 const routes: Routes = [
   {
     path: '',
     redirectTo: '/login',
-    pathMatch: 'full',
+    pathMatch: 'full'
   },
   {
     path: 'login',
@@ -46,11 +42,11 @@ const routes: Routes = [
   },
   {
     path: 'confirmation-email',
-    loadChildren: () => import('./auth/confirmation-email/confirmation-email.module').then(m => m.ConfirmationEmailModule),
+    loadChildren: () => import('./auth/confirmation-email/confirmation-email.module').then(m => m.ConfirmationEmailModule)
   },
   {
     path: 'PUBLISHER',
-    loadChildren: () => import('./pages/publisher/publisher.module').then(m => m.PublisherModule),
+    loadChildren: () => import('./pages/publisher/publisher.module').then(m => m.PublisherModule)
     // canActivate: [CheckLoginGuard]
   },
   {
@@ -64,15 +60,17 @@ const routes: Routes = [
   },
   {
     path: '**',
-    component: PageNotFoundComponent,
+    component: PageNotFoundComponent
   }
 ];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes, {
-    enableTracing: true,
-    preloadingStrategy: QuicklinkStrategy
-  })],
+      enableTracing: true,
+      preloadingStrategy: QuicklinkStrategy
+    }
+  )],
   exports: [RouterModule]
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {
+}
