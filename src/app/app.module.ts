@@ -32,10 +32,10 @@ import { LocationStrategy, PathLocationStrategy } from '@angular/common';
       useClass: InterceptorService,
       multi: true
     },
-    {
-      provide: LocationStrategy,
-      useClass: PathLocationStrategy
-    }
+    // {
+    //   provide: LocationStrategy,
+    //   useClass: PathLocationStrategy
+    // }
   ],
   bootstrap: [AppComponent]
 })

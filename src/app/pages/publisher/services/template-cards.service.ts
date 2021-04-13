@@ -4,7 +4,8 @@ import { TemplateCard } from '@app/shared/models/template-card.model';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 import { AuthService } from '@auth/services/auth.service';
-import { ImageUpload } from '@shared/models/image-upload.model';
+import { tap } from 'rxjs/operators';
+import SwAlert from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
@@ -16,15 +17,12 @@ export class TemplateCardsService {
     private authSvc: AuthService) {
   }
 
-  newCardTemplate(card: TemplateCard, image: File): Observable<TemplateCard> {
+  saveTemplateCard(card: TemplateCard): Observable<TemplateCard> {
     const cardBlob = new Blob([JSON.stringify(card)], { type: 'application/json' });
     const formData = new FormData();
-    formData.append('file', image);
     formData.append('plantilla', cardBlob);
     return this.http
-      .post<TemplateCard>(`${environment.apiUrl}/plantillas/${this.authSvc.getUserId()}`, formData, {
-        reportProgress: true
-      });
+      .post<TemplateCard>(`${environment.apiUrl}/plantillas/${this.authSvc.getUserId()}`, formData);
   }
 
   getAllCards(): Observable<TemplateCard[]> {

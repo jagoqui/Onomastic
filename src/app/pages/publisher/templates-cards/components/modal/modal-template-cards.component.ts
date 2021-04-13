@@ -124,9 +124,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           texto: this.joditEditor.editor.value,
           asociacionesPorPlantilla: associations
         };
-        this.templateCardsService.newCardTemplate(
-          this.card,
-          this.uploadImagesSvc?.img ? this.uploadImagesSvc.img : this.cardImageEdit)
+        this.templateCardsService.saveTemplateCard(this.card)
           .pipe(takeUntil(this.destroy$))
           .subscribe((cardRes) => {
             if (cardRes) {
