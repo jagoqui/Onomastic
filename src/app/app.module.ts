@@ -31,11 +31,7 @@ import { LocationStrategy, PathLocationStrategy } from '@angular/common';
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,
       multi: true
-    },
-    // {
-    //   provide: LocationStrategy,
-    //   useClass: PathLocationStrategy
-    // }
+    }
   ],
   bootstrap: [AppComponent]
 })
