@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {CanActivate, Router} from '@angular/router';
+import { CanActivate, NavigationEnd, Route, Router } from '@angular/router';
 import {AuthService} from '@auth/services/auth.service';
 import {Observable} from 'rxjs';
 import {map, take} from 'rxjs/operators';
@@ -10,7 +10,9 @@ import {PlatformUserResponse} from '../models/platform-users.model';
   providedIn: 'root'
 })
 export class CheckLoginGuard implements CanActivate {
-  constructor(private authSvc: AuthService, private route: Router) {
+  constructor(
+    private authSvc: AuthService,
+    private router: Router) {
   }
 
   canActivate(): Observable<boolean> {
@@ -21,7 +23,7 @@ export class CheckLoginGuard implements CanActivate {
           return true;
         }
         alert('Acceco denegado!');
-        this.route.navigate(['/login']).then(r => console.log(r));
+        this.router.navigate(['/login']).then(r => console.log(r));
         return false;
       })
     );

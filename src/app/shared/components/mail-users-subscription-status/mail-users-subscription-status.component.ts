@@ -40,7 +40,16 @@ export class MailUsersSubscriptionStatusComponent implements OnInit {
                         <a href="${this.router.navigate(['PUBLISHER/help'])}">Ayuda</a>.
                     `,
               'success'
-            ).then(r => console.log(r));
+            ).then(_ => {});
+          }else{
+            SwAlert.fire(
+              'El usuario no exite!',
+              `
+                        Para más información
+                        <a href="${this.router.navigate(['PUBLISHER/help'])}">Ayuda</a>.
+                    `,
+              'error'
+            ).then(_ => {});
           }
         });
       } else {
@@ -51,7 +60,7 @@ export class MailUsersSubscriptionStatusComponent implements OnInit {
             <a href="${this.router.navigate(['PUBLISHER/help'])}">Ayuda</a>.
           `,
           'info'
-        ).then(r => console.log(r));
+        ).then(_ => {});
       }
     });
   }

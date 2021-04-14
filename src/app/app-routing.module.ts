@@ -54,8 +54,7 @@ const routes: Routes = [
     canActivate: [NegateCheckLoginGuard]
   },
   {
-    /*TODO: Permitir acceso de forma pública.*/
-    path: 'mail-mail-users-subscription-status/:email',
+    path: 'mail-users-subscription-status/:email',
     component: MailUsersSubscriptionStatusComponent
   },
   {
