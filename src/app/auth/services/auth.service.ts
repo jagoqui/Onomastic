@@ -109,7 +109,7 @@ export class AuthService {
         this.isLogged.next(true);
       }
     } else {
-      this.router.navigate(['/login']).then(r => console.log(r));
+      this.router.navigate(['/login']).then(_=>console.log('Session redirect to login'));
     }
   }
 }
