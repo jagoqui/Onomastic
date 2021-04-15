@@ -46,8 +46,8 @@ const routes: Routes = [
   },
   {
     path: 'PUBLISHER',
-    loadChildren: () => import('./pages/publisher/publisher.module').then(m => m.PublisherModule)
-    // canActivate: [CheckLoginGuard]
+    loadChildren: () => import('./pages/publisher/publisher.module').then(m => m.PublisherModule),
+    canActivate: [CheckLoginGuard]
   },
   {
     path: 'forgot-password', loadChildren: () => import('./auth/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule),
