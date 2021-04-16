@@ -5,7 +5,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
-import { EventDayService } from '../services/event-day.services';
+import { EventDayService } from '../services/event-day.service';
 import { ModalEventDayComponent } from './components/modal-event-day/modal-event-day.component';
 import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
 import { SafeHtml } from '@angular/platform-browser';

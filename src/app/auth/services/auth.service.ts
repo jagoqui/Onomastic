@@ -82,7 +82,7 @@ export class AuthService {
   }
 
   register(userData: PlatformUser): Observable<PlatformUserResponse | void> {
-    return this.http.post<PlatformUserResponse>(`${environment.apiUrl}/users`, userData).pipe(
+    return this.http.post<PlatformUserResponse>(`${environment.apiUrl}/usuarios`, userData).pipe(
       map((user: PlatformUserResponse) =>
         // this.saveLocalStorage(user);
         user

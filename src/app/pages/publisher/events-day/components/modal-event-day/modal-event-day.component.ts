@@ -4,7 +4,7 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
-import { EventDayService } from '@pages/¨publisher/services/event-day.services';
+import { EventDayService } from '@pages/¨publisher/services/event-day.service';
 import { TemplateCardsService } from '@pages/¨publisher/services/template-cards.service';
 import { ConditionRes, Parameter } from '@shared/models/event-day.model';
 import { TemplateCard } from '@shared/models/template-card.model';
@@ -59,6 +59,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   conditionsRes: ConditionRes[];
   selectedIdFilterAssociation: number[];
   parametersRes: Parameter[];
+  today = new Date();
   private destroy$ = new Subject<any>();
 
   constructor(

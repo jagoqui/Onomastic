@@ -41,9 +41,9 @@
         <!--Event day form-->
         <div fxFlex='60' fxLayout='column'>
           <div fxLayout='row' fxLayoutAlign='space-between center'>
-            <!-- Name -->
+            <!-- Subject -->
             <mat-form-field hideRequiredMarker appearance='outline' fxFlex='47'>
-              <mat-label>Nombre</mat-label>
+              <mat-label>Asunto</mat-label>
               <label>
                 <input type='text' matInput required formControlName='nombre'>
               </label>
@@ -76,7 +76,7 @@
             <mat-form-field fxFlex='47' appearance='outline'>
               <mat-label>Fecha de inicio</mat-label>
               <label>
-                <input matInput [matDatepicker]='dp' formControlName='fecha' (dateChange)='setDateFormat($event)'
+                <input matInput [matDatepicker]='dp' [min]="today" formControlName='fecha' (dateChange)='setDateFormat($event)'
                        placeholder='YYYY-MM-DD' readonly>
               </label>
               <mat-datepicker-toggle matSuffix [for]='dp'></mat-datepicker-toggle>
