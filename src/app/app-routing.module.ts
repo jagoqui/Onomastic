@@ -5,6 +5,7 @@ import { CheckLoginGuard } from '@shared/guards/check-login.guard';
 import { NegateCheckLoginGuard } from '@shared/guards/negate-check-login.guard';
 import { QuicklinkStrategy } from 'ngx-quicklink';
 
+// eslint-disable-next-line max-len
 import { MailUsersSubscriptionStatusComponent } from '@shared/components/mail-users-subscription-status/mail-users-subscription-status.component';
 
 
@@ -19,6 +20,10 @@ const routes: Routes = [
     loadChildren: () => import('./auth/login/login.module').then(m => m.LoginModule),
     // redirectTo: 'PUBLISHER/templates-cards/',
     canActivate: [NegateCheckLoginGuard]
+  },
+  {
+    path: 'mail-users-subscription-status/:email',
+    component: MailUsersSubscriptionStatusComponent
   },
   {
     path: 'home',
@@ -52,12 +57,7 @@ const routes: Routes = [
   {
     path: 'forgot-password', loadChildren: () => import('./auth/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule),
     canActivate: [NegateCheckLoginGuard]
-  },
-  {
-    path: 'mail-users-subscription-status/:email',
-    component: MailUsersSubscriptionStatusComponent
-  },
-  {
+  }, {
     path: '**',
     component: PageNotFoundComponent
   }

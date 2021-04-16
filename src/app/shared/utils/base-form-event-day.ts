@@ -20,7 +20,7 @@ export class BaseFormEventDay {
 
   createBaseForm(): FormGroup {
     return this.fb.group({
-      nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(20)]],
+      nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(45)]],
       fecha: ['', [Validators.required, this.validDate]],
       estado: ['', [Validators.required]], // TODO: Crear tipo de dato ACTIVO, INACTIVO
       recurrencia: ['', [Validators.required]], // TODO: Crear tipo de dato ANUAL, DIARIA

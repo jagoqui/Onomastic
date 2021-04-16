@@ -4,8 +4,7 @@ import { TemplateCard } from '@app/shared/models/template-card.model';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
 import { AuthService } from '@auth/services/auth.service';
-import { tap } from 'rxjs/operators';
-import SwAlert from 'sweetalert2';
+import { EventDay } from '@shared/models/event-day.model';
 
 @Injectable({
   providedIn: 'root'
@@ -39,4 +38,9 @@ export class TemplateCardsService {
     return this.http
       .delete<any>(`${environment.apiUrl}/plantillas/${id}/${this.authSvc.getUserId()}`);
   }
+
+  getAssociatedEvents(idTemplate: number): Observable<EventDay[]> {
+    return this.http
+      .get<EventDay[]>(`${environment.apiUrl}/evento/plantilla/${idTemplate}`);
+  };
 }
