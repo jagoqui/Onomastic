@@ -71,10 +71,13 @@ export class UploadImageService {
   }
 
   insertImage = (editor, url) => {
+    const imgContainer = document.createElement('div') as HTMLImageElement;
     const image = document.createElement('img') as HTMLImageElement;
     image.src = url;
     image.id = 'templateCardImage';
-    editor.selection.insertNode(image);
+    imgContainer.appendChild(image);
+    imgContainer.id='imgContainer';
+    editor.selection.insertNode(imgContainer);
   };
 
   deleteImage(imgName: string): Observable<any> {
