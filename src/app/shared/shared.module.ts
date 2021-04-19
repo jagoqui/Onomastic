@@ -19,6 +19,17 @@ import {
   MaterialElevationDirective,
 } from './directives/material-elevation.directive';
 
+const imports = [
+  CommonModule,
+  FlexLayoutModule,
+  RouterModule,
+  MaterialModule,
+  FormsModule,
+  ReactiveFormsModule,
+  NgxCaptchaModule
+];
+export default imports;
+
 @NgModule({
   declarations: [
     OnomasticLogoComponent,
@@ -29,25 +40,14 @@ import {
     MaterialElevationDirective
   ],
   imports: [
-    CommonModule,
-    FlexLayoutModule,
-    RouterModule,
-    MaterialModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxCaptchaModule
+    imports
   ],
   exports: [
-    CommonModule,
+    imports,
     OnomasticLogoComponent,
     HeaderComponent,
     MailUsersSubscriptionStatusComponent,
     SidebarComponent,
-    MaterialModule,
-    FlexLayoutModule,
-    FormsModule,
-    ReactiveFormsModule,
-    NgxCaptchaModule,
     FooterComponent,
     MaterialElevationDirective,
   ]
