@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import SwAlert from 'sweetalert2';
-import {EmailUsersService} from '@pages/¨publisher/services/email-users.service';
+import { EmailUsersService } from '@pages/publisher/services/email-users.service';
 
 @Component({
   selector: 'app-mail-users-subscription-status',

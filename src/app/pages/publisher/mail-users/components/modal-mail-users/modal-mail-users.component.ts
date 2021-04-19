@@ -5,11 +5,11 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE,} from '@angular/material
 import {MatDatepickerInputEvent} from '@angular/material/datepicker';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {ByNameId, ProgramaAcademicoPorUsuarioCorreo,} from '@shared/models/mail-users.model';
-import {BaseFormMailUsers} from '@shared/utils/base-form-mail-users';
 import * as moment from 'moment';
 import {Subscription} from 'rxjs';
 
 import {EmailUsersService} from '../../../services/email-users.service';
+import { BaseFormMailUsers } from '@pages/publisher/utils/base-form-mail-users';
 
 // eslint-disable-next-line no-shadow
 enum Action {

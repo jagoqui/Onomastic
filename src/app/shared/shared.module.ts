@@ -18,7 +18,6 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import {
   MaterialElevationDirective,
 } from './directives/material-elevation.directive';
-import { DomPurifyPipe } from './pipes/dom-purify.pipe';
 
 @NgModule({
   declarations: [
@@ -27,7 +26,6 @@ import { DomPurifyPipe } from './pipes/dom-purify.pipe';
     SidebarComponent,
     FooterComponent,
     MailUsersSubscriptionStatusComponent,
-    DomPurifyPipe,
     MaterialElevationDirective
   ],
   imports: [

@@ -1,15 +1,15 @@
 import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TemplateCardsService } from '@pages/¨publisher/services/template-cards.service';
+import { TemplateCardsService } from '@pages/publisher/services/template-cards.service';
 import { ThemeSwitcherControllerService } from '@shared/services/theme-switcher-controller.service';
 import { JoditAngularComponent } from 'jodit-angular';
 import { Subject } from 'rxjs';
 import { TemplateCard } from '@shared/models/template-card.model';
 import SwAlert from 'sweetalert2';
-import { UploadImageService } from '@pages/¨publisher/services/upload-image.service';
+import { UploadImageService } from '@pages/publisher/services/upload-image.service';
 import { environment } from '@env/environment';
 import { takeUntil } from 'rxjs/operators';
-import { EmailUsersService } from '@pages/¨publisher/services/email-users.service';
+import { EmailUsersService } from '@pages/publisher/services/email-users.service';
 import { LoaderService } from '@shared/services/loader.service';
 
 enum Action {

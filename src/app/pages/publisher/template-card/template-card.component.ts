@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core
 import { TemplateCard } from '@shared/models/template-card.model';
 import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
 import SwAlert from 'sweetalert2';
-import { TemplateCardsService } from '@pages/¨publisher/services/template-cards.service';
+import { TemplateCardsService } from '@pages/publisher/services/template-cards.service';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
