@@ -3,10 +3,10 @@ import {Router} from '@angular/router';
 import {ReCaptcha2Component} from 'ngx-captcha';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {Subscription} from 'rxjs';
-import {BaseFormPlatformUsers} from 'src/app/shared/utils/base-form-platform-users';
 import {environment} from 'src/environments/environment';
 
 import {AuthService} from '../services/auth.service';
+import { BaseFormPlatformUsers } from '@shared/utils/base-form-platform-users';
 
 @Component({
   selector: 'app-login',

@@ -1,9 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterEvent } from '@angular/router';
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { filter, map } from 'rxjs/operators';
 import { PlatformUser, PlatformUserResponse } from 'src/app/shared/models/platform-users.model';
 import { environment } from 'src/environments/environment';
 import { ThemeSwitcherControllerService } from '@shared/services/theme-switcher-controller.service';
@@ -22,8 +22,18 @@ export class AuthService {
   constructor(
     private http: HttpClient,
     private router: Router,
+    private route: ActivatedRoute,
     private themeSwitcherController: ThemeSwitcherControllerService) {
-    this.checkToken();
+    router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+    )
+      .subscribe((event: RouterEvent) => {
+        const { url } = event;
+        const routeSubscriptionStatus: boolean = url.indexOf('mail-users-subscription-status') === 1;
+        if (!routeSubscriptionStatus) {
+          this.checkToken();
+        }
+      });
   }
 
   get userResponse$(): Observable<PlatformUserResponse> {
@@ -93,7 +103,7 @@ export class AuthService {
   logout() {
     this.platformUserRes.next(null);
     this.isLogged.next(false);
-    this.router.navigate(['/login']).then(r => console.log(r));
+    this.router.navigate(['/login']).then();
     this.themeSwitcherController.setThemeClass('light-theme');
     localStorage.clear();
   }
@@ -109,7 +119,8 @@ export class AuthService {
         this.isLogged.next(true);
       }
     } else {
-      this.router.navigate(['/login']).then(_=>console.log('Session redirect to login'));
+      this.router.navigate(['/login']).then(_ => console.log('Session redirect to login'));
+      //TODO: Los modales no se están cerrando
     }
   }
 }

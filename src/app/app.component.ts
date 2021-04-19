@@ -7,6 +7,7 @@ import {ThemeSwitcherControllerService,} from '@shared/services/theme-switcher-c
 import {NgxSpinnerService} from 'ngx-spinner';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
+import { Router } from '@angular/router';
 
 
 @Component({
@@ -28,7 +29,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private sidenavController: SidenavControllerService,
     private themeSwitcherController: ThemeSwitcherControllerService,
     private spinner: NgxSpinnerService,
-    public loaderSvc: LoaderService
+    public loaderSvc: LoaderService,
+    private router: Router
   ) {
   }
 

@@ -1,7 +1,7 @@
 import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {environment} from '@env/environment';
-import {ByNameId, ID, MailUsers, MailUsersResponse, ProgramaAcademicoPorUsuarioCorreo} from '@shared/models/mail-users.model';
+import {ByNameId, ID, MailUsers, ProgramaAcademicoPorUsuarioCorreo} from '@shared/models/mail-users.model';
 import {Observable} from 'rxjs';
 import { AuthService } from '@auth/services/auth.service';
 
@@ -14,9 +14,9 @@ export class EmailUsersService {
   ) {
   }
 
-  getAll(): Observable<MailUsersResponse[]> {
+  getAll(): Observable<MailUsers[]> {
     return this.http
-      .get<MailUsersResponse[]>(`${environment.apiUrl}/usuariosemail`);
+      .get<MailUsers[]>(`${environment.apiUrl}/usuariosemail`);
   }
 
   getAssociations(): Observable<ByNameId[]> {
@@ -59,20 +59,20 @@ export class EmailUsersService {
       .get<ByNameId>(`${environment.apiUrl}/plataformas/${id}`);
   }
 
-  new(user: MailUsers): Observable<MailUsersResponse> {
+  new(user: MailUsers): Observable<MailUsers> {
     return this.http
       .post<MailUsers>(`${environment.apiUrl}/usuariosemail`, user);
   }
 
-  getById(id: ID): Observable<MailUsersResponse> {
+  getById(id: ID): Observable<MailUsers> {
     return this.http
-      .get<MailUsersResponse>(`${environment.apiUrl}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`);
+      .get<MailUsers>(`${environment.apiUrl}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`);
   }
 
 
-  update(id: ID, user: MailUsers): Observable<MailUsersResponse> {
+  update(id: ID, user: MailUsers): Observable<MailUsers> {
     return this.http
-      .put<MailUsersResponse>(`${environment.apiUrl}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`, user);
+      .put<MailUsers>(`${environment.apiUrl}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`, user);
   }
 
   delete(id: ID): Observable<MailUsers> {
@@ -80,14 +80,14 @@ export class EmailUsersService {
       .delete<MailUsers>(`${environment.apiUrl}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`);
   }
 
-  unsubscribe(emailEncrypt: string): Observable<MailUsersResponse> {
+  unsubscribe(emailEncrypt: string): Observable<MailUsers> {
     return this.http
-      .put<MailUsersResponse>(`${environment.apiUrl}/unsuscribe/${emailEncrypt}`,null);
+      .put<MailUsers>(`${environment.apiUrl}/unsuscribe/${emailEncrypt}`,null);
   }
 
-  subscribe(email: string): Observable<MailUsersResponse> {
+  subscribe(email: string): Observable<MailUsers> {
     return this.http
-      .put<MailUsersResponse>(`${environment.apiUrl}/usuariosemail/suscribe/${email}`,null);
+      .put<MailUsers>(`${environment.apiUrl}/usuariosemail/suscribe/${email}`,null);
   }
 
 }

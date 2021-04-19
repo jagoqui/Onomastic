@@ -1,7 +1,6 @@
-import {Component, Inject, OnInit} from '@angular/core';
-import {MAT_DIALOG_DATA} from '@angular/material/dialog';
-import {AuthService} from '@auth/services/auth.service';
-import {BaseFormPlatformUsers} from '@shared/utils/base-form-platform-users';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { BaseFormPlatformUsers } from '@shared/utils/base-form-platform-users';
 
 // eslint-disable-next-line no-shadow
 enum Action {
@@ -22,7 +21,6 @@ export class ModalPublishersComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private autSvc: AuthService,
     public newPublisherForm: BaseFormPlatformUsers
   ) {
   }
