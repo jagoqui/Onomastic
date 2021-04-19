@@ -78,10 +78,11 @@ const materialLibs = [
   MatMomentDateModule,
   MatNativeDateModule
 ];
+export default materialLibs;
 
 @NgModule({
   declarations: [],
-  imports: [CommonModule, ...materialLibs],
-  exports: [...materialLibs]
+  imports: [CommonModule, materialLibs],
+  exports: [materialLibs]
 })
 export class MaterialModule { }

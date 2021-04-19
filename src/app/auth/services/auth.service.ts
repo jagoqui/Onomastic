@@ -24,16 +24,7 @@ export class AuthService {
     private router: Router,
     private route: ActivatedRoute,
     private themeSwitcherController: ThemeSwitcherControllerService) {
-    router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-    )
-      .subscribe((event: RouterEvent) => {
-        const { url } = event;
-        const routeSubscriptionStatus: boolean = url.indexOf('mail-users-subscription-status') === 1;
-        if (!routeSubscriptionStatus) {
-          this.checkToken();
-        }
-      });
+    this.checkToken();
   }
 
   get userResponse$(): Observable<PlatformUserResponse> {
@@ -119,8 +110,15 @@ export class AuthService {
         this.isLogged.next(true);
       }
     } else {
-      this.router.navigate(['/login']).then(_ => console.log('Session redirect to login'));
-      //TODO: Los modales no se están cerrando
+      this.router.events
+        .pipe(filter(event => event instanceof NavigationEnd))
+        .subscribe((event: RouterEvent) => {
+          const { url } = event;
+          const routeSubscriptionStatus: boolean = url.indexOf('mail-users-subscription-status') === 1;
+          if (!routeSubscriptionStatus) {
+            this.router.navigate(['/login']).then(_ => console.log('Session redirect to login'));
+          }
+        });
     }
   }
 }
