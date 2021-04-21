@@ -1,0 +1,11 @@
+@import '../../../../assets/custom_styles/material_custom_theme';
+
+
+.button-add-publisher {
+    width: 55%;
+    margin-bottom: 0.5556rem;
+    margin-top: 2.7778rem;
+    &:before {
+      content: "Nuevo publicador";
+    }
+  }

@@ -24,4 +24,14 @@ export class PublisherService {
     return this.http
       .post<MailUsers>(`${environment.apiUrl}/`, user);
   }
+
+  getPublishers(): Observable<MailUsers[]> {
+    return this.http
+      .get<MailUsers[]>(`${environment.apiUrl}/`);
+  }
+
+  delete(id: number): Observable<[]> {
+    return this.http
+      .delete<[]>(`${environment.apiUrl}//${id}/${this.authSvc.getUserId()}`);
+  }
 }
