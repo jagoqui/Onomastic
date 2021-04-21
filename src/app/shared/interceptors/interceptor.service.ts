@@ -40,7 +40,7 @@ export class InterceptorService implements HttpInterceptor {
             text: ` Algo salió mal en la petición!. ${err.status === 401 ? 'Por seguridad se cerrará la sesión' : ''}`,
             footer: `<span style='color: red'>Error! <b> ${err.error === 'Forbidden'? 'Necesita permisos de admin.' : err.error.error}</b>.
                 ${err.statusText}</span><br><br>
-                <span>Necesita <a href="${this.router.navigate(['PUBLISHER/help'])}">ayuda</a>?</span>.`
+                <span>Necesita <a href="">ayuda</a>?</span>.`
           }).then(r => {
             console.log(err.statusText);
             this.loaderSvc.setLoading(false);

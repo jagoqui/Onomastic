@@ -71,6 +71,7 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     private eventDaySvc: EventDayService,
     private loaderSvc: LoaderService
   ) {
+    console.warn('Form is valid? :> ',this.eventDayForm.baseForm.controls);
   }
 
   setDateFormat(event: MatDatepickerInputEvent<unknown>) {
@@ -165,6 +166,8 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   }
 
   onClose(close?: boolean): void {
+    console.warn('Form is valid? :> ',this.eventDayForm.baseForm.valid);
+    console.warn('Form is valid? :> ',this.eventDayForm.baseForm.controls);
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.eventDayForm.onReset();
       this.refresh.emit(true);

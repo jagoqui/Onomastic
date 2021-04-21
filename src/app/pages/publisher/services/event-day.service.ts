@@ -18,12 +18,12 @@ export class EventDayService {
 
   new(event: EventDay): Observable<EventDay> {
     return this.http
-      .post<EventDay>(`${environment.apiUrl}/evento/${this.authSvc.getUserId()}`, event);
+      .post<EventDay>(`${environment.apiUrl}/evento}`, event);
   }
 
   getConditions(): Observable<ConditionRes[]> {
     return this.http
-      .get<ConditionRes[]>(`${environment.apiUrl}/evento/condiciones/${this.authSvc.getUserId()}`);
+      .get<ConditionRes[]>(`${environment.apiUrl}/evento/condiciones`);
   }
 
   getEvents(): Observable<EventDay[]> {
@@ -32,16 +32,16 @@ export class EventDayService {
 
   delete(id: number): Observable<[]> {
     return this.http
-      .delete<[]>(`${environment.apiUrl}/evento/${id}/${this.authSvc.getUserId()}`);
+      .delete<[]>(`${environment.apiUrl}/evento/${id}}`);
   }
 
   inactivateEvent(id: number): Observable<EventDay> {
     return this.http
-      .put<EventDay>(`${environment.apiUrl}/evento/desactivar/${id}/${this.authSvc.getUserId()}`, null);
+      .put<EventDay>(`${environment.apiUrl}/evento/desactivar/${id}`, null);
   }
 
   activateEvent(id: number): Observable<EventDay> {
     return this.http
-      .put<EventDay>(`${environment.apiUrl}/evento/activar/${id}/${this.authSvc.getUserId()}`, null);
+      .put<EventDay>(`${environment.apiUrl}/evento/activar/${id}`, null);
   }
 }

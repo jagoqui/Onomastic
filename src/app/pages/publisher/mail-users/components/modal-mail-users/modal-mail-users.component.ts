@@ -1,15 +1,17 @@
-import {Component, EventEmitter, Inject, OnDestroy, OnInit, Output,} from '@angular/core';
-import {FormGroup} from '@angular/forms';
-import {MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter,} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE,} from '@angular/material/core';
-import {MatDatepickerInputEvent} from '@angular/material/datepicker';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {ByNameId, ProgramaAcademicoPorUsuarioCorreo,} from '@shared/models/mail-users.model';
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormGroup } from '@angular/forms';
+import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
+import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { ByNameId, ProgramaAcademicoPorUsuarioCorreo } from '@shared/models/mail-users.model';
 import * as moment from 'moment';
-import {Subscription} from 'rxjs';
+import { Subscription } from 'rxjs';
 
-import {EmailUsersService} from '../../../services/email-users.service';
+import { EmailUsersService } from '../../../services/email-users.service';
 import { BaseFormMailUsers } from '@pages/publisher/utils/base-form-mail-users';
+import SwAlert from 'sweetalert2';
+import { LoaderService } from '@shared/services/loader.service';
 
 // eslint-disable-next-line no-shadow
 enum Action {
@@ -41,8 +43,8 @@ export const MY_FORMATS = {
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
     },
 
-    {provide: MAT_DATE_FORMATS, useValue: MY_FORMATS},
-  ],
+    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+  ]
 })
 export class ModalMailUsersComponent implements OnInit, OnDestroy {
   @Output() refresh = new EventEmitter<boolean>(false);
@@ -52,7 +54,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     associations: 4,
     program: 2,
     bodyType: 4,
-    platforms: 4,
+    platforms: 4
   };
   today = new Date();
   close = false;
@@ -66,7 +68,8 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<ModalMailUsersComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
     private userSvc: EmailUsersService,
-    public mailUserForm: BaseFormMailUsers
+    public mailUserForm: BaseFormMailUsers,
+    private loaderSvc: LoaderService
   ) {
   }
 
@@ -158,27 +161,26 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   }
 
   onSave(): void {
-    const formValue = this.mailUserForm.baseForm.value;
-    if (this.actionTODO === Action.new) {
-      this.userSvc.new(formValue).subscribe((user) => {
-        console.log('New mailUser', user);
-        this.onClose(true);
-        this.refresh.emit(true);
-        this.mailUserForm.onReset();
-      }, (err) => {
-        console.error('Error in create new mail user! :> ', err);
+    const user = this.mailUserForm.baseForm.value;
+    this.userSvc.saveMailUser(user, this.data?.user?.id).subscribe(_ => {
+      SwAlert.fire(`Destinatario ${this.data?.user ? 'Actualizado!' : 'Guardado!'} `, '', 'success')
+        .then();
+      this.onClose(true);
+      this.onClose(true);
+      this.refresh.emit(true);
+      this.mailUserForm.onReset();
+    }, (err) => {
+      SwAlert.fire({
+        icon: 'error',
+        html: `El usuario no se  ${this.data?.user ? 'actualizó' : 'guardó'}`,
+        title: 'Oops...',
+        text: 'Algo salió mal!',
+        footer: `<span style = 'color:red'>${err}</span>`
+      }).then(_ => {
+        this.loaderSvc.setLoading(false);
+        console.warn(`Error el destinat no se pudo ${this.data?.user ? 'actualizar' : 'guardar'}.`, user);
       });
-    } else {
-      const userId = this.data?.user?.id;
-      this.userSvc.update(userId, formValue).subscribe((user) => {
-        console.log('Update mailuser:>', user);
-        this.onClose(true);
-        this.refresh.emit(true);
-        this.mailUserForm.onReset();
-      }, (err) => {
-        console.error('Error in update mail user! :> ', err);
-      });
-    }
+    });
   }
 
   ngOnInit(): void {

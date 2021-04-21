@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { TemplateCard } from '@app/shared/models/template-card.model';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
-import { AuthService } from '@auth/services/auth.service';
 import { EventDay } from '@shared/models/event-day.model';
 
 @Injectable({
@@ -12,8 +11,7 @@ import { EventDay } from '@shared/models/event-day.model';
 export class TemplateCardsService {
 
   constructor(
-    private http: HttpClient,
-    private authSvc: AuthService) {
+    private http: HttpClient) {
   }
 
   saveTemplateCard(card: TemplateCard): Observable<TemplateCard> {
@@ -21,7 +19,7 @@ export class TemplateCardsService {
     const formData = new FormData();
     formData.append('plantilla', cardBlob);
     return this.http
-      .post<TemplateCard>(`${environment.apiUrl}/plantillas/${this.authSvc.getUserId()}`, formData);
+      .post<TemplateCard>(`${environment.apiUrl}/plantillas`, formData);
   }
 
   getAllCards(): Observable<TemplateCard[]> {
@@ -36,7 +34,7 @@ export class TemplateCardsService {
 
   delete(id: number): Observable<any> {
     return this.http
-      .delete<any>(`${environment.apiUrl}/plantillas/${id}/${this.authSvc.getUserId()}`);
+      .delete<any>(`${environment.apiUrl}/plantillas/${id}`);
   }
 
   getAssociatedEvents(idTemplate: number): Observable<EventDay[]> {

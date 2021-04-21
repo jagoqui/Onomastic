@@ -69,15 +69,6 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  getPageSizeOptions(): number[] {
-    const maxAll = 100;
-    if (this.dataSource.data.length > maxAll) {
-      return [5, 10, 20, 50, this.dataSource.data.length];
-    } else {
-      return [5, 10, 20, 50, maxAll];
-    }
-  }
-
   sanitizeHTML(card: string): SafeHtml {
     return this.domSanitizerSvc.sanitizeHTML(card);
   }
@@ -161,7 +152,6 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.getPageSizeOptions();
   }
 
   ngOnDestroy(): void {

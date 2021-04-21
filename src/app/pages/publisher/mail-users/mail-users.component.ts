@@ -82,7 +82,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
           }
         });
     } else {
-      this.mailUsersSvc.subscribe(emailEncrypt)
+      this.mailUsersSvc.subscribe(email) // TODO: Pedir que el back resiba el email encriptado
         .pipe(takeUntil(this.destroy$))
         .subscribe((user) => {
           if (user) {
@@ -96,27 +96,27 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
     }
   }
 
-  getPageSizeOptions(): number[] {
-    const maxall = 100;
-    if (this.dataSource.data.length > maxall) {
-      return [5, 10, 20, 50, this.dataSource.data.length];
-    } else {
-      return [5, 10, 20, 50, maxall];
-    }
-  }
-
   onDelete(userId: ID): void {
-    if (window.confirm('Esta seguro que desea eliminar éste usuario?')) {
-      this.mailUsersSvc
-        .delete(userId)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((_) => {
-          this.ngOnInit();
-          window.alert('Usuario eliminado!');
-        }, (err) => {
-          console.log('Error in create new mail user! :> ', err);
-        });
-    }
+    SwAlert.fire({
+      title: 'Está seguro que desea eliminar el destinatario?. Los cambios no podrán revertirse!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo!',
+      cancelButtonText: 'Cancelar'
+    }).then((resultDelete) => {
+        if (resultDelete.isConfirmed) {
+          this.mailUsersSvc
+            .delete(userId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((_) => {
+              SwAlert.fire('Eliminado!', 'El destinatario se ha eliminado', 'success').then();
+              this.ngOnInit();
+            });
+        }
+      }
+    );
   }
 
   onRefresh(): void {
@@ -128,7 +128,6 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
-    this.getPageSizeOptions();
   }
 
   ngOnInit(): void {

@@ -43,16 +43,6 @@ export class AuthService {
     return this.isLogged.getValue();
   }
 
-  getUserId(): number {
-    let id: number = null;
-    this.userResponse$.subscribe((userRes: PlatformUserResponse) => {
-      if (userRes) {
-        id = userRes.id;
-      }
-    });
-    return id;
-  }
-
   getUserToken(): string {
     let token: string = null;
     this.userResponse$.subscribe((userRes: PlatformUserResponse) => {
@@ -61,6 +51,16 @@ export class AuthService {
       }
     });
     return token;
+  }
+
+  getUserId(): number {
+    let id: number = null;
+    this.userResponse$.subscribe((userRes: PlatformUserResponse) => {
+      if (userRes) {
+        id = userRes.id;
+      }
+    });
+    return id;
   }
 
   login(authData: PlatformUser): Observable<PlatformUserResponse | void> {
@@ -117,6 +117,7 @@ export class AuthService {
           const routeSubscriptionStatus: boolean = url.indexOf('mail-users-subscription-status') === 1;
           if (!routeSubscriptionStatus) {
             this.router.navigate(['/login']).then(_ => console.log('Session redirect to login'));
+            //TODO: No se cierran los modals si se cierra la sesion automaticamente
           }
         });
     }
