@@ -1,7 +1,7 @@
-import {Component, OnInit} from '@angular/core';
-import {MatDialog} from '@angular/material/dialog';
+import { Component, OnInit } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
-import {ModalPublishersComponent,} from './components/modal-publishers/modal-publishers.component';
+import { ModalPublishersComponent, } from './components/modal-publishers/modal-publishers.component';
 
 @Component({
   selector: 'app-publishers',
@@ -13,11 +13,22 @@ export class PublishersComponent implements OnInit {
   constructor(private dialog: MatDialog) {
   }
 
-  onOpenModal(publisher = {}): void {
-    this.dialog.open(ModalPublishersComponent, {
+  onOpenModal(event = {}): void {
+    const dialogRef = this.dialog.open(ModalPublishersComponent, {
+      height: 'auto',
+      width: '35%',
+      panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
-      data: {title: 'Nueva plantilla', publisher},
+      disableClose: true,
+      data: { title: event ? 'NUEVO PUBLICADOR' : 'EDITAR PUBLICADOR', event }
     });
+    // if (dialogRef.afterClosed()) {
+    //   dialogRef.componentInstance.refresh.subscribe((refresh) => {
+    //     if (refresh) {
+    //       this.onRefresh();
+    //     }
+    //   });
+    // }
   }
 
   ngOnInit(): void {

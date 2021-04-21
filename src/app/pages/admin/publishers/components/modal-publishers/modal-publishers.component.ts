@@ -1,6 +1,13 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BaseFormPlatformUsers } from '@shared/utils/base-form-platform-users';
+import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { BaseFormPublisher } from '@shared/utils/base-form-publisher';
+import { ByNameId } from '@shared/models/mail-users.model';
+import { FormGroup } from '@angular/forms';
+import { takeUntil } from 'rxjs/operators';
+import SwAlert from 'sweetalert2';
+import { Subject } from 'rxjs';
+import { LoaderService } from '@app/shared/services/loader.service';
+import { PublisherService } from '@app/pages/publisher/services/publisher.service';
 
 // eslint-disable-next-line no-shadow
 enum Action {
@@ -14,26 +21,116 @@ enum Action {
   styleUrls: ['./modal-publishers.component.scss']
 })
 export class ModalPublishersComponent implements OnInit {
-
+  @Output() refresh = new EventEmitter<boolean>(false);
   actionTODO = Action.new;
   showPasswordField = true;
   hide = true;
+  maxListsConfig = {
+    associations: 4
+  };
+  associationsRes: ByNameId[];
+  private destroy$ = new Subject<any>();
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public newPublisherForm: BaseFormPlatformUsers
+    private dialogRef: MatDialogRef<ModalPublishersComponent>,
+    public newPublisherForm: BaseFormPublisher,
+    private publisherSvc: PublisherService,
+    private loaderSvc: LoaderService
   ) {
   }
 
+
   ngOnInit(): void {
-    if (this.data?.user.hasOwnProperty('id')) {
+    // if (this.data?.user.hasOwnProperty('id')) {
+    //   this.actionTODO = Action.edit;
+    // }
+    // this.newPublisherForm.baseForm.get('password').setValidators(null);
+    // this.newPublisherForm.baseForm.get('password').updateValueAndValidity();
+    // this.newPublisherForm.baseForm.get('role').setValidators(null);
+    // this.newPublisherForm.baseForm.get('role').updateValueAndValidity();
+    if (this.data?.event) {
       this.actionTODO = Action.edit;
+      this.pathFormData();
+    } else {
+      this.actionTODO = Action.new;
     }
-    this.newPublisherForm.baseForm.get('password').setValidators(null);
-    this.newPublisherForm.baseForm.get('password').updateValueAndValidity();
-    this.newPublisherForm.baseForm.get('role').setValidators(null);
-    this.newPublisherForm.baseForm.get('role').updateValueAndValidity();
+
+    this.publisherSvc.getAssociations()
+      .subscribe(associations => {
+        if (associations) {
+          this.associationsRes = associations;
+          // this.selectedIdFilterAssociation = new Array(this.conditionsRes.length + 1);
+        }
+      }, (err) => {
+        console.log('Get condition error! :> ', err);
+      });
   }
 
+
+  addByNameFormGroup(formGroup: string): void {
+    this.newPublisherForm.addByNameFormGroup(formGroup);
+  }
+
+  removeOrClearByName(iterator: number, formGroup: string, onClose?: boolean): void {
+    if (!onClose) {
+      if (confirm('Seguro que desea remover la lista?')) {
+        this.newPublisherForm.removeOrClearByName(iterator, formGroup);
+      }
+    } else {
+      this.newPublisherForm.removeOrClearByName(iterator, formGroup);
+    }
+  }
+
+  getAssociationsSize(): number {
+    return this.newPublisherForm.baseForm.controls.asociacionPorUsuarioCorreo.value.length;
+  }
+
+  setFormGroupID(formGroup: FormGroup, id: number) {
+    formGroup.controls.id.setValue(id);
+  }
+
+  onShowAddAssociation(iterator: number): boolean {
+    return (iterator === (this.getAssociationsSize() - 1) && (this.getAssociationsSize() < this.maxListsConfig.associations));
+  }
+
+  onClose(close?: boolean): void {
+    if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
+      this.newPublisherForm.onReset();
+      this.refresh.emit(true);
+      this.dialogRef.close();
+    }
+  }
+
+  onSave() {
+    //TODO: EL formulario deja activada el botón si se cambia de opción y queda vacio.
+    this.publisherSvc.new(this.newPublisherForm.baseForm.value)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(event => {
+        if (event) {
+          SwAlert.fire(
+            'Guardado!',
+            '<b>El publicador ha sido guardado</b>',
+            'success').then(r => console.log(r)).then(r => console.log(r));
+          this.onClose(true);
+        }
+      }, (err) => {
+        console.table('Error guardando el publicador :> ', this.newPublisherForm.baseForm.value);
+        SwAlert.fire({
+          icon: 'error',
+          html: '',
+          title: 'Oops...',
+          text: ' Algo salió mal!',
+          footer: `${err}`
+        }).then(_ => {
+          this.loaderSvc.setLoading(false);
+        });
+      });
+  }
+
+
+  private pathFormData(): void {
+    this.newPublisherForm.baseForm.patchValue(this.data?.event);
+  }
 
 }

@@ -1,20 +1,20 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import {ModalTempalteCardsComponent} from './modal-template-cards.component';
+import {ModalTemplateCardsComponent} from './modal-template-cards.component';
 
 describe('ModalComponent', () => {
-  let component: ModalTempalteCardsComponent;
-  let fixture: ComponentFixture<ModalTempalteCardsComponent>;
+  let component: ModalTemplateCardsComponent;
+  let fixture: ComponentFixture<ModalTemplateCardsComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ModalTempalteCardsComponent]
+      declarations: [ModalTemplateCardsComponent]
     })
       .compileComponents();
   });
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(ModalTempalteCardsComponent);
+    fixture = TestBed.createComponent(ModalTemplateCardsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
