@@ -4,7 +4,7 @@ import { ActivatedRoute, NavigationEnd, Router, RouterEvent } from '@angular/rou
 import { JwtHelperService } from '@auth0/angular-jwt';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { PlatformUser, PlatformUserResponse } from '@pages/admin/shared/models/platform-users.model';
+import { Auth} from '@adminShared/models/auth.model';
 import { environment } from '@env/environment';
 import { ThemeSwitcherControllerService } from '@appShared/services/theme-switcher-controller.service';
 
@@ -16,7 +16,7 @@ const jwtHelper = new JwtHelperService();
 })
 export class AuthService {
 
-  private platformUserRes = new BehaviorSubject<PlatformUserResponse>(null);
+  private platformUserRes = new BehaviorSubject<Auth>(null);
   private isLogged = new BehaviorSubject<boolean>(false);
 
   constructor(
@@ -27,11 +27,11 @@ export class AuthService {
     this.checkToken();
   }
 
-  get userResponse$(): Observable<PlatformUserResponse> {
+  get userResponse$(): Observable<Auth> {
     return this.platformUserRes.asObservable();
   }
 
-  get userResponseValue(): PlatformUserResponse {
+  get userResponseValue(): Auth {
     return this.platformUserRes.getValue();
   }
 
@@ -45,7 +45,7 @@ export class AuthService {
 
   getUserToken(): string {
     let token: string = null;
-    this.userResponse$.subscribe((userRes: PlatformUserResponse) => {
+    this.userResponse$.subscribe((userRes: Auth) => {
       if (userRes) {
         token = userRes.token;
       }
@@ -55,7 +55,7 @@ export class AuthService {
 
   getUserId(): number {
     let id: number = null;
-    this.userResponse$.subscribe((userRes: PlatformUserResponse) => {
+    this.userResponse$.subscribe((userRes: Auth) => {
       if (userRes) {
         id = userRes.id;
       }
@@ -63,11 +63,11 @@ export class AuthService {
     return id;
   }
 
-  login(authData: PlatformUser): Observable<PlatformUserResponse | void> {
-    return this.http.post<PlatformUserResponse>(`${environment.apiUrl}/auth/signin`, authData).pipe(
+  login(authData: Auth): Observable<Auth | void> {
+    return this.http.post<Auth>(`${environment.apiUrl}/auth/signin`, authData).pipe(
       map((userResponse: any) => {
         const decode = jwtHelper.decodeToken(userResponse.accessToken);
-        const userRes: PlatformUserResponse = {
+        const userRes: Auth = {
           id: decode.sub,
           name: decode.nombre,
           userEmail: authData.userEmail,
@@ -82,9 +82,9 @@ export class AuthService {
     );
   }
 
-  register(userData: PlatformUser): Observable<PlatformUserResponse | void> {
-    return this.http.post<PlatformUserResponse>(`${environment.apiUrl}/usuarios`, userData).pipe(
-      map((user: PlatformUserResponse) =>
+  register(userData: Auth): Observable<Auth | void> {
+    return this.http.post<Auth>(`${environment.apiUrl}/usuarios`, userData).pipe(
+      map((user: Auth) =>
         // this.saveLocalStorage(user);
         user
       )

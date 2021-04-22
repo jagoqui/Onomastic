@@ -1,6 +1,6 @@
 import { OverlayContainer } from '@angular/cdk/overlay';
 import { AfterViewInit, Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
-import { AuthService } from '@pages/admin/auth/services/auth.service';
+import { AuthService } from '@adminShared/services/auth.service';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';

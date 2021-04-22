@@ -1,10 +1,10 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {AuthService} from '@pages/admin/auth/services/auth.service';
+import {AuthService} from '@adminShared/services/auth.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {PlatformUserResponse} from '../../../pages/admin/shared/models/platform-users.model';
+import {Auth} from '@adminShared/models/auth.model';
 import {ThemeSwitcherControllerService} from '../../services/theme-switcher-controller.service';
 
 @Component({
@@ -15,7 +15,7 @@ import {ThemeSwitcherControllerService} from '../../services/theme-switcher-cont
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() toggleSidenav = new EventEmitter<void>();
 
-  platformUserData: PlatformUserResponse;
+  platformUserData: Auth;
   toggleDarkThemeControl = new FormControl(false);
   darkMode = false;
   isLogged = false;
@@ -47,7 +47,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.authSvc.userResponse$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((userRes: PlatformUserResponse) => {
+      .subscribe((userRes: Auth) => {
         if (userRes) {
           this.platformUserData = userRes;
         }
