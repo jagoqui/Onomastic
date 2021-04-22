@@ -2,18 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
+import { MailDataSent } from '@adminShared/models/mail-data-sent.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class PublisherService {
+export class MailDataSentService {
 
   constructor(private http: HttpClient) {
   }
 
-  getAll(): Observable<any[]> {
+  getAll(): Observable<MailDataSent[]> {
     return this.http
-      .get<any[]>(`${environment.apiUrl}/usuariosemail`);
+      .get<MailDataSent[]>(`${environment.apiUrl}/emails`);
   }
-
 }

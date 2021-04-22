@@ -1,3 +1,5 @@
+import { ByNameId } from '@adminShared/models/shared.model';
+
 export type Role = 'PUBLISHER' | 'ADMIN';
 
 export interface PlatformUser {
@@ -11,4 +13,13 @@ export interface PlatformUserResponse {
   name: string;
   role: Role;
   token: string;
+}
+export interface Publisher {
+  id:                   number;
+  nombre:               string;
+  email:                string;
+  estado:               string;
+  createTime:           Date;
+  rol:                  Role;
+  asociacionPorUsuario: ByNameId[];
 }

@@ -9,7 +9,8 @@ import { takeUntil } from 'rxjs/operators';
 import { EmailUserService } from '../services/email-user.service';
 import { ModalMailUsersComponent } from './components/modal-mail-users/modal-mail-users.component';
 import SwAlert from 'sweetalert2';
-import { ID } from '@pages/admin/shared/models/mail-users.model';
+import { ID } from '@adminShared/models/shared.model';
+import { MailDataSentService } from '@adminShared/services/mail-data-sent.service';
 
 @Component({
   selector: 'app-users',
@@ -29,19 +30,30 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   ];
   dataSource = new MatTableDataSource();
   private numUsers = 0;
+  private numMailsDataSent = 0;
   private destroy$ = new Subject<any>();
 
   constructor(
-    private dialog: MatDialog, private mailUsersSvc: EmailUserService
+    private dialog: MatDialog,
+    private mailUserSvc: EmailUserService,
+    private mailDataSentSvc: MailDataSentService
   ) {
   }
 
-  getPartialUsers(): string {
-    let x = ('' + this.numUsers).length;
+  get numMailUser(): string{
+    return this.getPartialUsers(this.numUsers);
+  }
+
+  get numMailsSent(): string{
+    return this.getPartialUsers(this.numMailsDataSent);
+  }
+
+  getPartialUsers(numData: number): string {
+    let x: number = ('' + numData).length;
     const p = Math.pow;
     const d = p(10, 1);
     x -= x % 3;
-    return Math.round(this.numUsers * d / p(10, x)) / d + ' kMGTPE'[x / 3];
+    return Math.round(numData * d / p(10, x)) / d + ' kMGTPE'[x / 3];
   }
 
   applyFilter(event: Event) {
@@ -59,7 +71,9 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
       data: { title: user ? 'Actualizar destinatario' : 'Nuevo destinatario', user }
     });
     if (dialogRef.afterClosed()) {
-      dialogRef.componentInstance.refresh.subscribe((refresh) => {
+      dialogRef.componentInstance.refresh
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((refresh) => {
         if (refresh) {
           this.onRefresh();
         }
@@ -70,7 +84,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   onSubscriptionStateChange(email: string, state: string) {
     const emailEncrypt = btoa(email);
     if (state === 'ACTIVO') {
-      this.mailUsersSvc.unsubscribe(emailEncrypt)
+      this.mailUserSvc.unsubscribe(emailEncrypt)
         .pipe(takeUntil(this.destroy$))
         .subscribe((user) => {
           if (user) {
@@ -82,7 +96,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
           }
         });
     } else {
-      this.mailUsersSvc.subscribe(email) // TODO: Pedir que el back resiba el email encriptado
+      this.mailUserSvc.subscribe(email) // TODO: Pedir que el back resiba el email encriptado
         .pipe(takeUntil(this.destroy$))
         .subscribe((user) => {
           if (user) {
@@ -107,7 +121,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
       cancelButtonText: 'Cancelar'
     }).then((resultDelete) => {
         if (resultDelete.isConfirmed) {
-          this.mailUsersSvc
+          this.mailUserSvc
             .delete(userId)
             .pipe(takeUntil(this.destroy$))
             .subscribe((_) => {
@@ -131,10 +145,17 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.mailUsersSvc.getAll().subscribe((user) => {
+    this.mailUserSvc.getAll()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((user) => {
       this.dataSource.data = user;
       this.numUsers = this.dataSource.data.length;
     });
+    this.mailDataSentSvc.getAll()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((dataSent) => {
+        this.numMailsDataSent= dataSent.length;
+      });
   }
 
   ngOnDestroy(): void {

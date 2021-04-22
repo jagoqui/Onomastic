@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
-import { ByNameId } from '@adminShared/models/mail-users.model';
+import { ByNameId } from '@adminShared/models/shared.model';
 
 @Injectable({
   providedIn: 'root'

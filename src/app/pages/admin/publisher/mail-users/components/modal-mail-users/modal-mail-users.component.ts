@@ -14,8 +14,9 @@ import { PlatformService } from '@pages/admin/shared/services/platform.service';
 import { AssociationService } from '@pages/admin/shared/services/association.service';
 import { AcademicProgramService } from '@pages/admin/shared/services/academic-program.service';
 import { BodyTypeService } from '@pages/admin/shared/services/body-type.service';
-import { ByNameId, ProgramaAcademicoPorUsuarioCorreo } from '@adminShared/models/mail-users.model';
+import { ProgramaAcademicoPorUsuarioCorreo } from '@adminShared/models/mail-users.model';
 import { LoaderService } from '@appShared/services/loader.service';
+import { ByNameId } from '@adminShared/models/shared.model';
 
 // eslint-disable-next-line no-shadow
 enum Action {

@@ -1,4 +1,4 @@
-import { ByNameId } from './mail-users.model';
+import { ByNameId } from '@adminShared/models/shared.model';
 
 export interface TemplateCard {
   id?: number;

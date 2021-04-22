@@ -4,7 +4,7 @@
     <button fxFlex mat-raised-button fxLayout="row" fxLayoutAlign="center center" class="mat-headline">
       <div fxLayout="column" fxLayoutAlign="center start">
         <span class="button-title">Total de correos</span>
-        <span class="mat-title">30K</span>
+        <span class="mat-title">{{numMailsSent}}</span>
       </div>
       <div fxFlex class="circle">
         <mat-icon>autorenew</mat-icon>
@@ -13,7 +13,7 @@
     <button fxFlex mat-raised-button fxLayout="row" fxLayoutAlign="center center" class="mat-headline">
       <div fxLayout="column" fxLayoutAlign="center start">
         <span class="button-title">Total de usuarios</span>
-        <span class="mat-title">{{getPartialUsers()}}</span>
+        <span class="mat-title">{{numMailUser}}</span>
       </div>
       <div fxFlex class="circle">
         <mat-icon>people_outline</mat-icon>

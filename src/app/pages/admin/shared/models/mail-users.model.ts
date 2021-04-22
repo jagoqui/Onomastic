@@ -1,3 +1,5 @@
+import { ByNameId, ID } from '@adminShared/models/shared.model';
+
 export interface MailUsers {
   id: ID;
   nombre: string;
@@ -10,16 +12,6 @@ export interface MailUsers {
   programaAcademicoPorUsuarioCorreo?: ProgramaAcademicoPorUsuarioCorreo[];
   plataformaPorUsuarioCorreo?: ByNameId[];
   vinculacionPorUsuarioCorreo?: ByNameId[];
-}
-
-export interface ByNameId {
-  id: number;
-  nombre: string;
-}
-
-export interface ID {
-  tipoIdentificacion: string;
-  numeroIdentificacion: string;
 }
 
 export interface ProgramaAcademicoPorUsuarioCorreo {

@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
 import { HttpClient } from '@angular/common/http';
-import { ByNameId } from '@adminShared/models/mail-users.model';
+import { ByNameId } from '@adminShared/models/shared.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +16,7 @@ export class AssociationService {
       .get<ByNameId[]>(`${environment.apiUrl}/asociaciones`);
   }
 
-  getAssociationsByUser(): Observable<ByNameId[]> {
+  getAssociationsByPublisher(): Observable<ByNameId[]> {
     return this.http
       .get<ByNameId[]>(`${environment.apiUrl}/usuarios/asociacion`);
   }

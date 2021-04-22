@@ -52,7 +52,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         }
     </style>
   `;
-  onCompleteCard = false;
   private destroy$ = new Subject<any>();
 
   constructor(
@@ -65,6 +64,12 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     private associationSvc: AssociationService,
     private loaderSvc: LoaderService
   ) {
+  }
+
+  get onCompleteCard() {
+    //TODO: Agregar más condiciones
+    const cardImg = document.getElementById('templateCardImage');
+    return !!cardImg;
   }
 
   onClose(close?: boolean): void {
@@ -107,7 +112,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   }
 
   getAssociations() {
-    this.associationSvc.getAssociationsByUser()
+    this.associationSvc.getAssociationsByPublisher()
       .pipe(takeUntil(this.destroy$))
       .subscribe(associations => {
         this.card = {
@@ -342,10 +347,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
               document.getElementById(id).remove();
             }
           }
-        },
-        change: () => {
-          const cardImg = document.getElementById('templateCardImage');
-          this.onCompleteCard = !!cardImg;
         },
         beforePaste: (event) => {
           if (event.clipboardData.types.length === 0) {

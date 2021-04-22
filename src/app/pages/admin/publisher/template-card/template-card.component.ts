@@ -46,7 +46,7 @@ export class TemplateCardComponent implements OnDestroy {
             ol.appendChild(li);
           }
           const html = ol.hasChildNodes() ? `
-            <span>Si elimina ésta plantilla se eliminará tambien los siquiente eventos asociados.</span><br>'
+            <span>Si elimina ésta plantilla se eliminará tambien los siguientes eventos asociados.</span><br>'
             <div style='text-align:justify'>${ol.innerHTML}</div>
           ` : '';
           SwAlert.fire({
