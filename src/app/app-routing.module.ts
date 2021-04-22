@@ -35,12 +35,7 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    loadChildren: () => import('./pages/admin/auth/profile/profile.module').then(m => m.ProfileModule),
-    canActivate: [CheckLoginGuard]
-  },
-  {
-    path: 'add-publisher',
-    loadChildren: () => import('./pages/admin/auth/add-publisher/add-publisher.module').then(m => m.AddPublisherModule),
+    loadChildren: () => import('./pages/admin/publisher/profile/profile.module').then(m => m.ProfileModule),
     canActivate: [CheckLoginGuard]
   },
   {

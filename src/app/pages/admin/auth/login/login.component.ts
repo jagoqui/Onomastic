@@ -5,8 +5,8 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { Subscription } from 'rxjs';
 import { environment } from '@env/environment';
 
-import { AuthService } from '../services/auth.service';
-import { BaseFormPublishers } from '@publishers/shared/utils/base-form-publishers';
+import { AuthService } from '@adminShared/services/auth.service';
+import { BaseFormAuth } from '@adminShared/utils/base-form-auth';
 
 @Component({
   selector: 'app-login',
@@ -30,7 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private authSvc: AuthService,
     private router: Router,
-    public loginForm: BaseFormPublishers,
+    public loginForm: BaseFormAuth,
     private spinner: NgxSpinnerService
   ) {
     this.onResetCaptcha();
