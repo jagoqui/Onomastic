@@ -8,12 +8,12 @@ import { EventDayService } from '@pages/publisher/services/event-day.service';
 import { TemplateCardsService } from '@pages/publisher/services/template-cards.service';
 import { ConditionRes, Parameter } from '@shared/models/event-day.model';
 import { TemplateCard } from '@shared/models/template-card.model';
-import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
+import { DomSanitizerService } from '@shared/services/control/dom-sanitizer.service';
 import * as moment from 'moment';
 import { Subject } from 'rxjs/internal/Subject';
 import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
-import { LoaderService } from '@shared/services/loader.service';
+import { LoaderService } from '@shared/services/control/loader.service';
 import { BaseFormEventDay } from '@pages/publisher/utils/base-form-event-day';
 
 
@@ -68,10 +68,8 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     private templateCardsService: TemplateCardsService,
     private domSanitizerSvc: DomSanitizerService,
     public eventDayForm: BaseFormEventDay,
-    private eventDaySvc: EventDayService,
-    private loaderSvc: LoaderService
+    private eventDaySvc: EventDayService
   ) {
-    console.warn('Form is valid? :> ',this.eventDayForm.baseForm.controls);
   }
 
   setDateFormat(event: MatDatepickerInputEvent<unknown>) {
@@ -140,7 +138,6 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
   }
 
   onSave() {
-    //TODO: EL formulario deja activada el botón si se cambia de opción y queda vacio.
     this.eventDaySvc.new(this.eventDayForm.baseForm.value)
       .pipe(takeUntil(this.destroy$))
       .subscribe(event => {
@@ -151,23 +148,10 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
             'success').then(r => console.log(r)).then(r => console.log(r));
           this.onClose(true);
         }
-      }, (err) => {
-        console.table('Error guardando evento :> ', this.eventDayForm.baseForm.value);
-        SwAlert.fire({
-          icon: 'error',
-          html: '',
-          title: 'Oops...',
-          text: ' Algo salió mal!',
-          footer: `${err}`
-        }).then(_ => {
-          this.loaderSvc.setLoading(false);
-        });
       });
   }
 
   onClose(close?: boolean): void {
-    console.warn('Form is valid? :> ',this.eventDayForm.baseForm.valid);
-    console.warn('Form is valid? :> ',this.eventDayForm.baseForm.controls);
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.eventDayForm.onReset();
       this.refresh.emit(true);

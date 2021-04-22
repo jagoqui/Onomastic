@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from '@angular/router';
 import SwAlert from 'sweetalert2';
-import { EmailUsersService } from '@pages/publisher/services/email-users.service';
+import { EmailUserService } from '@pages/publisher/services/email-user.service';
 
 @Component({
   selector: 'app-mail-users-subscription-status',
@@ -13,7 +13,7 @@ export class MailUsersSubscriptionStatusComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private emailUserService: EmailUsersService
+    private emailUserService: EmailUserService
   ) {
   }
 

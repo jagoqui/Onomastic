@@ -5,7 +5,7 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
 import {PlatformUserResponse} from '../../models/platform-users.model';
-import {ThemeSwitcherControllerService} from '../../services/theme-switcher-controller.service';
+import {ThemeSwitcherControllerService} from '../../services/control/theme-switcher-controller.service';
 
 @Component({
   selector: 'app-header',

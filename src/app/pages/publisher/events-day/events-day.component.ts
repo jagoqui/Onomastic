@@ -7,7 +7,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { EventDayService } from '../services/event-day.service';
 import { ModalEventDayComponent } from './components/modal-event-day/modal-event-day.component';
-import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
+import { DomSanitizerService } from '@shared/services/control/dom-sanitizer.service';
 import { SafeHtml } from '@angular/platform-browser';
 import { TemplateCard } from '@shared/models/template-card.model';
 import { EventDay } from '@shared/models/event-day.model';

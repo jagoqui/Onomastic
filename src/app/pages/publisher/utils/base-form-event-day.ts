@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment';
-import {FormErrorsService} from '@shared/services/form-errors.service';
+import {FormErrorsService} from '@shared/services/control/form-errors.service';
 
 @Injectable({providedIn: 'root'})
 export class BaseFormEventDay {
@@ -64,7 +64,9 @@ export class BaseFormEventDay {
   }
 
   onReset(): void {
-    this.baseForm.controls.condicionesEvento = this.fb.array([this.createConditionField()]);
+    for (let i = this.conditionsOptionsField.length-1; i > 0 ; i--) {
+      this.conditionsOptionsField.removeAt(i);
+    }
     this.baseForm.reset();
   }
 

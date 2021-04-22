@@ -2,8 +2,8 @@ import { AfterViewInit, ChangeDetectionStrategy, Component, EventEmitter, Input,
 import { MatDialog } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
 import { TemplateCard } from '@shared/models/template-card.model';
-import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
-import { LoaderService } from '@shared/services/loader.service';
+import { DomSanitizerService } from '@shared/services/control/dom-sanitizer.service';
+import { LoaderService } from '@shared/services/control/loader.service';
 
 import { TemplateCardsService } from '../services/template-cards.service';
 import { ModalTemplateCardsComponent } from './components/modal/modal-template-cards.component';

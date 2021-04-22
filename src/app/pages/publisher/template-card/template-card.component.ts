@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import { TemplateCard } from '@shared/models/template-card.model';
-import { DomSanitizerService } from '@shared/services/dom-sanitizer.service';
+import { DomSanitizerService } from '@shared/services/control/dom-sanitizer.service';
 import SwAlert from 'sweetalert2';
 import { TemplateCardsService } from '@pages/publisher/services/template-cards.service';
 import { Router } from '@angular/router';
@@ -28,7 +28,7 @@ export class TemplateCardComponent implements OnDestroy {
 
   onEditCard(id: number): void {
     this.router.navigateByUrl('/PUBLISHER', { skipLocationChange: true }).then(() =>
-      this.router.navigate(['PUBLISHER/templates-cards/', id]).then(r => console.log('Open route: ,', r)));
+      this.router.navigate(['PUBLISHER/templates-cards/', id]).then());
   }
 
   onDeleteCard(card: TemplateCard) {
@@ -59,7 +59,7 @@ export class TemplateCardComponent implements OnDestroy {
           }).then((resultDelete) => {
             if (resultDelete.isConfirmed) {
               this.templateCardsService.delete(card.id).subscribe((cardRes) => {
-                SwAlert.fire('Eliminado!', 'La plantilla se ha eliminado', 'success').then(r => console.log(r));
+                SwAlert.fire('Eliminado!', 'La plantilla se ha eliminado', 'success').then();
                 this.refreshCards.emit(true);
               });
             }

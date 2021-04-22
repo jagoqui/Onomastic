@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { PlatformUser, PlatformUserResponse } from 'src/app/shared/models/platform-users.model';
 import { environment } from 'src/environments/environment';
-import { ThemeSwitcherControllerService } from '@shared/services/theme-switcher-controller.service';
+import { ThemeSwitcherControllerService } from '@shared/services/control/theme-switcher-controller.service';
 
 const jwtHelper = new JwtHelperService();
 

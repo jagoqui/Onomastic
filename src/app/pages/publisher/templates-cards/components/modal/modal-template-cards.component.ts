@@ -1,7 +1,7 @@
 import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TemplateCardsService } from '@pages/publisher/services/template-cards.service';
-import { ThemeSwitcherControllerService } from '@shared/services/theme-switcher-controller.service';
+import { ThemeSwitcherControllerService } from '@shared/services/control/theme-switcher-controller.service';
 import { JoditAngularComponent } from 'jodit-angular';
 import { Subject } from 'rxjs';
 import { TemplateCard } from '@shared/models/template-card.model';
@@ -9,8 +9,9 @@ import SwAlert from 'sweetalert2';
 import { UploadImageService } from '@pages/publisher/services/upload-image.service';
 import { environment } from '@env/environment';
 import { takeUntil } from 'rxjs/operators';
-import { EmailUsersService } from '@pages/publisher/services/email-users.service';
-import { LoaderService } from '@shared/services/loader.service';
+import { EmailUserService } from '@pages/publisher/services/email-user.service';
+import { LoaderService } from '@shared/services/control/loader.service';
+import { AssociationService } from '@shared/services/data/association.service';
 
 enum Action {
   edit = 'Actualizar',
@@ -60,7 +61,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     private themeSwitcherController: ThemeSwitcherControllerService,
     private templateCardsService: TemplateCardsService,
     private uploadImagesSvc: UploadImageService,
-    private emailUserSvc: EmailUsersService,
+    private emailUserSvc: EmailUserService,
+    private associationSvc: AssociationService,
     private loaderSvc: LoaderService
   ) {
   }
@@ -76,15 +78,13 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     if (!this.uploadImagesSvc?.img) {
       this.getAssociations();
     } else {
-      if (this.cardImageEdit) {
-        this.deleteImage(this.urlImageEdit);
-      }
       this.uploadImagesSvc.imageUpload(this.uploadImagesSvc.img)
         .pipe(takeUntil(this.destroy$))
-        .subscribe(res => {
-          if (res?.fileDownloadUri) {
+        .subscribe(img => {
+          if (img?.fileDownloadUri) {
             const imgCard = document.getElementById('templateCardImage');
-            imgCard.setAttribute('src', res.fileDownloadUri);
+            imgCard.setAttribute('src', img.fileDownloadUri);
+            this.uploadImagesSvc.imgName = img.fileName;
           }
           this.getAssociations();
         }, (err) => {
@@ -93,7 +93,9 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
             html: `La imagen de la plantilla no se  guardó, por integridad de los datos no se creará la plantilla.`,
             title: 'Oops...',
             text: 'Algo salió mal!',
-            footer: `<span style = 'color:red'>${err}</span>`
+            footer: `<p style='color: red; display: block;'>
+                    Error ${err.status}! <b> ${err.error?.error === 'Forbidden' ? 'Necesita permisos de admin.' : ''}</b>
+                    <b>${err.error?.error}</b>.`
           }).then(r => {
             this.loaderSvc.setLoading(false);
             this.deleteImage();
@@ -105,7 +107,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   }
 
   getAssociations() {
-    this.emailUserSvc.getAssociationsById()
+    this.associationSvc.getAssociationsByUser()
       .pipe(takeUntil(this.destroy$))
       .subscribe(associations => {
         this.card = {
@@ -127,7 +129,11 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
               html: `La plantilla no se  ${this.data?.card ? 'actualizó' : 'guardó'}`,
               title: 'Oops...',
               text: 'Algo salió mal!',
-              footer: `<span style = 'color:red'>${err}</span>`
+              footer: `
+                <span style='color: red;'>
+                    Error ${err.status}! <b> ${err.error?.error === 'Forbidden' ? 'Necesita permisos de admin.' : err.error?.error}</b>
+                </span>
+                <span style='display: block;'>&nbsp;&nbsp;Necesitas <a href=''>ayuda</a>?</span>.`
             }).then(r => {
               this.loaderSvc.setLoading(false);
               this.deleteImage();
@@ -172,7 +178,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       toolbarAdaptive: false,
       insertImageAsBase64URI: false,
       buttons: [
-        'source',
         'font', 'paragraph', 'fontsize', 'brush', '|',
         'bold', 'underline', 'italic', 'strikethrough', '|',
         'align', 'indent', 'outdent', '|',
@@ -268,15 +273,13 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                 confirmButtonText: 'Sí, reemplazarla!',
                 cancelButtonText: 'Cancelar'
               }).then((resultReplace) => {
-                console.log('Plantilla cargada!.', resultReplace);
                 if (resultReplace.isConfirmed) {
-                  imgContainer.remove();
-                  this.uploadImagesSvc.openExplorerWindows(editor);
+                  this.uploadImagesSvc.openExplorerWindows(editor,true);
                 }
                 return null;
               });
             } else {
-              await this.uploadImagesSvc.openExplorerWindows(editor);
+              await this.uploadImagesSvc.openExplorerWindows(editor, false);
             }
           })
         },
@@ -361,20 +364,15 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     };
   }
 
-  deleteImage(url?: string) {
-    const imgCard = document.getElementById('templateCardImage');
-    let srcImg = imgCard.getAttributeNode('src').value;
-    if (url) {
-      srcImg = url;
-    }
-    const imgName = srcImg.replace(environment.downloadImagesUriServer + '/', '');
-    this.uploadImagesSvc.deleteImage(imgName)
+  deleteImage() {
+    this.uploadImagesSvc.deleteImage()
       .pipe(takeUntil(this.destroy$))
       .subscribe((res) => {
-        console.log('Imagen eliminada! ', res);
+        SwAlert.fire('Imagen eliminada!', 'La imagen de la plantilla fue eliminada correctamente', 'success').then();
       }, (err) => {
         this.loaderSvc.setLoading(false);
-        console.log('Error al eliminar la imagen! :> ', err);
+        SwAlert.fire('Eliminación fallida!', 'La plantilla no se cargó', 'warning').then();
+        console.warn(err);
       });
   }
 
@@ -394,8 +392,10 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       this.actionTODO = Action.edit;
       this.joditEditor.editor.value = this.data.card.texto;
       this.urlImageEdit = document.getElementById('templateCardImage').getAttributeNode('src').value;
-      this.uploadImagesSvc.getFileFromUrl(this.urlImageEdit, 'img').then((file) => {
+      const nameImage = this.urlImageEdit.replace(environment.downloadImagesUriServer + '/', '');
+      this.uploadImagesSvc.getFileFromUrl(this.urlImageEdit, nameImage).then((file) => {
         this.cardImageEdit = file;
+        this.uploadImagesSvc.imgName = file.name;
       });
     } else {
       this.actionTODO = Action.new;

@@ -8,10 +8,14 @@ import { ByNameId, ProgramaAcademicoPorUsuarioCorreo } from '@shared/models/mail
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 
-import { EmailUsersService } from '../../../services/email-users.service';
+import { EmailUserService } from '../../../services/email-user.service';
 import { BaseFormMailUsers } from '@pages/publisher/utils/base-form-mail-users';
 import SwAlert from 'sweetalert2';
-import { LoaderService } from '@shared/services/loader.service';
+import { LoaderService } from '@shared/services/control/loader.service';
+import { PlatformService } from '@shared/services/data/platform.service';
+import { AssociationService } from '@shared/services/data/association.service';
+import { AcademicProgramService } from '@shared/services/data/academic-program.service';
+import { BodyTypeService } from '@shared/services/data/body-type.service';
 
 // eslint-disable-next-line no-shadow
 enum Action {
@@ -67,7 +71,11 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   constructor(
     private dialogRef: MatDialogRef<ModalMailUsersComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-    private userSvc: EmailUsersService,
+    private userSvc: EmailUserService,
+    private platformSvc: PlatformService,
+    private associationSvc: AssociationService,
+    private academicProgramSvc: AcademicProgramService,
+    private bodyTypeSvc: BodyTypeService,
     public mailUserForm: BaseFormMailUsers,
     private loaderSvc: LoaderService
   ) {
@@ -192,7 +200,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     }
 
     this.subscription.add(
-      this.userSvc.getAssociations().subscribe(associations => {
+      this.associationSvc.getAssociations().subscribe(associations => {
         if (associations) {
           this.associations = associations;
         }
@@ -202,7 +210,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.userSvc.getAcademicPrograms().subscribe(programs => {
+      this.academicProgramSvc.getAcademicPrograms().subscribe(programs => {
         if (programs) {
           this.programs = programs;
         }
@@ -212,7 +220,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.userSvc.getBondingTypes().subscribe(types => {
+      this.bodyTypeSvc.getBondingTypes().subscribe(types => {
         if (types) {
           this.bondingTypes = types;
         }
@@ -222,7 +230,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.userSvc.getPlatforms().subscribe(platforms => {
+      this.platformSvc.getPlatforms().subscribe(platforms => {
         if (platforms) {
           this.platforms = platforms;
         }

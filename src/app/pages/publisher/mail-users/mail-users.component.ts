@@ -7,7 +7,7 @@ import { ID } from '@shared/models/mail-users.model';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { EmailUsersService } from '../services/email-users.service';
+import { EmailUserService } from '../services/email-user.service';
 import { ModalMailUsersComponent } from './components/modal-mail-users/modal-mail-users.component';
 import SwAlert from 'sweetalert2';
 
@@ -32,7 +32,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   private destroy$ = new Subject<any>();
 
   constructor(
-    private dialog: MatDialog, private mailUsersSvc: EmailUsersService
+    private dialog: MatDialog, private mailUsersSvc: EmailUserService
   ) {
   }
 

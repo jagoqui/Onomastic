@@ -9,6 +9,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UploadImageService {
+  imgName: string = null;
   private imgFile: File = null;
 
   constructor(
@@ -24,7 +25,7 @@ export class UploadImageService {
     this.imgFile = null;
   }
 
-  openExplorerWindows = (editor) => {
+  openExplorerWindows = (editor, onDeleteLastImage) => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
@@ -33,6 +34,7 @@ export class UploadImageService {
     return input.onchange = async () => {
       const file = input.files[0];
       if (!file) {
+        SwAlert.fire('Carga fallida!', 'La plantilla no se cargó', 'warning').then();
         return;
       }
       if (!file.name.match(/\.(jpg|jpeg|png|gif)$/)) {
@@ -44,6 +46,10 @@ export class UploadImageService {
           }
         ).then(r => console.warn('Error en  el formato de la imagen!', r));
         return;
+      }
+      SwAlert.fire('Carga exitosa!', 'La plantilla se ha cargado', 'success').then();
+      if(onDeleteLastImage){
+        this.deleteImage();
       }
       this.imgFile = file;
       this.insertImage(editor, URL.createObjectURL(file));
@@ -76,12 +82,15 @@ export class UploadImageService {
     image.src = url;
     image.id = 'templateCardImage';
     imgContainer.appendChild(image);
-    imgContainer.id='imgContainer';
+    imgContainer.id = 'imgContainer';
     editor.selection.insertNode(imgContainer);
   };
 
-  deleteImage(imgName: string): Observable<any> {
-    return this.http
-      .delete<any>(`${environment.apiUrl}/delete/${imgName}`);
+  deleteImage(): Observable<any> {
+    document?.getElementById('imgContainer').remove();
+    if(this.imgName){
+      return this.http
+        .delete<any>(`${environment.apiUrl}/delete/${this.imgName}`);
+    }
   }
 }

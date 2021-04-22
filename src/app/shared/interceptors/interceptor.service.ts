@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 
-import { LoaderService } from '../services/loader.service';
+import { LoaderService } from '../services/control/loader.service';
 import { AuthService } from '@auth/services/auth.service';
 import { Router } from '@angular/router';
 
@@ -38,11 +38,11 @@ export class InterceptorService implements HttpInterceptor {
             html: '',
             title: 'Oops...',
             text: ` Algo salió mal en la petición!. ${err.status === 401 ? 'Por seguridad se cerrará la sesión' : ''}`,
-            footer: `<span style='color: red'>Error! <b> ${err.error === 'Forbidden'? 'Necesita permisos de admin.' : err.error.error}</b>.
-                ${err.statusText}</span><br><br>
-                <span>Necesita <a href="">ayuda</a>?</span>.`
-          }).then(r => {
-            console.log(err.statusText);
+            footer: `
+                <span style="color: red;">
+                    Error ${err.status}! <b> ${err.error?.error=== 'Forbidden'? 'Necesita permisos de admin.' : err.error?.error}</b></span>
+                <span style="display: block;">&nbsp;&nbsp;Necesitas <a href="">ayuda</a>?</span>.`
+          }).then(_ => {
             this.loaderSvc.setLoading(false);
             if (err.status === 401) {
               this.authSvc.logout();

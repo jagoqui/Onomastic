@@ -1,9 +1,9 @@
 import {OverlayContainer} from '@angular/cdk/overlay';
 import {AfterViewInit, Component, HostBinding, OnDestroy, OnInit,} from '@angular/core';
 import {AuthService} from '@auth/services/auth.service';
-import {LoaderService} from '@shared/services/loader.service';
-import {SidenavControllerService,} from '@shared/services/sidenav-controller.service';
-import {ThemeSwitcherControllerService,} from '@shared/services/theme-switcher-controller.service';
+import {LoaderService} from '@shared/services/control/loader.service';
+import {SidenavControllerService,} from '@shared/services/control/sidenav-controller.service';
+import {ThemeSwitcherControllerService,} from '@shared/services/control/theme-switcher-controller.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
