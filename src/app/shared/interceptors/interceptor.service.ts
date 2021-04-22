@@ -4,8 +4,8 @@ import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 
-import { LoaderService } from '../services/control/loader.service';
-import { AuthService } from '@auth/services/auth.service';
+import { LoaderService } from '../services/loader.service';
+import { AuthService } from '@pages/admin/auth/services/auth.service';
 import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })

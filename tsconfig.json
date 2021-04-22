@@ -4,9 +4,13 @@
     "baseUrl": "./",
     "paths": {
       "@app/*": ["src/app/*"],
-      "@auth/*": ["src/app/auth/*"],
       "@pages/*":["src/app/pages/*"],
-      "@shared/*": ["src/app/shared/*"],
+      "@admin/*":["src/app/pages/admin*"],
+      "@auth/*": ["src/app/pages/admin/auth/*"],
+      "@publisher/*": ["src/app/pages/admin/publisher/*"],
+      "@publishers/*": ["src/app/pages/admin/publishers/*"],
+      "@adminShared/*":["src/app/pages/admin/shared/*"],
+      "@appShared/*": ["src/app/shared/*"],
       "@env/*": ["src/environments/*"]
     },
     "outDir": "./dist/out-tsc",

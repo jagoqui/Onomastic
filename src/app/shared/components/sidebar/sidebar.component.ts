@@ -1,10 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {AuthService} from 'src/app/auth/services/auth.service';
+import {AuthService} from 'src/app/pages/admin/auth/services/auth.service';
 
-import {SidenavControllerService,} from '../../services/control/sidenav-controller.service';
-import {ThemeSwitcherControllerService,} from '../../services/control/theme-switcher-controller.service';
+import {SidenavControllerService,} from '../../services/sidenav-controller.service';
+import {ThemeSwitcherControllerService,} from '../../services/theme-switcher-controller.service';
 
 @Component({
   selector: 'app-sidebar',
