@@ -1,10 +1,10 @@
 import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormControl} from '@angular/forms';
-import {AuthService} from '@auth/services/auth.service';
+import {AuthService} from '@pages/admin/auth/services/auth.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {PlatformUserResponse} from '../../models/platform-users.model';
+import {PlatformUserResponse} from '../../../pages/admin/shared/models/platform-users.model';
 import {ThemeSwitcherControllerService} from '../../services/theme-switcher-controller.service';
 
 @Component({

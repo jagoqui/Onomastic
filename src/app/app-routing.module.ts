@@ -1,13 +1,11 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PageNotFoundComponent } from '@shared/components/page-not-found/page-not-found.component';
-import { CheckLoginGuard } from '@shared/guards/check-login.guard';
-import { NegateCheckLoginGuard } from '@shared/guards/negate-check-login.guard';
 import { QuicklinkStrategy } from 'ngx-quicklink';
-
+import { NegateCheckLoginGuard } from '@appShared/guards/negate-check-login.guard';
 // eslint-disable-next-line max-len
-import { MailUsersSubscriptionStatusComponent } from '@shared/components/mail-users-subscription-status/mail-users-subscription-status.component';
-
+import { MailUsersSubscriptionStatusComponent } from '@appShared/components/mail-users-subscription-status/mail-users-subscription-status.component';
+import { CheckLoginGuard } from '@appShared/guards/check-login.guard';
+import { PageNotFoundComponent } from '@appShared/components/page-not-found/page-not-found.component';
 
 const routes: Routes = [
   {
@@ -17,7 +15,7 @@ const routes: Routes = [
   },
   {
     path: 'login',
-    loadChildren: () => import('./auth/login/login.module').then(m => m.LoginModule),
+    loadChildren: () => import('./pages/admin/auth/login/login.module').then(m => m.LoginModule),
     // redirectTo: 'PUBLISHER/templates-cards/',
     canActivate: [NegateCheckLoginGuard]
   },
@@ -37,25 +35,26 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    loadChildren: () => import('./auth/profile/profile.module').then(m => m.ProfileModule),
+    loadChildren: () => import('./pages/admin/auth/profile/profile.module').then(m => m.ProfileModule),
     canActivate: [CheckLoginGuard]
   },
   {
     path: 'add-publisher',
-    loadChildren: () => import('./auth/add-publisher/add-publisher.module').then(m => m.AddPublisherModule),
+    loadChildren: () => import('./pages/admin/auth/add-publisher/add-publisher.module').then(m => m.AddPublisherModule),
     canActivate: [CheckLoginGuard]
   },
   {
     path: 'confirmation-email',
-    loadChildren: () => import('./auth/confirmation-email/confirmation-email.module').then(m => m.ConfirmationEmailModule)
+    loadChildren: () => import('./pages/admin/auth/confirmation-email/confirmation-email.module').then(m => m.ConfirmationEmailModule)
   },
   {
     path: 'PUBLISHER',
-    loadChildren: () => import('./pages/publisher/publisher.module').then(m => m.PublisherModule),
+    loadChildren: () => import('./pages/admin/publisher/publisher.module').then(m => m.PublisherModule),
     canActivate: [CheckLoginGuard]
   },
   {
-    path: 'forgot-password', loadChildren: () => import('./auth/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule),
+    path: 'forgot-password',
+    loadChildren: () => import('./pages/admin/auth/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule),
     canActivate: [NegateCheckLoginGuard]
   }, {
     path: '**',

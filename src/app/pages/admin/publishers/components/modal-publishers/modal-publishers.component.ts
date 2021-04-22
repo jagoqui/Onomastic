@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BaseFormPlatformUsers } from '@shared/utils/base-form-platform-users';
+import { BaseFormPublishers } from '@publishers/utils/base-form-publishers';
 
 // eslint-disable-next-line no-shadow
 enum Action {
@@ -21,7 +21,7 @@ export class ModalPublishersComponent implements OnInit {
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public data: any,
-    public newPublisherForm: BaseFormPlatformUsers
+    public newPublishersForm: BaseFormPublishers
   ) {
   }
 
@@ -29,10 +29,10 @@ export class ModalPublishersComponent implements OnInit {
     if (this.data?.user.hasOwnProperty('id')) {
       this.actionTODO = Action.edit;
     }
-    this.newPublisherForm.baseForm.get('password').setValidators(null);
-    this.newPublisherForm.baseForm.get('password').updateValueAndValidity();
-    this.newPublisherForm.baseForm.get('role').setValidators(null);
-    this.newPublisherForm.baseForm.get('role').updateValueAndValidity();
+    this.newPublishersForm.baseForm.get('password').setValidators(null);
+    this.newPublishersForm.baseForm.get('password').updateValueAndValidity();
+    this.newPublishersForm.baseForm.get('role').setValidators(null);
+    this.newPublishersForm.baseForm.get('role').updateValueAndValidity();
   }
 
 

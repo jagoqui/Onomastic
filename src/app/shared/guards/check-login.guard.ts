@@ -1,10 +1,10 @@
 import {Injectable} from '@angular/core';
 import { CanActivate, NavigationEnd, Route, Router } from '@angular/router';
-import {AuthService} from '@auth/services/auth.service';
+import {AuthService} from '@pages/admin/auth/services/auth.service';
 import {Observable} from 'rxjs';
 import {map, take} from 'rxjs/operators';
 
-import {PlatformUserResponse} from '../models/platform-users.model';
+import {PlatformUserResponse} from '../../pages/admin/shared/models/platform-users.model';
 
 @Injectable({
   providedIn: 'root'

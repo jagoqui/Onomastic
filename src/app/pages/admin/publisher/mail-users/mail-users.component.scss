@@ -1,0 +1,45 @@
+@import '../../../../../assets/custom_styles/material_custom_theme';
+
+.container {
+  #actions_buttons {
+    width: 55%;
+    margin-bottom: 0.5556rem;
+    margin-top: 2.7778rem;
+
+    button{
+      margin: 0;
+      padding: 0;
+    }
+
+    .mat-headline {
+      border-radius: 2.7778rem;
+
+      .button-title {
+        color: mat-color($mat-accent, main);
+      }
+
+      .circle {
+        margin: auto auto auto 15px;
+
+        .mat-icon {
+          background: mat-color($mat-primary, main);
+          border-radius: 50%;
+          padding: 15.0006px;
+          color: white
+        }
+      }
+
+      .mat-title {
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+.button-add-user {
+  top: -1.111rem;
+
+  &:before {
+    content: "Agregar destinatario";
+  }
+}
