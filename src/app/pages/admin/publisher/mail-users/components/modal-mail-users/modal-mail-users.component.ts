@@ -7,8 +7,8 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import * as moment from 'moment';
 import { Subscription } from 'rxjs';
 
-import { EmailUserService } from '../../../services/email-user.service';
-import { BaseFormMailUsers } from '@pages/admin/publisher/utils/base-form-mail-users';
+import { EmailUserService } from '../../../shared/services/email-user.service';
+import { BaseFormMailUsers } from '@pages/admin/publisher/shared/utils/base-form-mail-users';
 import SwAlert from 'sweetalert2';
 import { PlatformService } from '@pages/admin/shared/services/platform.service';
 import { AssociationService } from '@pages/admin/shared/services/association.service';

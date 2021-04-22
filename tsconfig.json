@@ -9,6 +9,8 @@
       "@auth/*": ["src/app/pages/admin/auth/*"],
       "@publisher/*": ["src/app/pages/admin/publisher/*"],
       "@publishers/*": ["src/app/pages/admin/publishers/*"],
+      "@publisherShared/*": ["src/app/pages/admin/publisher/shared*"],
+      "@publishersShared/*": ["src/app/pages/admin/publishers/shared*"],
       "@adminShared/*":["src/app/pages/admin/shared/*"],
       "@appShared/*": ["src/app/shared/*"],
       "@env/*": ["src/environments/*"]

@@ -19,7 +19,7 @@ const routes: Routes = [
   },
   {
     path: 'help',
-    loadChildren: () => import('./help/help.module').then(m => m.HelpModule)
+    loadChildren: () => import('./shared/help/help.module').then(m => m.HelpModule)
   },
   {
     path: 'events-day',

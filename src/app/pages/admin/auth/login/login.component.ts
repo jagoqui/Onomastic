@@ -6,7 +6,7 @@ import { Subscription } from 'rxjs';
 import { environment } from '@env/environment';
 
 import { AuthService } from '../services/auth.service';
-import { BaseFormPublishers } from '@publishers/utils/base-form-publishers';
+import { BaseFormPublishers } from '@publishers/shared/utils/base-form-publishers';
 
 @Component({
   selector: 'app-login',

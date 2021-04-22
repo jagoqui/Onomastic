@@ -1,13 +1,13 @@
 import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TemplateCardsService } from '@pages/admin/publisher/services/template-cards.service';
+import { TemplateCardsService } from '@pages/admin/publisher/shared/services/template-cards.service';
 import { JoditAngularComponent } from 'jodit-angular';
 import { Subject } from 'rxjs';
 import SwAlert from 'sweetalert2';
-import { UploadImageService } from '@pages/admin/publisher/services/upload-image.service';
+import { UploadImageService } from '@pages/admin/publisher/shared/services/upload-image.service';
 import { environment } from '@env/environment';
 import { takeUntil } from 'rxjs/operators';
-import { EmailUserService } from '@pages/admin/publisher/services/email-user.service';
+import { EmailUserService } from '@pages/admin/publisher/shared/services/email-user.service';
 import { AssociationService } from '@pages/admin/shared/services/association.service';
 import { TemplateCard } from '@adminShared/models/template-card.model';
 import { ThemeSwitcherControllerService } from '@appShared/services/theme-switcher-controller.service';
@@ -86,7 +86,10 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       this.uploadImagesSvc.imageUpload(this.uploadImagesSvc.img)
         .pipe(takeUntil(this.destroy$))
         .subscribe(img => {
+          // eslint-disable-next-line no-debugger
+          debugger;
           if (img?.fileDownloadUri) {
+
             const imgCard = document.getElementById('templateCardImage');
             imgCard.setAttribute('src', img.fileDownloadUri);
             this.uploadImagesSvc.imgName = img.fileName;
@@ -183,6 +186,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       toolbarAdaptive: false,
       insertImageAsBase64URI: false,
       buttons: [
+        'source',
         'font', 'paragraph', 'fontsize', 'brush', '|',
         'bold', 'underline', 'italic', 'strikethrough', '|',
         'align', 'indent', 'outdent', '|',

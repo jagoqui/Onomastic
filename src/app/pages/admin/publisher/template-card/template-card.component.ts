@@ -1,10 +1,10 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import SwAlert from 'sweetalert2';
-import { TemplateCardsService } from '@pages/admin/publisher/services/template-cards.service';
+import { TemplateCardsService } from '@pages/admin/publisher/shared/services/template-cards.service';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { EventDayService } from '@publisher/services/event-day.service';
+import { EventDayService } from '@publisher/shared/services/event-day.service';
 import { TemplateCard } from '@adminShared/models/template-card.model';
 import { DomSanitizerService } from '@appShared/services/dom-sanitizer.service';
 

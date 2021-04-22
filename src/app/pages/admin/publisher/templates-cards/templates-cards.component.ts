@@ -2,7 +2,7 @@ import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
 
-import { TemplateCardsService } from '../services/template-cards.service';
+import { TemplateCardsService } from '../shared/services/template-cards.service';
 import { ModalTemplateCardsComponent } from './components/modal/modal-template-cards.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TemplateCard } from '@adminShared/models/template-card.model';

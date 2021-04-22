@@ -6,7 +6,7 @@ import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { EmailUserService } from '../services/email-user.service';
+import { EmailUserService } from '../shared/services/email-user.service';
 import { ModalMailUsersComponent } from './components/modal-mail-users/modal-mail-users.component';
 import SwAlert from 'sweetalert2';
 import { ID } from '@adminShared/models/shared.model';

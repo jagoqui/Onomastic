@@ -19,14 +19,15 @@ export class EventDayService {
       .post<EventDay>(`${environment.apiUrl}/evento`, event);
   }
 
+  getEvents(): Observable<EventDay[]> {
+    return this.http.get<EventDay[]>(`${environment.apiUrl}/eventos`);
+  }
+
   getConditions(): Observable<ConditionRes[]> {
     return this.http
       .get<ConditionRes[]>(`${environment.apiUrl}/evento/condiciones`);
   }
 
-  getEvents(): Observable<EventDay[]> {
-    return this.http.get<EventDay[]>(`${environment.apiUrl}/`);
-  }
 
   getAssociatedEvents(idTemplate: number): Observable<EventDay[]> {
     return this.http

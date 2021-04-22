@@ -34,9 +34,9 @@
         <ng-container matColumnDef='expandedDetail'>
           <td mat-cell *matCellDef='let element' [attr.colspan]='columnsToDisplay.length'>
             <div class='example-element-detail' [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
-              <app-template-card
-                #cardHtml *ngIf='element.plantilla' [card]='element.plantilla' [actions]='false'
-                (refreshCards)='onRefresh($event)'></app-template-card>
+                <app-template-card
+                  #cardHtml *ngIf='element.plantilla' [card]='element.plantilla' [actions]='false'
+                  (refreshCards)='onRefresh($event)'></app-template-card>
             </div>
           </td>
         </ng-container>

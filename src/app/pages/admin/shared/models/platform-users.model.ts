@@ -20,6 +20,6 @@ export interface Publisher {
   email:                string;
   estado:               string;
   createTime:           Date;
-  rol:                  Role;
+  rol:                  ByNameId[];
   asociacionPorUsuario: ByNameId[];
 }

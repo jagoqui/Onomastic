@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { BaseFormPublishers } from '@publishers/utils/base-form-publishers';
+import { BaseFormPublishers } from '@publishers/shared/utils/base-form-publishers';
 
 // eslint-disable-next-line no-shadow
 enum Action {

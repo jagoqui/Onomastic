@@ -4,13 +4,13 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
-import { EventDayService } from '@pages/admin/publisher/services/event-day.service';
-import { TemplateCardsService } from '@pages/admin/publisher/services/template-cards.service';
+import { EventDayService } from '@pages/admin/publisher/shared/services/event-day.service';
+import { TemplateCardsService } from '@pages/admin/publisher/shared/services/template-cards.service';
 import * as moment from 'moment';
 import { Subject } from 'rxjs/internal/Subject';
 import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
-import { BaseFormEventDay } from '@pages/admin/publisher/utils/base-form-event-day';
+import { BaseFormEventDay } from '@pages/admin/publisher/shared/utils/base-form-event-day';
 import { TemplateCard } from '@adminShared//models/template-card.model';
 import { ConditionRes, Parameter } from '@adminShared//models/event-day.model';
 import { DomSanitizerService } from '@app/shared/services/dom-sanitizer.service';

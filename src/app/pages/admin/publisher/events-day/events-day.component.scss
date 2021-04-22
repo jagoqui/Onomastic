@@ -39,8 +39,6 @@ tr.example-element-row:not(.example-expanded-row):active {
 }
 
 .example-element-detail {
-  overflow: hidden;
-  display: flex;
-  justify-content:center;
+  justify-content: center;
+  display: flex
 }
-
