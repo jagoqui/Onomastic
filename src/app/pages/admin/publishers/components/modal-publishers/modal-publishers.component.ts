@@ -42,34 +42,6 @@ export class ModalPublishersComponent implements OnInit {
   ) {
   }
 
-
-  ngOnInit(): void {
-    // if (this.data?.user.hasOwnProperty('id')) {
-    //   this.actionTODO = Action.edit;
-    // }
-    // this.newPublisherForm.baseForm.get('password').setValidators(null);
-    // this.newPublisherForm.baseForm.get('password').updateValueAndValidity();
-    // this.newPublisherForm.baseForm.get('role').setValidators(null);
-    // this.newPublisherForm.baseForm.get('role').updateValueAndValidity();
-    if (this.data?.event) {
-      this.actionTODO = Action.edit;
-      this.pathFormData();
-    } else {
-      this.actionTODO = Action.new;
-    }
-
-    this.associationSvc.getAssociations()
-      .subscribe(associations => {
-        if (associations) {
-          this.associationsRes = associations;
-          // this.selectedIdFilterAssociation = new Array(this.conditionsRes.length + 1);
-        }
-      }, (err) => {
-        console.log('Get condition error! :> ', err);
-      });
-  }
-
-
   addByNameFormGroup(formGroup: string): void {
     this.publisherForm.addByNameFormGroup(formGroup);
   }
@@ -107,8 +79,8 @@ export class ModalPublishersComponent implements OnInit {
   onSave() {
     this.publisherSvc.new(this.publisherForm.baseForm.value)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(event => {
-        if (event) {
+      .subscribe(publisher => {
+        if (publisher) {
           SwAlert.fire(
             'Guardado!',
             '<b>El publicador ha sido guardado</b>',
@@ -129,9 +101,31 @@ export class ModalPublishersComponent implements OnInit {
       });
   }
 
-
-  private pathFormData(): void {
-    this.publisherForm.baseForm.patchValue(this.data?.event);
+  pathFormData(): void {
+    this.publisherForm.baseForm.patchValue(this.data?.publisher);
   }
 
+  ngOnInit(): void {
+    if (this.data?.user.hasOwnProperty('id')) {
+      this.actionTODO = Action.edit;
+    }
+    this.publisherForm.baseForm.get('password').setValidators(null);
+    this.publisherForm.baseForm.get('password').updateValueAndValidity();
+    if (this.data?.event) {
+      this.actionTODO = Action.edit;
+      this.pathFormData();
+    } else {
+      this.actionTODO = Action.new;
+    }
+
+    this.associationSvc.getAssociations()
+      .subscribe(associations => {
+        if (associations) {
+          this.associationsRes = associations;
+          // this.selectedIdFilterAssociation = new Array(this.conditionsRes.length + 1);
+        }
+      }, (err) => {
+        console.log('Get condition error! :> ', err);
+      });
+  }
 }

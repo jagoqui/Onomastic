@@ -6,9 +6,9 @@ import { FormErrorsService } from '@appShared/services/form-errors.service';
 export class BaseFormPublisher {
   errorsMessage = {
     nombre: '',
+    password:'',
     email: '',
     estado: '',
-    apellido: '',
     rol: this.createByNameArrayError('id'),
     asociacionPorUsuarioCorreo: this.createByNameArrayError('id')
   };
@@ -23,13 +23,14 @@ export class BaseFormPublisher {
   createBaseForm(): FormGroup {
     return this.fb.group({
       nombre: ['', [Validators.required]],
+      password:['', [Validators.required]],
       email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
-      role: this.fb.group({
-        id: ['', [Validators.required]],
+      estado: ['', [Validators.required]],
+      rol: this.fb.group({
+        id: [''],
         name: ['', [Validators.required]]
       }),
-      asociacionPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')]),
-      estado: ['', [Validators.required]]
+      asociacionPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')])
     });
   }
 
