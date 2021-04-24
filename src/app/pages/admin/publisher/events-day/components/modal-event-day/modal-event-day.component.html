@@ -21,15 +21,17 @@
       <form [formGroup]='eventDayForm.baseForm' fxLayout='row' fxLayoutAlign='space-between center' [fxLayoutGap]="'1.667rem'">
         <!--Template card-->
         <div *ngIf='!selectCard; else selectedCard'
-             [ngClass]="!eventDayForm.isValidField(eventDayForm.baseForm.controls.plantilla)? 'select-card-container-error' : 'select-card-container'"
+             [ngClass]="controls.plantilla.invalid && !controls.plantilla.pristine? 'select-card-container-error' : 'select-card-container'"
             fxFlex='40'>
           <div class='btn-select-card'>
             <button mat-button color='primary' (click)='loadCards()'>
               Seleccionar plantilla<br>
               <mat-icon>image</mat-icon>
-              <mat-error *ngIf='!eventDayForm.isValidField(eventDayForm.baseForm.controls.plantilla)'>
-                Debe seleccionar una plantilla
-              </mat-error>
+              <ng-container *ngIf='controls.plantilla.invalid && !controls.plantilla.pristine'>
+                <mat-error *ngFor="let error of eventDayForm.onSearchErrors(controls.plantilla)">
+                  {{error}}
+                </mat-error>
+              </ng-container>
             </button>
           </div>
         </div>
@@ -48,13 +50,13 @@
                 <input type='text' matInput required formControlName='nombre'>
               </label>
               <mat-icon matSuffix>event_note</mat-icon>
-              <mat-error *ngFor="let error of eventDayForm.mapErrors(eventDayForm.baseForm.controls.nombre, 'Nombre')">
+              <mat-error *ngFor="let error of eventDayForm.onSearchErrors(controls.nombre)">
                 {{error}}
               </mat-error>
             </mat-form-field>
             <!-- State -->
             <mat-form-field fxFlex='47' hideRequiredMarker appearance='outline'>
-              <mat-label>estado</mat-label>
+              <mat-label>Estado</mat-label>
               <mat-select #state formControlName='estado'>
                 <mat-option>-- Seleccione una opción --</mat-option>
                 <mat-option value='ACTIVO'>ACTIVO</mat-option>
@@ -66,7 +68,7 @@
                 <mat-icon *ngSwitchDefault matSuffix>edit_notifications</mat-icon>
               </ng-container>
               <mat-error
-                *ngFor="let error of eventDayForm.mapErrors(eventDayForm.baseForm.controls.estado, 'Estado')">
+                *ngFor="let error of eventDayForm.onSearchErrors(controls.estado)">
                 {{error}}
               </mat-error>
             </mat-form-field>
@@ -82,7 +84,7 @@
               <mat-datepicker-toggle matSuffix [for]='dp'></mat-datepicker-toggle>
               <mat-datepicker #dp></mat-datepicker>
               <mat-error
-                *ngFor="let error of eventDayForm.mapErrors(eventDayForm.baseForm.controls.fecha, 'Fecha de inicio')">
+                *ngFor="let error of eventDayForm.onSearchErrors(controls.fecha)">
                 {{error}}
               </mat-error>
             </mat-form-field>
@@ -100,7 +102,7 @@
                 <mat-icon *ngSwitchDefault matSuffix>schedule</mat-icon>
               </ng-container>
               <mat-error
-                *ngFor="let error of eventDayForm.mapErrors(eventDayForm.baseForm.controls.recurrencia, 'Recurrencia')">
+                *ngFor="let error of eventDayForm.onSearchErrors(controls.recurrencia)">
                 {{error}}
               </mat-error>
             </mat-form-field>
@@ -122,10 +124,10 @@
                   </mat-option>
                 </mat-select>
                 <mat-icon matSuffix>fact_check</mat-icon>
-                <!--                <mat-error-->
-                <!--                  *ngFor="let error of eventDayForm.mapErrors(eventDayForm.baseForm.controls.condicionesEvento[0].condicion, 'Condición')">-->
-                <!--                  {{error}}-->
-                <!--                </mat-error>-->
+                <mat-error
+                  *ngFor="let error of eventDayForm.onSearchErrors(controls.condicionesEvento[i])">
+                  {{error}}
+                </mat-error>
               </mat-form-field>
               <!--Filter by association-->
               <ng-container *ngIf="conditionSelect.value === 'programa_academico'">

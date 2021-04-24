@@ -9,12 +9,7 @@ export interface MailUsers {
   estado: string;
   genero: string;
   asociacionPorUsuarioCorreo?: ByNameId[];
-  programaAcademicoPorUsuarioCorreo?: ProgramaAcademicoPorUsuarioCorreo[];
+  programaAcademicoPorUsuarioCorreo?: ByNameId[];
   plataformaPorUsuarioCorreo?: ByNameId[];
   vinculacionPorUsuarioCorreo?: ByNameId[];
-}
-
-export interface ProgramaAcademicoPorUsuarioCorreo {
-  codigo: number;
-  nombre: string;
 }

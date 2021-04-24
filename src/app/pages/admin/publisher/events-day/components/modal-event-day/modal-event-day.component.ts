@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -12,15 +12,11 @@ import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 import { BaseFormEventDay } from '@pages/admin/publisher/shared/utils/base-form-event-day';
 import { TemplateCard } from '@adminShared//models/template-card.model';
-import { ConditionRes, Parameter } from '@adminShared//models/event-day.model';
+import { ConditionRes, EventDay, Parameter } from '@adminShared//models/event-day.model';
 import { DomSanitizerService } from '@app/shared/services/dom-sanitizer.service';
+import { ACTIONS } from '@adminShared/models/shared.model';
+import { AbstractControl } from '@angular/forms';
 
-
-// eslint-disable-next-line no-shadow
-enum Action {
-  edit = 'Editar',
-  new = 'Crear',
-}
 
 export const MY_FORMATS = {
   parse: {
@@ -48,9 +44,9 @@ export const MY_FORMATS = {
     { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
   ]
 })
-export class ModalEventDayComponent implements OnInit, OnDestroy {
+export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() refresh = new EventEmitter<boolean>(false);
-  actionTODO = '';
+  actionTODO: ACTIONS;
 
   cards: TemplateCard[] = [];
   sidenavOpened = false;
@@ -69,6 +65,10 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
     public eventDayForm: BaseFormEventDay,
     private eventDaySvc: EventDayService
   ) {
+  }
+
+  get controls(): { [p: string]: AbstractControl } {
+    return this.eventDayForm.controls;
   }
 
   setDateFormat(event: MatDatepickerInputEvent<unknown>) {
@@ -160,10 +160,10 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     if (this.data?.event) {
-      this.actionTODO = Action.edit;
-      this.pathFormData();
+      this.actionTODO = 'EDITAR';
+      this.pathFormData(this.data?.event);
     } else {
-      this.actionTODO = Action.new;
+      this.actionTODO = 'AGREGAR';
     }
 
     this.eventDaySvc.getConditions()
@@ -179,18 +179,25 @@ export class ModalEventDayComponent implements OnInit, OnDestroy {
       });
   }
 
+  ngAfterViewInit() {
+    this.eventDayForm.baseForm.controls.plantilla.markAsPristine({ onlySelf: true });
+  }
+
+
   ngOnDestroy(): void {
     this.destroy$.next({});
     this.destroy$.complete();
   }
 
-  private pathFormData(): void {
-    const conditions = this.data?.event.condicionesEvento;
-    // if (conditions) {
-    //   for (let i = 0; i < conditions.length - 1; i++) {
-    //     this.eventDayForm.addParameterFormGroup('condicion');
-    //   }
-    // }
-    this.eventDayForm.baseForm.patchValue(this.data?.event);
+  private pathFormData(event: EventDay): void {
+    const conditions = event.condicionesEvento;
+
+    for (let i = 0; i < conditions.length - 1; i++) {
+      this.eventDayForm.addConditionsOptions();
+    }
+
+    // this.eventDayForm.baseForm.patchValue(event);
+    this.selectCard = event.plantilla;
   }
+
 }

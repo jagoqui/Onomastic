@@ -15,6 +15,13 @@ export class EventDayService {
   }
 
   new(event: EventDay): Observable<EventDay> {
+    [
+      {
+        id: '1',
+        codigo: '',
+        nombre: ''
+      }
+    ];
     return this.http
       .post<EventDay>(`${environment.apiUrl}/evento`, event);
   }
