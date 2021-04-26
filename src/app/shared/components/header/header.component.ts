@@ -4,7 +4,7 @@ import {AuthService} from '@adminShared/services/auth.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 
-import {Auth} from '@adminShared/models/auth.model';
+import {AuthRes} from '@adminShared/models/auth.model';
 import {ThemeSwitcherControllerService} from '../../services/theme-switcher-controller.service';
 
 @Component({
@@ -15,7 +15,7 @@ import {ThemeSwitcherControllerService} from '../../services/theme-switcher-cont
 export class HeaderComponent implements OnInit, OnDestroy {
   @Output() toggleSidenav = new EventEmitter<void>();
 
-  platformUserData: Auth;
+  platformUserData: AuthRes;
   toggleDarkThemeControl = new FormControl(false);
   darkMode = false;
   isLogged = false;
@@ -47,7 +47,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.authSvc.userResponse$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((userRes: Auth) => {
+      .subscribe((userRes: AuthRes) => {
         if (userRes) {
           this.platformUserData = userRes;
         }

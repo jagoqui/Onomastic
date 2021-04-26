@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { AbstractControl } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
@@ -22,7 +22,7 @@ enum Action {
   templateUrl: './modal-publishers.component.html',
   styleUrls: ['./modal-publishers.component.scss']
 })
-export class ModalPublishersComponent implements OnInit {
+export class ModalPublishersComponent implements OnInit, OnDestroy {
   @Output() refresh = new EventEmitter<boolean>(false);
 
   actionTODO: ACTIONS;
@@ -35,11 +35,11 @@ export class ModalPublishersComponent implements OnInit {
   roleOptions: Role[] = [
     {
       id: 1,
-      nombre:'ADMIN',
+      nombre: 'ADMIN'
     },
     {
       id: 2,
-      nombre:'PUBLISHER'
+      nombre: 'PUBLISHER'
     }
   ];
   private destroy$ = new Subject<any>();
@@ -116,6 +116,11 @@ export class ModalPublishersComponent implements OnInit {
         console.log('Get condition error! :> ', err);
       });
   }
+
+  ngOnDestroy(): void {
+    this.destroy$.next({});
+    this.destroy$.complete();
+  };
 
   private pathFormData(event: Publisher): void {
     const associations = event.asociacionPorUsuario;

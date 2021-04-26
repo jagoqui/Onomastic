@@ -28,14 +28,14 @@ export class PublisherService {
       .delete<[]>(`${environment.apiUrl}/usuarios/${id}`);
   }
 
-  deactivate(id: number): Observable<Publisher> {
+  activate(email: string): Observable<MailUsers> {
     return this.http
-      .put<Publisher>(`${environment.apiUrl}/usuarios/deactivate/${id}`, null);
+      .put<MailUsers>(`${environment.apiUrl}/usuarios/activar/${email}`, null);
   }
 
-  activate(id: number): Observable<MailUsers> {
+  deactivate(email: string): Observable<Publisher> {
     return this.http
-      .put<MailUsers>(`${environment.apiUrl}/usuarios/activate/${id}`, null);
+      .put<Publisher>(`${environment.apiUrl}/usuarios/desactivar/${email}`, null);
   }
 
 }
