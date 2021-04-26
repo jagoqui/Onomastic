@@ -1,14 +1,15 @@
 import { Component, EventEmitter, Inject, OnInit, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { FormGroup } from '@angular/forms';
+import { AbstractControl } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 import { Subject } from 'rxjs';
 import { LoaderService } from '@app/shared/services/loader.service';
-import { ByNameId } from '@adminShared/models/shared.model';
+import { ACTIONS, ByIdOrCode } from '@adminShared/models/shared.model';
 import { PublisherService } from '@adminShared/services/publisher.service';
 import { AssociationService } from '@adminShared/services/association.service';
 import { BaseFormPublisher } from '@adminShared/utils/base-form-publisher';
+import { Publisher, Role } from '@adminShared/models/publisher.model';
 
 // eslint-disable-next-line no-shadow
 enum Action {
@@ -23,13 +24,24 @@ enum Action {
 })
 export class ModalPublishersComponent implements OnInit {
   @Output() refresh = new EventEmitter<boolean>(false);
-  actionTODO = Action.new;
+
+  actionTODO: ACTIONS;
   showPasswordField = true;
   hide = true;
   maxListsConfig = {
     associations: 4
   };
-  associationsRes: ByNameId[];
+  associationsRes: ByIdOrCode[];
+  roleOptions: Role[] = [
+    {
+      id: 1,
+      nombre:'ADMIN',
+    },
+    {
+      id: 2,
+      nombre:'PUBLISHER'
+    }
+  ];
   private destroy$ = new Subject<any>();
 
   constructor(
@@ -42,33 +54,16 @@ export class ModalPublishersComponent implements OnInit {
   ) {
   }
 
-  addByNameFormGroup(formGroup: string): void {
-    this.publisherForm.addByNameFormGroup(formGroup);
+  get controls(): { [p: string]: AbstractControl } {
+    return this.publisherForm.controls;
   }
 
-  removeOrClearByName(iterator: number, formGroup: string, onClose?: boolean): void {
-    if (!onClose) {
-      if (confirm('Seguro que desea remover la lista?')) {
-        this.publisherForm.removeOrClearByName(iterator, formGroup);
-      }
-    } else {
-      this.publisherForm.removeOrClearByName(iterator, formGroup);
-    }
-  }
-
-  getAssociationsSize(): number {
-    return this.publisherForm.baseForm.controls.asociacionPorUsuarioCorreo.value.length;
-  }
-
-  setFormGroupID(formGroup: FormGroup, id: number) {
-    formGroup.controls.id.setValue(id);
-  }
-
-  onShowAddAssociation(iterator: number): boolean {
-    return (iterator === (this.getAssociationsSize() - 1) && (this.getAssociationsSize() < this.maxListsConfig.associations));
+  removeAssociation(i: number) {
+    this.publisherForm.removeAssociation(i);
   }
 
   onClose(close?: boolean): void {
+    console.log(this.publisherForm.baseForm.value);
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.publisherForm.onReset();
       this.refresh.emit(true);
@@ -101,31 +96,33 @@ export class ModalPublishersComponent implements OnInit {
       });
   }
 
-  pathFormData(): void {
-    this.publisherForm.baseForm.patchValue(this.data?.publisher);
-  }
-
   ngOnInit(): void {
-    if (this.data?.user.hasOwnProperty('id')) {
-      this.actionTODO = Action.edit;
-    }
     this.publisherForm.baseForm.get('password').setValidators(null);
     this.publisherForm.baseForm.get('password').updateValueAndValidity();
-    if (this.data?.event) {
-      this.actionTODO = Action.edit;
-      this.pathFormData();
+
+    if (this.data?.publisher) {
+      this.actionTODO = 'EDITAR';
+      this.pathFormData(this.data.publisher);
     } else {
-      this.actionTODO = Action.new;
+      this.actionTODO = 'AGREGAR';
     }
 
     this.associationSvc.getAssociations()
       .subscribe(associations => {
         if (associations) {
           this.associationsRes = associations;
-          // this.selectedIdFilterAssociation = new Array(this.conditionsRes.length + 1);
         }
       }, (err) => {
         console.log('Get condition error! :> ', err);
       });
+  }
+
+  private pathFormData(event: Publisher): void {
+    const associations = event.asociacionPorUsuario;
+
+    for (let i = 0; i < associations.length - 1; i++) {
+      this.publisherForm.addAssociation();
+    }
+    this.publisherForm.baseForm.patchValue(event);
   }
 }

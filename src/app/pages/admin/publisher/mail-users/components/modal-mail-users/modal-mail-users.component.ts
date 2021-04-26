@@ -15,7 +15,7 @@ import { AssociationService } from '@pages/admin/shared/services/association.ser
 import { AcademicProgramService } from '@pages/admin/shared/services/academic-program.service';
 import { BodyTypeService } from '@pages/admin/shared/services/body-type.service';
 import { LoaderService } from '@appShared/services/loader.service';
-import { ByNameId} from '@adminShared/models/shared.model';
+import { ByIdOrCode} from '@adminShared/models/shared.model';
 
 // eslint-disable-next-line no-shadow
 enum Action {
@@ -62,10 +62,10 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   };
   today = new Date();
   close = false;
-  associations: ByNameId[];
-  programs: ByNameId[];
-  bondingTypes: ByNameId[];
-  platforms: ByNameId[];
+  associations: ByIdOrCode[];
+  programs: ByIdOrCode[];
+  bondingTypes: ByIdOrCode[];
+  platforms: ByIdOrCode[];
   private subscription: Subscription = new Subscription();
 
   constructor(

@@ -1,4 +1,4 @@
-import { ByNameId } from '@adminShared/models/shared.model';
+import { ByIdOrCode, ROLE } from '@adminShared/models/shared.model';
 
 export interface Publisher {
   id?: number;
@@ -7,6 +7,11 @@ export interface Publisher {
   email: string;
   estado: string;
   createTime?: Date;
-  rol: ByNameId[];
-  asociacionPorUsuario?: ByNameId[];
+  rol: Role;
+  asociacionPorUsuario?: ByIdOrCode[];
+}
+
+export interface Role {
+  id: number;
+  nombre: ROLE;
 }

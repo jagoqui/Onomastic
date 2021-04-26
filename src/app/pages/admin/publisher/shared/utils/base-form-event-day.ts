@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { FormErrorsService } from '@appShared/services/form-errors.service';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Injectable({ providedIn: 'root' })
 export class BaseFormEventDay {
@@ -14,7 +15,7 @@ export class BaseFormEventDay {
   ) {
   }
 
-  get conditionsOptionsField(): FormArray {
+  get conditions(): FormArray {
     return this.baseForm.get('condicionesEvento') as FormArray;
   }
 
@@ -36,27 +37,30 @@ export class BaseFormEventDay {
     });
   }
 
+  setDate(event: MatDatepickerInputEvent<unknown>) {
+    this.baseForm.controls.fecha.setValue(moment(event.value).format('YYYY-MM-DD'));
+  }
+
   validDate(control: FormControl): { [key: string]: any } | null {
     const date = control.value;
-
     return moment(date, 'YYYY-MM-DD', true).isValid() ?
       null : {
         invalidDate: true
       };
   }
 
-  addConditionsOptions() {
-    this.conditionsOptionsField.push(this.createConditionField());
+  addCondition() {
+    this.conditions.push(this.createConditionField());
   }
 
   removeCondition(key: number) {
     if (confirm('Seguro que desea quitar ésta condición?')) {
-      this.conditionsOptionsField.removeAt(key);
+      this.conditions.removeAt(key);
     }
   }
 
   clearParameter(index: number) {
-    this.conditionsOptionsField.at(index).get('parametro').setValue(null);
+    this.conditions.at(index).get('parametro').setValue(null);
   }
 
   onSearchErrors(field: AbstractControl | FormGroup){
@@ -64,8 +68,8 @@ export class BaseFormEventDay {
   }
 
   onReset(): void {
-    for (let i = this.conditionsOptionsField.length - 1; i > 0; i--) {
-      this.conditionsOptionsField.removeAt(i);
+    for (let i = this.conditions.length - 1; i > 0; i--) {
+      this.conditions.removeAt(i);
     }
     this.baseForm.reset();
   }

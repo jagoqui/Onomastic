@@ -8,7 +8,7 @@ export interface ID {
   numeroIdentificacion: string;
 }
 
-export interface ByNameId {
+export interface ByIdOrCode {
   id?: number;
   codigo?: number;
   nombre: string;

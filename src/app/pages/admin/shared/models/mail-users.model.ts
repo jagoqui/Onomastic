@@ -1,4 +1,4 @@
-import { ByNameId, ID } from '@adminShared/models/shared.model';
+import { ByIdOrCode, ID } from '@adminShared/models/shared.model';
 
 export interface MailUsers {
   id: ID;
@@ -8,8 +8,8 @@ export interface MailUsers {
   fechaNacimiento: Date;
   estado: string;
   genero: string;
-  asociacionPorUsuarioCorreo?: ByNameId[];
-  programaAcademicoPorUsuarioCorreo?: ByNameId[];
-  plataformaPorUsuarioCorreo?: ByNameId[];
-  vinculacionPorUsuarioCorreo?: ByNameId[];
+  asociacionPorUsuarioCorreo?: ByIdOrCode[];
+  programaAcademicoPorUsuarioCorreo?: ByIdOrCode[];
+  plataformaPorUsuarioCorreo?: ByIdOrCode[];
+  vinculacionPorUsuarioCorreo?: ByIdOrCode[];
 }

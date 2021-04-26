@@ -1,19 +1,24 @@
-import { Injectable } from '@angular/core';
-import { FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Injectable, NgIterable } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { FormErrorsService } from '@appShared/services/form-errors.service';
 
 @Injectable({ providedIn: 'root' })
 export class BaseFormPublisher {
-  errorsMessage = {
-    nombre: '',
-    password:'',
-    email: '',
-    estado: '',
-    rol: this.createByNameArrayError('id'),
-    asociacionPorUsuarioCorreo: this.createByNameArrayError('id')
-  };
-  baseForm = this.createBaseForm();
+
+  public baseForm = this.createBaseForm();
   private emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
+
+  get associationsIterable(): (FormArray & NgIterable<FormGroup>) | undefined | null {
+    return this.associations.controls as (FormArray & NgIterable<FormGroup>) | undefined | null;
+  }
+
+  get associations(): FormArray{
+    return this.baseForm.get('asociacionPorUsuarioCorreo') as FormArray;
+  }
+
+  get controls(): { [p: string]: AbstractControl } {
+    return this.baseForm.controls;
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -27,81 +32,44 @@ export class BaseFormPublisher {
       email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
       estado: ['', [Validators.required]],
       rol: this.fb.group({
-        id: [''],
-        name: ['', [Validators.required]]
+        id: [null, [Validators.required]],
+        nombre: [null, [Validators.required]]
       }),
-      asociacionPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')])
+      asociacionPorUsuarioCorreo: this.fb.array([this.createAssociationField()]),
     });
   }
 
-  createByNameArrayError(id: string) {
-    if (id === 'id') {
-      return new Array({
-        id: '',
-        nombre: ''
-      });
-    } else {
-      return new Array({
-        codigo: '',
-        nombre: ''
-      });
+
+  addAssociation() {
+    this.associationsIterable.push(this.createAssociationField());
+  }
+
+  removeAssociation(i: number) {
+    if (confirm('Seguro que desea quitar ésta asociación?')) {
+      this.associations.removeAt(i);
     }
   }
 
-  addByNameArrayError(arrayError: string) {
-    const byNameErrorArray = this.errorsMessage[arrayError] as Array<any>;
-    byNameErrorArray.push(this.createByNameArrayError(arrayError === 'programaAcademicoPorUsuarioCorreo' ? 'codigo' : 'id'));
+  clearParameter(index: number) {
+    this.associationsIterable.at(index).get('parametro').setValue(null);
   }
 
-  addByNameFormGroup(formGroup: string) {
-    const byName = this.baseForm.get(formGroup) as FormArray;
-    byName.push(this.createByNameFormGroup(formGroup === 'programaAcademicoPorUsuarioCorreo' ? 'codigo' : 'id'));
-    this.addByNameArrayError(formGroup);
-  }
-
-  removeOrClearByNameArrayError(i: number, arrayError: string) {
-    const byNameErrorArray = this.errorsMessage[arrayError] as Array<any>;
-    if (byNameErrorArray.length > 1) {
-      byNameErrorArray.splice(i, i);
-    } else {
-      byNameErrorArray.splice(byNameErrorArray.length + 1);
-    }
-  }
-
-  removeOrClearByName(i: number, formGroup: string) {
-    const byName = this.baseForm.get(formGroup) as FormArray;
-    if (byName.length > 1) {
-      byName.removeAt(i);
-    } else {
-      byName.reset();
-    }
-    this.removeOrClearByNameArrayError(i, formGroup);
+  onSearchErrors(field: AbstractControl | FormGroup){
+    return this.formErrorsSvc.searchErrors(field);
   }
 
   onReset(): void {
+    for (let i = this.associationsIterable.length - 1; i > 0; i--) {
+      this.associationsIterable.removeAt(i);
+    }
     this.baseForm.reset();
   }
 
-
-  private createByNameFormGroup(id: string): FormGroup {
-    if (id === 'id') {
-      return new FormGroup({
-        id: new FormControl('', Validators.required),
-        nombre: new FormControl('', Validators.required)
-      });
-    } else {
-      return new FormGroup({
-        codigo: new FormControl('', Validators.required),
-        nombre: new FormControl('', Validators.required)
-      });
-    }
+  private createAssociationField(): FormGroup {
+    return this.fb.group({
+      id: ['', Validators.required],
+      nombre: ['', Validators.required]
+    });
   }
-
-  // private createAssociationField() {
-  //   return this.fb.group({
-  //     id: ['', Validators.required],
-  //     name: ['', Validators.required]
-  //   });
-  // }
 
 }

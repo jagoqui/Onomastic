@@ -72,7 +72,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   setDateFormat(event: MatDatepickerInputEvent<unknown>) {
-    this.eventDayForm.baseForm.controls.fecha.setValue(moment(event.value).format('YYYY-MM-DD'));
+    this.eventDayForm.setDate(event);
   }
 
   setIdAssociation(id: number, indexClear: number) {
@@ -193,7 +193,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
     const conditions = event.condicionesEvento;
 
     for (let i = 0; i < conditions.length - 1; i++) {
-      this.eventDayForm.addConditionsOptions();
+      this.eventDayForm.addCondition();
     }
 
     // this.eventDayForm.baseForm.patchValue(event);

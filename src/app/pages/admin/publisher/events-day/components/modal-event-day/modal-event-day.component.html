@@ -109,7 +109,7 @@
           </div>
           <!-- Conditions -->
           <div formArrayName='condicionesEvento'
-               *ngFor='let condition of eventDayForm.conditionsOptionsField.controls; let i=index'>
+               *ngFor='let condition of eventDayForm.conditions.controls; let i=index'>
             <div fxLayout='row' fxLayoutAlign='space-between center' [formGroupName]='i'>
               <!--Condition-->
               <mat-form-field hideRequiredMarker [fxFlex]="conditionSelect.value === 'programa_academico'? 24 : 36"
@@ -175,17 +175,17 @@
               </ng-container>
               <!-- Actions list -->
               <div fxFlex='25' fxLayout='row' fxFlexAlign='space-around center'>
-                <div *ngIf='eventDayForm.baseForm.controls.condicionesEvento.value.length>1' fxFlex='45'>
+                <div *ngIf='eventDayForm.conditions.value.length >1' fxFlex='45'>
                   <button mat-mini-fab color='warn' title='Eliminar condición'
                           (click)='removeCondition(i)'>
                     <mat-icon>remove</mat-icon>
                   </button>
                 </div>
                 <div
-                  *ngIf='eventDayForm.baseForm.controls.condicionesEvento.value.length<5 && eventDayForm.baseForm.controls.condicionesEvento.value.length === i+1'
+                  *ngIf='eventDayForm.conditions.value.length<5 && eventDayForm.conditions.value.length === i+1'
                   fxFlex='45'>
                   <button mat-mini-fab color='primary' title='Agregar condición'
-                          (click)='eventDayForm.addConditionsOptions()'>
+                          (click)='eventDayForm.addCondition()'>
                     <mat-icon>playlist_add</mat-icon>
                   </button>
                 </div>
