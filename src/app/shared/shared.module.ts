@@ -18,6 +18,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 import {
   MaterialElevationDirective,
 } from './directives/material-elevation.directive';
+import { NgxSpinnerModule } from 'ngx-spinner';
 
 const imports = [
   CommonModule,
@@ -26,7 +27,8 @@ const imports = [
   MaterialModule,
   FormsModule,
   ReactiveFormsModule,
-  NgxCaptchaModule
+  NgxCaptchaModule,
+  NgxSpinnerModule
 ];
 export default imports;
 

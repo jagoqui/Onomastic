@@ -1,4 +1,4 @@
-import { Role } from '@adminShared/models/shared.model';
+import { ROLE } from '@adminShared/models/shared.model';
 
 
 export interface Auth {
@@ -6,7 +6,7 @@ export interface Auth {
   userEmail: string;
   password?: string;
   name?: string;
-  role?: Role;
+  role?: ROLE;
   token?: string;
 }
 

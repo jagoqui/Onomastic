@@ -3,89 +3,115 @@
   <div mat-dialog-content>
     <form [formGroup]='publisherForm.baseForm' fxLayout='row' fxLayoutAlign='space-between center'
           [fxLayoutGap]="'1.667rem'">
-      <!--Event day form-->
+      <!--Publisher form-->
       <div fxFlex='98' fxLayout='column'>
-        <!-- Name -->
-        <mat-form-field hideRequiredMarker appearance='outline' fxFlex='47'>
-          <mat-label>Nombre</mat-label>
-          <label>
-            <input type='text' matInput required formControlName='nombre'>
-          </label>
-          <mat-icon matSuffix>account_circle</mat-icon>
-          <!-- <mat-error *ngFor="let error of eventDayForm.mapErrors(eventDayForm.baseForm.controls.nombre, 'Nombre')">
+        <div fxLayout='row' fxLayoutAlign='space-between center'>
+          <!-- Account name -->
+          <mat-form-field hideRequiredMarker appearance='outline' fxFlex='47'>
+            <mat-label>Nombre de la cuenta</mat-label>
+            <label>
+              <input type='text' matInput required formControlName='nombre'>
+            </label>
+            <mat-icon matSuffix>account_circle</mat-icon>
+            <mat-error *ngFor='let error of publisherForm.onSearchErrors(controls.nombre)'>
               {{error}}
-            </mat-error> -->
-        </mat-form-field>
-        <!-- Email -->
-        <mat-form-field hideRequiredMarker appearance='outline' fxFlex='47'>
-          <mat-label>Email</mat-label>
-          <label>
-            <input type='text' matInput required formControlName='email'>
-          </label>
-          <mat-icon matSuffix>contact_mail</mat-icon>
-          <!-- <mat-error *ngFor="let error of eventDayForm.mapErrors(eventDayForm.baseForm.controls.nombre, 'Nombre')">
+            </mat-error>
+          </mat-form-field>
+          <!-- Rol -->
+          <mat-form-field fxFlex='47' hideRequiredMarker appearance='outline'>
+            <mat-label>Rol</mat-label>
+            <mat-select #role formControlName='rol'>
+              <mat-option>-- Seleccione una opción --</mat-option>
+              <mat-option *ngFor='let roleOpt of roleOptions' [value]='roleOpt'>{{roleOpt.nombre}}</mat-option>
+            </mat-select>
+            <ng-container [ngSwitch]='role.value?.nombre' matSuffix>
+              <mat-icon *ngSwitchCase="'ADMIN'" matSuffix>admin_panel_settings</mat-icon>
+              <mat-icon *ngSwitchCase="'PUBLISHER'" matSuffix>public</mat-icon>
+              <mat-icon *ngSwitchDefault matSuffix>privacy_tip</mat-icon>
+            </ng-container>
+            <!--            <mat-error *ngFor='let error of publisherForm.onSearchErrors(controls.rol)'>-->
+            <!--              {{error}}-->
+            <!--            </mat-error>-->
+          </mat-form-field>
+        </div>
+        <div fxLayout='row' fxLayoutAlign='space-between center'>
+          <!-- Email -->
+          <mat-form-field hideRequiredMarker appearance='outline' fxFlex='47'>
+            <mat-label>Email</mat-label>
+            <label>
+              <input type='text' matInput required formControlName='email'>
+            </label>
+            <mat-icon matSuffix>contact_mail</mat-icon>
+            <mat-error *ngFor='let error of publisherForm.onSearchErrors(controls.email)'>
               {{error}}
-            </mat-error> -->
-        </mat-form-field>
-        <!-- Association -->
-        <div *ngFor="let mailAssociation of publisherForm.baseForm.get('asociacionPorUsuarioCorreo')['controls'];
-    let i = index" [formGroup]='mailAssociation' fxLayout='row' fxFlexAlign='space-between center'>
-          <!-- Association -->
-          <div fxFlex='80'>
-            <mat-form-field hideRequiredMarker fxFlex='90' appearance='outline'>
-              <mat-label>Facultad/Escuela</mat-label>
-              <mat-select formControlName='nombre'>
-                <mat-option>-- Seleccione una opción --</mat-option>
-                <mat-option *ngFor='let association of associationsRes' [value]="association['nombre']"
-                            (onSelectionChange)="setFormGroupID(mailAssociation, association['id'])">
-                  {{association['nombre']}}
-                </mat-option>
-              </mat-select>
-              <mat-icon matSuffix>account_balance</mat-icon>
-              <!-- <mat-error *ngIf="checkField('nombre','asociacionPorUsuarioCorreo',i)">
-                {{mailUserForm.errorsMessage['asociacionPorUsuarioCorreo'][i].nombre}}
-              </mat-error> -->
-            </mat-form-field>
-          </div>
-          <!-- Actions list -->
-          <div fxFlex='15' fxLayout='row' fxFlexAlign='space-between center'>
-            <div *ngIf='getAssociationsSize() > 1' fxFlex='47'>
-              <button mat-mini-fab color='warn' title='Eliminar asociación'
-                      (click)="removeOrClearByName(i,'asociacionPorUsuarioCorreo', false)">
-                <mat-icon>remove</mat-icon>
-              </button>
+            </mat-error>
+          </mat-form-field>
+          <!-- State -->
+          <mat-form-field fxFlex='47' hideRequiredMarker appearance='outline'>
+            <mat-label>Estado</mat-label>
+            <mat-select #state formControlName='estado'>
+              <mat-option>-- Seleccione una opción --</mat-option>
+              <mat-option value='ACTIVO'>ACTIVO</mat-option>
+              <mat-option value='INACTIVO'>INACTIVO</mat-option>
+            </mat-select>
+            <ng-container [ngSwitch]='state.value' matSuffix>
+              <mat-icon *ngSwitchCase="'ACTIVO'" matSuffix>email</mat-icon>
+              <mat-icon *ngSwitchCase="'INACTIVO'" matSuffix>unsubscribe</mat-icon>
+              <mat-icon *ngSwitchDefault matSuffix>contact_mail</mat-icon>
+            </ng-container>
+            <mat-error *ngFor='let error of publisherForm.onSearchErrors(controls.estado)'>
+              {{error}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!--Association-->
+        <div formArrayName='asociacionPorUsuarioCorreo' *ngFor='let mailAssociation of publisherForm.associationsIterable;
+          let i =index' fxLayout='row'
+             fxFlexAlign='space-between center'>
+          <div fxFlex>
+            <!-- Association -->
+            <div fxFlex='60'>
+              <mat-form-field hideRequiredMarker fxFlex='90' appearance='outline'>
+                <mat-label>Facultad/Escuela</mat-label>
+                <mat-select [formGroupName]='i'>
+                  <mat-option>-- Seleccione una opción --</mat-option>
+                  <mat-option *ngFor='let association of associationsRes' [value]='association'>
+                    {{association['nombre']}}
+                  </mat-option>
+                </mat-select>
+                <mat-icon matSuffix>account_balance</mat-icon>
+                <mat-error *ngFor='let error of publisherForm.onSearchErrors(mailAssociation)'>
+                  {{error}}
+                </mat-error>
+              </mat-form-field>
             </div>
-            <div *ngIf='onShowAddAssociation(i)' fxFlex='47'>
-              <button mat-mini-fab color='primary' title='Agregar asociación'
-                      (click)="addByNameFormGroup('asociacionPorUsuarioCorreo')">
-                <mat-icon>playlist_add</mat-icon>
-              </button>
+            <!--Actions list-->
+            <div fxFlex='25' fxLayout='row' fxFlexAlign='space-around center'>
+              <div *ngIf='publisherForm.associationsIterable.length>1' fxFlex='45'>
+                <button mat-mini-fab color='warn' title='Eliminar condición'
+                        (click)='removeAssociation(i)'>
+                  <mat-icon>remove</mat-icon>
+                </button>
+              </div>
+              <div
+                *ngIf='publisherForm.associationsIterable.length<5 && publisherForm.associationsIterable.length === i+1'
+                fxFlex='45'>
+                <button mat-mini-fab color='primary' title='Agregar condición'
+                        (click)='publisherForm.addAssociation()'>
+                  <mat-icon>playlist_add</mat-icon>
+                </button>
+              </div>
             </div>
           </div>
         </div>
-        <!-- State -->
-        <mat-form-field fxFlex='47' hideRequiredMarker appearance='outline'>
-          <mat-label>Estado</mat-label>
-          <mat-select #state formControlName='estado'>
-            <mat-option>-- Seleccione una opción --</mat-option>
-            <mat-option value='ACTIVO'>ACTIVO</mat-option>
-            <mat-option value='INACTIVO'>INACTIVO</mat-option>
-          </mat-select>
-          <ng-container [ngSwitch]='state.value' matSuffix>
-            <mat-icon *ngSwitchCase="'ACTIVO'" matSuffix>notifications_active</mat-icon>
-            <mat-icon *ngSwitchCase="'INACTIVO'" matSuffix>notifications_off</mat-icon>
-            <mat-icon *ngSwitchDefault matSuffix>edit_notifications</mat-icon>
-          </ng-container>
-          <!-- <mat-error *ngFor="let error of eventDayForm.mapErrors(eventDayForm.baseForm.controls.estado, 'Estado')">
-    {{error}}
-  </mat-error> -->
-        </mat-form-field>
       </div>
     </form>
   </div>
   <div mat-dialog-actions fxLayout='row' fxLayoutAlign='end end'>
     <button mat-raised-button fxFlex='20' color='warn' (click)='onClose(null)'>Cancelar</button>
-    <button mat-raised-button fxFlex='20' color='primary' (click)='onSave()'>
+    <button mat-raised-button fxFlex='20' color='primary' (click)='onSave()'
+            [disabled]='publisherForm.baseForm.invalid'>
       Agregar
     </button>
   </div>
+</div>

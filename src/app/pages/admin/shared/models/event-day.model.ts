@@ -1,4 +1,4 @@
-import { ByNameId } from '@adminShared/models/shared.model';
+import { ByIdOrCode } from '@adminShared/models/shared.model';
 
 export interface EventDay {
   id?: number;
@@ -27,6 +27,6 @@ export interface ConditionRes {
 
 export interface Parameter {
   id: number;
-  valores: ByNameId[];
+  valores: ByIdOrCode[];
 }
 

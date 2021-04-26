@@ -6,6 +6,8 @@ import { NegateCheckLoginGuard } from '@appShared/guards/negate-check-login.guar
 import { MailUsersSubscriptionStatusComponent } from '@appShared/components/mail-users-subscription-status/mail-users-subscription-status.component';
 import { CheckLoginGuard } from '@appShared/guards/check-login.guard';
 import { PageNotFoundComponent } from '@appShared/components/page-not-found/page-not-found.component';
+import { ForgotPasswordComponent } from '@auth/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from '@auth/reset-password/reset-password.component';
 
 const routes: Routes = [
   {
@@ -16,7 +18,6 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./pages/admin/auth/login/login.module').then(m => m.LoginModule),
-    // redirectTo: 'PUBLISHER/templates-cards/',
     canActivate: [NegateCheckLoginGuard]
   },
   {
@@ -39,8 +40,8 @@ const routes: Routes = [
     canActivate: [CheckLoginGuard]
   },
   {
-    path: 'confirmation-email',
-    loadChildren: () => import('./pages/admin/auth/confirmation-email/confirmation-email.module').then(m => m.ConfirmationEmailModule)
+    path: 'reset/:token',
+    component: ResetPasswordComponent
   },
   {
     path: 'PUBLISHER',
@@ -49,7 +50,7 @@ const routes: Routes = [
   },
   {
     path: 'forgot-password',
-    loadChildren: () => import('./pages/admin/auth/forgot-password/forgot-password.module').then(m => m.ForgotPasswordModule),
+    component: ForgotPasswordComponent,
     canActivate: [NegateCheckLoginGuard]
   }, {
     path: '**',

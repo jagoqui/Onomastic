@@ -27,14 +27,14 @@ export class PublishersComponent implements OnInit {
               private publishersSvc: PublisherService) {
   }
 
-  onOpenModal(event = {}): void {
+  onOpenModal(publisher = {}): void {
     const dialogRef = this.dialog.open(ModalPublishersComponent, {
       height: 'auto',
-      width: '35%',
+      width: '50%',
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
-      data: { title: event ? 'EDITAR PUBLICADOR' : 'NUEVO PUBLICADOR', event }
+      data: { title: publisher ? 'EDITAR PUBLICADOR' : 'NUEVO PUBLICADOR', publisher }
     });
     if (dialogRef.afterClosed()) {
       dialogRef.componentInstance.refresh.subscribe((refresh) => {

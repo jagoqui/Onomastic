@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
 import { HttpClient } from '@angular/common/http';
-import { ByNameId } from '@adminShared/models/shared.model';
+import { ByIdOrCode } from '@adminShared/models/shared.model';
 
 @Injectable({
   providedIn: 'root'
@@ -11,13 +11,13 @@ export class BodyTypeService {
 
   constructor(private http: HttpClient) { }
 
-  getBondingTypes(): Observable<ByNameId[]> {
+  getBondingTypes(): Observable<ByIdOrCode[]> {
     return this.http
-      .get<ByNameId[]>(`${environment.apiUrl}/vinculaciones`);
+      .get<ByIdOrCode[]>(`${environment.apiUrl}/vinculaciones`);
   }
 
-  getBondingTypeById(id: string): Observable<ByNameId> {
+  getBondingTypeById(id: string): Observable<ByIdOrCode> {
     return this.http
-      .get<ByNameId>(`${environment.apiUrl}/vinculaciones/${id}`);
+      .get<ByIdOrCode>(`${environment.apiUrl}/vinculaciones/${id}`);
   }
 }

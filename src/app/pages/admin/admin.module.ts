@@ -4,10 +4,12 @@ import {MaterialModule} from 'src/app/material-module.module';
 
 import {AdminRoutingModule} from './admin-routing.module';
 import {AdminComponent} from './admin.component';
+import { ForgotPasswordComponent } from '@auth/forgot-password/forgot-password.component';
+import { ResetPasswordComponent } from '@auth/reset-password/reset-password.component';
 
 
 @NgModule({
-  declarations: [AdminComponent],
+  declarations: [AdminComponent, ForgotPasswordComponent, ResetPasswordComponent],
   imports: [
     CommonModule,
     AdminRoutingModule,
