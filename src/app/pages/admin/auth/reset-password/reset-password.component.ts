@@ -11,6 +11,7 @@ import { takeUntil } from 'rxjs/operators';
 })
 export class ResetPasswordComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<any>();
+  private password: string = null;
 
   constructor(
     private router: Router,
@@ -20,53 +21,70 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.password = null;
     const token = this.route.snapshot.paramMap.get('token');
+    console.log(token);
     if (!token) {
       this.router.navigate(['/login']).then();
-      return;
+      this.ngOnDestroy();
     }
     Swal.mixin({
       input: 'password',
       confirmButtonText: 'Siguiente &rarr;',
-      showCancelButton: true,
+      showConfirmButton: true,
       progressSteps: ['1', '2']
     }).queue([
       {
         title: 'Ingrese la nueva contraseña',
-        text: 'Bebe contener entre 8 y 20 caracteres!.'
+        preConfirm:(password: string) => this.onValidPassword(password)
       },
-      'Ingrese de nuevo la contraseña'
+      {
+        title: 'Ingrese de nuevo la contraseña',
+        preConfirm:(passwordVerified: string) => {
+         const onEqual = passwordVerified === this.password;
+          if(!onEqual){
+            Swal.showValidationMessage(
+              'Las constraseñas no coinciden');
+          }
+          return onEqual;
+        }
+      }
     ]).then((result: any) => {
-      if (result.value[0] === result.value[1] && result.value[1] >= 8 && result.value[1] <= 20) {
-        this.authSvc.resetPassword(token, result.value[0])
-          .pipe(takeUntil(this.destroy$))
-          .subscribe(res=>{
-            if(res){
-              Swal.fire({
-                icon: 'success',
-                title: 'Contraseña actualizada!',
-                confirmButtonText: 'Aceptar!'
-              }).then(_ => this.router.navigate(['/login']).then());
-            }
-          });
-      } else {
-        Swal.fire({
-          title: 'Las contraseñas no coinciden!. Desea volver a intentarlo?',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Sí',
-          cancelButtonText: 'Cancelar'
-        }).then((resultDelete) => {
-          if (resultDelete.isConfirmed) {
-            this.ngOnInit();
-          } else {
-            this.router.navigate(['/login']).then();
+      this.authSvc.resetPassword(token, result.value[0])
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(res => {
+          if (res) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Contraseña actualizada!',
+              confirmButtonText: 'Aceptar!'
+            }).then(_ => this.router.navigate(['/login']).then());
           }
         });
-      }
     });
+  }
+
+  onValidPassword(password: string) {
+    const errors = [];
+    if (password.length > 20) {
+      errors.push('No puede ingresar más de 20 caracteres');
+    }
+    if (password.length < 8) {
+      errors.push('Ingrese al menos 8 caracteres');
+    }
+    if (password.search(/[a-z]/i) < 0) {
+      errors.push('Debe de contener al menos una letra.');
+    }
+    if (password.search(/[0-9]/) < 0) {
+      errors.push('Debe contener al menos un digito.');
+    }
+    if (errors.length > 0) {
+      Swal.showValidationMessage(
+        `Formato invalido: ${errors.join('\n')}`);
+      return false;
+    }
+    this.password = password;
+    return true;
   }
 
   ngOnDestroy(): void {
