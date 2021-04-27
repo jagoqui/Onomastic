@@ -29,11 +29,12 @@ import { DomSanitizerService } from '@appShared/services/dom-sanitizer.service';
 export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+
   dataSource = new MatTableDataSource();
   columnsToDisplay = [
     'nombre', 'fecha',
     'recurrencia',
-    'estado', 'acciones'
+    'estado'
   ];
   cards: TemplateCard[];
   expandedElement: EventDay;
@@ -78,33 +79,23 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
       this.eventsSvc.inactivateEvent(id)
         .pipe(takeUntil(this.destroy$))
         .subscribe((event) => {
-          //TODO: No me está devolviendo el evento.
-          // if (event) {
-          //   SwAlert.fire(`El evento quedó desactivado! `, '', 'success')
-          //     .then(_ => {
-          //       this.onRefresh();
-          //     });
-          // }
-          SwAlert.fire(`El evento se ha desactivado! `, '', 'success')
-            .then(_ => {
-              this.onRefresh();
-            });
+          if (event) {
+            SwAlert.fire(`El evento se ha desactivado! `, '', 'success')
+              .then(_ => {
+                this.onRefresh();
+              });
+          }
         });
     } else {
       this.eventsSvc.activateEvent(id)
         .pipe(takeUntil(this.destroy$))
         .subscribe((event) => {
-          //TODO: No me está devolviendo el evento.
-          // if (event) {
-          //   SwAlert.fire(`El evento quedó desactivado! `, '', 'success')
-          //     .then(_ => {
-          //       this.onRefresh();
-          //     });
-          // }
-          SwAlert.fire(`El evento se ha activado! `, '', 'success')
-            .then(_ => {
-              this.onRefresh();
-            });
+          if (event) {
+            SwAlert.fire(`El evento se ha activado! `, '', 'success')
+              .then(_ => {
+                this.onRefresh();
+              });
+          }
         });
     }
   }
