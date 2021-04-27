@@ -45,12 +45,13 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
           if(!onEqual){
             Swal.showValidationMessage(
               'Las constraseñas no coinciden');
+            return false;
           }
-          return onEqual;
+          return passwordVerified;
         }
       }
     ]).then((result: any) => {
-      this.authSvc.resetPassword(token, result.value[0])
+      this.authSvc.resetPassword(token, result.value[1])
         .pipe(takeUntil(this.destroy$))
         .subscribe(res => {
           if (res) {

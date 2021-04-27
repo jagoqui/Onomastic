@@ -98,7 +98,7 @@ export class AuthService {
         password
       }
     });
-    return this.http.get<any>(`${environment.apiUrl}/auth/resetpwd`,{params});
+    return this.http.post<any>(`${environment.apiUrl}/auth/resetpwd`,null,{params});
   }
 
   logout() {
