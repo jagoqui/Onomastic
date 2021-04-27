@@ -53,14 +53,15 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
     ]).then((result: any) => {
       this.authSvc.resetPassword(token, result.value[1])
         .pipe(takeUntil(this.destroy$))
-        .subscribe(res => {
-          if (res) {
-            Swal.fire({
-              icon: 'success',
-              title: 'Contraseña actualizada!',
-              confirmButtonText: 'Aceptar!'
-            }).then(_ => this.router.navigate(['/login']).then());
-          }
+        .subscribe(_ => {
+          Swal.fire({
+            icon: 'success',
+            title: 'Contraseña actualizada!',
+            confirmButtonText: 'Aceptar!'
+          }).then(_ => this.router.navigate(['/login']).then());
+        },(err)=>{
+          Swal.showValidationMessage(
+            `Error al resetear la contraseña. ${err.status}`);
         });
     });
   }
