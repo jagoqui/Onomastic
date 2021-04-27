@@ -1,16 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '@adminShared/services/auth.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-reset-password',
   template: ''
 })
-export class ResetPasswordComponent implements OnInit {
+export class ResetPasswordComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<any>();
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private authSvc: AuthService
   ) {
   }
 
@@ -33,11 +38,17 @@ export class ResetPasswordComponent implements OnInit {
       'Ingrese de nuevo la contraseña'
     ]).then((result: any) => {
       if (result.value[0] === result.value[1] && result.value[1] >= 8 && result.value[1] <= 20) {
-        Swal.fire({
-          icon: 'success',
-          title: 'Contraseña actualizada!',
-          confirmButtonText: 'Aceptar!'
-        }).then(_ => this.router.navigate(['/login']).then());
+        this.authSvc.resetPassword(token, result.value[0])
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(res=>{
+            if(res){
+              Swal.fire({
+                icon: 'success',
+                title: 'Contraseña actualizada!',
+                confirmButtonText: 'Aceptar!'
+              }).then(_ => this.router.navigate(['/login']).then());
+            }
+          });
       } else {
         Swal.fire({
           title: 'Las contraseñas no coinciden!. Desea volver a intentarlo?',
@@ -58,4 +69,8 @@ export class ResetPasswordComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next({});
+    this.destroy$.complete();
+  };
 }

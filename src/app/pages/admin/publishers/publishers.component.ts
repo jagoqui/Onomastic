@@ -58,9 +58,9 @@ export class PublishersComponent implements OnInit {
     }
   }
 
-  onStateChange(id: number, state: string) {
+  onStateChange(email: string, state: string) {
     if (state === 'ACTIVO') {
-      this.publishersSvc.deactivate(id)
+      this.publishersSvc.deactivate(email)
         .pipe(takeUntil(this.destroy$))
         .subscribe((user) => {
           if (user) {
@@ -72,7 +72,7 @@ export class PublishersComponent implements OnInit {
           }
         });
     } else {
-      this.publishersSvc.activate(id)
+      this.publishersSvc.activate(email)
         .pipe(takeUntil(this.destroy$))
         .subscribe((user) => {
           if (user) {
