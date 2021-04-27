@@ -1,19 +1,25 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { AuthService } from '@adminShared/services/auth.service';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-forgot-password',
-  template:''
+  template: ''
 })
-export class ForgotPasswordComponent implements OnInit {
+export class ForgotPasswordComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<any>();
 
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private athSvc: AuthService
+  ) {
   }
 
   ngOnInit(): void {
     Swal.fire({
-      title: 'Ingrese el correo a recuperar la contraseña',
+      title: 'Ingrese el correo para recuperar la contraseña',
       input: 'text',
       inputAttributes: {
         autocapitalize: 'off'
@@ -21,26 +27,25 @@ export class ForgotPasswordComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: 'Enviar',
       showLoaderOnConfirm: true,
-      preConfirm: (login) => fetch(`//api.github.com/users/${login}`)
-        .then(response => {
-          if (!response.ok) {
-            throw new Error(response.statusText);
-          }
-          return response.json();
-        })
-        .catch(error => {
+      preConfirm: (email) => this.athSvc.sendMailResetPassword(email)
+        .subscribe((_) => {
+          Swal.fire({
+            icon: 'success',
+            title: `Por favor revise ${email} y siga las instrucciones para resetear la contraseña!`,
+            confirmButtonText: 'Aceptar!'
+          }).then(_ => this.router.navigate(['/login']).then());
+        }, (err) => {
+          console.log(err);
           Swal.showValidationMessage(
-            `El correo no existe: ${error}`
+            `El correo no existe: ${err.status}`
           );
         }),
       allowOutsideClick: () => !Swal.isLoading()
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire({
-          title: `${result.value.login}'s avatar`,
-          imageUrl: result.value.avatar_url
-        }).then((_) => this.router.navigate(['/login']));
-      }
-    });
+    }).then((_) => this.router.navigate(['/login']));
   }
+
+  ngOnDestroy(): void {
+    this.destroy$.next({});
+    this.destroy$.complete();
+  };
 }
