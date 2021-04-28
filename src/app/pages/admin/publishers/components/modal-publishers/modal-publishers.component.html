@@ -66,7 +66,7 @@
         </div>
         <!--Association-->
         <div *ngFor="let mailAssociation of publisherForm.associations['controls'];
-          let i = index" fxLayout='row'
+          let i = index"  fxLayout='row'
              fxFlexAlign='space-between center'>
           <div fxFlex>
             <!-- Association -->
@@ -80,9 +80,9 @@
                   </mat-option>
                 </mat-select>
                 <mat-icon matSuffix>account_balance</mat-icon>
-                <mat-error *ngFor='let error of publisherForm.onSearchErrors(mailAssociation)'>
-                  {{error}}
-                </mat-error>
+<!--                <mat-error *ngFor='let error of publisherForm.onSearchErrors(controls.asociacionPorUsuarioCorreo[i])'>-->
+<!--                  {{error}}-->
+<!--                </mat-error>-->
               </mat-form-field>
             </div>
             <!--Actions list-->

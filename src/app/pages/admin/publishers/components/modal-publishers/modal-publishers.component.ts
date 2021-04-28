@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { AbstractControl } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 import { Subject } from 'rxjs';
@@ -56,6 +56,10 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
 
   get controls(): { [p: string]: AbstractControl } {
     return this.publisherForm.controls;
+  }
+
+  getFormGroup(field: AbstractControl) {
+    return field as FormGroup;
   }
 
   removeAssociation(i: number) {
