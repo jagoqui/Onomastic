@@ -271,7 +271,6 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
       }
     }
     this.mailUserForm.baseForm.patchValue(this.data?.user);
-
   }
 
 }

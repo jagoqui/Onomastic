@@ -65,15 +65,15 @@
           </mat-form-field>
         </div>
         <!--Association-->
-        <div formArrayName='asociacionPorUsuarioCorreo' *ngFor='let mailAssociation of publisherForm.associationsIterable;
-          let i =index' fxLayout='row'
+        <div *ngFor="let mailAssociation of publisherForm.associations['controls'];
+          let i = index" fxLayout='row'
              fxFlexAlign='space-between center'>
           <div fxFlex>
             <!-- Association -->
             <div fxFlex='60'>
               <mat-form-field hideRequiredMarker fxFlex='90' appearance='outline'>
                 <mat-label>Facultad/Escuela</mat-label>
-                <mat-select [formGroupName]='i'>
+                <mat-select (selectionChange)='mailAssociation.setValue($event.value)'>
                   <mat-option>-- Seleccione una opción --</mat-option>
                   <mat-option *ngFor='let association of associationsRes' [value]='association'>
                     {{association['nombre']}}
@@ -87,15 +87,13 @@
             </div>
             <!--Actions list-->
             <div fxFlex='25' fxLayout='row' fxFlexAlign='space-around center'>
-              <div *ngIf='publisherForm.associationsIterable.length>1' fxFlex='45'>
+              <div *ngIf='publisherForm.associations.length>1' fxFlex='45'>
                 <button mat-mini-fab color='warn' title='Eliminar condición'
                         (click)='removeAssociation(i)'>
                   <mat-icon>remove</mat-icon>
                 </button>
               </div>
-              <div
-                *ngIf='publisherForm.associationsIterable.length<5 && publisherForm.associationsIterable.length === i+1'
-                fxFlex='45'>
+              <div *ngIf='publisherForm.associations.length-1 === i && i<5' fxFlex='45'>
                 <button mat-mini-fab color='primary' title='Agregar condición'
                         (click)='publisherForm.addAssociation()'>
                   <mat-icon>playlist_add</mat-icon>

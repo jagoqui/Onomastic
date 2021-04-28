@@ -97,12 +97,9 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.publisherForm.baseForm.get('password').setValidators(null);
-    this.publisherForm.baseForm.get('password').updateValueAndValidity();
-
     if (this.data?.publisher) {
       this.actionTODO = 'EDITAR';
-      this.pathFormData(this.data.publisher);
+      this.pathFormData();
     } else {
       this.actionTODO = 'AGREGAR';
     }
@@ -122,12 +119,20 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   };
 
-  private pathFormData(event: Publisher): void {
-    const associations = event.asociacionPorUsuario;
+  private pathFormData(): void {
+    const{
+      nombre, email,
+      estado, rol,
+      asociacionPorUsuario
+    }= this.data.publisher as Publisher;
 
-    for (let i = 0; i < associations.length - 1; i++) {
+    for (let i = 0; i < asociacionPorUsuario?.length - 1; i++) {
       this.publisherForm.addAssociation();
     }
-    this.publisherForm.baseForm.patchValue(event);
+    const publisher =Object({
+      nombre, email,
+      estado, rol,
+      asociacionPorUsuario});
+    this.publisherForm.baseForm.patchValue(publisher);
   }
 }

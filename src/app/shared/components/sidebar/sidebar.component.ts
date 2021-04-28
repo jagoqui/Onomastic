@@ -1,10 +1,10 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {AuthService} from '@adminShared/services/auth.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { AuthService } from '@adminShared/services/auth.service';
 
-import {SidenavControllerService,} from '../../services/sidenav-controller.service';
-import {ThemeSwitcherControllerService,} from '../../services/theme-switcher-controller.service';
+import { SidenavControllerService } from '../../services/sidenav-controller.service';
+import { ThemeSwitcherControllerService } from '../../services/theme-switcher-controller.service';
 
 @Component({
   selector: 'app-sidebar',
@@ -20,6 +20,10 @@ export class SidebarComponent implements OnInit, OnDestroy {
     public sidenavController: SidenavControllerService,
     private themeSwitcherController: ThemeSwitcherControllerService
   ) {
+  }
+
+  get isAdmin(): boolean {
+    return this.authSvc.isPublisherAdmin;
   }
 
   onExit() {
