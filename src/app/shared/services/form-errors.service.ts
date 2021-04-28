@@ -28,9 +28,7 @@ export class FormErrorsService {
       const errors: string[] = [];
       for (const key in controls) {
         if (controls.hasOwnProperty(key)) {
-          for (const error of this.mapErrors(controls[key])) {
-            errors.push(error);
-          }
+          errors.push(this.mapErrors(controls[key])?.join());
         }
       }
       return errors;

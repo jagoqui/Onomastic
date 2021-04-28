@@ -43,6 +43,16 @@ export class AuthService {
     return this.isLogged.getValue();
   }
 
+  get isPublisherAdmin(): boolean{
+    let isAdmin = false;
+    this.userResponse$.subscribe((userRes: AuthRes) => {
+      if (userRes) {
+        isAdmin = userRes.role ==='ADMIN';
+      }
+    });
+    return isAdmin;
+  }
+
   getUserToken(): string {
     let token: string = null;
     this.userResponse$.subscribe((userRes: AuthRes) => {

@@ -144,6 +144,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   }
 
   onClose(close?: boolean): void {
+    console.log(this.mailUserForm.baseForm.value);
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.mailUserForm.onReset();
       const associations = this.mailUserForm.baseForm.controls.asociacionPorUsuarioCorreo.value;
@@ -271,7 +272,6 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
       }
     }
     this.mailUserForm.baseForm.patchValue(this.data?.user);
-
   }
 
 }

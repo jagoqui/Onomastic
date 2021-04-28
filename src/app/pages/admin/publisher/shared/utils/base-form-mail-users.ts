@@ -1,8 +1,8 @@
-import {Injectable} from '@angular/core';
-import {FormArray, FormBuilder, FormControl, FormGroup, Validators,} from '@angular/forms';
+import { Injectable } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import * as moment from 'moment';
 
-@Injectable({providedIn: 'root'})
+@Injectable({ providedIn: 'root' })
 export class BaseFormMailUsers {
   errorsMessage = {
     nombre: '',
@@ -21,9 +21,28 @@ export class BaseFormMailUsers {
     plataformaPorUsuarioCorreo: this.createByNameArrayError('id')
   };
   baseForm = this.createBaseForm();
-  private emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
 
   constructor(private fb: FormBuilder) {
+  }
+
+  get academicProgram(): AbstractControl {
+    // eslint-disable-next-line @typescript-eslint/dot-notation
+    return this.baseForm.get('programaAcademicoPorUsuarioCorreo') as AbstractControl;
+  }
+
+  private static createByNameFormGroup(id: string): FormGroup {
+    if (id === 'id') {
+      return new FormGroup({
+        id: new FormControl('', Validators.required),
+        nombre: new FormControl('', Validators.required)
+      });
+    } else {
+      return new FormGroup({
+        id: new FormControl('', Validators.required),
+        codigo: new FormControl('', Validators.required),
+        nombre: new FormControl('', Validators.required)
+      });
+    }
   }
 
   createBaseForm(): FormGroup {
@@ -36,12 +55,12 @@ export class BaseFormMailUsers {
       }),
       fechaNacimiento: ['', [Validators.required, this.validDate]],
       genero: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
+      email: ['', [Validators.required, Validators.email]],
       estado: ['', [Validators.required]],
-      asociacionPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')]),
-      programaAcademicoPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('codigo')]),
-      vinculacionPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')]),
-      plataformaPorUsuarioCorreo: this.fb.array([this.createByNameFormGroup('id')]),
+      asociacionPorUsuarioCorreo: this.fb.array([BaseFormMailUsers.createByNameFormGroup('id')]),
+      programaAcademicoPorUsuarioCorreo: this.fb.array([BaseFormMailUsers.createByNameFormGroup('codigo')]),
+      vinculacionPorUsuarioCorreo: this.fb.array([BaseFormMailUsers.createByNameFormGroup('id')]),
+      plataformaPorUsuarioCorreo: this.fb.array([BaseFormMailUsers.createByNameFormGroup('id')])
     });
   }
 
@@ -53,6 +72,7 @@ export class BaseFormMailUsers {
       });
     } else {
       return new Array({
+        id: '',
         codigo: '',
         nombre: ''
       });
@@ -61,7 +81,7 @@ export class BaseFormMailUsers {
 
   addByNameFormGroup(formGroup: string) {
     const byName = this.baseForm.get(formGroup) as FormArray;
-    byName.push(this.createByNameFormGroup(formGroup === 'programaAcademicoPorUsuarioCorreo' ? 'codigo' : 'id'));
+    byName.push(BaseFormMailUsers.createByNameFormGroup(formGroup === 'programaAcademicoPorUsuarioCorreo' ? 'codigo' : 'id'));
     this.addByNameArrayError(formGroup);
   }
 
@@ -121,43 +141,30 @@ export class BaseFormMailUsers {
     this.baseForm.reset();
   }
 
-  private createByNameFormGroup(id: string): FormGroup {
-    if (id === 'id') {
-      return new FormGroup({
-        id: new FormControl('', Validators.required),
-        nombre: new FormControl('', Validators.required)
-      });
-    } else {
-      return new FormGroup({
-        codigo: new FormControl('', Validators.required),
-        nombre: new FormControl('', Validators.required)
-      });
-    }
-  }
 
   private getErrorMessage(field: string, group?: string, i?: number): void {
-    let errorField = null;
+    let errorField: ValidationErrors;
     if (group) {
       if (i !== null) {
         const arrayControl = this.baseForm.get(group) as FormArray;
-        const {errors} = arrayControl.at(i).get(field);
+        const { errors } = arrayControl.at(i).get(field);
         errorField = errors;
       } else {
-        const {errors} = this.baseForm.get([group, field]);
+        const { errors } = this.baseForm.get([group, field]);
         errorField = errors;
       }
     } else {
-      const {errors} = this.baseForm.get(field);
+      const { errors } = this.baseForm.get(field);
       errorField = errors;
     }
 
 
     if (errorField) {
-      const minlenght = errorField?.minlength?.requiredLength;
+      const minlength = errorField?.minlength?.requiredLength;
       const messages = {
         required: 'es requerido!',
         pattern: `es ivalido!`,
-        minlength: `debe contener al ${minlenght} caracteres`,
+        minlength: `debe contener al ${minlength} caracteres`
       };
       const errorKey = Object.keys(errorField).find(Boolean);
 

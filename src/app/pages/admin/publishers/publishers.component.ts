@@ -1,24 +1,28 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
-import { ModalPublishersComponent, } from './components/modal-publishers/modal-publishers.component';
+import { ModalPublishersComponent } from './components/modal-publishers/modal-publishers.component';
 import { PublisherService } from '@adminShared/services/publisher.service';
 import { Publisher } from '@adminShared/models/publisher.model';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
 
 @Component({
   selector: 'app-publishers',
   templateUrl: './publishers.component.html',
   styleUrls: ['./publishers.component.scss']
 })
-export class PublishersComponent implements OnInit {
+export class PublishersComponent implements OnInit, OnDestroy {
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort) sort: MatSort;
 
   dataSource = new MatTableDataSource();
   columnsToDisplay = [
     'nombre', 'email',
-    'rol','estado'
+    'rol', 'estado'
   ];
   private numPublisher = 0;
   private destroy$ = new Subject<any>();
@@ -45,17 +49,16 @@ export class PublishersComponent implements OnInit {
     }
   }
 
+  showProperty(publisher: Publisher, property: string) {
+    if (property === 'rol') {
+      return publisher[property].nombre;
+    }
+    return publisher[property];
+  }
+
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
-  }
-
-  onRefresh(refreshEvent?: boolean): void {
-    if (refreshEvent || refreshEvent !== false) {
-      this.destroy$.next({});
-      this.destroy$.complete();
-      this.ngOnInit();
-    }
   }
 
   onStateChange(email: string, state: string) {
@@ -64,7 +67,7 @@ export class PublishersComponent implements OnInit {
         .pipe(takeUntil(this.destroy$))
         .subscribe((user) => {
           if (user) {
-            SwAlert.fire(`El usuario no recibirá más correos! `, '', 'success')
+            SwAlert.fire(`El publicador está desactivado! `, '', 'success')
               .then(r => {
                 this.onRefresh();
                 console.log(r);
@@ -76,7 +79,7 @@ export class PublishersComponent implements OnInit {
         .pipe(takeUntil(this.destroy$))
         .subscribe((user) => {
           if (user) {
-            SwAlert.fire(`El usuario comenzará a recibir correos! `, '', 'success')
+            SwAlert.fire(`El publicador está activado! `, '', 'success')
               .then(r => {
                 this.onRefresh();
                 console.log(r);
@@ -111,18 +114,25 @@ export class PublishersComponent implements OnInit {
     });
   }
 
+  onRefresh(refreshEvent?: boolean): void {
+    if (refreshEvent || refreshEvent !== false) {
+      this.destroy$.next({});
+      this.destroy$.complete();
+      this.ngOnInit();
+    }
+  }
+
+
   ngOnInit(): void {
     this.publishersSvc.getAll().subscribe((publisher) => {
       this.dataSource.data = publisher;
-      //TODO: Crear un servicio desde el back para obtener el número de usuarios
+      //TODO: Crear un servicio desde el back para obtener el número de publicadores
       this.numPublisher = this.dataSource.data.length;
     });
   }
 
-  showProperty(publisher: Publisher, property: string) {
-    if(property=== 'rol'){
-      return publisher[property].nombre;
-    }
-    return publisher[property];
+  ngOnDestroy(): void {
+    this.destroy$.next({});
+    this.destroy$.complete();
   }
 }

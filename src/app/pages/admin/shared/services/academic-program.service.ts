@@ -13,7 +13,7 @@ export class AcademicProgramService {
 
   getAcademicPrograms(): Observable<ByIdOrCode[]> {
     return this.http
-      .get<ByIdOrCode[]>(`${environment.apiUrl}/programasacademicos`);
+      .get<ByIdOrCode[]>(`${environment.apiUrl}/usuarios/programasporasociacion`);
   }
 
   getAcademicProgramByCode(code: number): Observable<ByIdOrCode> {

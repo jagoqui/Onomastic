@@ -19,7 +19,7 @@
     <mat-icon matListIcon>date_range</mat-icon>
     <span class="nav-link">Eventos</span>
   </a>
-  <a mat-list-item routerLink="/ADMIN/publishers" routerLinkActive="active-list-item"
+  <a *ngIf='isAdmin' mat-list-item routerLink="/ADMIN/publishers" routerLinkActive="active-list-item"
      (click)="sidenavController.openSidebar(false)">
     <mat-icon matListIcon>public</mat-icon>
     <span class="nav-link">Publicadores</span>
