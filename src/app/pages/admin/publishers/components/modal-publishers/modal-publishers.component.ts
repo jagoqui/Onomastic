@@ -1,21 +1,15 @@
 import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { AbstractControl, FormControl, FormGroup } from '@angular/forms';
+import { AbstractControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 import { Subject } from 'rxjs';
-import { LoaderService } from '@app/shared/services/loader.service';
 import { ACTIONS, ByIdOrCode } from '@adminShared/models/shared.model';
 import { PublisherService } from '@adminShared/services/publisher.service';
 import { AssociationService } from '@adminShared/services/association.service';
 import { BaseFormPublisher } from '@adminShared/utils/base-form-publisher';
 import { Publisher, Role } from '@adminShared/models/publisher.model';
 
-// eslint-disable-next-line no-shadow
-enum Action {
-  edit = 'edit',
-  new = 'new',
-}
 
 @Component({
   selector: 'app-modal-publishers',
@@ -49,8 +43,7 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
     private dialogRef: MatDialogRef<ModalPublishersComponent>,
     public publisherForm: BaseFormPublisher,
     private publisherSvc: PublisherService,
-    private associationSvc: AssociationService,
-    private loaderSvc: LoaderService
+    private associationSvc: AssociationService
   ) {
   }
 
@@ -86,18 +79,7 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
             'success').then(r => console.log(r)).then(r => console.log(r));
           this.onClose(true);
         }
-      }, (err) => {
-        console.table('Error guardando el publicador :> ', this.publisherForm.baseForm.value);
-        SwAlert.fire({
-          icon: 'error',
-          html: '',
-          title: 'Oops...',
-          text: ' Algo salió mal!',
-          footer: `${err}`
-        }).then(_ => {
-          this.loaderSvc.setLoading(false);
-        });
-      });
+      }, () => SwAlert.showValidationMessage('Error obteniendo publicadores'));
   }
 
   ngOnInit(): void {
@@ -113,9 +95,7 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
         if (associations) {
           this.associationsRes = associations;
         }
-      }, (err) => {
-        console.log('Get condition error! :> ', err);
-      });
+      }, () => SwAlert.showValidationMessage('Error obteniendo asociaciones'));
   }
 
   ngOnDestroy(): void {
@@ -124,19 +104,20 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
   };
 
   private pathFormData(): void {
-    const{
+    const {
       nombre, email,
       estado, rol,
       asociacionPorUsuario
-    }= this.data.publisher as Publisher;
+    } = this.data.publisher as Publisher;
 
     for (let i = 0; i < asociacionPorUsuario?.length - 1; i++) {
       this.publisherForm.addAssociation();
     }
-    const publisher =Object({
+    const publisher = Object({
       nombre, email,
       estado, rol,
-      asociacionPorUsuario});
+      asociacionPorUsuario
+    });
     this.publisherForm.baseForm.patchValue(publisher);
   }
 }

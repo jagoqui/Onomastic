@@ -1,13 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import SwAlert from 'sweetalert2';
 import { EmailUserService } from '@pages/admin/publisher/shared/services/email-user.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'app-mail-users-subscription-status',
   template: ''
 })
-export class MailUsersSubscriptionStatusComponent implements OnInit {
+export class MailUsersSubscriptionStatusComponent implements OnInit, OnDestroy {
+  private destroy$ = new Subject<any>();
 
   constructor(
     private router: Router,
@@ -30,29 +33,29 @@ export class MailUsersSubscriptionStatusComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         const emailBase64 = btoa(email);
-        this.emailUserService.unsubscribe(emailBase64).subscribe(res => {
-          if (res) {
-            SwAlert.fire(
-              'Subscripción cancelada!',
-              `
+        this.emailUserService.unsubscribe(emailBase64)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe(res => {
+            if (res) {
+              SwAlert.fire(
+                'Subscripción cancelada!',
+                `
                         No recibirá más correos de Onomástico, para más información
                         <a href='${this.router.navigate(['PUBLISHER/help'])}'>Ayuda</a>.
                     `,
-              'success'
-            ).then(_ => {
-            });
-          } else {
-            SwAlert.fire(
-              'El usuario no exite!',
-              `
+                'success'
+              ).then();
+            } else {
+              SwAlert.fire(
+                'El usuario no exite!',
+                `
                         Para más información
                         <a href='${this.router.navigate(['PUBLISHER/help'])}'>Ayuda</a>.
                     `,
-              'error'
-            ).then(_ => {
-            });
-          }
-        });
+                'error'
+              ).then();
+            }
+          }, () => SwAlert.showValidationMessage('Error desactivando usuario.'));
       } else {
         SwAlert.fire(
           'Subscripción renovada!',
@@ -67,4 +70,8 @@ export class MailUsersSubscriptionStatusComponent implements OnInit {
     });
   }
 
+  ngOnDestroy(): void {
+    this.destroy$.next({});
+    this.destroy$.complete();
+  };
 }

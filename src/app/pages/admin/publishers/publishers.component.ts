@@ -68,24 +68,18 @@ export class PublishersComponent implements OnInit, OnDestroy {
         .subscribe((user) => {
           if (user) {
             SwAlert.fire(`El publicador está desactivado! `, '', 'success')
-              .then(r => {
-                this.onRefresh();
-                console.log(r);
-              });
+              .then(r => this.onRefresh());
           }
-        });
+        }, () => SwAlert.showValidationMessage('Error desactivando publicador'));
     } else {
       this.publishersSvc.activate(email)
         .pipe(takeUntil(this.destroy$))
         .subscribe((user) => {
           if (user) {
             SwAlert.fire(`El publicador está activado! `, '', 'success')
-              .then(r => {
-                this.onRefresh();
-                console.log(r);
-              });
+              .then(() => this.onRefresh());
           }
-        });
+        }, () => SwAlert.showValidationMessage('Error activando publicador'));
     }
   }
 
@@ -106,10 +100,8 @@ export class PublishersComponent implements OnInit, OnDestroy {
           .pipe(takeUntil(this.destroy$))
           .subscribe((_) => {
             SwAlert.fire(`El publicador fue eliminado! `, '', 'success')
-              .then(_ => {
-                this.onRefresh();
-              });
-          });
+              .then(() => this.onRefresh());
+          }, () => SwAlert.showValidationMessage('Error eliminado publicador'));
       }
     });
   }

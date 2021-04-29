@@ -6,15 +6,13 @@ import SwAlert from 'sweetalert2';
 
 import { LoaderService } from '../services/loader.service';
 import { AuthService } from '@adminShared/services/auth.service';
-import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class InterceptorService implements HttpInterceptor {
 
   constructor(
     private loaderSvc: LoaderService,
-    public  authSvc: AuthService,
-    private router: Router,
+    public authSvc: AuthService
   ) {
   }
 
@@ -36,11 +34,11 @@ export class InterceptorService implements HttpInterceptor {
             icon: 'error',
             title: ` Algo salió mal en la petición.`,
             footer: `
-                <span style="color: red;">
+                <span style='color: red;'>
                     Error ${err.status}! <b> ${err.status === 403 ? 'Necesita permisos de admin.' : err.error?.error}</b>
                     ${err.status === 401 ? 'Por seguridad se cerrará la sesión.' : ''}
                 </span>
-                <span>&nbsp;&nbsp;Necesitas <a href="">ayuda</a>?</span>.`
+                <span>&nbsp;&nbsp;Necesitas <a href=''>ayuda</a>?</span>.`
           }).then(_ => {
             this.loaderSvc.setLoading(false);
             console.warn(this.getServerErrorMessage(err));
@@ -55,7 +53,7 @@ export class InterceptorService implements HttpInterceptor {
 
   private getServerErrorMessage(error: HttpErrorResponse): string {
     switch (error.status) {
-      case 401:{
+      case 401: {
         this.authSvc.logout();
         return `Forbidden: ${error.message}`;
       }

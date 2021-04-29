@@ -289,7 +289,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
 
   onSave() {
     if (this.uploadImagesSvc.isImgStorage()) {
-      console.log('entra');
       //TODO: Si hay error en la actulización de la plantilla está eliminado la imagen
       this.getAssociations();
     } else {

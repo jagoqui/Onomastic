@@ -1,6 +1,5 @@
-
-import { Injectable, NgIterable } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { Injectable } from '@angular/core';
+import { AbstractControl, FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { FormErrorsService } from '@appShared/services/form-errors.service';
 
 @Injectable({ providedIn: 'root' })
@@ -8,17 +7,17 @@ export class BaseFormPublisher {
 
   public baseForm = this.createBaseForm();
 
-  get associations(): FormArray{
+  constructor(
+    private fb: FormBuilder,
+    private formErrorsSvc: FormErrorsService) {
+  }
+
+  get associations(): FormArray {
     return this.baseForm.get('asociacionPorUsuario') as FormArray;
   }
 
   get controls(): { [p: string]: AbstractControl } {
     return this.baseForm.controls;
-  }
-
-  constructor(
-    private fb: FormBuilder,
-    private formErrorsSvc: FormErrorsService) {
   }
 
   createBaseForm(): FormGroup {
@@ -30,7 +29,7 @@ export class BaseFormPublisher {
         id: [null, [Validators.required]],
         nombre: [null, [Validators.required]]
       }),
-      asociacionPorUsuario: this.fb.array([this.createAssociationField()]),
+      asociacionPorUsuario: this.fb.array([this.createAssociationField()])
     });
   }
 
@@ -45,7 +44,7 @@ export class BaseFormPublisher {
     }
   }
 
-  onSearchErrors(field: AbstractControl | FormGroup){
+  onSearchErrors(field: AbstractControl | FormGroup) {
     return this.formErrorsSvc.searchErrors(field);
   }
 
