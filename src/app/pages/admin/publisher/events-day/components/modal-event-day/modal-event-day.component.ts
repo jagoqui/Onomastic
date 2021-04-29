@@ -6,10 +6,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
 import { EventDayService } from '@pages/admin/publisher/shared/services/event-day.service';
 import { TemplateCardsService } from '@pages/admin/publisher/shared/services/template-cards.service';
-import * as moment from 'moment';
 import { Subject } from 'rxjs/internal/Subject';
 import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
+import Swal from 'sweetalert2';
 import { BaseFormEventDay } from '@pages/admin/publisher/shared/utils/base-form-event-day';
 import { TemplateCard } from '@adminShared//models/template-card.model';
 import { ConditionRes, EventDay, Parameter } from '@adminShared//models/event-day.model';
@@ -108,13 +108,19 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
         this.sidenavOpened = true;
         this.templateCardsService.getAllCards()
           .pipe(takeUntil(this.destroy$))
-          .subscribe(cards => this.cards = cards);
+          .subscribe(cards => this.cards = cards,()=>{
+            Swal.showValidationMessage(
+              'Error cargando las plantillas');
+          });
       }
     } else {
       this.sidenavOpened = true;
       this.templateCardsService.getAllCards()
         .pipe(takeUntil(this.destroy$))
-        .subscribe(cards => this.cards = cards);
+        .subscribe(cards => this.cards = cards,()=>{
+          Swal.showValidationMessage(
+            'Error cargando las plantillas');
+        });
     }
   }
 
@@ -147,6 +153,9 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
             'success').then(r => console.log(r)).then(r => console.log(r));
           this.onClose(true);
         }
+      }, (err) => {
+        Swal.showValidationMessage(
+          `Error guardando el evento. ${err.status}`);
       });
   }
 
@@ -174,8 +183,9 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
           //TODO: Crear dinamicamente 'selectedIdFilterAssociation'
           this.selectedIdFilterAssociation = new Array(this.conditionsRes.length + 1);
         }
-      }, (err) => {
-        console.log('Get condition error! :> ', err);
+      }, (_) => {
+        Swal.showValidationMessage(
+          `No se pudo cargar las condiciones. `);
       });
   }
 

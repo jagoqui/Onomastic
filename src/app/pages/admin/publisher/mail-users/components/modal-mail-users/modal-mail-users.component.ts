@@ -178,17 +178,8 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
       this.onClose(true);
       this.refresh.emit(true);
       this.mailUserForm.onReset();
-    }, (err) => {
-      SwAlert.fire({
-        icon: 'error',
-        html: `El usuario no se  ${this.data?.user ? 'actualizó' : 'guardó'}`,
-        title: 'Oops...',
-        text: 'Algo salió mal!',
-        footer: `<span style = 'color:red'>${err}</span>`
-      }).then(_ => {
-        this.loaderSvc.setLoading(false);
-        console.warn(`Error el destinat no se pudo ${this.data?.user ? 'actualizar' : 'guardar'}.`, user);
-      });
+    }, ()=>{
+      SwAlert.showValidationMessage('El destinatario no se guardó');
     });
   }
 
@@ -205,8 +196,8 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
         if (associations) {
           this.associations = associations;
         }
-      }, (err) => {
-        console.log('Get associations error! :> ', err);
+      }, ()=>{
+        SwAlert.showValidationMessage('Error cargando las asociaciones');
       })
     );
 

@@ -7,6 +7,7 @@ import { environment } from '@env/environment';
 
 import { AuthService } from '@adminShared/services/auth.service';
 import { BaseFormAuth } from '@adminShared/utils/base-form-auth';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -45,6 +46,9 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.router.navigate(['/home']).then(r => console.log(r));
           this.loginForm.baseForm.reset();
         }
+      },()=>{
+        Swal.showValidationMessage(
+          'No se pudo iniciar sesion, verifique su email y contraseña.');
       })
     );
   }
@@ -94,7 +98,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private onResetCaptcha(): void {
     this.captchaElem?.resetCaptcha();
-
   }
 
 }
