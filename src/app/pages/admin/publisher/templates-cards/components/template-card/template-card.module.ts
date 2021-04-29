@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { TemplateCardComponent } from '@pages/admin/publisher/template-card/template-card.component';
+import { TemplateCardComponent } from '@publisher/templates-cards/components/template-card/template-card.component';
 import { SharedModule } from '@appShared/shared.module';
 
 

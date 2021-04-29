@@ -89,11 +89,12 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
         .subscribe((user) => {
           if (user) {
             SwAlert.fire(`El usuario no recibirá más correos! `, '', 'success')
-              .then(r => {
+              .then(() => {
                 this.onRefresh();
-                console.log(r);
               });
           }
+        },()=>{
+          SwAlert.showValidationMessage('Error desactivando destinatario');
         });
     } else {
       this.mailUserSvc.subscribe(email) // TODO: Pedir que el back resiba el email encriptado
@@ -101,11 +102,12 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
         .subscribe((user) => {
           if (user) {
             SwAlert.fire(`El usuario comenzará a recibir correos! `, '', 'success')
-              .then(r => {
+              .then(() => {
                 this.onRefresh();
-                console.log(r);
               });
           }
+        },()=>{
+          SwAlert.showValidationMessage('Error activando destinatario');
         });
     }
   }
@@ -127,6 +129,8 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
             .subscribe((_) => {
               SwAlert.fire('Eliminado!', 'El destinatario se ha eliminado', 'success').then();
               this.ngOnInit();
+            },()=>{
+              SwAlert.showValidationMessage('Error elimando las destinatario');
             });
         }
       }
@@ -150,11 +154,15 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
       .subscribe((user) => {
       this.dataSource.data = user;
       this.numUsers = this.dataSource.data.length;
-    });
+    },()=>{
+        SwAlert.showValidationMessage('Error cargando los destinatarios');
+      });
     this.mailDataSentSvc.getAll()
       .pipe(takeUntil(this.destroy$))
       .subscribe((dataSent) => {
         this.numMailsDataSent= dataSent.length;
+      },()=>{
+        SwAlert.showValidationMessage('Error cargando las los correos enviados');
       });
   }
 

@@ -11,12 +11,8 @@ import { EmailUserService } from '@pages/admin/publisher/shared/services/email-u
 import { AssociationService } from '@pages/admin/shared/services/association.service';
 import { TemplateCard } from '@adminShared/models/template-card.model';
 import { ThemeSwitcherControllerService } from '@appShared/services/theme-switcher-controller.service';
-import { LoaderService } from '@appShared/services/loader.service';
+import { ACTIONS } from '@adminShared/models/shared.model';
 
-enum Action {
-  edit = 'Actualizar',
-  new = 'Agregar',
-}
 
 @Component({
   selector: 'app-modal',
@@ -30,10 +26,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   config: any;
   iconSwitchTheme: string;
   card: TemplateCard;
-  cardImageEdit: File = null;
-  urlImageEdit: string = null;
   maxChars = 400;
-  actionTODO = '';
+  actionTODO: ACTIONS;
   cardImageStyles = `
     <style>
         #templateCardImage{
@@ -61,8 +55,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     private templateCardsService: TemplateCardsService,
     private uploadImagesSvc: UploadImageService,
     private emailUserSvc: EmailUserService,
-    private associationSvc: AssociationService,
-    private loaderSvc: LoaderService
+    private associationSvc: AssociationService
   ) {
   }
 
@@ -70,86 +63,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     //TODO: Agregar más condiciones
     const cardImg = document.getElementById('templateCardImage');
     return !!cardImg;
-  }
-
-  onClose(close?: boolean): void {
-    if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
-      this.joditEditor.resetEditor();
-      this.dialogRef.close();
-    }
-  }
-
-  onSave() {
-    if (!this.uploadImagesSvc?.img) {
-      this.getAssociations();
-    } else {
-      this.uploadImagesSvc.imageUpload(this.uploadImagesSvc.img)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe(img => {
-          // eslint-disable-next-line no-debugger
-          debugger;
-          if (img?.fileDownloadUri) {
-
-            const imgCard = document.getElementById('templateCardImage');
-            imgCard.setAttribute('src', img.fileDownloadUri);
-            this.uploadImagesSvc.imgName = img.fileName;
-          }
-          this.getAssociations();
-        }, (err) => {
-          SwAlert.fire({
-            icon: 'error',
-            html: `La imagen de la plantilla no se  guardó, por integridad de los datos no se creará la plantilla.`,
-            title: 'Oops...',
-            text: 'Algo salió mal!',
-            footer: `<p style='color: red; display: block;'>
-                    Error ${err.status}! <b> ${err.error?.error === 'Forbidden' ? 'Necesita permisos de admin.' : ''}</b>
-                    <b>${err.error?.error}</b>.`
-          }).then(r => {
-            this.loaderSvc.setLoading(false);
-            this.deleteImage();
-            console.warn(`Error la plantilla no se pudo ${this.data?.card ? 'actualizar' : 'guardar'} la plantilla.`, r);
-            console.table(this.card);
-          });
-        });
-    }
-  }
-
-  getAssociations() {
-    this.associationSvc.getAssociationsByPublisher()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(associations => {
-        this.card = {
-          id: this.data?.card?.id ? this.data.card.id : null,
-          texto: this.joditEditor.editor.value,
-          asociacionesPorPlantilla: associations
-        };
-        this.templateCardsService.saveTemplateCard(this.card)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((cardRes) => {
-            if (cardRes) {
-              SwAlert.fire(`Plantilla ${this.data?.card ? 'Actualizada!' : 'Guardada!'} `, '', 'success')
-                .then(r => console.log(`Se ${this.data?.card ? 'actualizó' : 'guardó'} la plantilla exitosamente.`, r));
-              this.onClose(true);
-            }
-          }, (err) => {
-            SwAlert.fire({
-              icon: 'error',
-              html: `La plantilla no se  ${this.data?.card ? 'actualizó' : 'guardó'}`,
-              title: 'Oops...',
-              text: 'Algo salió mal!',
-              footer: `
-                <span style='color: red;'>
-                    Error ${err.status}! <b> ${err.error?.error === 'Forbidden' ? 'Necesita permisos de admin.' : err.error?.error}</b>
-                </span>
-                <span style='display: block;'>&nbsp;&nbsp;Necesitas <a href=''>ayuda</a>?</span>.`
-            }).then(r => {
-              this.loaderSvc.setLoading(false);
-              this.deleteImage();
-              console.warn(`Error la plantilla no se pudo ${this.data?.card ? 'actualizar' : 'guardar'} la plantilla.`, r, this.card);
-            });
-          });
-      });
-    this.uploadImagesSvc.setImgNull();
   }
 
   setEditorConfig(themeEditor: string) {
@@ -354,14 +267,12 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         },
         beforePaste: (event) => {
           if (event.clipboardData.types.length === 0) {
-            SwAlert.fire('No puedes cargar la plantilla de esta forma, utiliza la herramienta de cargar imágenes!', '', 'error').then(_ => {
-            });
+            SwAlert.fire('No puedes cargar la plantilla de esta forma, utiliza la herramienta de cargar imágenes!', '', 'error').then();
             return false;
           }
         },
         drop: (event) => {
-          SwAlert.fire('No puedes cargar la plantilla de esta forma, utiliza la herramienta de cargar imágenes!', '', 'error').then(_ => {
-          });
+          SwAlert.fire('No puedes cargar la plantilla de esta forma, utiliza la herramienta de cargar imágenes!', '', 'error').then();
           event.preventDefault();
           event.stopPropagation();
         }
@@ -369,41 +280,107 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     };
   }
 
-  deleteImage() {
-    this.uploadImagesSvc.deleteImage()
+  onClose(close?: boolean): void {
+    if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
+      this.joditEditor.resetEditor();
+      this.dialogRef.close();
+    }
+  }
+
+  onSave() {
+    if (this.uploadImagesSvc.isImgStorage()) {
+      //TODO: Si hay error en la actulización de la plantilla está eliminado la imagen
+      this.getAssociations();
+    } else {
+      this.uploadImagesSvc.imageUpload()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(img => {
+          if (img?.fileDownloadUri) {
+            const imgCard = document.getElementById('templateCardImage');
+            imgCard.setAttribute('src', img.fileDownloadUri);
+            //TODO: Acá el back debe devolver el archivo
+            this.uploadImagesSvc.getFileFromUrl(img?.fileDownloadUri, img.fileName).then((file) => {
+              this.uploadImagesSvc.img = file;
+              this.uploadImagesSvc.imgURI = img.fileDownloadUri;
+            });
+          }
+          this.getAssociations();
+        }, (err) => {
+          SwAlert.fire({
+            icon: 'error',
+            title: 'Algo salió mal!',
+            html: `
+              La imagen de la plantilla no se  guardó, por integridad de los datos no se
+              ${this.data?.card ? 'actualizará' : 'creará'} la plantilla.`,
+            footer: `
+                <span style='color: red;'>
+                    Error ${err.status}! <b> ${err.status === 403 ? 'Necesita permisos de admin.' : err.error?.error}</b>
+                    ${err.status === 401 ? 'Por seguridad se cerrará la sesión.' : ''}
+                </span>
+                <span>&nbsp;&nbsp;Necesitas <a href=''>ayuda</a>?</span>.`
+          });
+        });
+    }
+  }
+
+  getAssociations() {
+    this.associationSvc.getAssociationsByPublisher()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(_ => {
-        SwAlert.fire('Imagen eliminada!', 'La imagen de la plantilla fue eliminada correctamente', 'success').then();
-      }, (err) => {
-        this.loaderSvc.setLoading(false);
-        SwAlert.fire('Eliminación fallida!', 'La plantilla no se cargó', 'warning').then();
-        console.warn(err);
-      });
+      .subscribe(associations => {
+        this.card = {
+          id: this.data?.card?.id ? this.data.card.id : null,
+          texto: this.joditEditor.editor.value,
+          asociacionesPorPlantilla: associations
+        };
+        this.templateCardsService.saveTemplateCard(this.card)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((cardRes) => {
+            if (cardRes) {
+              SwAlert.fire(`Plantilla ${this.data?.card ? 'Actualizada!' : 'Guardada!'} `, '', 'success').then();
+              this.onClose(true);
+            }
+          }, (err) => {
+            SwAlert.fire({
+              icon: 'error',
+              title: 'Algo salió mal!',
+              html: `La plantilla no se  ${this.data?.card ? 'actualizó' : 'guardó'}`,
+              footer: `
+                <span style='color: red;'>
+                    Error ${err.status}! <b> ${err.status === 403 ? 'Necesita permisos de admin.' : err.error?.error}</b>
+                    ${err.status === 401 ? 'Por seguridad se cerrará la sesión.' : ''}
+                </span>
+                <span>&nbsp;&nbsp;Necesitas <a href=''>ayuda</a>?</span>.`
+            }).then(() => {
+              if (this.actionTODO === 'AGREGAR') {
+                this.uploadImagesSvc.onDeleteImage();
+              }
+            });
+          });
+      }, () => SwAlert.showValidationMessage('Error cargando asociaciones'));
+    this.uploadImagesSvc.img = null;
   }
 
   ngOnInit() {
     this.themeSwitcherController.themeClass$
       .pipe(takeUntil(this.destroy$))
-      .subscribe(
-        (theme: string) => {
-          const themeEditor = theme === 'light-theme' ? 'default' : 'dark';
-          this.setEditorConfig(themeEditor);
-        }
-      );
+      .subscribe((theme: string) => {
+        const themeEditor = theme === 'light-theme' ? 'default' : 'dark';
+        this.setEditorConfig(themeEditor);
+      });
   };
 
   async ngAfterViewInit() {
     if (this.data?.card) {
-      this.actionTODO = Action.edit;
+      this.actionTODO = 'EDITAR';
       this.joditEditor.editor.value = this.data.card.texto;
-      this.urlImageEdit = document.getElementById('templateCardImage').getAttributeNode('src').value;
-      const nameImage = this.urlImageEdit.replace(environment.downloadImagesUriServer + '/', '');
-      this.uploadImagesSvc.getFileFromUrl(this.urlImageEdit, nameImage).then((file) => {
-        this.cardImageEdit = file;
-        this.uploadImagesSvc.imgName = file.name;
+      const urlImageEdit = document.getElementById('templateCardImage').getAttributeNode('src').value;
+      const nameImage = urlImageEdit.replace(environment.downloadImagesUriServer + '/', '');
+      this.uploadImagesSvc.getFileFromUrl(urlImageEdit, nameImage).then((file) => {
+        this.uploadImagesSvc.img = file;
+        this.uploadImagesSvc.imgURI = urlImageEdit;
       });
     } else {
-      this.actionTODO = Action.new;
+      this.actionTODO = 'AGREGAR';
     }
   }
 

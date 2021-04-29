@@ -1,15 +1,35 @@
-import {Component, EventEmitter, OnDestroy, OnInit, Output} from '@angular/core';
-import {FormControl} from '@angular/forms';
-import {AuthService} from '@adminShared/services/auth.service';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import { Component, EventEmitter, OnDestroy, OnInit, Output } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { AuthService } from '@adminShared/services/auth.service';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import {AuthRes} from '@adminShared/models/auth.model';
-import {ThemeSwitcherControllerService} from '../../services/theme-switcher-controller.service';
+import { AuthRes } from '@adminShared/models/auth.model';
+import { ThemeSwitcherControllerService } from '../../services/theme-switcher-controller.service';
 
 @Component({
   selector: 'app-header',
-  templateUrl: './header.component.html',
+  template: `
+    <mat-toolbar color='primary' class='mat-elevation-z3 main-toolbar' *ngIf='isLogged'>
+    <span>
+      <button *ngIf='isLogged' mat-icon-button (click)='onToggleSidenav()'>
+        <mat-icon>menu</mat-icon>
+      </button>
+      <button id='app-title' mat-raised-button color='primary' class='mat-display-2' [routerLink]="'/home'" title='Home'>Onomástico</button>
+    </span>
+      <span class='spacer'></span>
+      <div class='option-list-nav'>
+        <button *ngIf='platformUserData.name' mat-raised-button color='primary' routerLink='/profile'
+                title='Perfil'>{{ platformUserData.name}}</button>
+        <button *ngIf='platformUserData.role' mat-raised-button color='primary' [routerLink]="'/'+platformUserData.role"
+                title='Role'>{{platformUserData.role }}</button>
+      </div>
+      <mat-slide-toggle [formControl]='toggleDarkThemeControl'>
+        <mat-icon *ngIf='darkMode' class='mat-18'>brightness_4</mat-icon>
+        <mat-icon *ngIf='!darkMode' class='mat-18'>brightness_7</mat-icon>
+      </mat-slide-toggle>
+    </mat-toolbar>
+  `,
   styleUrls: ['./header.component.scss']
 })
 export class HeaderComponent implements OnInit, OnDestroy {

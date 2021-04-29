@@ -1,22 +1,25 @@
-import { AfterViewInit, Component, OnInit } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { SafeHtml } from '@angular/platform-browser';
 
 import { TemplateCardsService } from '../shared/services/template-cards.service';
-import { ModalTemplateCardsComponent } from './components/modal/modal-template-cards.component';
+import { ModalTemplateCardsComponent } from './components/modal-template-cards/modal-template-cards.component';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TemplateCard } from '@adminShared/models/template-card.model';
 import { DomSanitizerService } from '@appShared/services/dom-sanitizer.service';
 import { LoaderService } from '@appShared/services/loader.service';
+import SwAlert from 'sweetalert2';
+import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-templates-cards',
   templateUrl: './templates-cards.component.html',
   styleUrls: ['./templates-cards.component.scss']
 })
-export class TemplatesCardsComponent implements OnInit, AfterViewInit {
+export class TemplatesCardsComponent implements OnInit, AfterViewInit, OnDestroy {
   cards: TemplateCard[];
   onViewCard = true;
+  private destroy$ = new Subject<any>();
 
   constructor(
     private dialog: MatDialog,
@@ -61,7 +64,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
       if (cards) {
         this.cards = cards;
       }
-    });
+    },() => SwAlert.showValidationMessage('Error obteniendo plantillas'));
   }
 
   ngOnInit(): void {
@@ -71,7 +74,12 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit {
         if (card) {
           this.onOpenModal(card);
         }
-      });
+      },() => SwAlert.showValidationMessage('Error obteniendo plantilla'));
     }
   }
+
+  ngOnDestroy(): void {
+    this.destroy$.next({});
+    this.destroy$.complete();
+  };
 }

@@ -13,6 +13,7 @@ import { takeUntil } from 'rxjs/operators';
 import { TemplateCard } from '@pages/admin/shared/models/template-card.model';
 import { EventDay } from '@pages/admin/shared/models/event-day.model';
 import { DomSanitizerService } from '@appShared/services/dom-sanitizer.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-events-day',
@@ -85,6 +86,9 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.onRefresh();
               });
           }
+        },()=>{
+          Swal.showValidationMessage(
+            'Error desactivando evento');
         });
     } else {
       this.eventsSvc.activateEvent(id)
@@ -96,6 +100,9 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.onRefresh();
               });
           }
+        },()=>{
+          Swal.showValidationMessage(
+            'Error activando evento');
         });
     }
   }
@@ -120,6 +127,9 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
               .then(_ => {
                 this.onRefresh();
               });
+          },()=>{
+            Swal.showValidationMessage(
+              'Error eliminando evento');
           });
       }
     });

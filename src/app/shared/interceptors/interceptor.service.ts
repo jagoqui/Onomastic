@@ -1,4 +1,4 @@
-import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
+import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
@@ -6,15 +6,13 @@ import SwAlert from 'sweetalert2';
 
 import { LoaderService } from '../services/loader.service';
 import { AuthService } from '@adminShared/services/auth.service';
-import { Router } from '@angular/router';
 
 @Injectable({ providedIn: 'root' })
 export class InterceptorService implements HttpInterceptor {
 
   constructor(
     private loaderSvc: LoaderService,
-    public  authSvc: AuthService,
-    private router: Router,
+    public authSvc: AuthService
   ) {
   }
 
@@ -32,21 +30,18 @@ export class InterceptorService implements HttpInterceptor {
         () => {
         },
         err => {
-          // TODO: Crear objeto con mensajes de error
           SwAlert.fire({
             icon: 'error',
-            html: '',
-            title: 'Oops...',
-            text: ` Algo salió mal en la petición!. ${err.status === 401 ? 'Por seguridad se cerrará la sesión' : ''}`,
+            title: ` Algo salió mal en la petición.`,
             footer: `
-                <span style="color: red;">
-                    Error ${err.status}! <b> ${err.error?.error=== 'Forbidden'? 'Necesita permisos de admin.' : err.error?.error}</b></span>
-                <span style="display: block;">&nbsp;&nbsp;Necesitas <a href="">ayuda</a>?</span>.`
+                <span style='color: red;'>
+                    Error ${err.status}! <b> ${err.status === 403 ? 'Necesita permisos de admin.' : err.error?.error}</b>
+                    ${err.status === 401 ? 'Por seguridad se cerrará la sesión.' : ''}
+                </span>
+                <span>&nbsp;&nbsp;Necesitas <a href=''>ayuda</a>?</span>.`
           }).then(_ => {
             this.loaderSvc.setLoading(false);
-            if (err.status === 401) {
-              this.authSvc.logout();
-            }
+            console.warn(this.getServerErrorMessage(err));
           });
         },
         () => {
@@ -54,5 +49,26 @@ export class InterceptorService implements HttpInterceptor {
         }
       )
     );
+  }
+
+  private getServerErrorMessage(error: HttpErrorResponse): string {
+    switch (error.status) {
+      case 401: {
+        this.authSvc.logout();
+        return `Forbidden: ${error.message}`;
+      }
+      case 404: {
+        return `Not Found: ${error.message}`;
+      }
+      case 403: {
+        return `Access Denied: ${error.message}`;
+      }
+      case 500: {
+        return `Internal Server Error: ${error.message}`;
+      }
+      default: {
+        return `Unknown Server Error: ${error.message}`;
+      }
+    }
   }
 }

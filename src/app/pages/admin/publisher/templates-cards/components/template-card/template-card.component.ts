@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnDestroy, Output } from '@angular/core';
 import SwAlert from 'sweetalert2';
-import { TemplateCardsService } from '@pages/admin/publisher/shared/services/template-cards.service';
+import { TemplateCardsService } from '@publisher/shared/services/template-cards.service';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -60,13 +60,15 @@ export class TemplateCardComponent implements OnDestroy {
             cancelButtonText: 'Cancelar'
           }).then((resultDelete) => {
             if (resultDelete.isConfirmed) {
-              this.templateCardsService.delete(card.id).subscribe(_ => {
-                SwAlert.fire('Eliminado!', 'La plantilla se ha eliminado', 'success').then();
-                this.refreshCards.emit(true);
-              });
+              this.templateCardsService.delete(card.id)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe(() => {
+                  SwAlert.fire('Eliminado!', 'La plantilla se ha eliminado', 'success').then();
+                  this.refreshCards.emit(true);
+                }, () => SwAlert.showValidationMessage('La plantilla no se pudo eliminar'));
             }
           });
-        }
+        },() => SwAlert.showValidationMessage('No se pudo cargar las asociaciones')
       );
   }
 
