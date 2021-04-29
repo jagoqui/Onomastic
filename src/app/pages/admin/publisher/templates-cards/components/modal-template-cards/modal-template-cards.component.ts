@@ -189,6 +189,10 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                 title: 'Sólo puede cargarse una plantilla!',
                 text: ' Desea reemplazar la plantilla actual?',
                 icon: 'warning',
+                footer: `
+                    <span style='color:darkorange'>
+                        Si reemplaza la plantilla, la anterior se eliminará  de la base de datos y no podrá revertirse!
+                    </span>`,
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
@@ -289,6 +293,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
 
   onSave() {
     if (this.uploadImagesSvc.isImgStorage()) {
+      console.log('Editando');
       //TODO: Si hay error en la actulización de la plantilla está eliminado la imagen
       this.getAssociations();
     } else {

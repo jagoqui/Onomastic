@@ -26,7 +26,7 @@ export class UploadImageService {
     this.imgFile = file;
   }
 
-  openExplorerWindows = (editor, onDeleteLastImage) => {
+  openExplorerWindows = (editor, onDeleteLastImage) =>  {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
@@ -75,10 +75,6 @@ export class UploadImageService {
     return this.http.get<File>(`${environment.downloadImagesUriServer}/${imgName ? imgName : this.imgURI}`);
   }
 
-  isImgStorage(): boolean {
-    return this.imgFile.name.includes(this.imgGerenicName);
-  }
-
   async getFileFromUrl(url, name, defaultType = 'image/jpeg'): Promise<File> {
     const response = await fetch(url);
     const data = await response.blob();
@@ -105,7 +101,9 @@ export class UploadImageService {
       }, () => {
         //TODO: Hacer log de error
         if (this.isImgStorage()) {
-          SwAlert.showValidationMessage('Error al eliminar la imagen');
+          SwAlert.showValidationMessage('Error al eliminar la anterior imagen, carge de nuevo la plantilla');
+          this.imgFile = null;
+          document?.getElementById('imgContainer').remove();
         } else {
           SwAlert.showValidationMessage('Error al eliminar la imagen');
         }
@@ -119,4 +117,9 @@ export class UploadImageService {
     }
     return of(null);
   }
+
+  isImgStorage(): boolean {
+    return this.imgFile.name.includes(this.imgGerenicName);
+  }
+
 }
