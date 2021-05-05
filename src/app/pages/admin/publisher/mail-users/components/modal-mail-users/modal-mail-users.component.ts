@@ -13,13 +13,7 @@ import { PlatformService } from '@pages/admin/shared/services/platform.service';
 import { AssociationService } from '@pages/admin/shared/services/association.service';
 import { AcademicProgramService } from '@pages/admin/shared/services/academic-program.service';
 import { BodyTypeService } from '@pages/admin/shared/services/body-type.service';
-import { ByIdOrCode } from '@adminShared/models/shared.model';
-
-// eslint-disable-next-line no-shadow
-enum Action {
-  edit = 'Actualizar',
-  new = 'Agregar',
-}
+import { ACTIONS, ByIdOrCode } from '@adminShared/models/shared.model';
 
 export const MY_FORMATS = {
   parse: {
@@ -51,7 +45,7 @@ export const MY_FORMATS = {
 export class ModalMailUsersComponent implements OnInit, OnDestroy {
   @Output() refresh = new EventEmitter<boolean>(false);
 
-  actionTODO = '';
+  actionTODO: ACTIONS;
   maxListsConfig = {
     associations: 4,
     program: 2,
@@ -88,7 +82,6 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
 
 
   onClose(close?: boolean): void {
-    console.log(this.mailUserForm.baseForm.value);
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.mailUserForm.baseForm.reset();
       this.refresh.emit(true);
@@ -98,22 +91,25 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
 
   onSave(): void {
     const user = this.mailUserForm.baseForm.value;
-    this.userSvc.saveMailUser(user, this.data?.user?.id).subscribe(_ => {
-      SwAlert.fire(`Destinatario ${this.data?.user ? 'Actualizado!' : 'Guardado!'} `, '', 'success').then();
+    this.userSvc.save(user).subscribe(() => {
+      SwAlert.fire(
+        `${this.actionTODO === 'AGREGAR' ? 'GUARDADO' : 'ACTUALIZADO'}`,
+        `<b>El destinatario se pudo ${this.actionTODO.toLowerCase()} exitosamente</b>`,
+        'success').then();
       this.onClose(true);
       this.refresh.emit(true);
       this.mailUserForm.baseForm.reset();
-    }, () => {
-      SwAlert.showValidationMessage('El destinatario no se guardó');
-    });
+    }, () => SwAlert.showValidationMessage(`Error  al ${this.actionTODO.toLowerCase()} el destinatario`));
   }
 
   ngOnInit(): void {
     if (this.data?.user) {
-      this.actionTODO = Action.edit;
+      this.actionTODO = 'EDITAR';
       this.mailUserForm.baseForm.patchValue(this.data.user);
     } else {
-      this.actionTODO = Action.new;
+      this.mailUserForm.baseForm.get('id').setValidators(null);
+      this.mailUserForm.baseForm.get('id').updateValueAndValidity();
+      this.actionTODO = 'AGREGAR';
     }
 
     this.subscription.add(
@@ -160,6 +156,4 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscription.unsubscribe();
   }
-
-
 }

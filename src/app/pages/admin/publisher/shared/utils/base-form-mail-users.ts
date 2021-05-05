@@ -49,7 +49,7 @@ export class BaseFormMailUsers {
       email: ['', [Validators.required, Validators.email]],
       estado: ['', [Validators.required]],
       asociacionPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id')],
-      programaAcademicoPorUsuarioCorreo: this.fb.array([BaseFormMailUsers.createByNameFormGroup('codigo')]),
+      programaAcademicoPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('codigo')],
       vinculacionPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id')],
       plataformaPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id')]
     });
