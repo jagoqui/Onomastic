@@ -123,6 +123,7 @@ export class AuthService {
     const platformUser = JSON.parse(localStorage.getItem('PlatformUser')) || null;
     if (platformUser) {
       const isExpired = jwtHelper.isTokenExpired(platformUser.token);
+      //TODO: Pregutar si el usuario está activo
       if (isExpired) {
         this.logout();
       } else {

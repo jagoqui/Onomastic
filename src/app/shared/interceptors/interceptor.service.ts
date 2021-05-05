@@ -36,7 +36,7 @@ export class InterceptorService implements HttpInterceptor {
             footer: `
                 <span style='color: red;'>
                     Error ${err.status}! <b> ${err.status === 403 ? 'Necesita permisos de admin.' : err.error?.error}</b>
-                    ${err.status === 401 ? 'Por seguridad se cerrará la sesión.' : ''}
+                    ${err.status === 401 ? 'La sesión ha cauducado, por favor vuelva a loguearse.' : ''}
                 </span>
                 <span>&nbsp;&nbsp;Necesitas <a href=''>ayuda</a>?</span>.`
           }).then(_ => {

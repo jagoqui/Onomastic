@@ -4,25 +4,25 @@
     <mat-icon matListIcon>home</mat-icon>
     <span class="nav-link">home</span>
   </a>
-  <a mat-list-item [routerLink]="['/PUBLISHER/templates-cards','']" routerLinkActive="active-list-item"
+  <a *ngIf='isAdmin' mat-list-item routerLink="/ADMIN/publishers" routerLinkActive="active-list-item"
      (click)="sidenavController.openSidebar(false)">
-    <mat-icon matListIcon>redeem</mat-icon>
-    <span class="nav-link">Plantillas</span>
+    <mat-icon matListIcon>public</mat-icon>
+    <span class="nav-link">Publicadores</span>
   </a>
   <a mat-list-item routerLink="/PUBLISHER/mail-users" routerLinkActive="active-list-item"
      (click)="sidenavController.openSidebar(false)">
     <mat-icon matListIcon>people</mat-icon>
     <span class="nav-link">Destinatarios</span>
   </a>
+  <a mat-list-item [routerLink]="['/PUBLISHER/templates-cards','']" routerLinkActive="active-list-item"
+     (click)="sidenavController.openSidebar(false)">
+    <mat-icon matListIcon>redeem</mat-icon>
+    <span class="nav-link">Plantillas</span>
+  </a>
   <a mat-list-item routerLink="/PUBLISHER/events-day" routerLinkActive="active-list-item"
      (click)="sidenavController.openSidebar(false)">
     <mat-icon matListIcon>date_range</mat-icon>
     <span class="nav-link">Eventos</span>
-  </a>
-  <a *ngIf='isAdmin' mat-list-item routerLink="/ADMIN/publishers" routerLinkActive="active-list-item"
-     (click)="sidenavController.openSidebar(false)">
-    <mat-icon matListIcon>public</mat-icon>
-    <span class="nav-link">Publicadores</span>
   </a>
   <a mat-list-item routerLink="/PUBLISHER/help" routerLinkActive="active-list-item"
      (click)="sidenavController.openSidebar(false)">
