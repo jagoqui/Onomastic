@@ -1,4 +1,4 @@
-@import 'assets/custom_styles/material_custom_theme.scss';
+@import 'assets/custom_styles/ng-select-styles';
 
 html,
 body {
@@ -84,10 +84,5 @@ footer {
   width: 100%;
   bottom:0 ;
   margin-top: 1.667rem;
-}
-
-@function set-background-buttom-action($color: mat-color($mat-primary, main)) {
-  $background-buttom-action: $color;
-  @return 0;
 }
 

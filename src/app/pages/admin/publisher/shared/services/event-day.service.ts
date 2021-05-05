@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from '@env/environment';
 import { Observable } from 'rxjs';
-import { ConditionRes, EventDay } from '@adminShared/models/event-day.model';
+import { Condition, EventDay } from '@adminShared/models/event-day.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,18 +14,23 @@ export class EventDayService {
   ) {
   }
 
-  new(event: EventDay): Observable<EventDay> {
+  save(event: EventDay): Observable<EventDay> {
+    if(event?.id){
+      console.log(event.id);
+      return this.http
+        .put<EventDay>(`${environment.apiUrl}/evento/${event.id}`, event);
+    }
     return this.http
-      .post<EventDay>(`${environment.apiUrl}/eventos`, event);
+      .post<EventDay>(`${environment.apiUrl}/evento`, event);
   }
 
   getEvents(): Observable<EventDay[]> {
     return this.http.get<EventDay[]>(`${environment.apiUrl}/eventos`);
   }
 
-  getConditions(): Observable<ConditionRes[]> {
+  getConditions(): Observable<Condition[]> {
     return this.http
-      .get<ConditionRes[]>(`${environment.apiUrl}/evento/condiciones`);
+      .get<Condition[]>(`${environment.apiUrl}/evento/condiciones`);
   }
 
 

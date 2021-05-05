@@ -13,10 +13,15 @@ export class PublisherService {
   constructor(private http: HttpClient) {
   }
 
-  new(user: MailUsers): Observable<Publisher> {
+  save(publisher: Publisher): Observable<Publisher> {
+    if(publisher?.id){
+      return this.http
+        .put<Publisher>(`${environment.apiUrl}/usuarios/${publisher.id}`, publisher);
+    }
     return this.http
-      .post<Publisher>(`${environment.apiUrl}/usuarios`, user);
+      .post<Publisher>(`${environment.apiUrl}/usuarios`, publisher);
   }
+
 
   getAll(): Observable<Publisher[]> {
     return this.http

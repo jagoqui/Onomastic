@@ -6,7 +6,6 @@ import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 
 @Injectable({ providedIn: 'root' })
 export class BaseFormEventDay {
-
   public baseForm = this.createBaseForm();
 
   constructor(
@@ -15,21 +14,18 @@ export class BaseFormEventDay {
   ) {
   }
 
-  get conditions(): FormArray {
-    return this.baseForm.get('condicionesEvento') as FormArray;
-  }
-
   get controls(): { [p: string]: AbstractControl } {
     return this.baseForm.controls;
   }
 
   createBaseForm(): FormGroup {
     return this.fb.group({
+      id:['', [Validators.required]],
       nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(45)]],
       fecha: ['', [Validators.required, this.validDate]],
       estado: ['', [Validators.required]],
       recurrencia: ['', [Validators.required]],
-      condicionesEvento: this.fb.array([this.createConditionField()]),
+      condicionesEvento: [this.createConditionField()],
       plantilla: this.fb.group({
         id: [null, [Validators.required]],
         texto: [null, [Validators.required]]
@@ -49,35 +45,15 @@ export class BaseFormEventDay {
       };
   }
 
-  addCondition() {
-    this.conditions.push(this.createConditionField());
-  }
-
-  removeCondition(key: number) {
-    if (confirm('Seguro que desea quitar ésta condición?')) {
-      this.conditions.removeAt(key);
-    }
-  }
-
-  clearParameter(index: number) {
-    this.conditions.at(index).get('parametro').setValue(null);
-  }
-
   onSearchErrors(field: AbstractControl | FormGroup){
     return this.formErrorsSvc.searchErrors(field);
   }
 
-  onReset(): void {
-    for (let i = this.conditions.length - 1; i > 0; i--) {
-      this.conditions.removeAt(i);
-    }
-    this.baseForm.reset();
-  }
-
   private createConditionField(): FormGroup {
     return this.fb.group({
-      condicion: ['', Validators.required],
-      parametro: ['', Validators.required]
+      id: [null, Validators.required],
+      condicion: [null, Validators.required],
+      value: [null, Validators.required],
     });
   }
 }

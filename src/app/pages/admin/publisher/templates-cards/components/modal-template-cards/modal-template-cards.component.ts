@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, Inject, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { TemplateCardsService } from '@pages/admin/publisher/shared/services/template-cards.service';
 import { JoditAngularComponent } from 'jodit-angular';
@@ -22,7 +22,6 @@ import { ACTIONS } from '@adminShared/models/shared.model';
 export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('editor') joditEditor: JoditAngularComponent;
 
-  jodit: JoditAngularComponent;
   config: any;
   iconSwitchTheme: string;
   card: TemplateCard;
@@ -51,6 +50,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   constructor(
     private dialogRef: MatDialogRef<ModalTemplateCardsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private render2: Renderer2,
+    private elementRef: ElementRef,
     private themeSwitcherController: ThemeSwitcherControllerService,
     private templateCardsService: TemplateCardsService,
     private uploadImagesSvc: UploadImageService,
@@ -61,9 +62,17 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
 
   get onCompleteCard() {
     //TODO: Agregar más condiciones
-    const cardImg = document.getElementById('templateCardImage');
-    return !!cardImg;
+    return !!this.imgCard;
   }
+
+  get imgContainer() {
+    return document.getElementById('imgContainer');
+  }
+
+  get imgCard() {
+    return document.getElementById('templateCardImage');
+  }
+
 
   setEditorConfig(themeEditor: string) {
     const iconSwitchTheme = `assets/icons/toggle-${themeEditor === 'dark' ? 'on' : 'off'}-solid.svg`;
@@ -183,8 +192,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
             if (this.joditEditor.editor.value === '') {
               this.joditEditor.editor.value = this.cardImageStyles;
             }
-            const imgContainer = document.getElementById('imgContainer');
-            if (imgContainer) {
+            if (this.imgContainer) {
               return await SwAlert.fire({
                 title: 'Sólo puede cargarse una plantilla!',
                 text: ' Desea reemplazar la plantilla actual?',
@@ -301,8 +309,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         .pipe(takeUntil(this.destroy$))
         .subscribe(img => {
           if (img?.fileDownloadUri) {
-            const imgCard = document.getElementById('templateCardImage');
-            imgCard.setAttribute('src', img.fileDownloadUri);
+            this.imgCard.setAttribute('src', img.fileDownloadUri);
             //TODO: Acá el back debe devolver el archivo
             this.uploadImagesSvc.getFileFromUrl(img?.fileDownloadUri, img.fileName).then((file) => {
               this.uploadImagesSvc.img = file;
@@ -378,7 +385,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     if (this.data?.card) {
       this.actionTODO = 'EDITAR';
       this.joditEditor.editor.value = this.data.card.texto;
-      const urlImageEdit = document.getElementById('templateCardImage').getAttributeNode('src').value;
+      const urlImageEdit = this.imgCard.getAttributeNode('src').value;
       const nameImage = urlImageEdit.replace(environment.downloadImagesUriServer + '/', '');
       this.uploadImagesSvc.getFileFromUrl(urlImageEdit, nameImage).then((file) => {
         this.uploadImagesSvc.img = file;

@@ -1,5 +1,4 @@
 import { Component, EventEmitter, Inject, OnDestroy, OnInit, Output } from '@angular/core';
-import { FormGroup } from '@angular/forms';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -14,8 +13,7 @@ import { PlatformService } from '@pages/admin/shared/services/platform.service';
 import { AssociationService } from '@pages/admin/shared/services/association.service';
 import { AcademicProgramService } from '@pages/admin/shared/services/academic-program.service';
 import { BodyTypeService } from '@pages/admin/shared/services/body-type.service';
-import { LoaderService } from '@appShared/services/loader.service';
-import { ByIdOrCode} from '@adminShared/models/shared.model';
+import { ByIdOrCode } from '@adminShared/models/shared.model';
 
 // eslint-disable-next-line no-shadow
 enum Action {
@@ -76,8 +74,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     private associationSvc: AssociationService,
     private academicProgramSvc: AcademicProgramService,
     private bodyTypeSvc: BodyTypeService,
-    public mailUserForm: BaseFormMailUsers,
-    private loaderSvc: LoaderService
+    public mailUserForm: BaseFormMailUsers
   ) {
   }
 
@@ -89,81 +86,11 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     return this.mailUserForm.isValidField(field, group, iterator);
   }
 
-  setFormGroupID(formGroup: FormGroup, id: number) {
-    formGroup.controls.id.setValue(id);
-  }
-
-  setFormGroupCode(formGroup: FormGroup, code: number) {
-    formGroup.controls.codigo.setValue(code);
-  }
-
-  addByNameFormGroup(formGroup: string): void {
-    this.mailUserForm.addByNameFormGroup(formGroup);
-  }
-
-  removeOrClearByName(iterator: number, formGroup: string, onClose?: boolean): void {
-    if (!onClose) {
-      if (confirm('Seguro que desea remover la lista?')) {
-        this.mailUserForm.removeOrClearByName(iterator, formGroup);
-      }
-    } else {
-      this.mailUserForm.removeOrClearByName(iterator, formGroup);
-    }
-  }
-
-  onShowAddAssociation(iterator: number): boolean {
-    return (iterator === (this.getAssociationsSize() - 1) && (this.getAssociationsSize() < this.maxListsConfig.associations));
-  }
-
-  getAssociationsSize(): number {
-    return this.mailUserForm.baseForm.controls.asociacionPorUsuarioCorreo.value.length;
-  }
-
-  onShowAddProgram(iterator: number): boolean {
-    return (iterator === (this.getProgramsSize() - 1) && (this.getProgramsSize() < this.maxListsConfig.program));
-  }
-
-  getProgramsSize(): number {
-    return this.mailUserForm.baseForm.controls.programaAcademicoPorUsuarioCorreo.value.length;
-  }
-
-  onShowAddBodyType(iterator: number): boolean {
-    return (iterator === (this.getBodyTypesSize() - 1) && (this.getBodyTypesSize() < this.maxListsConfig.bodyType));
-  }
-
-  getBodyTypesSize(): number {
-    return this.mailUserForm.baseForm.controls.vinculacionPorUsuarioCorreo.value.length;
-  }
-
-  getPlatformsSize(): number {
-    return this.mailUserForm.baseForm.controls.plataformaPorUsuarioCorreo.value.length;
-  }
-
-  onShowPlatforms(iterator: number): boolean {
-    return (iterator === (this.getPlatformsSize() - 1) && (this.getPlatformsSize() < this.maxListsConfig.platforms));
-  }
 
   onClose(close?: boolean): void {
     console.log(this.mailUserForm.baseForm.value);
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
-      this.mailUserForm.onReset();
-      const associations = this.mailUserForm.baseForm.controls.asociacionPorUsuarioCorreo.value;
-      const bodyTypes = this.mailUserForm.baseForm.controls.vinculacionPorUsuarioCorreo.value;
-      const programs = this.mailUserForm.baseForm.controls.programaAcademicoPorUsuarioCorreo.value;
-      const platforms = this.mailUserForm.baseForm.controls.plataformaPorUsuarioCorreo.value;
-
-      for (const association of associations) {
-        this.removeOrClearByName(association, 'asociacionPorUsuarioCorreo', true);
-      }
-      for (const bodyType of bodyTypes) {
-        this.removeOrClearByName(bodyType, 'vinculacionPorUsuarioCorreo', true);
-      }
-      for (const program of programs) {
-        this.removeOrClearByName(program, 'programaAcademicoPorUsuarioCorreo', true);
-      }
-      for (const platform of platforms) {
-        this.removeOrClearByName(platform, 'plataformaPorUsuarioCorreo', true);
-      }
+      this.mailUserForm.baseForm.reset();
       this.refresh.emit(true);
       this.dialogRef.close();
     }
@@ -172,13 +99,11 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   onSave(): void {
     const user = this.mailUserForm.baseForm.value;
     this.userSvc.saveMailUser(user, this.data?.user?.id).subscribe(_ => {
-      SwAlert.fire(`Destinatario ${this.data?.user ? 'Actualizado!' : 'Guardado!'} `, '', 'success')
-        .then();
-      this.onClose(true);
+      SwAlert.fire(`Destinatario ${this.data?.user ? 'Actualizado!' : 'Guardado!'} `, '', 'success').then();
       this.onClose(true);
       this.refresh.emit(true);
-      this.mailUserForm.onReset();
-    }, ()=>{
+      this.mailUserForm.baseForm.reset();
+    }, () => {
       SwAlert.showValidationMessage('El destinatario no se guardó');
     });
   }
@@ -186,7 +111,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     if (this.data?.user) {
       this.actionTODO = Action.edit;
-      this.pathFormData();
+      this.mailUserForm.baseForm.patchValue(this.data.user);
     } else {
       this.actionTODO = Action.new;
     }
@@ -196,7 +121,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
         if (associations) {
           this.associations = associations;
         }
-      }, ()=>{
+      }, () => {
         SwAlert.showValidationMessage('Error cargando las asociaciones');
       })
     );
@@ -206,8 +131,8 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
         if (programs) {
           this.programs = programs;
         }
-      }, (err) => {
-        console.error('Get program error! :> ', err);
+      }, () => {
+        SwAlert.showValidationMessage('Error cargando los programas academicos');
       })
     );
 
@@ -216,8 +141,8 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
         if (types) {
           this.bondingTypes = types;
         }
-      }, (err) => {
-        console.error('Get bonding type error! :> ', err);
+      }, () => {
+        SwAlert.showValidationMessage('Error cargando las vinculaciones');
       })
     );
 
@@ -226,8 +151,8 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
         if (platforms) {
           this.platforms = platforms;
         }
-      }, (err) => {
-        console.error('Get platforms error! :> ', err);
+      }, () => {
+        SwAlert.showValidationMessage('Error cargando las plataformas');
       })
     );
   }
@@ -236,33 +161,5 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
     this.subscription.unsubscribe();
   }
 
-  private pathFormData(): void {
-    const associations = this.data?.user.asociacionPorUsuarioCorreo;
-    const programs = this.data?.user.programaAcademicoPorUsuarioCorreo;
-    const bonding = this.data?.user.vinculacionPorUsuarioCorreo;
-    const platform = this.data?.user.plataformaPorUsuarioCorreo;
-
-    if (associations) {
-      for (let i = 0; i < associations.length - 1; i++) {
-        this.mailUserForm.addByNameFormGroup('asociacionPorUsuarioCorreo');
-      }
-    }
-    if (programs) {
-      for (let i = 0; i < programs.length - 1; i++) {
-        this.mailUserForm.addByNameFormGroup('programaAcademicoPorUsuarioCorreo');
-      }
-    }
-    if (bonding) {
-      for (let i = 0; i < bonding.length - 1; i++) {
-        this.mailUserForm.addByNameFormGroup('vinculacionPorUsuarioCorreo');
-      }
-    }
-    if (platform) {
-      for (let i = 0; i < platform.length - 1; i++) {
-        this.mailUserForm.addByNameFormGroup('plataformaPorUsuarioCorreo');
-      }
-    }
-    this.mailUserForm.baseForm.patchValue(this.data?.user);
-  }
 
 }

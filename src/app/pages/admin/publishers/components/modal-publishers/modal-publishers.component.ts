@@ -20,12 +20,7 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
   @Output() refresh = new EventEmitter<boolean>(false);
 
   actionTODO: ACTIONS;
-  showPasswordField = true;
-  hide = true;
-  maxListsConfig = {
-    associations: 4
-  };
-  associationsRes: ByIdOrCode[];
+  associations: ByIdOrCode[];
   roleOptions: Role[] = [
     {
       id: 1,
@@ -55,45 +50,44 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
     return field as FormGroup;
   }
 
-  removeAssociation(i: number) {
-    this.publisherForm.removeAssociation(i);
-  }
-
   onClose(close?: boolean): void {
-    console.log(this.publisherForm.baseForm.value);
-    if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
-      this.publisherForm.onReset();
+    if (close ? close : confirm('No se han guardado los cambios, desea salir?')) {
+      this.publisherForm.baseForm.reset();
       this.refresh.emit(true);
       this.dialogRef.close();
     }
   }
 
   onSave() {
-    this.publisherSvc.new(this.publisherForm.baseForm.value)
+    const publisher: Publisher = this.publisherForm.baseForm.value;
+    this.publisherSvc.save(publisher)
       .pipe(takeUntil(this.destroy$))
       .subscribe(publisher => {
         if (publisher) {
           SwAlert.fire(
-            'Guardado!',
-            '<b>El publicador ha sido guardado</b>',
-            'success').then(r => console.log(r)).then(r => console.log(r));
+            `${this.actionTODO === 'AGREGAR' ? 'GUARDADO' : 'ACTUALIZADO'}`,
+            `<b>El publicador se pudo ${this.actionTODO.toLowerCase()} exitosamente</b>`,
+            'success').then();
           this.onClose(true);
         }
-      }, () => SwAlert.showValidationMessage('Error obteniendo publicadores'));
+      }, () => SwAlert.showValidationMessage(`Error  al ${this.actionTODO.toLowerCase()} el publicador`));
   }
 
   ngOnInit(): void {
-    if (this.data?.publisher) {
+    const publisher = this.data?.publisher;
+    if (publisher) {
       this.actionTODO = 'EDITAR';
-      this.pathFormData();
+      this.publisherForm.baseForm.patchValue(publisher);
     } else {
+      this.publisherForm.baseForm.get('id').setValidators(null);
+      this.publisherForm.baseForm.get('id').updateValueAndValidity();
       this.actionTODO = 'AGREGAR';
     }
 
     this.associationSvc.getAssociations()
       .subscribe(associations => {
         if (associations) {
-          this.associationsRes = associations;
+          this.associations = associations;
         }
       }, () => SwAlert.showValidationMessage('Error obteniendo asociaciones'));
   }
@@ -103,21 +97,4 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   };
 
-  private pathFormData(): void {
-    const {
-      nombre, email,
-      estado, rol,
-      asociacionPorUsuario
-    } = this.data.publisher as Publisher;
-
-    for (let i = 0; i < asociacionPorUsuario?.length - 1; i++) {
-      this.publisherForm.addAssociation();
-    }
-    const publisher = Object({
-      nombre, email,
-      estado, rol,
-      asociacionPorUsuario
-    });
-    this.publisherForm.baseForm.patchValue(publisher);
-  }
 }

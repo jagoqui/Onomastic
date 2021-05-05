@@ -12,10 +12,11 @@ import SwAlert from 'sweetalert2';
 import Swal from 'sweetalert2';
 import { BaseFormEventDay } from '@pages/admin/publisher/shared/utils/base-form-event-day';
 import { TemplateCard } from '@adminShared//models/template-card.model';
-import { ConditionRes, EventDay, Parameter } from '@adminShared//models/event-day.model';
+import { Condition, EventDay, Parameter } from '@adminShared//models/event-day.model';
 import { DomSanitizerService } from '@app/shared/services/dom-sanitizer.service';
 import { ACTIONS } from '@adminShared/models/shared.model';
 import { AbstractControl } from '@angular/forms';
+import { LoaderService } from '@appShared/services/loader.service';
 
 
 export const MY_FORMATS = {
@@ -51,8 +52,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
   cards: TemplateCard[] = [];
   sidenavOpened = false;
   selectCard: TemplateCard = null;
-  conditionsRes: ConditionRes[];
-  selectedIdFilterAssociation: number[];
+  conditionsRes: Condition[];
   parametersRes: Parameter[];
   today = new Date();
   private destroy$ = new Subject<any>();
@@ -63,7 +63,8 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
     private templateCardsService: TemplateCardsService,
     private domSanitizerSvc: DomSanitizerService,
     public eventDayForm: BaseFormEventDay,
-    private eventDaySvc: EventDayService
+    private eventDaySvc: EventDayService,
+    private loaderSvc: LoaderService
   ) {
   }
 
@@ -71,30 +72,15 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
     return this.eventDayForm.controls;
   }
 
+  //TODO: Revisar
+  get loading() {
+    return this.loaderSvc.isLoading.value;
+  }
+
   setDateFormat(event: MatDatepickerInputEvent<unknown>) {
     this.eventDayForm.setDate(event);
   }
 
-  setIdAssociation(id: number, indexClear: number) {
-    this.selectedIdFilterAssociation[indexClear] = id;
-    this.eventDayForm.clearParameter(indexClear);
-  }
-
-  removeCondition(i: number) {
-    this.eventDayForm.removeCondition(i);
-    this.selectedIdFilterAssociation.splice(i, 1);
-    this.selectedIdFilterAssociation.push(null);
-  }
-
-  setParameters(condition: ConditionRes): string {
-    this.parametersRes = condition.parametros;
-    return condition.condicion;
-  }
-
-  onClearParameter(i: number) {
-    this.eventDayForm.clearParameter(i);
-    this.selectedIdFilterAssociation[i] = -1;
-  }
 
   loadCards(onChange?: boolean) {
     this.eventDayForm.baseForm.controls.plantilla.markAsTouched();
@@ -108,7 +94,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
         this.sidenavOpened = true;
         this.templateCardsService.getAllCards()
           .pipe(takeUntil(this.destroy$))
-          .subscribe(cards => this.cards = cards,()=>{
+          .subscribe(cards => this.cards = cards, () => {
             Swal.showValidationMessage(
               'Error cargando las plantillas');
           });
@@ -117,7 +103,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
       this.sidenavOpened = true;
       this.templateCardsService.getAllCards()
         .pipe(takeUntil(this.destroy$))
-        .subscribe(cards => this.cards = cards,()=>{
+        .subscribe(cards => this.cards = cards, () => {
           Swal.showValidationMessage(
             'Error cargando las plantillas');
         });
@@ -143,25 +129,26 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   onSave() {
-    this.eventDaySvc.new(this.eventDayForm.baseForm.value)
+    this.eventDaySvc.save(this.eventDayForm.baseForm.value)
       .pipe(takeUntil(this.destroy$))
       .subscribe(event => {
         if (event) {
           SwAlert.fire(
-            'Guardado!',
-            '<b>El evento ha sido guardado</b>',
-            'success').then(r => console.log(r)).then(r => console.log(r));
+            `${this.actionTODO === 'AGREGAR' ? 'GUARDADO' : 'ACTUALIZADO'}`,
+            `<b>El evento se pudo ${this.actionTODO.toLowerCase()} exitosamente</b>`,
+            'success').then();
           this.onClose(true);
         }
       }, (err) => {
         Swal.showValidationMessage(
-          `Error guardando el evento. ${err.status}`);
+          `Error en al ${this.actionTODO.toLowerCase()} el evento. ${err.status}`);
       });
   }
 
   onClose(close?: boolean): void {
+    console.log(JSON.stringify(this.eventDayForm.baseForm.value));
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
-      this.eventDayForm.onReset();
+      this.eventDayForm.baseForm.reset();
       this.refresh.emit(true);
       this.dialogRef.close();
     }
@@ -172,6 +159,8 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
       this.actionTODO = 'EDITAR';
       this.pathFormData(this.data?.event);
     } else {
+      this.eventDayForm.baseForm.get('id').setValidators(null);
+      this.eventDayForm.baseForm.get('id').updateValueAndValidity();
       this.actionTODO = 'AGREGAR';
     }
 
@@ -180,12 +169,10 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
       .subscribe(conditions => {
         if (conditions) {
           this.conditionsRes = conditions;
-          //TODO: Crear dinamicamente 'selectedIdFilterAssociation'
-          this.selectedIdFilterAssociation = new Array(this.conditionsRes.length + 1);
         }
       }, (_) => {
         Swal.showValidationMessage(
-          `No se pudo cargar las condiciones. `);
+          `No se pudo cargar las condiciones.`);
       });
   }
 
@@ -200,13 +187,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   private pathFormData(event: EventDay): void {
-    const conditions = event.condicionesEvento;
-
-    for (let i = 0; i < conditions.length - 1; i++) {
-      this.eventDayForm.addCondition();
-    }
-
-    // this.eventDayForm.baseForm.patchValue(event);
+    this.eventDayForm.baseForm.patchValue(event);
     this.selectCard = event.plantilla;
   }
 
