@@ -310,7 +310,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         .subscribe(img => {
           if (img?.fileDownloadUri) {
             this.imgCard.setAttribute('src', img.fileDownloadUri);
-            //TODO: Acá el back debe devolver el archivo
+            //TODO: Pedir al back debe devolver el archivo
             this.uploadImagesSvc.getFileFromUrl(img?.fileDownloadUri, img.fileName).then((file) => {
               this.uploadImagesSvc.img = file;
               this.uploadImagesSvc.imgURI = img.fileDownloadUri;

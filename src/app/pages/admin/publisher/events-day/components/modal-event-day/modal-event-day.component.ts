@@ -146,7 +146,6 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
   }
 
   onClose(close?: boolean): void {
-    console.log(JSON.stringify(this.eventDayForm.baseForm.value));
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.eventDayForm.baseForm.reset();
       this.refresh.emit(true);
