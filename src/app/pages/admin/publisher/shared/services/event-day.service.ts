@@ -16,7 +16,6 @@ export class EventDayService {
 
   save(event: EventDay): Observable<EventDay> {
     if(event?.id){
-      console.log(event.id);
       return this.http
         .put<EventDay>(`${environment.apiUrl}/evento/${event.id}`, event);
     }

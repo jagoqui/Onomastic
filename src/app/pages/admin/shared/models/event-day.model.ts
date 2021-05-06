@@ -18,12 +18,6 @@ export interface Condition {
   parametros: Parameter[];
 }
 
-export interface Parameter {
-  id: number;
-  condicion: string;
-  value: string;
-}
-
 export interface Parameter{
   id: number;
   condicion: string;

@@ -91,7 +91,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
 
   onSave(): void {
     const user = this.mailUserForm.baseForm.value;
-    this.userSvc.save(user).subscribe(() => {
+    this.userSvc.save(user, this.actionTODO==='EDITAR'? user.id: null).subscribe(() => {
       SwAlert.fire(
         `${this.actionTODO === 'AGREGAR' ? 'GUARDADO' : 'ACTUALIZADO'}`,
         `<b>El destinatario se pudo ${this.actionTODO.toLowerCase()} exitosamente</b>`,

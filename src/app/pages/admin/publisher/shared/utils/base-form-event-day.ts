@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import * as moment from 'moment';
 import { FormErrorsService } from '@appShared/services/form-errors.service';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
@@ -20,15 +20,15 @@ export class BaseFormEventDay {
 
   createBaseForm(): FormGroup {
     return this.fb.group({
-      id:['', [Validators.required]],
+      id: ['', [Validators.required]],
       nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(45)]],
       fecha: ['', [Validators.required, this.validDate]],
       estado: ['', [Validators.required]],
       recurrencia: ['', [Validators.required]],
       condicionesEvento: [this.createConditionField()],
       plantilla: this.fb.group({
-        id: [null, [Validators.required]],
-        texto: [null, [Validators.required]]
+        id: ['', [Validators.required]],
+        texto: ['', [Validators.required]]
       })
     });
   }
@@ -45,15 +45,15 @@ export class BaseFormEventDay {
       };
   }
 
-  onSearchErrors(field: AbstractControl | FormGroup){
+  onSearchErrors(field: AbstractControl | FormGroup) {
     return this.formErrorsSvc.searchErrors(field);
   }
 
   private createConditionField(): FormGroup {
     return this.fb.group({
-      id: [null, Validators.required],
-      condicion: [null, Validators.required],
-      value: [null, Validators.required],
+      id: ['', Validators.required],
+      condicion: ['', Validators.required],
+      value: ['', Validators.required]
     });
   }
 }
