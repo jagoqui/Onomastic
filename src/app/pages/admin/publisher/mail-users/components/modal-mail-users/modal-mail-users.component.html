@@ -128,6 +128,9 @@
       [selectableGroupAsModel]='true'
       formControlName='asociacionPorUsuarioCorreo'>
       <ng-template ng-option-tmp let-association='item'>
+        <ng-container>
+          <mat-icon> account_balance</mat-icon>
+        </ng-container>
         {{association.nombre| uppercase}}
       </ng-template>
     </ng-select>
@@ -149,6 +152,9 @@
       [selectableGroupAsModel]='true'
       formControlName='programaAcademicoPorUsuarioCorreo'>
       <ng-template ng-option-tmp let-program='item'>
+        <ng-container>
+          <mat-icon> school</mat-icon>
+        </ng-container>
         {{program.nombre| uppercase}}
       </ng-template>
     </ng-select>
@@ -170,6 +176,9 @@
       [selectableGroupAsModel]='true'
       formControlName='vinculacionPorUsuarioCorreo'>
       <ng-template ng-option-tmp let-bondingType='item'>
+        <ng-container>
+          <mat-icon> group_work</mat-icon>
+        </ng-container>
         {{bondingType.nombre| uppercase}}
       </ng-template>
     </ng-select>
@@ -191,6 +200,9 @@
       [selectableGroupAsModel]='true'
       formControlName='plataformaPorUsuarioCorreo'>
       <ng-template ng-option-tmp let-bondingType='item'>
+        <ng-container>
+          <mat-icon> storage</mat-icon>
+        </ng-container>
         {{bondingType.nombre| uppercase}}
       </ng-template>
     </ng-select>

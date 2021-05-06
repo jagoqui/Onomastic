@@ -67,9 +67,9 @@
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef='columnsToDisplay'></tr>
-        <tr mat-row *matRowDef='let element; columns: columnsToDisplay;' class='example-element-row'
-            [class.example-expanded-row]='expandedElement === element'
-            (click)='expandedElement = expandedElement === element ? null : element'>
+        <tr mat-row *matRowDef='let event; columns: columnsToDisplay;' class='example-element-row'
+            [class.example-expanded-row]='expandedElement === event'
+            (click)='expandedElement = expandedElement === event ? null : event'>
         </tr>
         <td mat-column *matRowDef="let row; columns: ['actions']"></td>
         <tr mat-row *matRowDef="let row; columns: ['expandedDetail']" class='example-detail-row'></tr>

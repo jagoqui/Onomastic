@@ -111,22 +111,25 @@
           </div>
           <!--         Conditions -->
           <ng-select
-                     [items]='conditionsRes'
-                     groupBy='parametros'
-                     bindLabel='value'
-                     placeholder='Condiciones'
-                     appearance='outline'
-                     notFoundText='No hay más condiones en la lista'
-                     typeToSearchText='Search'
-                     [loading]='loading'
-                     [multiple]='true'
-                     [minTermLength]='3'
-                     [hideSelected]='true'
-                     [closeOnSelect]='false'
-                     [clearSearchOnAdd]='true'
-                     [selectableGroupAsModel]='true'
-                     formControlName='condicionesEvento'>
+            [items]='conditionsRes'
+            groupBy='parametros'
+            bindLabel='value'
+            placeholder='Condiciones'
+            appearance='outline'
+            notFoundText='No hay más condiones en la lista'
+            typeToSearchText='Search'
+            [loading]='loading'
+            [multiple]='true'
+            [minTermLength]='3'
+            [hideSelected]='true'
+            [closeOnSelect]='false'
+            [clearSearchOnAdd]='true'
+            [selectableGroupAsModel]='true'
+            formControlName='condicionesEvento'>
             <ng-template ng-optgroup-tmp let-condition='item'>
+              <ng-container>
+                <mat-icon> local_offer</mat-icon>
+              </ng-container>
               {{condition.name| uppercase}}
             </ng-template>
           </ng-select>
