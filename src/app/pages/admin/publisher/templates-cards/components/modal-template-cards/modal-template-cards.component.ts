@@ -336,6 +336,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   }
 
   getAssociations() {
+    //TODO: Se actualiza con los actuales asociciones del publicador, reemplazando lo permisos inciales del publicador.
     this.associationSvc.getAssociationsByPublisher()
       .pipe(takeUntil(this.destroy$))
       .subscribe(associations => {

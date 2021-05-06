@@ -56,7 +56,7 @@ export class ResetPasswordComponent implements OnInit, OnDestroy {
         .subscribe(_ => {
           Swal.fire({
             icon: 'success',
-            title: 'Contraseña actualizada!',
+            title: 'Contraseña actualizada, ya puede iniciar sesión!',
             confirmButtonText: 'Aceptar!'
           }).then(_ => this.router.navigate(['/login']).then());
         },(err)=>{

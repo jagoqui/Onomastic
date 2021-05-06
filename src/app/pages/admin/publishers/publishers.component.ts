@@ -19,19 +19,40 @@ export class PublishersComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  dataSource = new MatTableDataSource();
+  dataSource= new MatTableDataSource();
   columnsToDisplay = [
     'nombre', 'email',
-    'rol', 'estado'
+    'asociacionPorUsuario',
+    'rol', 'estado', 'createTime'
   ];
-  private numPublisher = 0;
+
+  numPublisher = 0;
   private destroy$ = new Subject<any>();
 
-  constructor(private dialog: MatDialog,
-              private publishersSvc: PublisherService) {
+  constructor(
+    private dialog: MatDialog,
+    private publishersSvc: PublisherService) {
   }
 
-  onOpenModal(publisher = {}): void {
+  showProperty(publisher: Publisher, key: string) {
+    const values: Array<string> = [];
+    if (typeof publisher[key] === 'object') {
+      if(publisher[key]?.length){
+        for (const property of publisher[key]) {
+          if (property) {
+            values.push(property.nombre);
+          }
+        }
+      }else{
+        values.push(publisher[key].nombre);
+      }
+    } else {
+      values.push(publisher[key]);
+    }
+    return values;
+  }
+
+  onOpenModal(publisher: Publisher): void {
     const dialogRef = this.dialog.open(ModalPublishersComponent, {
       height: 'auto',
       width: '50%',
@@ -47,13 +68,6 @@ export class PublishersComponent implements OnInit, OnDestroy {
         }
       });
     }
-  }
-
-  showProperty(publisher: Publisher, property: string) {
-    if (property === 'rol') {
-      return publisher[property].nombre;
-    }
-    return publisher[property];
   }
 
   applyFilter(event: Event) {
@@ -117,7 +131,7 @@ export class PublishersComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.publishersSvc.getAll().subscribe((publisher) => {
-      this.dataSource.data = publisher;
+      this.dataSource.data  = publisher;
       //TODO: Crear un servicio desde el back para obtener el número de publicadores
       this.numPublisher = this.dataSource.data.length;
     });
