@@ -9,7 +9,6 @@ import { TemplateCardsService } from '@pages/admin/publisher/shared/services/tem
 import { Subject } from 'rxjs/internal/Subject';
 import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
-import Swal from 'sweetalert2';
 import { BaseFormEventDay } from '@pages/admin/publisher/shared/utils/base-form-event-day';
 import { TemplateCard } from '@adminShared//models/template-card.model';
 import { Condition, EventDay, Parameter } from '@adminShared//models/event-day.model';
@@ -95,7 +94,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
         this.templateCardsService.getAllCards()
           .pipe(takeUntil(this.destroy$))
           .subscribe(cards => this.cards = cards, () => {
-            Swal.showValidationMessage(
+            SwAlert.showValidationMessage(
               'Error cargando las plantillas');
           });
       }
@@ -104,7 +103,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
       this.templateCardsService.getAllCards()
         .pipe(takeUntil(this.destroy$))
         .subscribe(cards => this.cards = cards, () => {
-          Swal.showValidationMessage(
+          SwAlert.showValidationMessage(
             'Error cargando las plantillas');
         });
     }
@@ -140,8 +139,8 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
           this.onClose(true);
         }
       }, (err) => {
-        Swal.showValidationMessage(
-          `Error en al ${this.actionTODO.toLowerCase()} el evento. ${err.status}`);
+        SwAlert.showValidationMessage(
+          `Error al ${this.actionTODO.toLowerCase()} el evento. ${err.status}`);
       });
   }
 
@@ -170,7 +169,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
           this.conditionsRes = conditions;
         }
       }, (_) => {
-        Swal.showValidationMessage(
+        SwAlert.showValidationMessage(
           `No se pudo cargar las condiciones.`);
       });
   }

@@ -9,4 +9,3 @@ export interface AuthRes {
   role?: ROLE;
   token?: string;
 }
-
