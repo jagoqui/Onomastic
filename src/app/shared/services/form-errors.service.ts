@@ -42,6 +42,11 @@ export class FormErrorsService {
     }
     const formGroup = field.parent.controls;
     const name: string = Object.keys(formGroup).find(name => field === formGroup[name]) || null;
+    // if (field.errors?.matDatepickerMin) {
+    //   // field.setValidators(null);
+    //   // field.updateValueAndValidity();
+    //   return;
+    // }
     return Object.keys(field.errors || {})
       .map(key => `${name.toUpperCase()}  ${this.errorMap[key](field)}`);
   }

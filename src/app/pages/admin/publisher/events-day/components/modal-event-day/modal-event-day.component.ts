@@ -16,6 +16,7 @@ import { DomSanitizerService } from '@app/shared/services/dom-sanitizer.service'
 import { ACTIONS, DATE_FORMAT } from '@adminShared/models/shared.model';
 import { AbstractControl } from '@angular/forms';
 import { LoaderService } from '@appShared/services/loader.service';
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-modal',
@@ -28,7 +29,7 @@ import { LoaderService } from '@appShared/services/loader.service';
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
     },
 
-    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT}
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT }
   ]
 })
 export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -40,7 +41,6 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
   selectCard: TemplateCard = null;
   conditionsRes: Condition[];
   parametersRes: Parameter[];
-  today = new Date();
   private destroy$ = new Subject<any>();
 
   constructor(
@@ -62,6 +62,24 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
   get loading() {
     return this.loaderSvc.isLoading.value;
   }
+
+  dateFilter = (dayDp: Date): boolean => {
+    const dayText: string = moment(dayDp).format('MM/DD/YYYY');
+    const dayToFilter = new Date(dayText);
+    dayToFilter.setHours(0, 0, 0, 0);
+    const today: Date = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (this.actionTODO === 'EDITAR') {
+      const dateUpdate = this.data.event.fecha.split('-');
+      const [year, month, day] = dateUpdate;
+      const minDate: Date = new Date(`${month}/${day}/${year}`);
+      minDate.setHours(0, 0, 0, 0);
+
+      return (dayToFilter >= today) || (dayToFilter.toDateString() === minDate.toDateString());
+    }
+    return dayToFilter >= today;
+  };
 
   setDateFormat(event: MatDatepickerInputEvent<unknown>) {
     this.eventDayForm.setDate(event);
@@ -142,7 +160,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
   ngOnInit(): void {
     if (this.data?.event) {
       this.actionTODO = 'EDITAR';
-      this.pathFormData(this.data?.event);
+      this.pathFormData(this.data.event);
     } else {
       this.eventDayForm.baseForm.get('id').setValidators(null);
       this.eventDayForm.baseForm.get('id').updateValueAndValidity();

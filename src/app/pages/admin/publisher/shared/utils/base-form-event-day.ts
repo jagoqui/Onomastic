@@ -3,6 +3,7 @@ import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from
 import * as moment from 'moment';
 import { FormErrorsService } from '@appShared/services/form-errors.service';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { DATE_FORMAT } from '@adminShared/models/shared.model';
 
 @Injectable({ providedIn: 'root' })
 export class BaseFormEventDay {
@@ -20,21 +21,21 @@ export class BaseFormEventDay {
 
   createBaseForm(): FormGroup {
     return this.fb.group({
-      id: ['', [Validators.required]],
-      nombre: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(45)]],
-      fecha: ['', [Validators.required, this.validDate]],
-      estado: ['', [Validators.required]],
-      recurrencia: ['', [Validators.required]],
+      id: [null, [Validators.required]],
+      nombre: [null, [Validators.required, Validators.minLength(5), Validators.maxLength(45)]],
+      fecha: [null, [Validators.required, this.validDate]],
+      estado: [null, [Validators.required]],
+      recurrencia: [null, [Validators.required]],
       condicionesEvento: [this.createConditionField()],
       plantilla: this.fb.group({
-        id: ['', [Validators.required]],
-        texto: ['', [Validators.required]]
+        id: [null, [Validators.required]],
+        texto: [null, [Validators.required]]
       })
     });
   }
 
   setDate(event: MatDatepickerInputEvent<unknown>) {
-    this.baseForm.controls.fecha.setValue(moment(event.value).format('YYYY-MM-DD'));
+    this.baseForm.controls.fecha.setValue(moment(event.value).format(DATE_FORMAT.display.dateInput));
   }
 
   validDate(control: FormControl): { [key: string]: any } | null {
@@ -51,9 +52,9 @@ export class BaseFormEventDay {
 
   private createConditionField(): FormGroup {
     return this.fb.group({
-      id: ['', Validators.required],
-      condicion: ['', Validators.required],
-      value: ['', Validators.required]
+      id: [null, Validators.required],
+      condicion: [null, Validators.required],
+      value: [null, Validators.required]
     });
   }
 }

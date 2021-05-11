@@ -13,7 +13,7 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: '/login',
-    // redirectTo: '/PUBLISHER/mail-users',
+    // redirectTo: '/PUBLISHER/events-day',
     pathMatch: 'full'
   },
   {
