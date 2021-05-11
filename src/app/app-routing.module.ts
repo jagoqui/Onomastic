@@ -12,8 +12,8 @@ import { ResetPasswordComponent } from '@auth/reset-password/reset-password.comp
 const routes: Routes = [
   {
     path: '',
-    // redirectTo: '/login',
-    redirectTo: '/PUBLISHER/mail-users',
+    redirectTo: '/login',
+    // redirectTo: '/PUBLISHER/mail-users',
     pathMatch: 'full'
   },
   {
@@ -47,7 +47,7 @@ const routes: Routes = [
   {
     path: 'PUBLISHER',
     loadChildren: () => import('./pages/admin/publisher/publisher.module').then(m => m.PublisherModule),
-    // canActivate: [CheckLoginGuard]
+    canActivate: [CheckLoginGuard]
   },
   {
     path: 'forgot-password',

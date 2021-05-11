@@ -13,22 +13,9 @@ import { BaseFormEventDay } from '@pages/admin/publisher/shared/utils/base-form-
 import { TemplateCard } from '@adminShared//models/template-card.model';
 import { Condition, EventDay, Parameter } from '@adminShared//models/event-day.model';
 import { DomSanitizerService } from '@app/shared/services/dom-sanitizer.service';
-import { ACTIONS } from '@adminShared/models/shared.model';
+import { ACTIONS, DATE_FORMAT } from '@adminShared/models/shared.model';
 import { AbstractControl } from '@angular/forms';
 import { LoaderService } from '@appShared/services/loader.service';
-
-
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'LL'
-  },
-  display: {
-    dateInput: 'YYYY-MM-DD',
-    monthYearLabel: 'YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'YYYY'
-  }
-};
 
 @Component({
   selector: 'app-modal',
@@ -41,7 +28,7 @@ export const MY_FORMATS = {
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
     },
 
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT}
   ]
 })
 export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy {
