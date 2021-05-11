@@ -9,27 +9,14 @@ import { TemplateCardsService } from '@pages/admin/publisher/shared/services/tem
 import { Subject } from 'rxjs/internal/Subject';
 import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
-import Swal from 'sweetalert2';
 import { BaseFormEventDay } from '@pages/admin/publisher/shared/utils/base-form-event-day';
 import { TemplateCard } from '@adminShared//models/template-card.model';
 import { Condition, EventDay, Parameter } from '@adminShared//models/event-day.model';
 import { DomSanitizerService } from '@app/shared/services/dom-sanitizer.service';
-import { ACTIONS } from '@adminShared/models/shared.model';
+import { ACTIONS, DATE_FORMAT } from '@adminShared/models/shared.model';
 import { AbstractControl } from '@angular/forms';
 import { LoaderService } from '@appShared/services/loader.service';
-
-
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'LL'
-  },
-  display: {
-    dateInput: 'YYYY-MM-DD',
-    monthYearLabel: 'YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'YYYY'
-  }
-};
+import * as moment from 'moment';
 
 @Component({
   selector: 'app-modal',
@@ -42,7 +29,7 @@ export const MY_FORMATS = {
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
     },
 
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT }
   ]
 })
 export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -54,7 +41,6 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
   selectCard: TemplateCard = null;
   conditionsRes: Condition[];
   parametersRes: Parameter[];
-  today = new Date();
   private destroy$ = new Subject<any>();
 
   constructor(
@@ -77,6 +63,24 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
     return this.loaderSvc.isLoading.value;
   }
 
+  dateFilter = (dayDp: Date): boolean => {
+    const dayText: string = moment(dayDp).format('MM/DD/YYYY');
+    const dayToFilter = new Date(dayText);
+    dayToFilter.setHours(0, 0, 0, 0);
+    const today: Date = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    if (this.actionTODO === 'EDITAR') {
+      const dateUpdate = this.data.event.fecha.split('-');
+      const [year, month, day] = dateUpdate;
+      const minDate: Date = new Date(`${month}/${day}/${year}`);
+      minDate.setHours(0, 0, 0, 0);
+
+      return (dayToFilter >= today) || (dayToFilter.toDateString() === minDate.toDateString());
+    }
+    return dayToFilter >= today;
+  };
+
   setDateFormat(event: MatDatepickerInputEvent<unknown>) {
     this.eventDayForm.setDate(event);
   }
@@ -95,7 +99,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
         this.templateCardsService.getAllCards()
           .pipe(takeUntil(this.destroy$))
           .subscribe(cards => this.cards = cards, () => {
-            Swal.showValidationMessage(
+            SwAlert.showValidationMessage(
               'Error cargando las plantillas');
           });
       }
@@ -104,7 +108,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
       this.templateCardsService.getAllCards()
         .pipe(takeUntil(this.destroy$))
         .subscribe(cards => this.cards = cards, () => {
-          Swal.showValidationMessage(
+          SwAlert.showValidationMessage(
             'Error cargando las plantillas');
         });
     }
@@ -140,8 +144,8 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
           this.onClose(true);
         }
       }, (err) => {
-        Swal.showValidationMessage(
-          `Error en al ${this.actionTODO.toLowerCase()} el evento. ${err.status}`);
+        SwAlert.showValidationMessage(
+          `Error al ${this.actionTODO.toLowerCase()} el evento. ${err.status}`);
       });
   }
 
@@ -156,7 +160,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
   ngOnInit(): void {
     if (this.data?.event) {
       this.actionTODO = 'EDITAR';
-      this.pathFormData(this.data?.event);
+      this.pathFormData(this.data.event);
     } else {
       this.eventDayForm.baseForm.get('id').setValidators(null);
       this.eventDayForm.baseForm.get('id').updateValueAndValidity();
@@ -170,7 +174,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
           this.conditionsRes = conditions;
         }
       }, (_) => {
-        Swal.showValidationMessage(
+        SwAlert.showValidationMessage(
           `No se pudo cargar las condiciones.`);
       });
   }

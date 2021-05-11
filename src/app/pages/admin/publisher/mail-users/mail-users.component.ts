@@ -12,6 +12,7 @@ import SwAlert from 'sweetalert2';
 import { ID } from '@adminShared/models/shared.model';
 import { MailDataSentService } from '@adminShared/services/mail-data-sent.service';
 import { MailUsers } from '@adminShared/models/mail-users.model';
+import { ModalMailsLogComponent } from '@publisher/mail-users/components/modal-mails-log/modal-mails-log.component';
 
 @Component({
   selector: 'app-users',
@@ -51,6 +52,25 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
     return this.getPartialUsers(this.numMailsDataSent);
   }
 
+  openModalLogs() {
+    const dialogRef = this.dialog.open(ModalMailsLogComponent, {
+      height: 'auto',
+      width: '90%',
+      panelClass: 'app-full-bleed-dialog',
+      hasBackdrop: true,
+      disableClose: true,
+      data: { title: 'HISTORIAL'}
+    });
+    if (dialogRef.afterClosed()) {
+      dialogRef.componentInstance.refresh
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((refresh) => {
+          if (refresh) {
+            this.onRefresh();
+          }
+        });
+    }
+  }
   onOpenModal(user: MailUsers) {
     const dialogRef = this.dialog.open(ModalMailUsersComponent, {
       height: 'auto',
@@ -173,5 +193,4 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
     this.destroy$.next({});
     this.destroy$.complete();
   }
-
 }

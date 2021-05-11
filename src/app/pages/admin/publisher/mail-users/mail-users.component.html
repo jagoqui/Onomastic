@@ -7,7 +7,7 @@
         <span class="mat-title">{{numMailsSent}}</span>
       </div>
       <div fxFlex class="circle">
-        <mat-icon>autorenew</mat-icon>
+        <mat-icon (click)='openModalLogs()' >autorenew</mat-icon>
       </div>
     </button>
     <button fxFlex mat-raised-button fxLayout="row" fxLayoutAlign="center center" class="mat-headline">

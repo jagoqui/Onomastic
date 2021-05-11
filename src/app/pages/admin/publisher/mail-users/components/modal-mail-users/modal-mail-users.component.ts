@@ -13,19 +13,8 @@ import { PlatformService } from '@pages/admin/shared/services/platform.service';
 import { AssociationService } from '@pages/admin/shared/services/association.service';
 import { AcademicProgramService } from '@pages/admin/shared/services/academic-program.service';
 import { BodyTypeService } from '@pages/admin/shared/services/body-type.service';
-import { ACTIONS, ByIdOrCode } from '@adminShared/models/shared.model';
+import { ACTIONS, ByIdOrCode, DATE_FORMAT } from '@adminShared/models/shared.model';
 
-export const MY_FORMATS = {
-  parse: {
-    dateInput: 'LL'
-  },
-  display: {
-    dateInput: 'YYYY-MM-DD',
-    monthYearLabel: 'YYYY',
-    dateA11yLabel: 'LL',
-    monthYearA11yLabel: 'YYYY'
-  }
-};
 
 @Component({
   selector: 'app-modal-mail-users',
@@ -38,8 +27,7 @@ export const MY_FORMATS = {
       useClass: MomentDateAdapter,
       deps: [MAT_DATE_LOCALE, MAT_MOMENT_DATE_ADAPTER_OPTIONS]
     },
-
-    { provide: MAT_DATE_FORMATS, useValue: MY_FORMATS }
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT }
   ]
 })
 export class ModalMailUsersComponent implements OnInit, OnDestroy {
