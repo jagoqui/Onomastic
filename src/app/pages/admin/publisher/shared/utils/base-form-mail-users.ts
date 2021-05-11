@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import * as moment from 'moment';
 
 @Injectable({ providedIn: 'root' })
@@ -14,20 +14,11 @@ export class BaseFormMailUsers {
     email: '',
     fechaNacimiento: '',
     estado: '',
-    genero: '',
-    asociacionPorUsuarioCorreo: this.createByNameArrayError('id'),
-    programaAcademicoPorUsuarioCorreo: this.createByNameArrayError('codigo'),
-    vinculacionPorUsuarioCorreo: this.createByNameArrayError('id'),
-    plataformaPorUsuarioCorreo: this.createByNameArrayError('id')
+    genero: ''
   };
   baseForm = this.createBaseForm();
 
   constructor(private fb: FormBuilder) {
-  }
-
-  get academicProgram(): AbstractControl {
-    // eslint-disable-next-line @typescript-eslint/dot-notation
-    return this.baseForm.get('programaAcademicoPorUsuarioCorreo') as AbstractControl;
   }
 
   private static createByNameFormGroup(id: string): FormGroup {
@@ -57,56 +48,11 @@ export class BaseFormMailUsers {
       genero: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       estado: ['', [Validators.required]],
-      asociacionPorUsuarioCorreo: this.fb.array([BaseFormMailUsers.createByNameFormGroup('id')]),
-      programaAcademicoPorUsuarioCorreo: this.fb.array([BaseFormMailUsers.createByNameFormGroup('codigo')]),
-      vinculacionPorUsuarioCorreo: this.fb.array([BaseFormMailUsers.createByNameFormGroup('id')]),
-      plataformaPorUsuarioCorreo: this.fb.array([BaseFormMailUsers.createByNameFormGroup('id')])
+      asociacionPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id')],
+      programaAcademicoPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('codigo')],
+      vinculacionPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id')],
+      plataformaPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id')]
     });
-  }
-
-  createByNameArrayError(id: string) {
-    if (id === 'id') {
-      return new Array({
-        id: '',
-        nombre: ''
-      });
-    } else {
-      return new Array({
-        id: '',
-        codigo: '',
-        nombre: ''
-      });
-    }
-  }
-
-  addByNameFormGroup(formGroup: string) {
-    const byName = this.baseForm.get(formGroup) as FormArray;
-    byName.push(BaseFormMailUsers.createByNameFormGroup(formGroup === 'programaAcademicoPorUsuarioCorreo' ? 'codigo' : 'id'));
-    this.addByNameArrayError(formGroup);
-  }
-
-  removeOrClearByName(i: number, formGroup: string) {
-    const byName = this.baseForm.get(formGroup) as FormArray;
-    if (byName.length > 1) {
-      byName.removeAt(i);
-    } else {
-      byName.reset();
-    }
-    this.removeOrClearByNameArrayError(i, formGroup);
-  }
-
-  addByNameArrayError(arrayError: string) {
-    const byNameErrorArray = this.errorsMessage[arrayError] as Array<any>;
-    byNameErrorArray.push(this.createByNameArrayError(arrayError === 'programaAcademicoPorUsuarioCorreo' ? 'codigo' : 'id'));
-  }
-
-  removeOrClearByNameArrayError(i: number, arrayError: string) {
-    const byNameErrorArray = this.errorsMessage[arrayError] as Array<any>;
-    if (byNameErrorArray.length > 1) {
-      byNameErrorArray.splice(i, i);
-    } else {
-      byNameErrorArray.splice(byNameErrorArray.length + 1);
-    }
   }
 
   validDate(control: FormControl): { [key: string]: any } | null {
@@ -136,11 +82,6 @@ export class BaseFormMailUsers {
       return ((control.touched || control.dirty) && control.invalid);
     }
   }
-
-  onReset(): void {
-    this.baseForm.reset();
-  }
-
 
   private getErrorMessage(field: string, group?: string, i?: number): void {
     let errorField: ValidationErrors;

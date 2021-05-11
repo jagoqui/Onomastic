@@ -7,7 +7,7 @@
         <span class="mat-title">{{numMailsSent}}</span>
       </div>
       <div fxFlex class="circle">
-        <mat-icon>autorenew</mat-icon>
+        <mat-icon (click)='openModalLogs()' >autorenew</mat-icon>
       </div>
     </button>
     <button fxFlex mat-raised-button fxLayout="row" fxLayoutAlign="center center" class="mat-headline">
@@ -43,7 +43,6 @@
 
       </mat-toolbar-row>
     </mat-toolbar>
-
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" matSort>
         <!-- ID Column -->
@@ -135,7 +134,7 @@
       </table>
     </div>
     <mat-paginator [length]="100"
-                   [pageSize]="10"
+                   [pageSize]="5"
                    [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
   </div>
 </div>

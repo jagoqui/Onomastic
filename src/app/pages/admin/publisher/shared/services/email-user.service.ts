@@ -18,7 +18,7 @@ export class EmailUserService {
       .get<MailUsers[]>(`${environment.apiUrl}/usuariosemail`);
   }
 
-  saveMailUser(user: MailUsers, id?: ID): Observable<MailUsers> {
+  save(user: MailUsers, id?: ID): Observable<MailUsers> {
     if (id) {
       return this.http
         .put<MailUsers>(`${environment.apiUrl}/usuariosemail/${id.tipoIdentificacion}/${id.numeroIdentificacion}`, user);

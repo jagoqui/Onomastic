@@ -18,17 +18,18 @@
   </mat-sidenav>
   <mat-sidenav-content>
     <div mat-dialog-content>
-      <form [formGroup]='eventDayForm.baseForm' fxLayout='row' fxLayoutAlign='space-between center' [fxLayoutGap]="'1.667rem'">
+      <form [formGroup]='eventDayForm.baseForm' fxLayout='row' fxLayoutAlign='space-between center'
+            [fxLayoutGap]="'1.667rem'">
         <!--Template card-->
         <div *ngIf='!selectCard; else selectedCard'
              [ngClass]="controls.plantilla.invalid && !controls.plantilla.pristine? 'select-card-container-error' : 'select-card-container'"
-            fxFlex='40'>
+             fxFlex='40'>
           <div class='btn-select-card'>
             <button mat-button color='primary' (click)='loadCards()'>
               Seleccionar plantilla<br>
               <mat-icon>image</mat-icon>
               <ng-container *ngIf='controls.plantilla.invalid && !controls.plantilla.pristine'>
-                <mat-error *ngFor="let error of eventDayForm.onSearchErrors(controls.plantilla)">
+                <mat-error *ngFor='let error of eventDayForm.onSearchErrors(controls.plantilla)'>
                   {{error}}
                 </mat-error>
               </ng-container>
@@ -50,7 +51,7 @@
                 <input type='text' matInput required formControlName='nombre'>
               </label>
               <mat-icon matSuffix>event_note</mat-icon>
-              <mat-error *ngFor="let error of eventDayForm.onSearchErrors(controls.nombre)">
+              <mat-error *ngFor='let error of eventDayForm.onSearchErrors(controls.nombre)'>
                 {{error}}
               </mat-error>
             </mat-form-field>
@@ -68,7 +69,7 @@
                 <mat-icon *ngSwitchDefault matSuffix>edit_notifications</mat-icon>
               </ng-container>
               <mat-error
-                *ngFor="let error of eventDayForm.onSearchErrors(controls.estado)">
+                *ngFor='let error of eventDayForm.onSearchErrors(controls.estado)'>
                 {{error}}
               </mat-error>
             </mat-form-field>
@@ -78,13 +79,14 @@
             <mat-form-field fxFlex='47' appearance='outline'>
               <mat-label>Fecha de inicio</mat-label>
               <label>
-                <input matInput [matDatepicker]='dp' [min]="today" formControlName='fecha' (dateChange)='setDateFormat($event)'
+                <input matInput [matDatepicker]='dp' [min]='today' formControlName='fecha'
+                       (dateChange)='setDateFormat($event)'
                        placeholder='YYYY-MM-DD' readonly>
               </label>
               <mat-datepicker-toggle matSuffix [for]='dp'></mat-datepicker-toggle>
               <mat-datepicker #dp></mat-datepicker>
               <mat-error
-                *ngFor="let error of eventDayForm.onSearchErrors(controls.fecha)">
+                *ngFor='let error of eventDayForm.onSearchErrors(controls.fecha)'>
                 {{error}}
               </mat-error>
             </mat-form-field>
@@ -102,96 +104,35 @@
                 <mat-icon *ngSwitchDefault matSuffix>schedule</mat-icon>
               </ng-container>
               <mat-error
-                *ngFor="let error of eventDayForm.onSearchErrors(controls.recurrencia)">
+                *ngFor='let error of eventDayForm.onSearchErrors(controls.recurrencia)'>
                 {{error}}
               </mat-error>
             </mat-form-field>
           </div>
-          <!-- Conditions -->
-          <div formArrayName='condicionesEvento'
-               *ngFor='let condition of eventDayForm.conditions.controls; let i=index'>
-            <div fxLayout='row' fxLayoutAlign='space-between center' [formGroupName]='i'>
-              <!--Condition-->
-              <mat-form-field hideRequiredMarker [fxFlex]="conditionSelect.value === 'programa_academico'? 24 : 36"
-                              appearance='outline' title='Condición'>
-                <mat-label>Condiciones</mat-label>
-                <mat-select #conditionSelect formControlName='condicion' (selectionChange)='onClearParameter(i)'>
-                  <mat-option [value]='null'>-- Seleccione una opción --</mat-option>
-                  <mat-option *ngFor='let conditionRes of conditionsRes' [value]='conditionRes.condicion'>
-                    <ng-container>
-                      {{conditionSelect.value === conditionRes.condicion ? setParameters(conditionRes) : conditionRes.condicion}}
-                    </ng-container>
-                  </mat-option>
-                </mat-select>
-                <mat-icon matSuffix>fact_check</mat-icon>
-                <mat-error
-                  *ngFor="let error of eventDayForm.onSearchErrors(controls.condicionesEvento[i])">
-                  {{error}}
-                </mat-error>
-              </mat-form-field>
-              <!--Filter by association-->
-              <ng-container *ngIf="conditionSelect.value === 'programa_academico'">
-                <ng-container *ngFor='let conditionRes of conditionsRes'>
-                  <mat-form-field *ngIf="conditionRes.condicion === 'asociacion'" hideRequiredMarker fxFlex='24'
-                                  appearance='outline' title='Filtro por asociación'>
-                    <mat-label>Filtro por asociacíon</mat-label>
-                    <mat-select (selectionChange)='setIdAssociation($event.value, i)'
-                                [(value)]='selectedIdFilterAssociation[i]'>
-                      <mat-option [value]='null'>-- Seleccione una opción --</mat-option>
-                      <mat-option *ngFor='let associationFilterRes of conditionRes.parametros[0].valores'
-                                  [value]='associationFilterRes.id'>
-                        <ng-container> {{associationFilterRes.nombre}} </ng-container>
-                      </mat-option>
-                    </mat-select>
-                    <mat-icon matSuffix>fact_check</mat-icon>
-                    <!--                    <mat-error *ngFor="let error of eventDayForm.mapErrors(eventDayForm.baseForm.controls.condicionesEvento[i], 'Condición')">-->
-                    <!--                      {{error}}-->
-                    <!--                    </mat-error>-->
-                  </mat-form-field>
-                </ng-container>
+          <!--         Conditions -->
+          <ng-select
+            [items]='conditionsRes'
+            groupBy='parametros'
+            bindLabel='value'
+            placeholder='Condiciones'
+            appearance='outline'
+            notFoundText='No hay más condiones en la lista'
+            typeToSearchText='Search'
+            [loading]='loading'
+            [multiple]='true'
+            [minTermLength]='3'
+            [hideSelected]='true'
+            [closeOnSelect]='false'
+            [clearSearchOnAdd]='true'
+            [selectableGroupAsModel]='true'
+            formControlName='condicionesEvento'>
+            <ng-template ng-optgroup-tmp let-condition='item'>
+              <ng-container>
+                <mat-icon> local_offer</mat-icon>
               </ng-container>
-              <!--Parameter-->
-              <ng-container
-                *ngIf="conditionSelect.value === 'programa_academico'? selectedIdFilterAssociation !== null : !conditionSelect.empty">
-                <ng-container *ngFor='let parameterRes of parametersRes'>
-                  <mat-form-field
-                    *ngIf="conditionSelect.value === 'programa_academico' ? parameterRes.id=== selectedIdFilterAssociation[i]: true"
-                    hideRequiredMarker [fxFlex]="conditionSelect.value === 'programa_academico'? 24 : 36"
-                    appearance='outline' [title]="'Seleccione el valor de '+ conditionSelect.value">
-                    <mat-label>Seleccione {{conditionSelect.value}}</mat-label>
-                    <mat-select formControlName='parametro'>
-                      <mat-option>-- Seleccione una opción --</mat-option>
-                      <mat-option *ngFor='let valor of parameterRes.valores' [value]='valor.id'>
-                        <ng-container> {{valor.nombre}} </ng-container>
-                      </mat-option>
-                    </mat-select>
-                    <mat-icon matSuffix>fact_check</mat-icon>
-                    <!--                    <mat-error-->
-                    <!--                      *ngFor="let error of eventDayForm.mapErrors(eventDayForm.baseForm.controls.condicionesEvento[i].parametro, 'Condición')">-->
-                    <!--                      {{error}}-->
-                    <!--                    </mat-error>-->
-                  </mat-form-field>
-                </ng-container>
-              </ng-container>
-              <!-- Actions list -->
-              <div fxFlex='25' fxLayout='row' fxFlexAlign='space-around center'>
-                <div *ngIf='eventDayForm.conditions.value.length >1' fxFlex='45'>
-                  <button mat-mini-fab color='warn' title='Eliminar condición'
-                          (click)='removeCondition(i)'>
-                    <mat-icon>remove</mat-icon>
-                  </button>
-                </div>
-                <div
-                  *ngIf='eventDayForm.conditions.value.length<5 && eventDayForm.conditions.value.length === i+1'
-                  fxFlex='45'>
-                  <button mat-mini-fab color='primary' title='Agregar condición'
-                          (click)='eventDayForm.addCondition()'>
-                    <mat-icon>playlist_add</mat-icon>
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
+              {{condition.name| uppercase}}
+            </ng-template>
+          </ng-select>
         </div>
       </form>
     </div>
@@ -201,6 +142,6 @@
 <div mat-dialog-actions fxLayout='row' fxLayoutAlign='end end'>
   <button mat-raised-button fxFlex='20' color='warn' (click)='onClose(null)'>Cancelar</button>
   <button mat-raised-button fxFlex='20' color='primary' (click)='onSave()' [disabled]='eventDayForm.baseForm.invalid'>
-    Crear evento
+    {{actionTODO}}
   </button>
 </div>

@@ -11,6 +11,8 @@ import { ModalMailUsersComponent } from './components/modal-mail-users/modal-mai
 import SwAlert from 'sweetalert2';
 import { ID } from '@adminShared/models/shared.model';
 import { MailDataSentService } from '@adminShared/services/mail-data-sent.service';
+import { MailUsers } from '@adminShared/models/mail-users.model';
+import { ModalMailsLogComponent } from '@publisher/mail-users/components/modal-mails-log/modal-mails-log.component';
 
 @Component({
   selector: 'app-users',
@@ -20,6 +22,7 @@ import { MailDataSentService } from '@adminShared/services/mail-data-sent.servic
 export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
+
   columnsToDisplay = [
     'id', 'plataformaPorUsuarioCorreo',
     'nombre', 'email', 'fechaNacimiento',
@@ -29,6 +32,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
     'estado', 'actions'
   ];
   dataSource = new MatTableDataSource();
+
   private numUsers = 0;
   private numMailsDataSent = 0;
   private destroy$ = new Subject<any>();
@@ -40,12 +44,51 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   ) {
   }
 
-  get numMailUser(): string{
+  get numMailUser(): string {
     return this.getPartialUsers(this.numUsers);
   }
 
-  get numMailsSent(): string{
+  get numMailsSent(): string {
     return this.getPartialUsers(this.numMailsDataSent);
+  }
+
+  openModalLogs() {
+    const dialogRef = this.dialog.open(ModalMailsLogComponent, {
+      height: 'auto',
+      width: '90%',
+      panelClass: 'app-full-bleed-dialog',
+      hasBackdrop: true,
+      disableClose: true,
+      data: { title: 'HISTORIAL'}
+    });
+    if (dialogRef.afterClosed()) {
+      dialogRef.componentInstance.refresh
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((refresh) => {
+          if (refresh) {
+            this.onRefresh();
+          }
+        });
+    }
+  }
+  onOpenModal(user: MailUsers) {
+    const dialogRef = this.dialog.open(ModalMailUsersComponent, {
+      height: 'auto',
+      width: '45%',
+      panelClass: 'app-full-bleed-dialog',
+      hasBackdrop: true,
+      disableClose: true,
+      data: { title: user ? 'Actualizar destinatario' : 'Nuevo destinatario', user }
+    });
+    if (dialogRef.afterClosed()) {
+      dialogRef.componentInstance.refresh
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((refresh) => {
+          if (refresh) {
+            this.onRefresh();
+          }
+        });
+    }
   }
 
   getPartialUsers(numData: number): string {
@@ -61,26 +104,6 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  onOpenModal(user = {}) {
-    const dialogRef = this.dialog.open(ModalMailUsersComponent, {
-      height: 'auto',
-      width: '45%',
-      panelClass: 'app-full-bleed-dialog',
-      hasBackdrop: true,
-      disableClose: true,
-      data: { title: user ? 'Actualizar destinatario' : 'Nuevo destinatario', user }
-    });
-    if (dialogRef.afterClosed()) {
-      dialogRef.componentInstance.refresh
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((refresh) => {
-        if (refresh) {
-          this.onRefresh();
-        }
-      });
-    }
-  }
-
   onSubscriptionStateChange(email: string, state: string) {
     const emailEncrypt = btoa(email);
     if (state === 'ACTIVO') {
@@ -93,7 +116,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
                 this.onRefresh();
               });
           }
-        },()=>{
+        }, () => {
           SwAlert.showValidationMessage('Error desactivando destinatario');
         });
     } else {
@@ -106,7 +129,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
                 this.onRefresh();
               });
           }
-        },()=>{
+        }, () => {
           SwAlert.showValidationMessage('Error activando destinatario');
         });
     }
@@ -129,7 +152,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
             .subscribe((_) => {
               SwAlert.fire('Eliminado!', 'El destinatario se ha eliminado', 'success').then();
               this.ngOnInit();
-            },()=>{
+            }, () => {
               SwAlert.showValidationMessage('Error elimando las destinatario');
             });
         }
@@ -152,16 +175,16 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
     this.mailUserSvc.getAll()
       .pipe(takeUntil(this.destroy$))
       .subscribe((user) => {
-      this.dataSource.data = user;
-      this.numUsers = this.dataSource.data.length;
-    },()=>{
+        this.dataSource.data = user;
+        this.numUsers = this.dataSource.data.length;
+      }, () => {
         SwAlert.showValidationMessage('Error cargando los destinatarios');
       });
     this.mailDataSentSvc.getAll()
       .pipe(takeUntil(this.destroy$))
       .subscribe((dataSent) => {
-        this.numMailsDataSent= dataSent.length;
-      },()=>{
+        this.numMailsDataSent = dataSent.length;
+      }, () => {
         SwAlert.showValidationMessage('Error cargando las los correos enviados');
       });
   }
@@ -170,5 +193,4 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
     this.destroy$.next({});
     this.destroy$.complete();
   }
-
 }

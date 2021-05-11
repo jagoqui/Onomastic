@@ -11,7 +11,7 @@ import { ImageUpload } from '@adminShared/models/image-upload.model';
 export class UploadImageService {
   public imgURI: string;
   private imgFile: File = null;
-  private imgGerenicName: '_template';
+  private imgGenericName: '_template';
 
   constructor(
     private http: HttpClient
@@ -26,7 +26,7 @@ export class UploadImageService {
     this.imgFile = file;
   }
 
-  openExplorerWindows = (editor, onDeleteLastImage) =>  {
+  openExplorerWindows = (editor, onDeleteLastImage: boolean) => {
     const input = document.createElement('input');
     input.setAttribute('type', 'file');
     input.setAttribute('accept', 'image/*');
@@ -64,7 +64,7 @@ export class UploadImageService {
       const formData = new FormData();
       formData.append('file', this.imgFile);
       return this.http
-        .post<ImageUpload>(`${environment.uploadImagesUriServer}/${new Date().getTime()}${this.imgGerenicName}`, formData, {
+        .post<ImageUpload>(`${environment.uploadImagesUriServer}/${new Date().getTime()}${this.imgGenericName}`, formData, {
           reportProgress: true
         });
     }
@@ -119,7 +119,8 @@ export class UploadImageService {
   }
 
   isImgStorage(): boolean {
-    return this.imgFile.name.includes(this.imgGerenicName);
+    //TODO: Poco seguro, hacer peticion para saber si la imagen en realidad está en la base de datos
+    return this.imgFile.name.includes(this.imgGenericName);
   }
 
 }

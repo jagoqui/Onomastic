@@ -14,12 +14,7 @@ export class NegateCheckLoginGuard implements CanActivate {
   canActivate(): Observable<boolean> {
     return this.authSvc.isLogged$.pipe(
       take(1),
-      map((logged: boolean) => {
-          if (!logged) {
-            alert('Acceso denegado!');
-          }
-          return !logged;
-        }
+      map((logged: boolean) => !logged
       )
     );
   }

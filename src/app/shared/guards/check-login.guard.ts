@@ -22,8 +22,7 @@ export class CheckLoginGuard implements CanActivate {
         if (userRes) {
           return true;
         }
-        alert('Acceco denegado!');
-        this.router.navigate(['/login']).then(r => console.log(r));
+        this.router.navigate(['/login']).then();
         return false;
       })
     );

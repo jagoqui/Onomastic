@@ -18,21 +18,26 @@
             </mat-error>
           </mat-form-field>
           <!-- Rol -->
-          <mat-form-field fxFlex='47' hideRequiredMarker appearance='outline'>
-            <mat-label>Rol</mat-label>
-            <mat-select #role formControlName='rol'>
-              <mat-option>-- Seleccione una opción --</mat-option>
-              <mat-option *ngFor='let roleOpt of roleOptions' [value]='roleOpt'>{{roleOpt.nombre}}</mat-option>
-            </mat-select>
-            <ng-container [ngSwitch]='role.value?.nombre' matSuffix>
-              <mat-icon *ngSwitchCase="'ADMIN'" matSuffix>admin_panel_settings</mat-icon>
-              <mat-icon *ngSwitchCase="'PUBLISHER'" matSuffix>public</mat-icon>
-              <mat-icon *ngSwitchDefault matSuffix>privacy_tip</mat-icon>
-            </ng-container>
-            <!--            <mat-error *ngFor='let error of publisherForm.onSearchErrors(controls.rol)'>-->
-            <!--              {{error}}-->
-            <!--            </mat-error>-->
-          </mat-form-field>
+          <ng-select #role fxFlex='47'
+                     [items]='roleOptions'
+                     bindLabel='nombre'
+                     placeholder='Rol'
+                     appearance='outline'
+                     labelForId='rol'
+                     title='Seleccione el rol del publicador'
+                     [clearable]='false'
+                     [searchable]='false'
+                     [selectableGroupAsModel]='true'
+                     formControlName='rol'>
+            <ng-template ng-label-tmp let-rol='item'>
+              <ng-container [ngSwitch]='rol.nombre'>
+                <mat-icon *ngSwitchCase="'ADMIN'">admin_panel_settings</mat-icon>
+                <mat-icon *ngSwitchCase="'PUBLISHER'">public</mat-icon>
+                <!--                <mat-icon *ngSwitchDefault>privacy_tip</mat-icon>-->
+              </ng-container>
+              {{rol.nombre| uppercase}}
+            </ng-template>
+          </ng-select>
         </div>
         <div fxLayout='row' fxLayoutAlign='space-between center'>
           <!-- Email -->
@@ -65,43 +70,27 @@
           </mat-form-field>
         </div>
         <!--Association-->
-        <div *ngFor="let mailAssociation of publisherForm.associations['controls'];
-          let i = index"  fxLayout='row'
-             fxFlexAlign='space-between center'>
-          <div fxFlex>
-            <!-- Association -->
-            <div fxFlex='60'>
-              <mat-form-field hideRequiredMarker fxFlex='90' appearance='outline'>
-                <mat-label>Facultad/Escuela</mat-label>
-                <mat-select (selectionChange)='mailAssociation.setValue($event.value)'>
-                  <mat-option>-- Seleccione una opción --</mat-option>
-                  <mat-option *ngFor='let association of associationsRes' [value]='association'>
-                    {{association['nombre']}}
-                  </mat-option>
-                </mat-select>
-                <mat-icon matSuffix>account_balance</mat-icon>
-<!--                <mat-error *ngFor='let error of publisherForm.onSearchErrors(controls.asociacionPorUsuarioCorreo[i])'>-->
-<!--                  {{error}}-->
-<!--                </mat-error>-->
-              </mat-form-field>
-            </div>
-            <!--Actions list-->
-            <div fxFlex='25' fxLayout='row' fxFlexAlign='space-around center'>
-              <div *ngIf='publisherForm.associations.length>1' fxFlex='45'>
-                <button mat-mini-fab color='warn' title='Eliminar condición'
-                        (click)='removeAssociation(i)'>
-                  <mat-icon>remove</mat-icon>
-                </button>
-              </div>
-              <div *ngIf='publisherForm.associations.length-1 === i && i<5' fxFlex='45'>
-                <button mat-mini-fab color='primary' title='Agregar condición'
-                        (click)='publisherForm.addAssociation()'>
-                  <mat-icon>playlist_add</mat-icon>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
+        <ng-select
+          [items]='associations'
+          bindLabel='nombre'
+          placeholder='Facultad/Escuela'
+          appearance='outline'
+          notFoundText='No hay más asociaciones en la lista!'
+          typeToSearchText='Search'
+          title='Seleccione la asociación/es del publicador'
+          [loading]='true'
+          [multiple]='true'
+          [minTermLength]='3'
+          [hideSelected]='true'
+          [closeOnSelect]='false'
+          [clearSearchOnAdd]='true'
+          [selectableGroupAsModel]='true'
+          formControlName='asociacionPorUsuario'>
+          <ng-template ng-option-tmp let-association='item' let-item$='item$'>
+            <ng-container><mat-icon> account_balance</mat-icon></ng-container>
+            {{association.nombre| uppercase}}
+          </ng-template>
+        </ng-select>
       </div>
     </form>
   </div>
@@ -109,7 +98,7 @@
     <button mat-raised-button fxFlex='20' color='warn' (click)='onClose(null)'>Cancelar</button>
     <button mat-raised-button fxFlex='20' color='primary' (click)='onSave()'
             [disabled]='publisherForm.baseForm.invalid'>
-      Agregar
+      {{actionTODO}}
     </button>
   </div>
 </div>

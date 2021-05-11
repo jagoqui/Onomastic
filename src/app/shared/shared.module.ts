@@ -19,6 +19,7 @@ import {
   MaterialElevationDirective,
 } from './directives/material-elevation.directive';
 import { NgxSpinnerModule } from 'ngx-spinner';
+import { NgSelectModule } from '@ng-select/ng-select';
 
 const imports = [
   CommonModule,
@@ -28,7 +29,8 @@ const imports = [
   FormsModule,
   ReactiveFormsModule,
   NgxCaptchaModule,
-  NgxSpinnerModule
+  NgxSpinnerModule,
+  NgSelectModule
 ];
 export default imports;
 

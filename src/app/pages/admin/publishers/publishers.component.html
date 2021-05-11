@@ -25,10 +25,10 @@
     </mat-toolbar>
     <div class='table-responsive'>
       <table mat-table [dataSource]='dataSource' multiTemplateDataRows class='mat-elevation-z8' matSort>
-        <ng-container matColumnDef='{{property}}' *ngFor='let property of columnsToDisplay'>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{property | titlecase}} </th>
+        <ng-container matColumnDef='{{key}}' *ngFor='let key of columnsToDisplay'>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header> {{key==='asociacionPorUsuario'? 'Asociación': key | titlecase}} </th>
           <td mat-cell *matCellDef='let publisher'>
-            {{showProperty(publisher, property)}}
+            <tr *ngFor='let value of showProperty(publisher, key)'>{{value}}</tr>
           </td>
         </ng-container>
         <!-- Table actions -->
@@ -70,8 +70,8 @@
       </table>
     </div>
     <!--    TODO: No está funcionado bien el paginado-->
-    <mat-paginator [length]='100'
-                   [pageSize]='10'
-                   [pageSizeOptions]='[5, 10, 25, 100]' showFirstLastButtons></mat-paginator>
+    <mat-paginator [length]= numPublisher
+                   [pageSize]="5"
+                   [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
   </div>
 </div>

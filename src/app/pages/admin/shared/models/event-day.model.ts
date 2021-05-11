@@ -1,5 +1,3 @@
-import { ByIdOrCode } from '@adminShared/models/shared.model';
-
 export interface EventDay {
   id?: number;
   nombre: string;
@@ -7,7 +5,7 @@ export interface EventDay {
   estado: string;
   recurrencia: string;
   plantilla: CardEvent;
-  condicionesEvento: Condition[];
+  condicionesEvento: Parameter[];
 }
 
 export interface CardEvent {
@@ -16,17 +14,12 @@ export interface CardEvent {
 }
 
 export interface Condition {
-  condicion: string;
-  parametro: string;
+  name: string;
+  parametros: Parameter[];
 }
 
-export interface ConditionRes {
-  condicion: string;
-  parametros?: Parameter[];
-}
-
-export interface Parameter {
+export interface Parameter{
   id: number;
-  valores: ByIdOrCode[];
+  condicion: string;
+  value: string;
 }
-
