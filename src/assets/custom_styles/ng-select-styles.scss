@@ -40,6 +40,10 @@
       .ng-input {
         bottom: .4375em;
       }
+
+      .ng-input > input {
+        color: CurrentColor;
+      }
     }
   }
 
@@ -134,10 +138,12 @@
       border-color: CurrentColor;
       border-width: 0.111rem;
     }
+
     .ng-value-container {
       .ng-placeholder {
         //Todo: Hacer dinamico el cambio del fondo
-        //background-color: $background;
+        background-color: if(CurrentColor == $light-background,
+          $light-background, #393939);
         transform: translateY(-1.5em) scale(0.8) perspective(5.556rem) translateZ(0rem);
         color: CurrentColor;
       }
@@ -365,8 +371,11 @@
     }
 
     .ng-option.ng-option-marked {
+      transition: all 0.3s ease-in-out;
+      font-weight: bold;
+      transform: scale(1.03);
       background: mat-color($mat-accent, lighter);
-      color: mat-color($mat-accent, main);
+      color: mat-color($mat-primary, darker);
     }
 
     .ng-option.ng-option-selected {
