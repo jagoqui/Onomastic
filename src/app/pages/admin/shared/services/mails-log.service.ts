@@ -2,18 +2,18 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
-import { MailDataSent } from '@adminShared/models/mail-data-sent.model';
+import { MailsLog } from '@app/pages/admin/shared/models/mails-log.model';
 
 @Injectable({
   providedIn: 'root'
 })
-export class MailDataSentService {
+export class MailsLogService {
 
   constructor(private http: HttpClient) {
   }
 
-  getAll(): Observable<MailDataSent[]> {
+  getAll(): Observable<MailsLog[]> {
     return this.http
-      .get<MailDataSent[]>(`${environment.apiUrl}/emails`);
+      .get<MailsLog[]>(`${environment.apiUrl}/emails`);
   }
 }
