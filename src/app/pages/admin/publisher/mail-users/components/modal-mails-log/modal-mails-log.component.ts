@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Inject, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/material/core';
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
@@ -25,7 +25,7 @@ import { MatPaginator } from '@angular/material/paginator';
     { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT }
   ]
 })
-export class ModalMailsLogComponent implements OnInit, AfterViewInit {
+export class ModalMailsLogComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() refresh = new EventEmitter<boolean>(false);
   @ViewChild(MatSort) sort: MatSort;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -34,6 +34,8 @@ export class ModalMailsLogComponent implements OnInit, AfterViewInit {
     'fecha', 'email', 'asunto'
   ];
   dataSource = new MatTableDataSource();
+  minDate: Date;
+  maxDate: Date;
   private numMails = 0;
   private destroy$ = new Subject<any>();
 
@@ -66,6 +68,11 @@ export class ModalMailsLogComponent implements OnInit, AfterViewInit {
       }, () => {
         SwAlert.showValidationMessage('Error cargando las los correos enviados');
       });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next({});
+    this.destroy$.complete();
   }
 
   onClose(): void {
