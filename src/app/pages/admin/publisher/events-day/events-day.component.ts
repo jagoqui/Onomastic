@@ -9,11 +9,11 @@ import { EventDayService } from '../shared/services/event-day.service';
 import { ModalEventDayComponent } from './components/modal-event-day/modal-event-day.component';
 import { SafeHtml } from '@angular/platform-browser';
 import SwAlert from 'sweetalert2';
+import Swal from 'sweetalert2';
 import { takeUntil } from 'rxjs/operators';
 import { TemplateCard } from '@pages/admin/shared/models/template-card.model';
 import { EventDay } from '@pages/admin/shared/models/event-day.model';
 import { DomSanitizerService } from '@appShared/services/dom-sanitizer.service';
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-events-day',
@@ -86,7 +86,7 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.onRefresh();
               });
           }
-        },()=>{
+        }, () => {
           Swal.showValidationMessage(
             'Error desactivando evento');
         });
@@ -100,7 +100,7 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
                 this.onRefresh();
               });
           }
-        },()=>{
+        }, () => {
           Swal.showValidationMessage(
             'Error activando evento');
         });
@@ -119,15 +119,14 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
       cancelButtonText: 'Cancelar'
     }).then((resultDelete) => {
       if (resultDelete.isConfirmed) {
-        this.eventsSvc
-          .delete(eventId)
+        this.eventsSvc.delete(eventId)
           .pipe(takeUntil(this.destroy$))
           .subscribe((_) => {
             SwAlert.fire(`El evento fue eliminado! `, '', 'success')
               .then(_ => {
                 this.onRefresh();
               });
-          },()=>{
+          }, () => {
             Swal.showValidationMessage(
               'Error eliminando evento');
           });
@@ -144,10 +143,15 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    this.eventsSvc.getEvents().subscribe((event) => {
-      this.dataSource.data = event;
-      this.numEvents = this.dataSource.data.length;
-    });
+    this.eventsSvc.getEvents()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((event) => {
+        this.dataSource.data = event;
+        this.numEvents = this.dataSource.data.length;
+      }, () => {
+        Swal.showValidationMessage(
+          'Error cargando los eventos');
+      });
   }
 
   ngAfterViewInit(): void {
