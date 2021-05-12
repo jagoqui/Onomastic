@@ -5,7 +5,7 @@ export interface EventDay {
   estado: string;
   recurrencia: string;
   plantilla: CardEvent;
-  condicionesEvento: Parameter[];
+  condicionesEvento?: Parameter[];
 }
 
 export interface CardEvent {

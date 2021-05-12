@@ -45,7 +45,7 @@ export class BaseFormMailUsers {
         numeroIdentificacion: ['', [Validators.required]]
       }),
       fechaNacimiento: ['', [Validators.required, this.validDate]],
-      genero: ['', [Validators.required]],
+      genero: ['', [Validators.required]], //TODO: No está detectando campo invalido si éste campo no lo tiene al editar.
       email: ['', [Validators.required, Validators.email]],
       estado: ['', [Validators.required]],
       asociacionPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id')],
