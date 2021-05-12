@@ -19,7 +19,7 @@
         <mat-icon>people_outline</mat-icon>
       </div>
     </button>
-    <button mat-raised-button class="button-action button-add-user" fxFlex (click)="onOpenModal(null)"
+    <button mat-raised-button class="button-action button-add-user" fxFlex (click)="onOpenModalForm(null)"
             title="Pulse para agregar un nuevo destinatario">Nuevo destinatario
     </button>
   </div>
@@ -107,7 +107,7 @@
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu="matMenu">
-              <button mat-menu-item (click)="onOpenModal(element)">
+              <button mat-menu-item (click)="onOpenModalForm(element)">
                 <mat-icon>edit</mat-icon>
                 <span>Editar</span>
               </button>
