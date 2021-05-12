@@ -32,8 +32,7 @@ export class MailUsersSubscriptionStatusComponent implements OnInit, OnDestroy {
       cancelButtonText: 'No, permanecer subscrito'
     }).then((result) => {
       if (result.isConfirmed) {
-        const emailBase64 = btoa(email);
-        this.emailUserService.unsubscribe(emailBase64)
+        this.emailUserService.unsubscribe(email)
           .pipe(takeUntil(this.destroy$))
           .subscribe(res => {
             if (res) {
