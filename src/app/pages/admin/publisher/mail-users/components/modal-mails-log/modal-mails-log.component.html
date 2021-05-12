@@ -31,16 +31,20 @@
         </mat-paginator>
     </div>
     <div class="container" fxFlex="50" fxLayout="column" fxLayoutAlign="space-around center">
-        <mat-form-field appearance="fill">
-            <mat-label>Seleccione un rango de fechas</mat-label>
-            <mat-date-range-input [rangePicker]="picker">
-                <input matStartDate placeholder="Fecha inicial">
-                <input matEndDate placeholder="Fecha final">
-            </mat-date-range-input>
-            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-            <mat-date-range-picker #picker></mat-date-range-picker>
-        </mat-form-field>
-        <div class="flex">
+       
+        <div class="flex" fxLayout="row" fxLayoutAlign="space-around center" >
+            <mat-form-field appearance="fill" fxFlex="40" >
+                <mat-label>Fecha inicial</mat-label>
+                <input matInput  [min]="minDate" [matDatepicker]="picker1">
+                <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+                <mat-datepicker #picker1></mat-datepicker>
+            </mat-form-field>
+            <mat-form-field appearance="fill" fxFlex="40">
+                <mat-label>Fecha final</mat-label>
+                <input matInput [max]="maxDate" [matDatepicker]="picker2">
+                <mat-datepicker-toggle matSuffix [for]="picker2"></mat-datepicker-toggle>
+                <mat-datepicker #picker2></mat-datepicker>
+            </mat-form-field>
         </div>
     </div>
 </div>
