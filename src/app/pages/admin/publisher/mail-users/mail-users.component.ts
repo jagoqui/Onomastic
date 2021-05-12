@@ -10,7 +10,7 @@ import { EmailUserService } from '../shared/services/email-user.service';
 import { ModalMailUsersComponent } from './components/modal-mail-users/modal-mail-users.component';
 import SwAlert from 'sweetalert2';
 import { ID } from '@adminShared/models/shared.model';
-import { MailDataSentService } from '@adminShared/services/mail-data-sent.service';
+import { MailsLogService } from '@app/pages/admin/shared/services/mails-log.service';
 import { MailUsers } from '@adminShared/models/mail-users.model';
 import { ModalMailsLogComponent } from '@publisher/mail-users/components/modal-mails-log/modal-mails-log.component';
 
@@ -40,7 +40,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   constructor(
     private dialog: MatDialog,
     private mailUserSvc: EmailUserService,
-    private mailDataSentSvc: MailDataSentService
+    private mailDataSentSvc: MailsLogService
   ) {
   }
 
@@ -55,7 +55,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   openModalLogs() {
     const dialogRef = this.dialog.open(ModalMailsLogComponent, {
       height: 'auto',
-      width: '90%',
+      width: '100%',
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
@@ -74,7 +74,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   onOpenModal(user: MailUsers) {
     const dialogRef = this.dialog.open(ModalMailUsersComponent, {
       height: 'auto',
-      width: '45%',
+      width: '90%',
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,

@@ -1,4 +1,4 @@
-export interface MailDataSent {
+export interface MailsLog {
   email:  string;
   fecha:  Date;
   asunto: string;
