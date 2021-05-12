@@ -142,8 +142,7 @@
     .ng-value-container {
       .ng-placeholder {
         //Todo: Hacer dinamico el cambio del fondo
-        background-color: if(CurrentColor == $light-background,
-          $light-background, #393939);
+        background-color: if(CurrentColor == $light-background, $light-background, #393939);
         transform: translateY(-1.5em) scale(0.8) perspective(5.556rem) translateZ(0rem);
         color: CurrentColor;
       }
