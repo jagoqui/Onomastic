@@ -15,7 +15,7 @@ export class MailUsersSubscriptionStatusComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private emailUserService: EmailUserService
+    private mailUserSvc: EmailUserService
   ) {
   }
 
@@ -32,10 +32,10 @@ export class MailUsersSubscriptionStatusComponent implements OnInit, OnDestroy {
       cancelButtonText: 'No, permanecer subscrito'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.emailUserService.unsubscribe(email)
+        this.mailUserSvc.unsubscribe(email)
           .pipe(takeUntil(this.destroy$))
-          .subscribe(res => {
-            if (res) {
+          .subscribe((user) => {
+            if (user) {
               SwAlert.fire(
                 'Subscripción cancelada!',
                 `
