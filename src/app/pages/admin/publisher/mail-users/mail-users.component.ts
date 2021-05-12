@@ -74,7 +74,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   onOpenModalForm(user: MailUsers) {
     const dialogRef = this.dialog.open(ModalMailUsersComponent, {
       height: 'auto',
-      width: '90%',
+      width: '45%',
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
