@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
@@ -9,17 +9,19 @@ import { PublisherService } from '@adminShared/services/publisher.service';
 import { Publisher } from '@adminShared/models/publisher.model';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-publishers',
   templateUrl: './publishers.component.html',
-  styleUrls: ['./publishers.component.scss']
+  styleUrls: ['./publishers.component.scss'],
+  providers: [DatePipe]
 })
-export class PublishersComponent implements OnInit, OnDestroy {
+export class PublishersComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort) sort: MatSort;
 
-  dataSource= new MatTableDataSource();
+  dataSource = new MatTableDataSource();
   columnsToDisplay = [
     'nombre', 'email',
     'asociacionPorUsuario',
@@ -31,23 +33,27 @@ export class PublishersComponent implements OnInit, OnDestroy {
 
   constructor(
     private dialog: MatDialog,
-    private publishersSvc: PublisherService) {
+    private publishersSvc: PublisherService,
+    private datePipe: DatePipe) {
   }
 
   showProperty(publisher: Publisher, key: string) {
     const values: Array<string> = [];
     if (typeof publisher[key] === 'object') {
-      if(publisher[key]?.length){
+      if (publisher[key]?.length) {
         for (const property of publisher[key]) {
           if (property) {
             values.push(property.nombre);
           }
         }
-      }else{
+      } else {
         values.push(publisher[key].nombre);
       }
     } else {
       values.push(publisher[key]);
+    }
+    if (key === 'createTime') {
+      values[0] =this.datePipe.transform(values[0], 'yyyy-MM-dd');
     }
     return values;
   }
@@ -130,11 +136,21 @@ export class PublishersComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.publishersSvc.getAll().subscribe((publisher) => {
-      this.dataSource.data  = publisher;
-      //TODO: Crear un servicio desde el back para obtener el número de publicadores
-      this.numPublisher = this.dataSource.data.length;
-    });
+    this.publishersSvc.getAll()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((publisher) => {
+        this.dataSource.data = publisher;
+        //TODO: Crear un servicio desde el back para obtener el número de publicadores
+        this.numPublisher = this.dataSource.data.length;
+      }, () => {
+        SwAlert.showValidationMessage(
+          `No se pudo cargar los pubicadores.`);
+      });
+  }
+
+  ngAfterViewInit(): void {
+    this.dataSource.sort = this.sort;
+    this.dataSource.paginator = this.paginator;
   }
 
   ngOnDestroy(): void {
