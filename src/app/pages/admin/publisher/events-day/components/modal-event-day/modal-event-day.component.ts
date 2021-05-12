@@ -173,7 +173,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
         if (conditions) {
           this.conditionsRes = conditions;
         }
-      }, (_) => {
+      }, () => {
         SwAlert.showValidationMessage(
           `No se pudo cargar las condiciones.`);
       });
