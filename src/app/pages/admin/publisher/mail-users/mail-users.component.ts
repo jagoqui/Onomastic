@@ -59,7 +59,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
-      data: { title: 'HISTORIAL'}
+      data: { title: 'HISTORIAL DE CORREOS ENVIADOS'}
     });
     if (dialogRef.afterClosed()) {
       dialogRef.componentInstance.refresh
@@ -71,7 +71,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
         });
     }
   }
-  onOpenModal(user: MailUsers) {
+  onOpenModalForm(user: MailUsers) {
     const dialogRef = this.dialog.open(ModalMailUsersComponent, {
       height: 'auto',
       width: '90%',

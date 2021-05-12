@@ -36,6 +36,7 @@ export class ModalMailsLogComponent implements OnInit, AfterViewInit, OnDestroy 
   dataSource = new MatTableDataSource();
   minDate: Date;
   maxDate: Date;
+  today: Date = new Date();
   private numMails = 0;
   private destroy$ = new Subject<any>();
 
