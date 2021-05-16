@@ -14,7 +14,7 @@ import { SharedModule } from '@appShared/shared.module';
     TemplateCardModule,
     JoditAngularModule,
     SharedModule
-  ]
+  ],
 })
 export class TemplatesCardsModule {
 }

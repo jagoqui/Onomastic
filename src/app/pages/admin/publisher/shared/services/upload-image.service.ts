@@ -4,6 +4,8 @@ import { Observable, of } from 'rxjs';
 import { environment } from '@env/environment';
 import { HttpClient } from '@angular/common/http';
 import { ImageUpload } from '@adminShared/models/image-upload.model';
+import { NgxImageCompressService } from 'ngx-image-compress';
+import { FriendlyNumberAbbreviationService } from '@appShared/services/friendly-number-abbreviation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +16,9 @@ export class UploadImageService {
   private imgGenericName: '_template';
 
   constructor(
-    private http: HttpClient
+    private http: HttpClient,
+    private imageCompress: NgxImageCompressService,
+    private friendlyNumberSvc: FriendlyNumberAbbreviationService
   ) {
   }
 
@@ -26,19 +30,10 @@ export class UploadImageService {
     this.imgFile = file;
   }
 
-  openExplorerWindows = (editor, onDeleteLastImage: boolean) => {
-    const input = document.createElement('input');
-    input.setAttribute('type', 'file');
-    input.setAttribute('accept', 'image/*');
-    input.click();
-
-    return input.onchange = () => {
-      const file = input.files[0];
-      if (!file) {
-        SwAlert.fire('Carga fallida!', 'La plantilla no se cargó', 'warning').then();
-        return;
-      }
-      if (!file.name.match(/\.(jpg|jpeg|png|gif)$/)) {
+  loadImage(editor, onDeleteLastImage: boolean) {
+    this.imageCompress.uploadFile().then(({ image, orientation }) => {
+      const fileType = image.substring('data:image/'.length, image.indexOf(';base64'));
+      if (!fileType.match(/(jpg|jpeg|png|gif)$/)) {
         SwAlert.fire(
           {
             icon: 'warning',
@@ -48,16 +43,43 @@ export class UploadImageService {
         ).then();
         return;
       }
-      SwAlert.fire('Carga exitosa!', 'La plantilla se ha cargado', 'success').then(() => {
-        this.imgFile = file;
-        this.imgURI = URL.createObjectURL(file);
-        this.insertImage(editor);
+
+      const fileSize = this.imageCompress.byteCount(image);
+      const maxSize = 300 * 1024;
+      const lowerQuality = fileSize > maxSize ? (fileSize / maxSize - 1) * 100 : fileSize * 90;
+      const quality = lowerQuality / fileSize;
+
+      this.imageCompress.compressFile(image, orientation, 75, quality).then((imageCompressed) => {
+        const fileSizeLowered = this.imageCompress.byteCount(imageCompressed);
+        SwAlert.fire(
+          'Carga exitosa!',
+          `La plantilla se ha cargado (${this.getFileSizeFriendlyFormat(fileSizeLowered)})`,
+          'success').then(() => {
+          this.getFileFromUrl(imageCompressed, 'img').then((file) => {
+            if (file) {
+              this.imgFile = file;
+              this.imgURI = URL.createObjectURL(this.imgFile);
+              this.insertImage(editor);
+            }
+          }, () => {
+            SwAlert.fire('Compresion fallida!', 'Error comprimiendo la imagén', 'error').then();
+          });
+        });
+        if (onDeleteLastImage) {
+          this.onDeleteImage();
+        }
+      }, () => {
+        SwAlert.fire('Compresion fallida!', 'Error comprimiendo la imagén', 'error').then();
       });
-      if (onDeleteLastImage) {
-        this.onDeleteImage();
-      }
-    };
-  };
+    }, () => {
+      SwAlert.fire('Carga fallida!', 'La plantilla no se cargó', 'warning').then();
+    });
+
+  }
+
+  getFileSizeFriendlyFormat(fileSize: number): string {
+    return `${this.friendlyNumberSvc.getFriendlyFormat(fileSize)}B`;
+  }
 
   imageUpload(): Observable<ImageUpload> {
     if (this.imgFile) {
@@ -84,26 +106,34 @@ export class UploadImageService {
   }
 
   insertImage = (editor) => {
-    const imgContainer = document.createElement('div') as HTMLImageElement;
     const image = document.createElement('img') as HTMLImageElement;
     image.src = this.imgURI;
     image.id = 'templateCardImage';
-    imgContainer.appendChild(image);
-    imgContainer.id = 'imgContainer';
-    editor.selection.insertNode(imgContainer);
+    image.alt='template-card';
+    image.setAttribute('style', `
+      display: block !important;
+      margin:auto !important;
+      width:100% important;
+      max-width:80% !important;
+      height: auto !important;
+      max-height:100% !important;
+      object-fit: cover !important;
+      object-position: center center !important;
+    `);
+    editor.selection.insertNode(image);
   };
 
   onDeleteImage() {
     this.deleteImage()
       .subscribe(() => {
         SwAlert.showValidationMessage('La anterior imagen de la plantilla fue eliminada correctamente');
-        document?.getElementById('imgContainer').remove();
+        document?.getElementById('templateCardImage').remove();
       }, () => {
         //TODO: Hacer log de error
         if (this.isImgStorage()) {
           SwAlert.showValidationMessage('Error al eliminar la anterior imagen, carge de nuevo la plantilla');
           this.imgFile = null;
-          document?.getElementById('imgContainer').remove();
+          document?.getElementById('templateCardImage').remove();
         } else {
           SwAlert.showValidationMessage('Error al eliminar la imagen');
         }
@@ -122,5 +152,4 @@ export class UploadImageService {
     //TODO: Poco seguro, hacer peticion para saber si la imagen en realidad está en la base de datos
     return this.imgFile.name.includes(this.imgGenericName);
   }
-
 }

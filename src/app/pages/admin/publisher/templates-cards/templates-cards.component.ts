@@ -39,7 +39,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit, OnDestroy
     this.onViewCard = false;
     const dialogRef = this.dialog.open(ModalTemplateCardsComponent, {
       height: 'auto',
-      width: '95%',
+      width: '75%',
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,

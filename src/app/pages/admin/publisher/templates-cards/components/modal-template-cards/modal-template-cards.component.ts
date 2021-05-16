@@ -27,24 +27,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   card: TemplateCard;
   maxChars = 400;
   actionTODO: ACTIONS;
-  cardImageStyles = `
-    <style>
-        #templateCardImage{
-                display: block;
-                margin: auto;
-                width:50vw;
-                max-width: 85%!important;
-                height: auto;
-        }
-        @supports(object-fit: cover){
-                #templateCardImage{
-                        height: 100%!important;
-                        object-fit: cover!important;
-                        object-position: center center!important;
-                }
-        }
-    </style>
-  `;
   private destroy$ = new Subject<any>();
 
   constructor(
@@ -65,12 +47,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     return !!this.imgCard;
   }
 
-  get imgContainer() {
-    return document.getElementById('imgContainer');
-  }
-
   get imgCard() {
-    return document.getElementById('templateCardImage');
+    return document.getElementById('templateCardImage') as HTMLImageElement;
   }
 
 
@@ -94,11 +72,11 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           <b>['image/jpg', 'image/png', 'image/jpeg', 'image/gif']</b>.<br>
           Ejemplo:<br><br>
            <span>
-          Hola <b id='name' class='labels' title='Nombre del usuario de correo.'>&lt;NOMBRE&gt;</b> en ésta
-          <b id='date' class='labels' title='Día que se envia el evento.'>&lt;FECHA&gt;</b>, la
-          <b id='school' class='labels' title='Facultad de ingeniería, escuela de artes ...'>&lt;FALCUTAD/ESCUELA&gt;</b>
+          Hola <b>&lt;NOMBRE&gt;</b> en ésta
+          <b>&lt;FECHA&gt;</b>, la
+          <b>&lt;FALCUTAD/ESCUELA&gt;</b>
           de la Universidad de Antioquia le queremos desear un feliz cumpleaños 🥳, tu cómo parte del grupo de
-          <b id='bodyType' class='labels' title='Estudiante, prodesor, auxiliar ...'>&ltESTAMENTO&gt;</b>, eres muy importante
+          <b>&ltESTAMENTO&gt;</b>, eres muy importante
           para nosotros.
           </span><br>
           <img  src='assets/images/templateCard_example.jpg' style='display: block;
@@ -126,8 +104,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           exec: (editor) => {
             editor.execCommand('selectall');
             editor.execCommand('copy');
-            SwAlert.fire('Texto quedó copiado en el clipboard', '', 'success').then(_ => {
-            });
+            SwAlert.fire('Texto quedó copiado en el clipboard', '', 'success').then();
           }
         },
         labels: {
@@ -142,39 +119,36 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
             program: 'Programa acádemico'
           },
           exec: (editor, _, $btn) => {
-            if (this.joditEditor.editor.value === '') {
-              this.joditEditor.editor.value = this.cardImageStyles;
-            }
             const key = $btn.control.text;
             switch (key) {
               case 'Nombre': {
                 editor.selection.insertHTML(
-                  '<span id="name" class ="labels" title="Nombre del usuario de correo.">&lt;NOMBRE&gt;</span>&nbsp;'
+                  '<span id="name" class ="labels">&lt;NOMBRE&gt;</span>&nbsp;'
                 );
                 break;
               }
               case 'Fecha': {
                 editor.selection.insertHTML(
-                  '<span id="date" class ="labels" title="Día que se envia el evento.">&lt;FECHA&gt;</span>&nbsp;'
+                  '<span id="date" class ="labels">&lt;FECHA&gt;</span>&nbsp;'
                 );
                 break;
               }
               case 'Facultad/Escuela': {
                 editor.selection.insertHTML(
-                  '<span id="school" class ="labels" title="Facultad de ingeniería, escuela de artes ...">' +
+                  '<span id="school" class ="labels">' +
                   '&lt;FALCUTAD/ESCUELA&gt;</span>&nbsp;'
                 );
                 break;
               }
               case 'Estamento': {
                 editor.selection.insertHTML(
-                  '<span id= "bodyType" class ="labels" title="Estudiante, prodesor, auxiliar ...">&ltESTAMENTO&gt;</span>&nbsp;'
+                  '<span id= "bodyType" class ="labels">&ltESTAMENTO&gt;</span>&nbsp;'
                 );
                 break;
               }
               case 'Programa acádemico': {
                 editor.selection.insertHTML(
-                  '<span id= "academicProgram" class ="labels" title="Programa acádemico ...">&ltPROGRAMA&gt;</span>&nbsp;'
+                  '<span id= "academicProgram" class ="labels">&ltPROGRAMA&gt;</span>&nbsp;'
                 );
                 break;
               }
@@ -189,10 +163,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           name: 'image',
           tooltip: 'Subir imagen de la plantilla prediseñada',
           exec: (async (editor) => {
-            if (this.joditEditor.editor.value === '') {
-              this.joditEditor.editor.value = this.cardImageStyles;
-            }
-            if (this.imgContainer) {
+            if (this.imgCard) {
               return await SwAlert.fire({
                 title: 'Sólo puede cargarse una plantilla!',
                 text: ' Desea reemplazar la plantilla actual?',
@@ -208,12 +179,12 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                 cancelButtonText: 'Cancelar'
               }).then((resultReplace) => {
                 if (resultReplace.isConfirmed) {
-                  this.uploadImagesSvc.openExplorerWindows(editor, true);
+                  this.uploadImagesSvc.loadImage(editor, true);
                 }
                 return null;
               });
             } else {
-              await this.uploadImagesSvc.openExplorerWindows(editor, false);
+              this.uploadImagesSvc.loadImage(editor, false);
             }
           })
         },
@@ -252,10 +223,20 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         }
       },
       events: {
+        change:() =>{
+          // const image = this.imgCard;
+          // image.src = this.uploadImagesSvc.imgURI;
+          // image.id = 'templateCardImage';
+          // image.alt='template-card';
+          // image.setAttribute('style', `
+          //   display: block !important;
+          //   margin:auto !important;
+          //   width:100% !important;
+          //   max-width:80% !important;
+          //   height: auto !important;
+          // `);
+        },
         keypress: () => {
-          if (this.joditEditor.editor.value === '') {
-            this.joditEditor.editor.selection.insertHTML(this.cardImageStyles);
-          }
           const text = this.joditEditor.editor.editor.innerText;
           //Todo: No coincide con el contador por defecto del editor
           const charCount = text.replace(/[\s\n\r\t]+/, '').length;
@@ -268,14 +249,15 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           }
         },
         keydown: (event) => {
-          const { key } = event;
-          if (key === 'Backspace' || key === 'Delete') {
-            const selection: any = this.joditEditor.editor.ownerDocument.getSelection();
-            const { id, className }: HTMLElement = selection.focusNode.parentElement;
-            if (className === 'labels') {
-              document.getElementById(id).remove();
-            }
-          }
+          //TODO: Examinar generar bugs
+          // const { key } = event;
+          // if (key === 'Backspace' || key === 'Delete') {
+          //   const selection: any = this.joditEditor.editor.ownerDocument.getSelection();
+          //   const { id, className }: HTMLElement = selection.focusNode.parentElement;
+          //   if (className === 'labels') {
+          //     document.getElementById(id).remove();
+          //   }
+          // }
         },
         beforePaste: (event) => {
           if (event.clipboardData.types.length === 0) {
@@ -330,7 +312,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                     ${err.status === 401 ? 'Por seguridad se cerrará la sesión.' : ''}
                 </span>
                 <span>&nbsp;&nbsp;Necesitas <a href=''>ayuda</a>?</span>.`
-          });
+          }).then();
         });
     }
   }

@@ -13,6 +13,7 @@ import { ID } from '@adminShared/models/shared.model';
 import { MailsLogService } from '@app/pages/admin/shared/services/mails-log.service';
 import { MailUsers } from '@adminShared/models/mail-users.model';
 import { ModalMailsLogComponent } from '@publisher/mail-users/components/modal-mails-log/modal-mails-log.component';
+import { FriendlyNumberAbbreviationService } from '@appShared/services/friendly-number-abbreviation.service';
 
 @Component({
   selector: 'app-users',
@@ -39,8 +40,9 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
 
   constructor(
     private dialog: MatDialog,
+    private friendlyNumberSvc: FriendlyNumberAbbreviationService,
     private mailUserSvc: EmailUserService,
-    private mailDataSentSvc: MailsLogService
+    private mailDataSentSvc: MailsLogService,
   ) {
   }
 
@@ -92,11 +94,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   getPartialUsers(numData: number): string {
-    let x: number = ('' + numData).length;
-    const p = Math.pow;
-    const d = p(10, 1);
-    x -= x % 3;
-    return Math.round(numData * d / p(10, x)) / d + ' kMGTPE'[x / 3];
+    return this.friendlyNumberSvc.getFriendlyFormat(numData);
   }
 
   applyFilter(event: Event) {
