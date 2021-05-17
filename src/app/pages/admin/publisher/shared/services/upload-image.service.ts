@@ -30,45 +30,58 @@ export class UploadImageService {
     this.imgFile = file;
   }
 
-  loadImage(editor, onDeleteLastImage: boolean) {
+  loadImage(editor) {
     this.imageCompress.uploadFile().then(({ image, orientation }) => {
-      const fileType = image.substring('data:image/'.length, image.indexOf(';base64'));
-      if (!fileType.match(/(jpg|jpeg|png|gif)$/)) {
-        SwAlert.fire(
-          {
-            icon: 'warning',
-            title: 'Oops...',
-            text: 'La plantilla sólo puede tener formato, [jpg, png, jpeg, gif]!'
-          }
-        ).then();
-        return;
-      }
+      const htmlImg: HTMLImageElement = new Image();
+      htmlImg.src = image;
 
-      const fileSize = this.imageCompress.byteCount(image);
-      const maxSize = 300 * 1024;
-      const lowerQuality = fileSize > maxSize ? (fileSize / maxSize - 1) * 100 : fileSize * 90;
-      const quality = lowerQuality / fileSize;
-
-      this.imageCompress.compressFile(image, orientation, 75, quality).then((imageCompressed) => {
-        const fileSizeLowered = this.imageCompress.byteCount(imageCompressed);
-        SwAlert.fire(
-          'Carga exitosa!',
-          `La plantilla se ha cargado (${this.getFileSizeFriendlyFormat(fileSizeLowered)})`,
-          'success').then(() => {
-          this.getFileFromUrl(imageCompressed, 'img').then((file) => {
-            if (file) {
-              this.imgFile = file;
-              this.imgURI = URL.createObjectURL(this.imgFile);
-              this.insertImage(editor);
+      htmlImg.onload = () => {
+        const fileType = image.substring('data:image/'.length, image.indexOf(';base64'));
+        if (!fileType.match(/(jpg|jpeg|png|gif)$/)) {
+          SwAlert.fire(
+            {
+              icon: 'warning',
+              title: 'Oops...',
+              text: 'La plantilla sólo puede tener formato, [jpg, png, jpeg, gif]!'
             }
-          }, () => {
-            SwAlert.fire('Compresion fallida!', 'Error comprimiendo la imagen', 'error').then();
-          });
+          ).then();
+          return;
+        }
+
+        const width = htmlImg.width;
+        const maxWidth = 650;
+        const ratio = (width > maxWidth) ?  1/(width / maxWidth)*100: 100;
+        const size = this.imageCompress.byteCount(image);
+        const maxSize = 300 * 1024;
+        const quality = size > maxSize ? 1/(size / maxSize) * 100 : 80;
+        console.log(ratio, quality);
+
+        this.imageCompress.compressFile(image, orientation, ratio, quality).then((imageCompressed) => {
+          const fileSizeLowered = this.imageCompress.byteCount(imageCompressed);
+          htmlImg.src = imageCompressed;
+
+          htmlImg.onload = () => {
+            SwAlert.fire(
+              'Carga exitosa!',
+              `La plantilla se ha cargado (${this.getFileSizeFriendlyFormat(fileSizeLowered)}) ${htmlImg.width + 'x' + htmlImg.height}`,
+              'success').then(() => {
+              this.getFileFromUrl(imageCompressed, 'img').then((file) => {
+                if (file) {
+                  this.imgFile = file;
+                  this.imgURI = URL.createObjectURL(this.imgFile);
+                  this.insertImage(editor);
+                }
+              }, () => {
+                SwAlert.fire('Compresion fallida!', 'Error comprimiendo la imagen', 'error').then();
+              });
+            });
+            document.getElementById('templateCardImage')?.remove();
+          };
+        }, () => {
+          SwAlert.fire('Compresion fallida!', 'Error comprimiendo la imagen', 'error').then();
         });
-        document?.getElementById('templateCardImage').remove();
-      }, () => {
-        SwAlert.fire('Compresion fallida!', 'Error comprimiendo la imagen', 'error').then();
-      });
+      };
+
     }, () => {
       SwAlert.fire('Carga fallida!', 'La plantilla no se cargó', 'warning').then();
     });
@@ -107,7 +120,7 @@ export class UploadImageService {
     const image = document.createElement('img') as HTMLImageElement;
     image.src = this.imgURI;
     image.id = 'templateCardImage';
-    image.alt='template-card';
+    image.alt = 'template-card';
     image.setAttribute('style', `
       display: block !important;
       margin:auto !important;
@@ -141,14 +154,15 @@ export class UploadImageService {
   deleteImage(imgName?: string): Observable<any> {
     if (this.isImgStorage(imgName)) {
       return this.http
-        .delete<any>(`${environment.apiUrl}/delete/${imgName?imgName: this.imgFile.name}`);
+        .delete<any>(`${environment.apiUrl}/delete/${imgName ? imgName : this.imgFile.name}`);
     }
     return of(null);
   }
 
   isImgStorage(imgName?: string): boolean {
     //TODO: Poco seguro, hacer peticion para saber si la imagen en realidad está en la base de datos
-    if(imgName){
+    if (imgName) {
+
       return imgName.includes(this.imgGenericName);
     }
     return this.imgFile?.name.includes(this.imgGenericName);

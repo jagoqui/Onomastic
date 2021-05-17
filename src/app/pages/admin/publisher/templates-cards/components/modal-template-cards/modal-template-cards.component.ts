@@ -26,7 +26,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   iconSwitchTheme: string;
   card: TemplateCard;
   maxChars = 400;
-  actionTODO: ACTIONS;
+  actionTODO: ACTIONS = 'AGREGAR';
   uriCardImageEdit: string = null;
   private destroy$ = new Subject<any>();
 
@@ -180,12 +180,12 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                 cancelButtonText: 'Cancelar'
               }).then((resultReplace) => {
                 if (resultReplace.isConfirmed) {
-                  this.uploadImagesSvc.loadImage(editor, true);
+                  this.uploadImagesSvc.loadImage(editor);
                 }
                 return null;
               });
             } else {
-              this.uploadImagesSvc.loadImage(editor, false);
+              this.uploadImagesSvc.loadImage(editor);
             }
           })
         },
