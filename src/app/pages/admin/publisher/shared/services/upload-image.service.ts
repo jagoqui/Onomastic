@@ -50,11 +50,10 @@ export class UploadImageService {
 
         const width = htmlImg.width;
         const maxWidth = 600;
-        const ratio = (width > maxWidth) ?  1/(width / maxWidth)*100: 100;
+        const ratio = (width > maxWidth) ? 1 / (width / maxWidth) * 100 : 100;
         const size = this.imageCompress.byteCount(image);
         const maxSize = 150 * 1024;
-        const quality = size > maxSize ? 1/(size / maxSize) * 100 : 100;
-        console.log(ratio, quality);
+        const quality = size > maxSize ? 1 / (size / maxSize) * 100 : 100;
 
         this.imageCompress.compressFile(image, orientation, ratio, quality).then((imageCompressed) => {
           const fileSizeLowered = this.imageCompress.byteCount(imageCompressed);
@@ -97,15 +96,14 @@ export class UploadImageService {
       const formData = new FormData();
       formData.append('file', this.imgFile);
       return this.http
-        .post<ImageUpload>(`${environment.uploadImagesUriServer}/${new Date().getTime()}${this.imgGenericName}`, formData, {
-          reportProgress: true
-        });
+        .post<ImageUpload>(`${environment.uploadImagesUriServer}/${new Date().getTime()}${this.imgFile.name}`, formData);
     }
     return of(null);
   }
 
-  imageDownload(imgName?: string): Observable<File> {
-    return this.http.get<File>(`${environment.downloadImagesUriServer}/${imgName ? imgName : this.imgURI}`);
+  imageDownload(imgUriEdit?: string): Observable<File> {
+    console.log(imgUriEdit ? imgUriEdit : this.imgURI);
+    return this.http.get<File>(`${imgUriEdit ? imgUriEdit : this.imgURI}`);
   }
 
   async getFileFromUrl(url, name, defaultType = 'image/jpeg'): Promise<File> {
@@ -125,7 +123,7 @@ export class UploadImageService {
       display: block !important;
       margin:auto !important;
       width:100% !important;
-      max-width:80% !important;
+      max-width:90% !important;
       height: auto !important;
       max-height:40vw !important;
       object-fit: cover !important;
@@ -134,37 +132,23 @@ export class UploadImageService {
     editor.selection.insertNode(image);
   };
 
-  onDeleteImage(imgName?: string) {
-    this.deleteImage(imgName)
+  onDeleteImage(imgUriEdit?: string) {
+    if(!imgUriEdit && this.imgURI?.includes('blob')){
+      document.getElementById('templateCardImage')?.remove();
+      return;
+    }
+    this.deleteImage(imgUriEdit?.replace(environment.downloadImagesUriServer + '/', ''))
       .subscribe(() => {
         SwAlert.showValidationMessage('La anterior imagen de la plantilla fue eliminada correctamente');
-        document?.getElementById('templateCardImage').remove();
+        document.getElementById('templateCardImage')?.remove();
       }, () => {
-        //TODO: Hacer log de error
-        if (this.isImgStorage()) {
-          SwAlert.showValidationMessage('Error al eliminar la anterior imagen, cierre el editor para recuperar la anterior imagen');
-          this.imgFile = null;
-          document?.getElementById('templateCardImage').remove();
-        } else {
-          SwAlert.showValidationMessage('Error al eliminar la imagen');
-        }
+        SwAlert.showValidationMessage('Error al eliminar la anterior imagen, ya no se encuentra alamacenda en la base de datos.');
+        this.imgFile = null;
       });
   }
 
   deleteImage(imgName?: string): Observable<any> {
-    if (this.isImgStorage(imgName)) {
-      return this.http
-        .delete<any>(`${environment.apiUrl}/delete/${imgName ? imgName : this.imgFile.name}`);
-    }
-    return of(null);
-  }
-
-  isImgStorage(imgName?: string): boolean {
-    //TODO: Poco seguro, hacer peticion para saber si la imagen en realidad está en la base de datos
-    if (imgName) {
-
-      return imgName.includes(this.imgGenericName);
-    }
-    return this.imgFile?.name.includes(this.imgGenericName);
+    return this.http
+      .delete<any>(`${environment.apiUrl}/delete/${imgName ? imgName : this.imgFile.name}`);
   }
 }

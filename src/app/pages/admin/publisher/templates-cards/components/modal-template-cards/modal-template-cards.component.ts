@@ -270,9 +270,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   }
 
   onSave() {
-    if (this.uploadImagesSvc.isImgStorage()) {
-      this.getAssociations();
-    } else {
+    if(this.uploadImagesSvc.imgURI?.includes('blob')){
       this.uploadImagesSvc.imageUpload()
         .pipe(takeUntil(this.destroy$))
         .subscribe(img => {
@@ -300,6 +298,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                 <span>&nbsp;&nbsp;Necesitas <a href=''>ayuda</a>?</span>.`
           }).then();
         });
+    }else{
+      this.getAssociations();
     }
   }
 
@@ -317,11 +317,12 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           .pipe(takeUntil(this.destroy$))
           .subscribe((cardRes) => {
             if (cardRes) {
-              if(this.uriCardImageEdit){
-                const nameImage = this.uriCardImageEdit.replace(environment.downloadImagesUriServer + '/', '');
-                this.uploadImagesSvc.onDeleteImage(nameImage);
-              }
               SwAlert.fire(`Plantilla ${this.data?.card ? 'Actualizada!' : 'Guardada!'} `, '', 'success').then();
+              if (this.uriCardImageEdit && this.uriCardImageEdit !== this.uploadImagesSvc.imgURI) {
+                this.uploadImagesSvc.onDeleteImage(this.uriCardImageEdit);
+              }else if (this.actionTODO === 'EDITAR') {
+                SwAlert.showValidationMessage('La imagen de la plantilla no se cambió');
+              }
               this.onClose(true);
             }
           }, (err) => {
