@@ -62,14 +62,12 @@ export class UploadImageService {
               this.insertImage(editor);
             }
           }, () => {
-            SwAlert.fire('Compresion fallida!', 'Error comprimiendo la imagén', 'error').then();
+            SwAlert.fire('Compresion fallida!', 'Error comprimiendo la imagen', 'error').then();
           });
         });
-        if (onDeleteLastImage) {
-          this.onDeleteImage();
-        }
+        document?.getElementById('templateCardImage').remove();
       }, () => {
-        SwAlert.fire('Compresion fallida!', 'Error comprimiendo la imagén', 'error').then();
+        SwAlert.fire('Compresion fallida!', 'Error comprimiendo la imagen', 'error').then();
       });
     }, () => {
       SwAlert.fire('Carga fallida!', 'La plantilla no se cargó', 'warning').then();
@@ -113,25 +111,25 @@ export class UploadImageService {
     image.setAttribute('style', `
       display: block !important;
       margin:auto !important;
-      width:100% important;
+      width:100% !important;
       max-width:80% !important;
       height: auto !important;
-      max-height:100% !important;
+      max-height:40vw !important;
       object-fit: cover !important;
       object-position: center center !important;
     `);
     editor.selection.insertNode(image);
   };
 
-  onDeleteImage() {
-    this.deleteImage()
+  onDeleteImage(imgName?: string) {
+    this.deleteImage(imgName)
       .subscribe(() => {
         SwAlert.showValidationMessage('La anterior imagen de la plantilla fue eliminada correctamente');
         document?.getElementById('templateCardImage').remove();
       }, () => {
         //TODO: Hacer log de error
         if (this.isImgStorage()) {
-          SwAlert.showValidationMessage('Error al eliminar la anterior imagen, carge de nuevo la plantilla');
+          SwAlert.showValidationMessage('Error al eliminar la anterior imagen, cierre el editor para recuperar la anterior imagen');
           this.imgFile = null;
           document?.getElementById('templateCardImage').remove();
         } else {
@@ -140,16 +138,19 @@ export class UploadImageService {
       });
   }
 
-  deleteImage(): Observable<any> {
-    if (this.isImgStorage()) {
+  deleteImage(imgName?: string): Observable<any> {
+    if (this.isImgStorage(imgName)) {
       return this.http
-        .delete<any>(`${environment.apiUrl}/delete/${this.imgFile.name}`);
+        .delete<any>(`${environment.apiUrl}/delete/${imgName?imgName: this.imgFile.name}`);
     }
     return of(null);
   }
 
-  isImgStorage(): boolean {
+  isImgStorage(imgName?: string): boolean {
     //TODO: Poco seguro, hacer peticion para saber si la imagen en realidad está en la base de datos
-    return this.imgFile.name.includes(this.imgGenericName);
+    if(imgName){
+      return imgName.includes(this.imgGenericName);
+    }
+    return this.imgFile?.name.includes(this.imgGenericName);
   }
 }

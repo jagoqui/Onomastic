@@ -27,6 +27,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   card: TemplateCard;
   maxChars = 400;
   actionTODO: ACTIONS;
+  uriCardImageEdit: string = null;
   private destroy$ = new Subject<any>();
 
   constructor(
@@ -110,7 +111,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         labels: {
           name: 'labels',
           iconURL: 'assets/icons/user-tag-solid.svg',
-          tooltip: 'Etiquetas para automatizar la plantilla',
+          tooltip: 'Etiquetas para filtrar información del destinatarios',
           list: {
             name: 'Nombre',
             date: 'Fecha',
@@ -223,19 +224,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         }
       },
       events: {
-        change:() =>{
-          // const image = this.imgCard;
-          // image.src = this.uploadImagesSvc.imgURI;
-          // image.id = 'templateCardImage';
-          // image.alt='template-card';
-          // image.setAttribute('style', `
-          //   display: block !important;
-          //   margin:auto !important;
-          //   width:100% !important;
-          //   max-width:80% !important;
-          //   height: auto !important;
-          // `);
-        },
         keypress: () => {
           const text = this.joditEditor.editor.editor.innerText;
           //Todo: No coincide con el contador por defecto del editor
@@ -283,8 +271,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
 
   onSave() {
     if (this.uploadImagesSvc.isImgStorage()) {
-      console.log('Editando');
-      //TODO: Si hay error en la actulización de la plantilla está eliminado la imagen
       this.getAssociations();
     } else {
       this.uploadImagesSvc.imageUpload()
@@ -318,7 +304,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   }
 
   getAssociations() {
-    //TODO: Se actualiza con los actuales asociciones del publicador, reemplazando lo permisos inciales del publicador.
+    //TODO: Se actualiza con los actuales asociciones del publicador, reemplazando lo permisos iniciales del publicador.
     this.associationSvc.getAssociationsByPublisher()
       .pipe(takeUntil(this.destroy$))
       .subscribe(associations => {
@@ -331,6 +317,10 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           .pipe(takeUntil(this.destroy$))
           .subscribe((cardRes) => {
             if (cardRes) {
+              if(this.uriCardImageEdit){
+                const nameImage = this.uriCardImageEdit.replace(environment.downloadImagesUriServer + '/', '');
+                this.uploadImagesSvc.onDeleteImage(nameImage);
+              }
               SwAlert.fire(`Plantilla ${this.data?.card ? 'Actualizada!' : 'Guardada!'} `, '', 'success').then();
               this.onClose(true);
             }
@@ -368,11 +358,12 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     if (this.data?.card) {
       this.actionTODO = 'EDITAR';
       this.joditEditor.editor.value = this.data.card.texto;
-      const urlImageEdit = this.imgCard.getAttributeNode('src').value;
-      const nameImage = urlImageEdit.replace(environment.downloadImagesUriServer + '/', '');
-      this.uploadImagesSvc.getFileFromUrl(urlImageEdit, nameImage).then((file) => {
+      //TODO: Verificar que la imagen si existe en db
+      this.uriCardImageEdit = this.imgCard.getAttributeNode('src').value;
+      const nameImage = this.uriCardImageEdit.replace(environment.downloadImagesUriServer + '/', '');
+      this.uploadImagesSvc.getFileFromUrl(this.uriCardImageEdit, nameImage).then((file) => {
         this.uploadImagesSvc.img = file;
-        this.uploadImagesSvc.imgURI = urlImageEdit;
+        this.uploadImagesSvc.imgURI = this.uriCardImageEdit;
       });
     } else {
       this.actionTODO = 'AGREGAR';
