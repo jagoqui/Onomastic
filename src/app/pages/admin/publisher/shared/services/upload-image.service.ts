@@ -49,11 +49,11 @@ export class UploadImageService {
         }
 
         const width = htmlImg.width;
-        const maxWidth = 650;
+        const maxWidth = 600;
         const ratio = (width > maxWidth) ?  1/(width / maxWidth)*100: 100;
         const size = this.imageCompress.byteCount(image);
-        const maxSize = 300 * 1024;
-        const quality = size > maxSize ? 1/(size / maxSize) * 100 : 80;
+        const maxSize = 150 * 1024;
+        const quality = size > maxSize ? 1/(size / maxSize) * 100 : 100;
         console.log(ratio, quality);
 
         this.imageCompress.compressFile(image, orientation, ratio, quality).then((imageCompressed) => {
