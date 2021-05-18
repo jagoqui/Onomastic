@@ -31,7 +31,7 @@
         <mat-form-field fxFlex='95'>
           <mat-label>Buscar</mat-label>
           <label>
-            <input matInput (keyup)='applyFilter($event)' placeholder='Ingrese el valor del campo a buscar'
+            <input matInput (keyup)='applyFilter($event.target.value)' placeholder='Ingrese el valor del campo a buscar'
                    autocomplete='off'>
           </label>
         </mat-form-field>

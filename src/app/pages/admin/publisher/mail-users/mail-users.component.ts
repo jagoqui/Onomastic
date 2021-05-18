@@ -61,7 +61,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
-      data: { title: 'HISTORIAL DE CORREOS ENVIADOS'}
+      data: { title: 'HISTORIAL DE CORREOS ENVIADOS' }
     });
     if (dialogRef.afterClosed()) {
       dialogRef.componentInstance.refresh
@@ -97,9 +97,10 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
     return this.friendlyNumberSvc.getFriendlyFormat(numData);
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
   }
 
   onSubscriptionStateChange(email: string, state: string) {
@@ -143,18 +144,18 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
       confirmButtonText: 'Sí, eliminarlo!',
       cancelButtonText: 'Cancelar'
     }).then((resultDelete) => {
-        if (resultDelete.isConfirmed) {
-          this.mailUserSvc
-            .delete(userId)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((_) => {
-              SwAlert.fire('Eliminado!', 'El destinatario se ha eliminado', 'success').then();
-              this.ngOnInit();
-            }, () => {
-              SwAlert.showValidationMessage('Error elimando las destinatario');
-            });
-        }
+      if (resultDelete.isConfirmed) {
+        this.mailUserSvc
+          .delete(userId)
+          .pipe(takeUntil(this.destroy$))
+          .subscribe((_) => {
+            SwAlert.fire('Eliminado!', 'El destinatario se ha eliminado', 'success').then();
+            this.ngOnInit();
+          }, () => {
+            SwAlert.showValidationMessage('Error elimando las destinatario');
+          });
       }
+    }
     );
   }
 
@@ -185,6 +186,13 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
       }, () => {
         SwAlert.showValidationMessage('Error cargando las los correos enviados');
       });
+    // TODO: falta filtrar por asociacion, vunculacion y programa
+    // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+    this.dataSource.filterPredicate = function(data: MailUsers, filter: string): boolean {
+      return data.id.numeroIdentificacion.toLowerCase().includes(filter) || data.nombre.toLowerCase().includes(filter)
+        || data.apellido.toLowerCase().includes(filter) || data.email.toLowerCase().includes(filter)
+        || data.estado.toLowerCase().includes(filter);
+    };
   }
 
   ngOnDestroy(): void {

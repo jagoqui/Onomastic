@@ -10,6 +10,7 @@ import SwAlert from 'sweetalert2';
 import { MatSort } from '@angular/material/sort';
 import { MailsLogService } from '@app/pages/admin/shared/services/mails-log.service';
 import { MatPaginator } from '@angular/material/paginator';
+import { MailsLog } from '@app/pages/admin/shared/models/mails-log.model';
 
 @Component({
   selector: 'app-modal-mais-log',
@@ -34,9 +35,14 @@ export class ModalMailsLogComponent implements OnInit, AfterViewInit, OnDestroy 
     'fecha', 'email', 'asunto'
   ];
   dataSource = new MatTableDataSource();
-  minDate: Date;
-  maxDate: Date;
+  // minDate: Date;
+  // maxDate: Date;
   today: Date = new Date();
+  filtersState = {
+    asunto: '',
+    email: '',
+
+  };
   private numMails = 0;
   private destroy$ = new Subject<any>();
 
@@ -47,11 +53,16 @@ export class ModalMailsLogComponent implements OnInit, AfterViewInit, OnDestroy 
   ) {
   }
 
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
+  }
+
   ngAfterViewInit(): void {
     this.dataSource.sort = this.sort;
     this.dataSource.paginator = this.paginator;
   }
-
 
   ngOnInit(): void {
     this.mailSentSvc.getAll()
@@ -69,6 +80,10 @@ export class ModalMailsLogComponent implements OnInit, AfterViewInit, OnDestroy 
       }, () => {
         SwAlert.showValidationMessage('Error cargando las los correos enviados');
       });
+      // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+      this.dataSource.filterPredicate = function(data: MailsLog, filter: string): boolean{
+        return data.asunto.toLowerCase().includes(filter) || data.email.toLowerCase().includes(filter);
+      };
   }
 
   ngOnDestroy(): void {
