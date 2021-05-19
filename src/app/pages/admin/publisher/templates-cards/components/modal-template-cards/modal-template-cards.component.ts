@@ -26,25 +26,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   iconSwitchTheme: string;
   card: TemplateCard;
   maxChars = 400;
-  actionTODO: ACTIONS;
-  cardImageStyles = `
-    <style>
-        #templateCardImage{
-                display: block;
-                margin: auto;
-                width:50vw;
-                max-width: 85%!important;
-                height: auto;
-        }
-        @supports(object-fit: cover){
-                #templateCardImage{
-                        height: 100%!important;
-                        object-fit: cover!important;
-                        object-position: center center!important;
-                }
-        }
-    </style>
-  `;
+  actionTODO: ACTIONS = 'AGREGAR';
+  uriCardImageEdit: string = null;
   private destroy$ = new Subject<any>();
 
   constructor(
@@ -65,12 +48,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     return !!this.imgCard;
   }
 
-  get imgContainer() {
-    return document.getElementById('imgContainer');
-  }
-
   get imgCard() {
-    return document.getElementById('templateCardImage');
+    return document.getElementById('templateCardImage') as HTMLImageElement;
   }
 
 
@@ -94,11 +73,11 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           <b>['image/jpg', 'image/png', 'image/jpeg', 'image/gif']</b>.<br>
           Ejemplo:<br><br>
            <span>
-          Hola <b id='name' class='labels' title='Nombre del usuario de correo.'>&lt;NOMBRE&gt;</b> en ésta
-          <b id='date' class='labels' title='Día que se envia el evento.'>&lt;FECHA&gt;</b>, la
-          <b id='school' class='labels' title='Facultad de ingeniería, escuela de artes ...'>&lt;FALCUTAD/ESCUELA&gt;</b>
+          Hola <b>&lt;NOMBRE&gt;</b> en ésta
+          <b>&lt;FECHA&gt;</b>, la
+          <b>&lt;FALCUTAD/ESCUELA&gt;</b>
           de la Universidad de Antioquia le queremos desear un feliz cumpleaños 🥳, tu cómo parte del grupo de
-          <b id='bodyType' class='labels' title='Estudiante, prodesor, auxiliar ...'>&ltESTAMENTO&gt;</b>, eres muy importante
+          <b>&ltESTAMENTO&gt;</b>, eres muy importante
           para nosotros.
           </span><br>
           <img  src='assets/images/templateCard_example.jpg' style='display: block;
@@ -126,14 +105,13 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           exec: (editor) => {
             editor.execCommand('selectall');
             editor.execCommand('copy');
-            SwAlert.fire('Texto quedó copiado en el clipboard', '', 'success').then(_ => {
-            });
+            SwAlert.fire('Texto quedó copiado en el clipboard', '', 'success').then();
           }
         },
         labels: {
           name: 'labels',
           iconURL: 'assets/icons/user-tag-solid.svg',
-          tooltip: 'Etiquetas para automatizar la plantilla',
+          tooltip: 'Etiquetas para filtrar información del destinatarios',
           list: {
             name: 'Nombre',
             date: 'Fecha',
@@ -142,39 +120,36 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
             program: 'Programa acádemico'
           },
           exec: (editor, _, $btn) => {
-            if (this.joditEditor.editor.value === '') {
-              this.joditEditor.editor.value = this.cardImageStyles;
-            }
             const key = $btn.control.text;
             switch (key) {
               case 'Nombre': {
                 editor.selection.insertHTML(
-                  '<span id="name" class ="labels" title="Nombre del usuario de correo.">&lt;NOMBRE&gt;</span>&nbsp;'
+                  '<span id="name" class ="labels">&lt;NOMBRE&gt;</span>&nbsp;'
                 );
                 break;
               }
               case 'Fecha': {
                 editor.selection.insertHTML(
-                  '<span id="date" class ="labels" title="Día que se envia el evento.">&lt;FECHA&gt;</span>&nbsp;'
+                  '<span id="date" class ="labels">&lt;FECHA&gt;</span>&nbsp;'
                 );
                 break;
               }
               case 'Facultad/Escuela': {
                 editor.selection.insertHTML(
-                  '<span id="school" class ="labels" title="Facultad de ingeniería, escuela de artes ...">' +
+                  '<span id="school" class ="labels">' +
                   '&lt;FALCUTAD/ESCUELA&gt;</span>&nbsp;'
                 );
                 break;
               }
               case 'Estamento': {
                 editor.selection.insertHTML(
-                  '<span id= "bodyType" class ="labels" title="Estudiante, prodesor, auxiliar ...">&ltESTAMENTO&gt;</span>&nbsp;'
+                  '<span id= "bodyType" class ="labels">&ltESTAMENTO&gt;</span>&nbsp;'
                 );
                 break;
               }
               case 'Programa acádemico': {
                 editor.selection.insertHTML(
-                  '<span id= "academicProgram" class ="labels" title="Programa acádemico ...">&ltPROGRAMA&gt;</span>&nbsp;'
+                  '<span id= "academicProgram" class ="labels">&ltPROGRAMA&gt;</span>&nbsp;'
                 );
                 break;
               }
@@ -189,10 +164,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           name: 'image',
           tooltip: 'Subir imagen de la plantilla prediseñada',
           exec: (async (editor) => {
-            if (this.joditEditor.editor.value === '') {
-              this.joditEditor.editor.value = this.cardImageStyles;
-            }
-            if (this.imgContainer) {
+            if (this.imgCard) {
               return await SwAlert.fire({
                 title: 'Sólo puede cargarse una plantilla!',
                 text: ' Desea reemplazar la plantilla actual?',
@@ -208,12 +180,12 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                 cancelButtonText: 'Cancelar'
               }).then((resultReplace) => {
                 if (resultReplace.isConfirmed) {
-                  this.uploadImagesSvc.openExplorerWindows(editor, true);
+                  this.uploadImagesSvc.loadImage(editor);
                 }
                 return null;
               });
             } else {
-              await this.uploadImagesSvc.openExplorerWindows(editor, false);
+              this.uploadImagesSvc.loadImage(editor);
             }
           })
         },
@@ -253,9 +225,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       },
       events: {
         keypress: () => {
-          if (this.joditEditor.editor.value === '') {
-            this.joditEditor.editor.selection.insertHTML(this.cardImageStyles);
-          }
           const text = this.joditEditor.editor.editor.innerText;
           //Todo: No coincide con el contador por defecto del editor
           const charCount = text.replace(/[\s\n\r\t]+/, '').length;
@@ -268,14 +237,15 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           }
         },
         keydown: (event) => {
-          const { key } = event;
-          if (key === 'Backspace' || key === 'Delete') {
-            const selection: any = this.joditEditor.editor.ownerDocument.getSelection();
-            const { id, className }: HTMLElement = selection.focusNode.parentElement;
-            if (className === 'labels') {
-              document.getElementById(id).remove();
-            }
-          }
+          //TODO: Examinar generar bugs
+          // const { key } = event;
+          // if (key === 'Backspace' || key === 'Delete') {
+          //   const selection: any = this.joditEditor.editor.ownerDocument.getSelection();
+          //   const { id, className }: HTMLElement = selection.focusNode.parentElement;
+          //   if (className === 'labels') {
+          //     document.getElementById(id).remove();
+          //   }
+          // }
         },
         beforePaste: (event) => {
           if (event.clipboardData.types.length === 0) {
@@ -300,11 +270,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   }
 
   onSave() {
-    if (this.uploadImagesSvc.isImgStorage()) {
-      console.log('Editando');
-      //TODO: Si hay error en la actulización de la plantilla está eliminado la imagen
-      this.getAssociations();
-    } else {
+    if(this.uploadImagesSvc.imgURI?.includes('blob')){
       this.uploadImagesSvc.imageUpload()
         .pipe(takeUntil(this.destroy$))
         .subscribe(img => {
@@ -330,13 +296,15 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                     ${err.status === 401 ? 'Por seguridad se cerrará la sesión.' : ''}
                 </span>
                 <span>&nbsp;&nbsp;Necesitas <a href=''>ayuda</a>?</span>.`
-          });
+          }).then();
         });
+    }else{
+      this.getAssociations();
     }
   }
 
   getAssociations() {
-    //TODO: Se actualiza con los actuales asociciones del publicador, reemplazando lo permisos inciales del publicador.
+    //TODO: Se actualiza con los actuales asociciones del publicador, reemplazando lo permisos iniciales del publicador.
     this.associationSvc.getAssociationsByPublisher()
       .pipe(takeUntil(this.destroy$))
       .subscribe(associations => {
@@ -350,6 +318,11 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           .subscribe((cardRes) => {
             if (cardRes) {
               SwAlert.fire(`Plantilla ${this.data?.card ? 'Actualizada!' : 'Guardada!'} `, '', 'success').then();
+              if (this.uriCardImageEdit && this.uriCardImageEdit !== this.uploadImagesSvc.imgURI) {
+                this.uploadImagesSvc.onDeleteImage(this.uriCardImageEdit);
+              }else if (this.actionTODO === 'EDITAR') {
+                SwAlert.showValidationMessage('La imagen de la plantilla no se cambió');
+              }
               this.onClose(true);
             }
           }, (err) => {
@@ -386,11 +359,12 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     if (this.data?.card) {
       this.actionTODO = 'EDITAR';
       this.joditEditor.editor.value = this.data.card.texto;
-      const urlImageEdit = this.imgCard.getAttributeNode('src').value;
-      const nameImage = urlImageEdit.replace(environment.downloadImagesUriServer + '/', '');
-      this.uploadImagesSvc.getFileFromUrl(urlImageEdit, nameImage).then((file) => {
+      //TODO: Verificar que la imagen si existe en db
+      this.uriCardImageEdit = this.imgCard.getAttributeNode('src').value;
+      const nameImage = this.uriCardImageEdit.replace(environment.downloadImagesUriServer + '/', '');
+      this.uploadImagesSvc.getFileFromUrl(this.uriCardImageEdit, nameImage).then((file) => {
         this.uploadImagesSvc.img = file;
-        this.uploadImagesSvc.imgURI = urlImageEdit;
+        this.uploadImagesSvc.imgURI = this.uriCardImageEdit;
       });
     } else {
       this.actionTODO = 'AGREGAR';

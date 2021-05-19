@@ -6,39 +6,25 @@
   }
 }
 
-.card {
-  width: 10px;
-  height: 10px;
-  padding: 0;
-  border: 0.1667rem solid mat-color($mat-primary, lighter);
-  align-items: center;
+table {
+  width: 100%;
+  tr {
+    .example-detail-row {
+      height: 0;
+    }
 
-  &:hover {
-    border: 0.1667rem solid mat-color($mat-primary, darker);
+    .example-element-row:not(.example-expanded-row):hover {
+      background: mat-color($mat-accent, main);
+    }
+
+    .example-element-row:not(.example-expanded-row):active {
+      background: #efefef;
+
+    }
+  }
+  .example-element-row td {
+    border-bottom-width: 0;
   }
 }
 
-table {
-  width: 100%;
-}
 
-tr.example-detail-row {
-  height: 0;
-}
-
-tr.example-element-row:not(.example-expanded-row):hover {
-  background: mat-color($mat-accent, main);
-}
-
-tr.example-element-row:not(.example-expanded-row):active {
-  background: #efefef;
-}
-
-.example-element-row td {
-  border-bottom-width: 0;
-}
-
-.example-element-detail {
-  justify-content: center;
-  display: flex
-}

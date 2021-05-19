@@ -10,6 +10,7 @@ import { AppComponent } from './app.component';
 import { PageNotFoundComponent } from '@appShared/components/page-not-found/page-not-found.component';
 import { SharedModule } from '@appShared/shared.module';
 import { InterceptorService } from '@appShared/interceptors/interceptor.service';
+import { NgxImageCompressService } from 'ngx-image-compress';
 
 @NgModule({
   declarations: [
@@ -30,7 +31,8 @@ import { InterceptorService } from '@appShared/interceptors/interceptor.service'
       provide: HTTP_INTERCEPTORS,
       useClass: InterceptorService,
       multi: true
-    }
+    },
+    NgxImageCompressService
   ],
   bootstrap: [AppComponent]
 })

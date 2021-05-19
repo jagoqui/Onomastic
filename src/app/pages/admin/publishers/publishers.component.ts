@@ -53,7 +53,7 @@ export class PublishersComponent implements OnInit, AfterViewInit, OnDestroy {
       values.push(publisher[key]);
     }
     if (key === 'createTime') {
-      values[0] =this.datePipe.transform(values[0], 'yyyy-MM-dd');
+      values[0] = this.datePipe.transform(values[0], 'yyyy-MM-dd');
     }
     return values;
   }
@@ -76,9 +76,10 @@ export class PublishersComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  applyFilter(event: Event) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+  applyFilter(filterValue: string) {
+    filterValue = filterValue.trim(); // Remove whitespace
+    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
+    this.dataSource.filter = filterValue;
   }
 
   onStateChange(email: string, state: string) {
@@ -146,6 +147,12 @@ export class PublishersComponent implements OnInit, AfterViewInit, OnDestroy {
         SwAlert.showValidationMessage(
           `No se pudo cargar los pubicadores.`);
       });
+    //TODO: Filtrar por asociacion
+    // eslint-disable-next-line prefer-arrow/prefer-arrow-functions
+    this.dataSource.filterPredicate = function(data: Publisher, filter: string): boolean {
+      return data.nombre.toLowerCase().includes(filter) || data.email.toLowerCase().includes(filter)
+        || data.rol.nombre.toLowerCase().includes(filter) || data.estado.toLowerCase().includes(filter);
+    };
   }
 
   ngAfterViewInit(): void {
