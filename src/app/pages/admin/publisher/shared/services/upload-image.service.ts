@@ -13,7 +13,6 @@ import { FriendlyNumberAbbreviationService } from '@appShared/services/friendly-
 export class UploadImageService {
   public imgURI: string;
   private imgFile: File = null;
-  private imgGenericName: '_template';
 
   constructor(
     private http: HttpClient,
@@ -120,6 +119,7 @@ export class UploadImageService {
     image.id = 'templateCardImage';
     image.alt = 'template-card';
     image.setAttribute('style', `
+      background-color: green !important;
       display: block !important;
       margin:auto !important;
       width:100% !important;

@@ -1,29 +1,28 @@
 @import '../../../../../../../assets/custom_styles/material_custom_theme';
-
-.card {
-  margin: 2em 0.556rem 0.556rem;
-  box-shadow: 0.111rem 0.111rem 0.333rem 0 rgba(0, 0, 0, 0.3);
+.wrapper-card {
+  $width-shadow: 0.3rem;
+  box-shadow: 0 $width-shadow 2*$width-shadow 0 rgba(0, 0, 0, 0.2), 0 1.5*$width-shadow 5*$width-shadow 0 rgba(0, 0, 0, 0.19);
   border: 0.2rem solid mat-color($mat-primary, lighter);
   transition: all 0.6s;
-  border-radius: 0.5rem;
-  width: 25vw;
+  border-radius: 1.5%;
   font-size: calc(0.3em + 1vmin) !important;
   text-align: center;
 
-  .card_text {
-    *{
+  .card-container {
+    width: 18rem;
+    height: 18rem;
+    padding: 1rem;
+    text-align: justify;
+    text-justify: inter-word;
+    overflow-x: auto;
+    overflow-y: auto;
+    opacity: 0.6;
+    transition: opacity 0.5s;
+
+    * {
       font-size: 90% !important;
       text-decoration: none !important;
     }
-    text-align: justify;
-    text-justify: inter-word;
-    display:inline-block;
-    padding: 2vw;
-    height: 40vh;
-    overflow-x: auto;
-    opacity: 0.5;
-    transition: opacity 0.5s;
-    border-radius: 0.2rem;
 
     &:hover {
       opacity: 1;
@@ -31,30 +30,30 @@
   }
 
   .card_actions {
-    text-align: right;
-    padding: 0 0.556rem 0.556rem;
+    margin: 0;
+    padding: 0;
     position: relative;
+    text-align: right;
+    justify-content: center;
     background: linear-gradient(90deg, mat-color($mat-primary, darker) 0%, mat-color($mat-accent, darker) 38%, mat-color($mat-primary, lighter) 100%);
 
     button {
-      margin: 0.5em;
+      margin: 0.1rem;
+      padding: 0;
+
+      mat-icon {
+        font-size: 2rem;
+      }
     }
   }
-
   &:hover {
+    $width-shadow: 0.6rem;
     transform: scale(1.1);
-    border: 0.1667rem solid mat-color($mat-primary, darker);
-    box-shadow: 0.278rem 0.278rem 0.056rem rgba(250, 246, 246, 0.5);
-    -webkit-box-shadow: 0.278rem 0.278rem 1.111rem rgba(250, 246, 246, 0.5);
-    -moz-box-shadow: 0.278rem 0.278rem 1.111rem rgba(250, 246, 246, 0.5);
+    border: 0.25rem solid mat-color($mat-primary, darker);
+    box-shadow: 0 $width-shadow 2*$width-shadow 0 rgba(250, 246, 246, 0.5), 0 1.5*$width-shadow 5*$width-shadow 0 rgba(250, 246, 246, 0.5);
+    -webkit-box-shadow: 0 $width-shadow 2*$width-shadow 0 rgba(250, 246, 246, 0.5), 0 1.5*$width-shadow 5*$width-shadow 0 rgba(250, 246, 246, 0.5);
+    -moz-box-shadow: 0 $width-shadow 2*$width-shadow 0 rgba(250, 246, 246, 0.5), 0 1.5*$width-shadow 5*$width-shadow 0 rgba(250, 246, 246, 0.5);
   }
 }
 
-@media screen and (max-width: 20em) {
-  .card {
-    .card_text {
-      width: 60vh;
-      opacity: 1;
-    }
-  }
-}
+

@@ -13,7 +13,24 @@ import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-templates-cards',
-  templateUrl: './templates-cards.component.html',
+  template:`
+    <div class='container ' fxFlex='98' fxLayout='column'>
+      <div fxLayout='row'>
+        <button class='button-action button-add-template-card' fxFlex='19' mat-raised-button (click)='onOpenModal(null)'
+                title='Pulse para agregar una nueva plantilla'>Nueva plantilla
+        </button>
+      </div>
+
+      <div class='reloadCard'>
+        <button mat-mini-fab color='primary' title='Recargar plantillas' (click)='onRefresh()'>
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+      <section class='cards-container' *ngIf='this.onViewCard' fxLayoutAlign='center center'>
+        <app-template-card *ngFor='let card of cards' [card]='card' (refreshCards)='onRefresh($event)'></app-template-card>
+      </section>
+    </div>
+  `,
   styleUrls: ['./templates-cards.component.scss']
 })
 export class TemplatesCardsComponent implements OnInit, AfterViewInit, OnDestroy {

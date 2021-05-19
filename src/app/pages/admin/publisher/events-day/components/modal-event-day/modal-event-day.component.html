@@ -10,7 +10,7 @@
     <mat-toolbar color='primary'>
       <h1>Plantillas</h1>
     </mat-toolbar>
-    <div class='template-container'>
+    <div class='template-cards-container'>
       <app-template-card
         #cardHtml *ngFor='let card of cards' [card]='card' [actions]='false' title='Click para seleccionar'
         (refreshCards)='onRefresh($event)' (click)='onSelectCard(card)'></app-template-card>
