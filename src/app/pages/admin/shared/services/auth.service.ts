@@ -130,23 +130,6 @@ export class AuthService {
         this.platformUserRes.next(platformUser);
         this.isLogged.next(true);
       }
-    } else {
-      this.router.events
-        .pipe(filter(event => event instanceof NavigationEnd))
-        .subscribe((event: RouterEvent) => {
-          // const urlAccessByPass = [
-          //   'mail-users-subscription-status',
-          //   'forgot-password'
-          // ];
-          // const { url } = event;
-          // const matches = urlAccessByPass.filter(s => s.includes(url));
-          // // const routeSubscriptionStatus: boolean = url.indexOf('mail-users-subscription-status') === 1;
-          //
-          // if (!matches) {
-          //   this.router.navigate(['/login']).then(_ => console.log('Session redirect to login'));
-          //   //TODO: No se cierran los modals si se cierra la sesion automaticamente
-          // }
-        });
     }
   }
 }

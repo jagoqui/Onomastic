@@ -1,4 +1,20 @@
 .mat-toolbar {
+  *{
+    font-size:calc(12px + 0.6vw);
+  }
+  ::ng-deep {
+    .mat-slide-toggle-thumb, .mat-slide-toggle-thumb-container  {
+      height: calc(12px + 0.6vw);
+      width: calc(12px + 0.6vw);
+    }
+
+    .mat-slide-toggle-bar {
+      width: calc(23px + 0.6vw);
+      height: calc(8px + 0.6vw);
+      border-radius: 10px;
+    }
+  }
+
   .spacer {
     flex: 1 1 auto;
   }

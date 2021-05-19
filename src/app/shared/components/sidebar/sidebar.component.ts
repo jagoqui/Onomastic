@@ -5,6 +5,7 @@ import { AuthService } from '@adminShared/services/auth.service';
 
 import { SidenavControllerService } from '../../services/sidenav-controller.service';
 import { ThemeSwitcherControllerService } from '../../services/theme-switcher-controller.service';
+import { AuthRes } from '@adminShared/models/auth.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -13,6 +14,7 @@ import { ThemeSwitcherControllerService } from '../../services/theme-switcher-co
 })
 export class SidebarComponent implements OnInit, OnDestroy {
   opened = false;
+  platformUserData: AuthRes;
   private destroy$ = new Subject<any>();
 
   constructor(
@@ -40,6 +42,13 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .subscribe(
         (res: boolean) => (this.opened = res)
       );
+    this.authSvc.userResponse$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((userRes: AuthRes) => {
+        if (userRes) {
+          this.platformUserData = userRes;
+        }
+      });
   }
 
   ngOnDestroy(): void {
