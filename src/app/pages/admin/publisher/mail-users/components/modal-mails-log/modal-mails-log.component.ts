@@ -4,19 +4,22 @@ import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE } from '@angular/materia
 import { MAT_MOMENT_DATE_ADAPTER_OPTIONS, MomentDateAdapter } from '@angular/material-moment-adapter';
 import { DATE_FORMAT } from '@adminShared/models/shared.model';
 import { MatTableDataSource } from '@angular/material/table';
-import { takeUntil } from 'rxjs/operators';
+import { endWith, takeUntil } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import SwAlert from 'sweetalert2';
 import { MatSort } from '@angular/material/sort';
 import { MailsLogService } from '@app/pages/admin/shared/services/mails-log.service';
 import { MatPaginator } from '@angular/material/paginator';
 import { MailsLog } from '@app/pages/admin/shared/models/mails-log.model';
+import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { FormControl, FormGroup } from '@angular/forms';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-modal-mais-log',
   templateUrl: './modal-mails-log.component.html',
   styleUrls: ['./modal-mails-log.component.scss'],
-  providers: [
+  providers: [DatePipe,
     {
       provide: DateAdapter,
       useClass: MomentDateAdapter,
@@ -35,20 +38,18 @@ export class ModalMailsLogComponent implements OnInit, AfterViewInit, OnDestroy 
     'fecha', 'email', 'asunto'
   ];
   dataSource = new MatTableDataSource();
-  // minDate: Date;
-  // maxDate: Date;
-  today: Date = new Date();
-  filtersState = {
-    asunto: '',
-    email: '',
+  range = new FormGroup({
+    start: new FormControl(),
+    end: new FormControl()
+  });
 
-  };
   private numMails = 0;
   private destroy$ = new Subject<any>();
 
   constructor(
     private dialogRef: MatDialogRef<ModalMailsLogComponent>,
     private mailSentSvc: MailsLogService,
+    private datePipe: DatePipe,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
   }
@@ -57,6 +58,16 @@ export class ModalMailsLogComponent implements OnInit, AfterViewInit, OnDestroy 
     filterValue = filterValue.trim(); // Remove whitespace
     filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
     this.dataSource.filter = filterValue;
+  }
+
+  changeRangeDate(){
+    const start = this.datePipe.transform(this.range.get('start').value, 'yyyy-MM-dd');
+    const end = this.datePipe.transform(this.range.get('end').value, 'yyyy-MM-dd');
+    const rangeUpdt = new FormGroup({
+      start: new FormControl(start),
+      end: new FormControl(end)
+    });
+    console.log((rangeUpdt.value));
   }
 
   ngAfterViewInit(): void {
