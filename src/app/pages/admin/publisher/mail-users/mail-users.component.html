@@ -121,7 +121,7 @@
                 <mat-icon>email</mat-icon>
                 <span>Activar</span>
               </button>
-              <button mat-menu-item (click)='onDelete(element.id)'>
+              <button mat-menu-item (click)='onDelete(element.id)' [disabled]='true'>
                 <mat-icon color='warn'>delete</mat-icon>
                 <span>Eliminar</span>
               </button>

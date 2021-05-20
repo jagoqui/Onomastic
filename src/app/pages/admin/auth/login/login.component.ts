@@ -46,7 +46,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.subscription.add(
       this.authSvc.login(formValue).subscribe(userRes => {
         if (userRes) {
-          this.router.navigate(['/home']).then(r => console.log(r));
+          if(this.authSvc.isPublisherAdmin){
+            this.router.navigate(['/ADMIN/publishers']).then();
+          }else{
+            this.router.navigate(['/PUBLISHER/mail-users']).then();
+          }
           this.loginForm.baseForm.reset();
         }
       }, () => {
