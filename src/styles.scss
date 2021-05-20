@@ -4,17 +4,16 @@ html,
 body {
   box-sizing: border-box;
   height    : 100%;
-  margin    : 0
+  margin    : 0;
+  scroll-behavior: smooth;
 }
 
-// Create your Sass color vars (will be available in all the project)
 .container {
   margin: 2% auto 0;
   padding   : 0;
 
   div .button-action {
-    // TODO: Pasar texto del botón
-    margin-top: 2.7778rem;
+    margin-top: 2.7778vw;
     border-radius: 2.7778rem;
 
     &:before {
@@ -80,9 +79,9 @@ body {
 }
 
 footer {
+  z-index:999;
   position: relative;
   width: 100%;
   bottom:0 ;
   margin-top: 1.667rem;
 }
-

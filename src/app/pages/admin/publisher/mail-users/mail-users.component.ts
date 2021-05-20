@@ -4,7 +4,7 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, filter, map, takeUntil, tap } from 'rxjs/operators';
 
 import { EmailUserService } from '../shared/services/email-user.service';
 import { ModalMailUsersComponent } from './components/modal-mail-users/modal-mail-users.component';
@@ -14,6 +14,7 @@ import { MailsLogService } from '@app/pages/admin/shared/services/mails-log.serv
 import { MailUsers } from '@adminShared/models/mail-users.model';
 import { ModalMailsLogComponent } from '@publisher/mail-users/components/modal-mails-log/modal-mails-log.component';
 import { FriendlyNumberAbbreviationService } from '@appShared/services/friendly-number-abbreviation.service';
+import { FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-users',
@@ -32,6 +33,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
     'programaAcademicoPorUsuarioCorreo',
     'estado', 'actions'
   ];
+  search = new FormControl('');
   dataSource = new MatTableDataSource();
 
   private numUsers = 0;
@@ -42,8 +44,9 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
     private dialog: MatDialog,
     private friendlyNumberSvc: FriendlyNumberAbbreviationService,
     private mailUserSvc: EmailUserService,
-    private mailDataSentSvc: MailsLogService,
+    private mailDataSentSvc: MailsLogService
   ) {
+    this.onSearch();
   }
 
   get numMailUser(): string {
@@ -73,6 +76,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
         });
     }
   }
+
   onOpenModalForm(user: MailUsers) {
     const dialogRef = this.dialog.open(ModalMailUsersComponent, {
       height: 'auto',
@@ -97,10 +101,32 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
     return this.friendlyNumberSvc.getFriendlyFormat(numData);
   }
 
-  applyFilter(filterValue: string) {
-    filterValue = filterValue.trim(); // Remove whitespace
-    filterValue = filterValue.toLowerCase(); // MatTableDataSource defaults to lowercase matches
-    this.dataSource.filter = filterValue;
+  onChange(key: string) {
+    if (key === 'Backspace') {
+      this.search.valueChanges.pipe(
+        map(search => search?.toLowerCase().trim()),
+        debounceTime(300),
+        filter(search => search === ''),
+        tap(() => this.onClear()),
+        takeUntil(this.destroy$)
+      ).subscribe();
+    }
+  }
+
+  onClear(): void {
+    this.search.reset();
+    this.dataSource.filter = null;
+  }
+
+  onSearch(): void {
+    this.search.valueChanges.pipe(
+      map(search => search?.toLowerCase().trim()),
+      debounceTime(300),
+      distinctUntilChanged(),
+      filter(search => search !== '' && search?.length > 2),
+      tap(search => this.dataSource.filter = search),
+      takeUntil(this.destroy$)
+    ).subscribe();
   }
 
   onSubscriptionStateChange(email: string, state: string) {
@@ -144,18 +170,18 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
       confirmButtonText: 'Sí, eliminarlo!',
       cancelButtonText: 'Cancelar'
     }).then((resultDelete) => {
-      if (resultDelete.isConfirmed) {
-        this.mailUserSvc
-          .delete(userId)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((_) => {
-            SwAlert.fire('Eliminado!', 'El destinatario se ha eliminado', 'success').then();
-            this.ngOnInit();
-          }, () => {
-            SwAlert.showValidationMessage('Error elimando las destinatario');
-          });
+        if (resultDelete.isConfirmed) {
+          this.mailUserSvc
+            .delete(userId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((_) => {
+              SwAlert.fire('Eliminado!', 'El destinatario se ha eliminado', 'success').then();
+              this.ngOnInit();
+            }, () => {
+              SwAlert.showValidationMessage('Error elimando las destinatario');
+            });
+        }
       }
-    }
     );
   }
 

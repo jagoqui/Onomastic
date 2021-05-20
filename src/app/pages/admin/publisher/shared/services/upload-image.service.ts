@@ -119,7 +119,7 @@ export class UploadImageService {
     image.id = 'templateCardImage';
     image.alt = 'template-card';
     image.setAttribute('style', `
-      background-color: green !important;
+      background-color: #f2f2f2  !important;
       display: block !important;
       margin:auto !important;
       width:100% !important;
@@ -129,6 +129,10 @@ export class UploadImageService {
       object-fit: cover !important;
       object-position: center center !important;
     `);
+    image.setAttribute('rel', 'preload');
+    image.setAttribute('is', 'image');
+    image.setAttribute('width', '50');
+    image.setAttribute('height', '50');
     editor.selection.insertNode(image);
   };
 

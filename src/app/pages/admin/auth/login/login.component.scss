@@ -1,105 +1,172 @@
 @import '../../../../../assets/custom_styles/material_custom_theme';
 
-app-onomastic-logo {
-  background-color: mat-color($mat-primary, lighter);
-}
+main {
+  * {
+    transition-duration: 0.2s;
+  }
 
-mat-card {
-  mat-card-content {
-    form {
-      border: 0.1875rem mat-color($mat-accent, main) solid;
-      align-items: center;
+  .bg {
+    background: url('~src/assets/icons/splash-screen.svg') no-repeat fixed 50% 0;
+    justify-content: center;
+    text-align: center;
+    height: 100vh;
+    width: 100vw;
 
-      .mat-form-field,
-      #login-button,
-      .forgot-password {
-        width: 79.39%;
-        border-radius: 1.875rem;
-      }
-
-      mat-label {
-        font-size: 2.1875rem;
-      }
-
-      // Standard
-      ::ng-deep .mat-form-field {
-
-        .mat-input-element {
-          font-size: 1.3889rem;
-          color: mat-color($mat-accent, darker)
-        }
-
-        .mat-form-field-label {
-          color: mat-color($mat-accent, lighter);
-        }
-
-
-      }
-
-      #user-input {
-        margin: 3.125rem 0 0.625rem;
-      }
-
-      #password-input {
-        margin-bottom: 2.5rem;
-      }
-
-      #hide-password-button {
-
-        @mixin md-icon-size($size: 1.1111rem) {
-          font-size: $size;
-          height: $size;
-          width: $size;
-        }
-
-        @include md-icon-size(2.6667rem);
-
-        .material-icons.mat-icon {
-          @include md-icon-size(2.2222rem);
-        }
-      }
-
-      ngx-recaptcha2 {
-        @mixin recaptcha-transform($scale: 1) {
-          transform: scale($scale);
-          transform-origin: -$scale*10 0;
-          margin-bottom: 0.625rem;
-        }
-
-        @include recaptcha-transform(1.4);
-      }
-
-      #login-button {
-        padding: 1.5625rem;
-        font-size: 2.375rem;
-        color: white;
-        bottom: -2.81rem;
-
-        .mat-button {
-          border-radius: 1.875rem;
-
-        }
-
-        &:hover {
-          background-color: mat-color($mat-primary, darker);
-        }
-
-        &:disabled {
-          background-color: mat-color($mat-primary, lighter)
-        }
-      }
-
+    .arrow {
+      $size: calc(4.444rem + 1vw);
+      width: $size;
+      height: $size;
+      font-size: $size;
+      background-size: contain;
     }
 
-    .forgot-password {
-      text-decoration: none;
-      margin-top: 6.25rem;
-      font-size: 1.5rem;
-      color: mat-color($mat-accent, main);
-      letter-spacing: 0.0026rem;
+    .bounce {
+      animation: bounce 2s infinite;
+    }
 
-      &:hover {
-        color: mat-color($mat-primary, darker);
+    @keyframes bounce {
+      0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+      }
+      40% {
+        transform: translateY(-1.667rem);
+      }
+      60% {
+        transform: translateY(-0.833rem);
+      }
+    }
+  }
+
+  section.container {
+    justify-content: center;
+
+    div {
+      font-size: calc(1rem + 1vw);
+      $width-shadow: 0.3rem;
+
+      form {
+        box-shadow: 0 $width-shadow 2*$width-shadow 0 rgba(0, 0, 0, 0.2), 0 1.5*$width-shadow 5*$width-shadow 0 rgba(0, 0, 0, 0.19);
+        border-radius: 4%;
+        align-items: center;
+
+        .mat-form-field,
+        #login-button, {
+          width: 80%;
+          border-radius: 2.7778rem;
+        }
+
+        ::ng-deep {
+          mat-label {
+            font-size: 70%;
+          }
+
+          .mat-input-element {
+            font-size: 60%;
+            color: mat-color($mat-accent, darker)
+          }
+
+          .mat-form-field-label {
+            color: mat-color($mat-accent, lighter);
+          }
+
+          .mat-form-field-flex > .mat-form-field-infix {
+            padding: 0.3em 0 !important;
+          }
+
+          .mat-form-field-label-wrapper {
+            top: -1.5em;
+          }
+
+          .mat-form-field-appearance-outline.mat-form-field-can-float.mat-form-field-should-float .mat-form-field-label {
+            transform: translateY(-1.1em) scale(.70);
+            width: 133.33333%;
+          }
+        }
+
+        #user-input {
+          margin-top: 1vw;
+        }
+
+        #password-input {
+          margin-bottom: 1vw;
+        }
+
+        #hide-password-button {
+          $size: calc(20px + 0.5vw);
+          @mixin md-icon-size($size) {
+            font-size: $size;
+            height: $size;
+            width: $size;
+          }
+
+          @include md-icon-size($size) ;
+
+          .material-icons.mat-icon {
+            @include md-icon-size($size);
+          }
+        }
+
+        .mat-error {
+          font-size: 60%
+        }
+
+        ngx-recaptcha2 {
+          $minScale: 0.9;
+          $addScale: 0.1;
+          /* Large desktop */
+          @media (min-width: 66.667rem) {
+            transform: scale($minScale+3*$addScale);
+          }
+
+          /* Portrait tablet to landscape and desktop */
+          @media (min-width: 42.667rem) and (max-width: 54.389rem) {
+            transform: scale($minScale+2*$addScale);
+          }
+
+          /* Landscape phone to portrait tablet */
+          @media (max-width: 42.611rem) {
+            transform: scale($minScale+$addScale);
+          }
+
+          /* Landscape phones and down */
+          @media (max-width: 480px) {
+            transform: scale($minScale);
+          }
+        }
+
+        #login-button {
+          box-shadow: 0 $width-shadow 2*$width-shadow 0 rgba(0, 0, 0, 0.2), 0 1.5*$width-shadow 5*$width-shadow 0 rgba(0, 0, 0, 0.19);
+          $padding: calc(10px + 0.8vw);
+          padding: $padding;
+          color: white;
+          font-size: 90%;
+          bottom: calc(-2 * (10px + 0.8vw));
+
+          .mat-button {
+            border-radius: 1.875rem;
+          }
+
+          &:hover {
+            background-color: mat-color($mat-primary, darker);
+          }
+
+          &:disabled {
+            background-color: mat-color($mat-primary, lighter)
+          }
+        }
+      }
+
+      .forgot-password {
+        text-align: center;
+        text-decoration: none;
+        font-size: 60%;
+        margin-top: calc(3 * (10px + 0.8vw));
+        color: mat-color($mat-accent, main);
+        letter-spacing: 0.0026rem;
+
+        &:hover {
+          color: mat-color($mat-primary, darker);
+        }
       }
     }
   }

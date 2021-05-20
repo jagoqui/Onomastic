@@ -26,11 +26,6 @@ const routes: Routes = [
     component: MailUsersSubscriptionStatusComponent
   },
   {
-    path: 'home',
-    loadChildren: () => import('./pages/home/home.module').then(m => m.HomeModule),
-    canActivate: [CheckLoginGuard]
-  },
-  {
     path: 'ADMIN',
     loadChildren: () => import('./pages/admin/admin.module').then(m => m.AdminModule),
     canActivate: [CheckLoginGuard]

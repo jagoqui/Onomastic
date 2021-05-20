@@ -2,6 +2,6 @@ mat-sidenav-container {
   height: 100%;
 
   mat-sidenav {
-    width: 12.5rem;
+    width: calc(11rem + 2vw);
   }
 }
