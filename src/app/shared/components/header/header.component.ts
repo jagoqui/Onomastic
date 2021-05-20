@@ -13,7 +13,9 @@ import { ThemeSwitcherControllerService } from '../../services/theme-switcher-co
       <button *ngIf='isLogged' mat-icon-button (click)='onToggleSidenav()'>
         <mat-icon>menu</mat-icon>
       </button>
-      <button id='app-title' mat-raised-button color='primary' class='mat-display-2' [routerLink]="'/home'" title='Home'>Onomástico</button>
+      <button id='app-title' mat-raised-button color='primary' class='mat-display-2' [routerLink]="'/PUBLISHER/help'" title='Home'>
+        Onomástico
+      </button>
     </span>
       <span class='spacer'></span>
       <mat-slide-toggle [formControl]='toggleDarkThemeControl'>
