@@ -1,0 +1,25 @@
+@import '../../../../../../assets/custom_styles/material_custom_theme.scss';
+
+.container {
+  margin-top: 6%;
+}
+
+.container-btns {
+  margin: 2%;
+
+  .mat-accordion {
+    margin: 1%;
+    width: 80%;
+  }
+}
+
+.container-text {
+    margin: 2%;
+    text-align: justify;
+}
+
+::ng-deep {
+  mat-expansion-panel-header:hover {
+    background-color: mat-color($mat-primary, darker) !important;
+  }
+}
