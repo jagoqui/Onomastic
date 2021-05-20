@@ -11,9 +11,6 @@ import { HeaderComponent } from './components/header/header.component';
 import {
   MailUsersSubscriptionStatusComponent,
 } from './components/mail-users-subscription-status/mail-users-subscription-status.component';
-import {
-  OnomasticLogoComponent,
-} from './components/onomastic-logo/onomastic-logo.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import {
   MaterialElevationDirective,
@@ -36,7 +33,6 @@ export default imports;
 
 @NgModule({
   declarations: [
-    OnomasticLogoComponent,
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
@@ -48,7 +44,6 @@ export default imports;
   ],
   exports: [
     imports,
-    OnomasticLogoComponent,
     HeaderComponent,
     MailUsersSubscriptionStatusComponent,
     SidebarComponent,

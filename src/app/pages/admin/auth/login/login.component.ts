@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 import { ReCaptcha2Component } from 'ngx-captcha';
 import { NgxSpinnerService } from 'ngx-spinner';
@@ -7,7 +7,8 @@ import { environment } from '@env/environment';
 
 import { AuthService } from '@adminShared/services/auth.service';
 import { BaseFormAuth } from '@adminShared/utils/base-form-auth';
-import Swal from 'sweetalert2';
+import SwAlert from 'sweetalert2';
+import { DOCUMENT } from '@angular/common';
 
 @Component({
   selector: 'app-login',
@@ -29,6 +30,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   private subscription: Subscription = new Subscription();
 
   constructor(
+    @Inject(DOCUMENT) private document: Document,
     private authSvc: AuthService,
     private router: Router,
     public loginForm: BaseFormAuth,
@@ -38,6 +40,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.recaptchaConfig.success = false;
   }
 
+
   onLogin(): void {
     const formValue = this.loginForm.baseForm.value;
     this.subscription.add(
@@ -46,8 +49,8 @@ export class LoginComponent implements OnInit, OnDestroy {
           this.router.navigate(['/home']).then(r => console.log(r));
           this.loginForm.baseForm.reset();
         }
-      },()=>{
-        Swal.showValidationMessage(
+      }, () => {
+        SwAlert.showValidationMessage(
           'No se pudo iniciar sesion, verifique su email y contraseña.');
       })
     );
@@ -61,22 +64,15 @@ export class LoginComponent implements OnInit, OnDestroy {
     return this.loginForm.isValidField(field);
   }
 
-  handleResetRecaptcha() {
-  }
 
   handleExpireRecaptcha() {
     this.recaptchaConfig.success = false;
-  }
-
-  handleLoadRecaptcha() {
   }
 
   handleSuccessRecaptcha() {
     this.recaptchaConfig.success = true;
   }
 
-  handleErrorRecaptcha() {
-  }
 
   ngOnInit(): void {
     this.spinner.show(undefined, {

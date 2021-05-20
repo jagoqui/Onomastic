@@ -1,9 +1,4 @@
 <mat-nav-list>
-  <a mat-list-item routerLink="/home" routerLinkActive="active-list-item"
-     (click)="sidenavController.openSidebar(false)">
-    <mat-icon matListIcon>home</mat-icon>
-    <span class="nav-link">home</span>
-  </a>
   <a *ngIf='isAdmin' mat-list-item routerLink="/ADMIN/publishers" routerLinkActive="active-list-item"
      (click)="sidenavController.openSidebar(false)">
     <mat-icon matListIcon>public</mat-icon>
@@ -36,8 +31,8 @@
   <mat-divider></mat-divider>
   <div id="profile" fxLayout='column' fxLayoutAlign='center center'>
     <img class="avatar mat-elevation-z8" src="https://source.unsplash.com/c_GmwfHBDzk/200x200"  alt='profile image'/>
-    <span id='name'>{{ platformUserData.name}}</span>
-    <span id='role'>{{platformUserData.role }}</span>
-    <span id='email'>{{ platformUserData.userEmail}}</span>
+    <span id='name'>{{ platformUserData?.name}}</span>
+    <span id='role'>{{platformUserData?.role }}</span>
+    <span id='email'>{{ platformUserData?.userEmail}}</span>
   </div>
 </mat-nav-list>
