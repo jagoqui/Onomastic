@@ -49,12 +49,12 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
     this.onSearch();
   }
 
-  get numMailUser(): string {
+  get numMailUsers(): string {
     return this.getPartialUsers(this.numUsers);
   }
 
   get numMailsSent(): string {
-    return this.getPartialUsers(this.numMailsDataSent);
+    return this.getPartialUsers(this.numMailsDataSent+70000);
   }
 
   openModalLogs() {

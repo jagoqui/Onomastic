@@ -1,9 +1,11 @@
 .mat-toolbar {
-  *{
-    font-size:calc(12px + 0.6vw);
+  height:calc(25px + 2vw);
+  * {
+    font-size: calc(12px + 0.6vw);
   }
+
   ::ng-deep {
-    .mat-slide-toggle-thumb, .mat-slide-toggle-thumb-container  {
+    .mat-slide-toggle-thumb, .mat-slide-toggle-thumb-container {
       height: calc(12px + 0.6vw);
       width: calc(12px + 0.6vw);
     }

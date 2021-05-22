@@ -13,19 +13,14 @@ import { Subject } from 'rxjs';
 
 @Component({
   selector: 'app-templates-cards',
-  template:`
-    <div class='container ' fxFlex='98' fxLayout='column'>
-      <div fxLayout='row'>
-        <button class='button-action button-add-template-card' fxFlex='19' mat-raised-button (click)='onOpenModal(null)'
-                title='Pulse para agregar una nueva plantilla'>Nueva plantilla
-        </button>
-      </div>
-
-      <div class='reloadCard'>
-        <button mat-mini-fab color='primary' title='Recargar plantillas' (click)='onRefresh()'>
-          <mat-icon>refresh</mat-icon>
-        </button>
-      </div>
+  template: `
+    <div class='container'>
+      <button mat-fab color='primary' title='Nueva plantilla' (click)='onOpenModal(null)'>
+        <mat-icon matBadge="+" matBadgeColor="warn" matBadgeSize='small'>card_giftcard</mat-icon>
+      </button>
+      <button class='reload-button' mat-mini-fab color='primary' title='Recargar plantillas' (click)='onRefresh()'>
+        <mat-icon>refresh</mat-icon>
+      </button>
       <section class='cards-container' *ngIf='this.onViewCard' fxLayoutAlign='center center'>
         <app-template-card *ngFor='let card of cards' [card]='card' (refreshCards)='onRefresh($event)'></app-template-card>
       </section>
@@ -81,7 +76,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit, OnDestroy
       if (cards) {
         this.cards = cards;
       }
-    },() => SwAlert.showValidationMessage('Error obteniendo plantillas'));
+    }, () => SwAlert.showValidationMessage('Error obteniendo plantillas'));
   }
 
   ngOnInit(): void {
@@ -91,7 +86,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit, OnDestroy
         if (card) {
           this.onOpenModal(card);
         }
-      },() => SwAlert.showValidationMessage('Error obteniendo plantilla'));
+      }, () => SwAlert.showValidationMessage('Error obteniendo plantilla'));
     }
   }
 

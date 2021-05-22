@@ -1,4 +1,4 @@
-@import '../../../../../assets/custom_styles/material_custom_theme';
+@import '../../../../../material_custom_theme';
 
 main {
   * {
@@ -13,11 +13,8 @@ main {
     width: 100vw;
 
     .arrow {
-      $size: calc(4.444rem + 1vw);
-      width: $size;
-      height: $size;
-      font-size: $size;
-      background-size: contain;
+      $size: calc(24px + 5vw);
+      @include md-icon-size($size);
     }
 
     .bounce {
@@ -29,10 +26,10 @@ main {
         transform: translateY(0);
       }
       40% {
-        transform: translateY(-1.667rem);
+        transform: translateY(-1.667vw);
       }
       60% {
-        transform: translateY(-0.833rem);
+        transform: translateY(-0.833vw);
       }
     }
   }
@@ -57,11 +54,11 @@ main {
 
         ::ng-deep {
           mat-label {
-            font-size: 70%;
+            font-size: 55%;
           }
 
           .mat-input-element {
-            font-size: 60%;
+            font-size: 55%;
             color: mat-color($mat-accent, darker)
           }
 
@@ -92,13 +89,7 @@ main {
         }
 
         #hide-password-button {
-          $size: calc(20px + 0.5vw);
-          @mixin md-icon-size($size) {
-            font-size: $size;
-            height: $size;
-            width: $size;
-          }
-
+          $size: calc(10px + 1.5vw);
           @include md-icon-size($size) ;
 
           .material-icons.mat-icon {
@@ -111,8 +102,9 @@ main {
         }
 
         ngx-recaptcha2 {
-          $minScale: 0.9;
+          $minScale: 0.8;
           $addScale: 0.1;
+
           /* Large desktop */
           @media (min-width: 66.667rem) {
             transform: scale($minScale+3*$addScale);
@@ -136,11 +128,11 @@ main {
 
         #login-button {
           box-shadow: 0 $width-shadow 2*$width-shadow 0 rgba(0, 0, 0, 0.2), 0 1.5*$width-shadow 5*$width-shadow 0 rgba(0, 0, 0, 0.19);
-          $padding: calc(10px + 0.8vw);
-          padding: $padding;
+          --padding: calc(10px + 0.8vw);
+          padding: var(--padding);
           color: white;
           font-size: 90%;
-          bottom: calc(-2 * (10px + 0.8vw));
+          bottom: calc(-2 * var(--padding));
 
           .mat-button {
             border-radius: 1.875rem;
