@@ -1,12 +1,10 @@
-<div class='container table-wrapper' fxFlex='98'>
+<div class='container'>
   <!-- Actions buttons -->
-  <div id='actions_buttons' fxLayout='row' fxLayoutAlign='space-between center'>
-    <button class='button-action button-add-event' fxFlex='19' mat-raised-button (click)='onOpenModal(null)'
-            title='Pulse para agregar un nuevo evento'>Agregar evento
-    </button>
-  </div>
+  <button mat-mini-fab color='primary' title='Nuevo evento' (click)='onOpenModal(null)'>
+    <mat-icon matBadge="+" matBadgeColor="warn" matBadgeSize='small'>date_range</mat-icon>
+  </button>
   <!-- Table -->
-  <div class='mat-elevation-z8'>
+  <div class='table-container mat-elevation-z8'>
     <mat-toolbar color='primary'>
       <mat-toolbar-row fxLayout='row' fxLayoutAlign='space-between center'>
         <mat-form-field fxFlex='95'>
@@ -43,7 +41,8 @@
         <ng-container matColumnDef='actions'>
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
           <td mat-cell *matCellDef='let event'>
-            <button mat-icon-button [matMenuTriggerFor]='menu' aria-label='Example icon-button with a menu'>
+            <button mat-mini-fab [matMenuTriggerFor]='menu' aria-label='Example icon-button with a menu'
+                    color='warn'>
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu='matMenu'>

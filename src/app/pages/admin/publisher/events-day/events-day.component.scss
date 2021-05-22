@@ -1,10 +1,4 @@
-@import '../../../../../assets/custom_styles/material_custom_theme';
-
-.button-add-event {
-  &:before {
-    content: "Agregar evento";
-  }
-}
+@import '../../../../../material_custom_theme';
 
 table {
   width: 100%;

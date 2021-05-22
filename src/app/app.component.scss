@@ -1,7 +1,11 @@
 mat-sidenav-container {
   height: 100%;
+  mat-toolbar {
+    height: calc(25px + 2vw);
+    font-size: calc(12px + 0.35vw);
+  }
 
   mat-sidenav {
-    width: calc(11rem + 2vw);
+    width: calc(12rem + 2vw);
   }
 }

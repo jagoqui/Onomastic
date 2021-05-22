@@ -17,6 +17,7 @@ import {
 } from './directives/material-elevation.directive';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { ScrollComponent } from './components/scroll/scroll.component';
 
 const imports = [
   CommonModule,
@@ -37,7 +38,8 @@ export default imports;
     SidebarComponent,
     FooterComponent,
     MailUsersSubscriptionStatusComponent,
-    MaterialElevationDirective
+    MaterialElevationDirective,
+    ScrollComponent
   ],
   imports: [
     imports
@@ -49,6 +51,7 @@ export default imports;
     SidebarComponent,
     FooterComponent,
     MaterialElevationDirective,
+    ScrollComponent
   ]
 })
 export class SharedModule { }

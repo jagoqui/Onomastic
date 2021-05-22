@@ -1,76 +1,87 @@
-@import 'assets/custom_styles/ng-select-styles';
+@import 'ng-select-styles';
 
-html,
 body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
-  height    : 100%;
-  margin    : 0;
   scroll-behavior: smooth;
 }
 
 .container {
-  margin: 2% auto 0;
-  padding   : 0;
+  margin: calc(1.2 * (25px + 2vw)) auto;
+  padding: 0;
+  width: 95%;
 
-  div .button-action {
-    margin-top: 2.7778vw;
-    border-radius: 2.7778rem;
+  .table-container {
+    font-size: calc(9px + 0.5vw);
 
-    &:before {
-      position     : fixed;
-      left         : 0;
-      width        : 100%;
-      height       : 100%;
-      border-radius: 2.7778rem;
-      color        : white;
-      transition   : all 0.35s ease;
-      font-weight  : 800;
-      background: mat-color($mat-primary, main);
-    }
-
-    &:hover:before {
-      content: "";
-      width  : 15%;
-    }
-  }
-
-  div {
     .mat-toolbar {
-      margin-top: 1.6667rem;
-      font-size : 0.7778rem;
+      margin-top: calc(8px + 1vw);
+      font-size: 80%;
+    }
+
+    .table-responsive {
+      display: block;
+      width: 100%;
+      overflow-x: auto;
+
+      * {
+        font-size: 95%;
+      }
+
+      .mat-table {
+        width: 100%;
+        max-width: 100%;
+        margin-bottom: 0;
+        display: table;
+        border-collapse: collapse;
+      }
+
+      .mat-cell,
+      .mat-header-cell {
+        word-wrap: initial;
+        display: table-cell;
+        padding: 0 01vw;
+        line-break: unset;
+        width: auto;
+        white-space: nowrap;
+        overflow: hidden;
+        vertical-align: middle;
+      }
+
     }
   }
 
-  .table-responsive {
-    display   : block;
-    width     : 100%;
-    overflow-x: auto;
-
-    .mat-table {
-      width          : 100%;
-      max-width      : 100%;
-      margin-bottom  : 1rem;
-      display        : table;
-      border-collapse: collapse;
-    }
-
-    .mat-cell,
-    .mat-header-cell {
-      word-wrap     : initial;
-      display       : table-cell;
-      padding       : 0 0.2778rem;
-      line-break    : unset;
-      width         : auto;
-      white-space   : nowrap;
-      overflow      : hidden;
-      vertical-align: middle;
+  .mat-paginator-outer-container {
+    * {
+      font-size: 95%;
     }
   }
 }
 
+.mat-fab, .mat-mini-fab {
+  cursor: pointer;
+  padding: 0.4vw;
+  $size: calc(10px + 0.5vw);
+  --size-fab: 2.5*calc(10px + 0.5vw);
+  width: calc(var(--size-fab));
+  height: calc(var(--size-fab));
+
+  .mat-raised-button.mat-icon, .mat-icon, &.mat-icon {
+    font-size: $size;
+  }
+
+  .mat-badge-content {
+    $size: calc(8px + 0.5vw);
+    @include md-icon-size($size);
+  }
+}
+
+
 .mat-dialog-title {
-  margin     : 1.1111rem 0;
-  text-align : center;
+  margin: 1vw 0;
+  text-align: center;
   font-weight: bold;
 }
 
@@ -79,9 +90,9 @@ body {
 }
 
 footer {
-  z-index:999;
+  z-index: 999;
   position: relative;
   width: 100%;
-  bottom:0 ;
+  bottom: 0;
   margin-top: 1.667rem;
 }

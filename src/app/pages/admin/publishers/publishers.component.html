@@ -1,18 +1,16 @@
-<div class='container table-wrapper' fxFlex='98'>
+<div class='container'>
   <!-- Actions buttons -->
-  <div id='actions_buttons' fxLayout='row' fxLayoutAlign='space-between center'>
-    <button mat-raised-button class='button-action button-add-publisher' fxFlex='19' (click)='onOpenModal(null)'
-            title='Pulse para agregar un nuevo destinatario'>Nuevo publicador
-    </button>
-  </div>
+  <button mat-mini-fab color='primary' title='Nueva publicador' (click)='onOpenModal(null)'>
+    <mat-icon matBadge="+" matBadgeColor="warn" matBadgeSize='small'>public</mat-icon>
+  </button>
   <!-- Table -->
-  <div class='mat-elevation-z8'>
+  <div class=' table-container mat-elevation-z8'>
     <mat-toolbar color='primary'>
       <mat-toolbar-row fxLayout='row' fxLayoutAlign='space-between center'>
         <mat-form-field fxFlex='95'>
           <mat-label>Buscar</mat-label>
           <label>
-            <input matInput (keyup)='applyFilter($event.target.value)' placeholder='Ingrese el valor del campo a buscar'
+            <input matInput (keyup)='applyFilter($event.target["value"])' placeholder='Ingrese el valor del campo a buscar'
                    autocomplete='off'>
           </label>
         </mat-form-field>
@@ -37,7 +35,8 @@
         <ng-container matColumnDef='actions'>
           <th mat-header-cell *matHeaderCellDef>Acciones</th>
           <td mat-cell *matCellDef='let publisher'>
-            <button mat-icon-button [matMenuTriggerFor]='menu'>
+            <button mat-mini-fab [matMenuTriggerFor]='menu' aria-label='Example icon-button with a menu'
+                    color='warn'>
               <mat-icon>more_vert</mat-icon>
             </button>
             <mat-menu #menu='matMenu'>

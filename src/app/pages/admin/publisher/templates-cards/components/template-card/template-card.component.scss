@@ -1,4 +1,4 @@
-@import '../../../../../../../assets/custom_styles/material_custom_theme';
+@import '../../../../../../../material_custom_theme';
 
 .wrapper-card {
   $width-shadow: 0.3rem;
@@ -42,20 +42,37 @@
     button {
       margin: 0.1rem;
       padding: 0;
+    }
 
-      mat-icon {
-        font-size: 2rem;
+    .mat-mini-fab {
+      cursor: pointer;
+      padding: 0.4vw;
+      $size: calc(11px + 0.5vw);
+      --size-fab: 2.5*calc(11px + 0.5vw);
+      width: calc(var(--size-fab));
+      height: calc(var(--size-fab));
+
+      .mat-icon, &.mat-icon {
+        font-size: $size;
       }
     }
   }
 
-  &:hover {
-    $width-shadow: 0.6rem;
-    transform: scale(1.1);
-    border: 0.25rem solid mat-color($mat-primary, darker);
-    box-shadow: 0 $width-shadow 2*$width-shadow 0 rgba(250, 246, 246, 0.5), 0 1.5*$width-shadow 5*$width-shadow 0 rgba(250, 246, 246, 0.5);
-    -webkit-box-shadow: 0 $width-shadow 2*$width-shadow 0 rgba(250, 246, 246, 0.5), 0 1.5*$width-shadow 5*$width-shadow 0 rgba(250, 246, 246, 0.5);
-    -moz-box-shadow: 0 $width-shadow 2*$width-shadow 0 rgba(250, 246, 246, 0.5), 0 1.5*$width-shadow 5*$width-shadow 0 rgba(250, 246, 246, 0.5);
+  @media (min-width: 480px) {
+    &:hover {
+      $width-shadow: 0.6rem;
+      transform: scale(1.1);
+      border: 0.25rem solid mat-color($mat-primary, darker);
+      box-shadow: 0 $width-shadow 2*$width-shadow 0 rgba(250, 246, 246, 0.5), 0 1.5*$width-shadow 5*$width-shadow 0 rgba(250, 246, 246, 0.5);
+      -webkit-box-shadow: 0 $width-shadow 2*$width-shadow 0 rgba(250, 246, 246, 0.5), 0 1.5*$width-shadow 5*$width-shadow 0 rgba(250, 246, 246, 0.5);
+      -moz-box-shadow: 0 $width-shadow 2*$width-shadow 0 rgba(250, 246, 246, 0.5), 0 1.5*$width-shadow 5*$width-shadow 0 rgba(250, 246, 246, 0.5);
+    }
+  }
+
+  @media (max-width: 480px) {
+    .card-container {
+      opacity: 0.8;
+    }
   }
 }
 

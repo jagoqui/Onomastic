@@ -1,3 +1,5 @@
+@import '../../../../material_custom_theme.scss';
+
 .mat-nav-list {
 
   a {
@@ -22,14 +24,20 @@
     font-size: calc(11px + 0.2vw);
     margin-top: 2vw;
 
-    .avatar {
-      width: calc(100px + 1vw);
-      height: calc(100px + 1vw);
-      border-radius: 50%;
+    .mat-fab {
+      $size: calc(30px + 1.5vw);
+      --size-fab:2.5*calc(30px + 1.5vw);
+      width: calc(var(--size-fab));
+      height:calc(var(--size-fab));
+
+      .mat-icon {
+        @include md-icon-size($size) ;
+        display: flex;
+      }
     }
 
-    #name {
-      font-size: 120%;
+    #name, #rol {
+      font-size: 110%;
       font-weight: bold;
     }
 
