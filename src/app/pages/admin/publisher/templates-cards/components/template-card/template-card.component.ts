@@ -14,10 +14,10 @@ import { DomSanitizerService } from '@appShared/services/dom-sanitizer.service';
     <article class='wrapper-card' *ngIf='card'>
       <div class='card-container' [innerHTML]='this.domSanitizerSvc.sanitizeHTML(card.texto)'></div>
       <div *ngIf='actions' class='card_actions'>
-        <button mat-flat-button color='primary' (click)='onEditCard(card.id)' title='Click para editar plantilla'>
+        <button mat-mini-fab color='primary' (click)='onEditCard(card.id)' title='Click para editar plantilla'>
           <mat-icon>edit</mat-icon>
         </button>
-        <button mat-flat-button color='warn' (click)='onDeleteCard(card)' title='Click para eliminar plantilla'>
+        <button mat-mini-fab color='warn' (click)='onDeleteCard(card)' title='Click para eliminar plantilla'>
           <mat-icon>delete</mat-icon>
         </button>
       </div>

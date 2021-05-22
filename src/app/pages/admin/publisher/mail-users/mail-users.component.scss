@@ -1,1 +1,21 @@
 @import '../../../../../material_custom_theme';
+
+.actions_buttons {
+  .mat-raised-button {
+    border-radius: 30px;
+    margin: 0 1vw;
+    padding: calc(5px + 0.2vw);
+    font-size: calc(7px + 0.5vw);
+    line-height: 1.2;
+
+    div {
+      color: mat-color($mat-accent, lighter);
+    }
+
+    .mat-divider {
+      margin: 0.3vw;
+      border-top-color: mat-color($mat-warn, main) solid;
+      font-weight: bold;
+    }
+  }
+}

@@ -3,17 +3,26 @@
   <div class='actions_buttons' fxLayout='row' fxLayoutAlign='start center'>
     <button mat-raised-button color='primary' (click)='openModalLogs()'
             title='Click para abrir historial de correos enviados.'>
-      <div>T. Correos <mat-icon class="mat-mini-fab" matBadge=">" matBadgeColor="warn" matBadgeSize='small'> contact_mail</mat-icon></div>
+      <div>T. Correos
+        <div class='mat-mini-fab'>
+          <mat-icon matBadge='>' matBadgeColor='warn' matBadgeSize='small'> contact_mail</mat-icon>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
       {{numMailsSent}}
     </button>
     <button mat-raised-button color='primary'>
       <div>T. Destinatarios
-        <mat-icon class="mat-mini-fab">people_outline</mat-icon></div>
+        <div class='mat-mini-fab'>
+          <mat-icon>people_outline</mat-icon>
+        </div>
+      </div>
+      <mat-divider></mat-divider>
       {{numMailUsers}}
     </button>
 
-    <button mat-fab color='primary' title='Nueva destinatario' (click)='onOpenModalForm(null)'>
-      <mat-icon matBadge="+" matBadgeColor="warn" matBadgeSize='small'>people</mat-icon>
+    <button mat-mini-fab color='primary' title='Nueva destinatario' (click)='onOpenModalForm(null)'>
+      <mat-icon matBadge='+' matBadgeColor='warn' matBadgeSize='small'>people</mat-icon>
     </button>
 
   </div>

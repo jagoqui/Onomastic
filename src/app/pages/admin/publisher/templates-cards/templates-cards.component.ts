@@ -15,7 +15,7 @@ import { Subject } from 'rxjs';
   selector: 'app-templates-cards',
   template: `
     <div class='container'>
-      <button mat-fab color='primary' title='Nueva plantilla' (click)='onOpenModal(null)'>
+      <button mat-mini-fab color='primary' title='Nueva plantilla' (click)='onOpenModal(null)'>
         <mat-icon matBadge="+" matBadgeColor="warn" matBadgeSize='small'>card_giftcard</mat-icon>
       </button>
       <button class='reload-button' mat-mini-fab color='primary' title='Recargar plantillas' (click)='onRefresh()'>
