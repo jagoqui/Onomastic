@@ -218,10 +218,12 @@ $mat-theming-theme-dark: mat-dark-theme($theme-primary, $theme-accent, $theme-wa
 
 .light-theme {
   @include angular-material-theme($mat-theming-theme);
+  --bg:  #{$light-background};
 }
 
 .dark-theme {
   @include angular-material-theme($mat-theming-theme-dark);
+  --bg:  #{$dark-background};
 }
 
 
@@ -258,6 +260,6 @@ $mat-theming-theme-dark: mat-dark-theme($theme-primary, $theme-accent, $theme-wa
 @mixin md-icon-size($size) {
   height: $size;
   width: $size;
-  line-height:$size;
+  line-height: $size;
   font-size: $size;
 }
