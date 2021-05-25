@@ -60,7 +60,8 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   openModalLogs() {
     const dialogRef = this.dialog.open(ModalMailsLogComponent, {
       height: 'auto',
-      width: '100%',
+      width: 'auto',
+      maxWidth:'95%',
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
@@ -80,7 +81,8 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   onOpenModalForm(user: MailUsers) {
     const dialogRef = this.dialog.open(ModalMailUsersComponent, {
       height: 'auto',
-      width: '45%',
+      width: 'auto',
+      maxWidth:'95%',
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
