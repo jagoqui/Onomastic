@@ -61,7 +61,8 @@ export class PublishersComponent implements OnInit, AfterViewInit, OnDestroy {
   onOpenModal(publisher: Publisher): void {
     const dialogRef = this.dialog.open(ModalPublishersComponent, {
       height: 'auto',
-      width: '50%',
+      width: 'auto',
+      maxWidth:'95%',
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
