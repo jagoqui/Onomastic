@@ -32,7 +32,7 @@
   <div id='profile' fxLayout='column' fxLayoutAlign='center center'>
     <button mat-fab color='accent' >
       <mat-icon>
-        {{platformUserData.role==='ADMIN'?'admin_panel_settings':'public'}}
+        {{platformUserData?.role==='ADMIN'?'admin_panel_settings':'public'}}
       </mat-icon>
     </button>
     <span id='name'>{{ platformUserData?.name}}</span>

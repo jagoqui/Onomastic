@@ -12,11 +12,27 @@ import { AssociationService } from '@pages/admin/shared/services/association.ser
 import { TemplateCard } from '@adminShared/models/template-card.model';
 import { ThemeSwitcherControllerService } from '@appShared/services/theme-switcher-controller.service';
 import { ACTIONS } from '@adminShared/models/shared.model';
+import { ResponsiveService } from '@appShared/services/responsive.service';
 
+type SIZEiCONS = 'tiny' | 'xsmall' | 'small' | 'middle' | 'large';
 
 @Component({
   selector: 'app-modal',
-  templateUrl: './modal-template-cards.component.html',
+  template: `
+    <div fxLayout='column' fxLayoutAlign='space-between stretch'>
+      <h1 mat-dialog-title>{{data.title | uppercase }}</h1>
+      <jodit-editor #editor id='editor' [config]='config'></jodit-editor>
+    </div>
+
+    <div mat-dialog-actions fxLayout='row' fxLayoutAlign='end end'>
+      <button mat-raised-button fxFlex='20' color='warn' (click)='onClose(null)'>Cancelar</button>
+      <button mat-raised-button fxFlex='20' color='primary' (click)='onSave()'
+              [disabled]='!onCompleteCard'
+              [title]="onCompleteCard? 'Click para guardar':'Recuerde que debe ingresar la plantilla y almenos una condición'">
+        {{actionTODO}}
+      </button>
+    </div>
+  `,
   styleUrls: ['./modal-template-cards.component.scss']
 })
 export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -31,15 +47,16 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   private destroy$ = new Subject<any>();
 
   constructor(
-    private dialogRef: MatDialogRef<ModalTemplateCardsComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
+    private dialogRef: MatDialogRef<ModalTemplateCardsComponent>,
+    private responsiveSvc: ResponsiveService,
     private render2: Renderer2,
     private elementRef: ElementRef,
     private themeSwitcherController: ThemeSwitcherControllerService,
     private templateCardsService: TemplateCardsService,
     private uploadImagesSvc: UploadImageService,
     private emailUserSvc: EmailUserService,
-    private associationSvc: AssociationService
+    private associationSvc: AssociationService,
   ) {
   }
 
@@ -55,16 +72,40 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
 
   setEditorConfig(themeEditor: string) {
     const iconSwitchTheme = `assets/icons/toggle-${themeEditor === 'dark' ? 'on' : 'off'}-solid.svg`;
-    this.config = {
-      autofocus: true,
-      minHeight: 600,
-      language: 'es',
-      enter: 'br',
-      toolbarButtonSize: 'large',
-      limitChars: this.maxChars,
-      theme: themeEditor,
-      placeholder:
-        `
+    this.responsiveSvc.screenWidth$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((media) => {
+        let toolbarButtonSize: SIZEiCONS;
+        switch (media) {
+          case 'xs':
+            toolbarButtonSize = 'tiny' as SIZEiCONS;
+            break;
+          case 'sm':
+            toolbarButtonSize = 'xsmall' as SIZEiCONS;
+            break;
+          case 'md':
+            toolbarButtonSize = 'xsmall' as SIZEiCONS;
+            break;
+          case 'lg':
+            toolbarButtonSize = 'medium' as SIZEiCONS;
+            break;
+          case 'xl':
+            toolbarButtonSize = 'large' as SIZEiCONS;
+            break;
+      }
+      this.config = {
+        autofocus: true,
+        enableDragAndDropFileToEditor: false,
+        toolbarAdaptive: false,
+        minWidth: 250,
+        minHeight: 350,
+        language: 'es',
+        enter: 'br',
+        toolbarButtonSize,
+        limitChars: this.maxChars,
+        theme: themeEditor,
+        placeholder:
+          `
           Ingrese el texto aquí:<br><br>
           <hr><hr>
           <b>Nota importane</b>:<br>
@@ -83,182 +124,182 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           <img  src='assets/images/templateCard_example.jpg' style='display: block;
             margin: auto; width: 40vw' alt=''/>
         `,
-      showXPathInStatusbar: true,
-      toolbarAdaptive: false,
-      insertImageAsBase64URI: false,
-      buttons: [
-        'font', 'paragraph', 'fontsize', 'brush', '|',
-        'bold', 'underline', 'italic', 'strikethrough', '|',
-        'align', 'indent', 'outdent', '|',
-        'ol', 'ul', '|',
-        'table', 'hr', '|',
-        'superscript', 'subscript', 'symbol', '|',
-        'eraser', 'selectall', 'copyTrash', '|', 'imageUpload', 'print', '|', 'labels', '|',
-        '\n',
-        'undo', 'redo', 'reset', 'preview', 'fullsize', '|', 'theme', 'info', 'about'
-      ],
-      controls: {
-        copyTrash: {
-          name: 'copy',
-          tooltip: 'Copiar a la papelera',
-          exec: (editor) => {
-            editor.execCommand('selectall');
-            editor.execCommand('copy');
-            SwAlert.fire('Texto quedó copiado en el clipboard', '', 'success').then();
-          }
-        },
-        labels: {
-          name: 'labels',
-          iconURL: 'assets/icons/user-tag-solid.svg',
-          tooltip: 'Etiquetas para filtrar información del destinatarios',
-          list: {
-            name: 'Nombre',
-            date: 'Fecha',
-            school: 'Facultad/Escuela',
-            bodyType: 'Estamento',
-            program: 'Programa acádemico'
-          },
-          exec: (editor, _, $btn) => {
-            const key = $btn.control.text;
-            switch (key) {
-              case 'Nombre': {
-                editor.selection.insertHTML(
-                  '<span id="name" class ="labels">&lt;NOMBRE&gt;</span>&nbsp;'
-                );
-                break;
-              }
-              case 'Fecha': {
-                editor.selection.insertHTML(
-                  '<span id="date" class ="labels">&lt;FECHA&gt;</span>&nbsp;'
-                );
-                break;
-              }
-              case 'Facultad/Escuela': {
-                editor.selection.insertHTML(
-                  '<span id="school" class ="labels">' +
-                  '&lt;FALCUTAD/ESCUELA&gt;</span>&nbsp;'
-                );
-                break;
-              }
-              case 'Estamento': {
-                editor.selection.insertHTML(
-                  '<span id= "bodyType" class ="labels">&ltESTAMENTO&gt;</span>&nbsp;'
-                );
-                break;
-              }
-              case 'Programa acádemico': {
-                editor.selection.insertHTML(
-                  '<span id= "academicProgram" class ="labels">&ltPROGRAMA&gt;</span>&nbsp;'
-                );
-                break;
-              }
-              default: {
-                break;
-              }
+        showXPathInStatusbar: true,
+        insertImageAsBase64URI: false,
+        buttons: [
+          'font', 'paragraph', 'fontsize', 'brush', '|',
+          'bold', 'underline', 'italic', 'strikethrough', '|',
+          'align', 'indent', 'outdent', '|',
+          'ol', 'ul', '|',
+          'table', 'hr', '|',
+          'superscript', 'subscript', 'symbol', '|',
+          'eraser', 'selectall', 'copyTrash', '|', 'imageUpload', 'print', '|', 'labels', '|',
+          '\n',
+          'undo', 'redo', 'reset', 'preview', 'fullsize', '|', 'theme', 'info', 'about'
+        ],
+        controls: {
+          copyTrash: {
+            name: 'copy',
+            tooltip: 'Copiar a la papelera',
+            exec: (editor) => {
+              editor.execCommand('selectall');
+              editor.execCommand('copy');
+              SwAlert.fire('Texto quedó copiado en el clipboard', '', 'success').then();
             }
-            return;
-          }
-        },
-        imageUpload: {
-          name: 'image',
-          tooltip: 'Subir imagen de la plantilla prediseñada',
-          exec: (async (editor) => {
-            if (this.imgCard) {
-              return await SwAlert.fire({
-                title: 'Sólo puede cargarse una plantilla!',
-                text: ' Desea reemplazar la plantilla actual?',
-                icon: 'warning',
-                footer: `
+          },
+          labels: {
+            name: 'labels',
+            iconURL: 'assets/icons/user-tag-solid.svg',
+            tooltip: 'Etiquetas para filtrar información del destinatarios',
+            list: {
+              name: 'Nombre',
+              date: 'Fecha',
+              school: 'Facultad/Escuela',
+              bodyType: 'Estamento',
+              program: 'Programa acádemico'
+            },
+            exec: (editor, _, $btn) => {
+              const key = $btn.control.text;
+              switch (key) {
+                case 'Nombre': {
+                  editor.selection.insertHTML(
+                    '<span id="name" class ="labels">&lt;NOMBRE&gt;</span>&nbsp;'
+                  );
+                  break;
+                }
+                case 'Fecha': {
+                  editor.selection.insertHTML(
+                    '<span id="date" class ="labels">&lt;FECHA&gt;</span>&nbsp;'
+                  );
+                  break;
+                }
+                case 'Facultad/Escuela': {
+                  editor.selection.insertHTML(
+                    '<span id="school" class ="labels">' +
+                    '&lt;FALCUTAD/ESCUELA&gt;</span>&nbsp;'
+                  );
+                  break;
+                }
+                case 'Estamento': {
+                  editor.selection.insertHTML(
+                    '<span id= "bodyType" class ="labels">&ltESTAMENTO&gt;</span>&nbsp;'
+                  );
+                  break;
+                }
+                case 'Programa acádemico': {
+                  editor.selection.insertHTML(
+                    '<span id= "academicProgram" class ="labels">&ltPROGRAMA&gt;</span>&nbsp;'
+                  );
+                  break;
+                }
+                default: {
+                  break;
+                }
+              }
+              return;
+            }
+          },
+          imageUpload: {
+            name: 'image',
+            tooltip: 'Subir imagen de la plantilla prediseñada',
+            exec: (async (editor) => {
+              if (this.imgCard) {
+                return await SwAlert.fire({
+                  title: 'Sólo puede cargarse una plantilla!',
+                  text: ' Desea reemplazar la plantilla actual?',
+                  icon: 'warning',
+                  footer: `
                     <span style='color:darkorange'>
                         Si reemplaza la plantilla, la anterior se eliminará  de la base de datos y no podrá revertirse!
                     </span>`,
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Sí, reemplazarla!',
-                cancelButtonText: 'Cancelar'
-              }).then((resultReplace) => {
-                if (resultReplace.isConfirmed) {
-                  this.uploadImagesSvc.loadImage(editor);
-                }
-                return null;
-              });
-            } else {
-              this.uploadImagesSvc.loadImage(editor);
+                  showCancelButton: true,
+                  confirmButtonColor: '#3085d6',
+                  cancelButtonColor: '#d33',
+                  confirmButtonText: 'Sí, reemplazarla!',
+                  cancelButtonText: 'Cancelar'
+                }).then((resultReplace) => {
+                  if (resultReplace.isConfirmed) {
+                    this.uploadImagesSvc.loadImage(editor);
+                  }
+                  return null;
+                });
+              } else {
+                this.uploadImagesSvc.loadImage(editor);
+              }
+            })
+          },
+          reset: {
+            name: 'Reset',
+            iconURL: 'assets/icons/sync-solid.svg',
+            backgroundColor: 'red',
+            tooltip: 'Lleva el editor al estado inicial ...',
+            exec: (editor) => {
+              editor.value = '';
             }
-          })
-        },
-        reset: {
-          name: 'Reset',
-          iconURL: 'assets/icons/sync-solid.svg',
-          backgroundColor: 'red',
-          tooltip: 'Lleva el editor al estado inicial ...',
-          exec: (editor) => {
-            editor.value = '';
-          }
-        },
-        theme: {
-          name: 'Tema',
-          iconURL: iconSwitchTheme,
-          tooltip: 'Doble click para cambiar de tema',
-          value: 'default',
-          exec: (editor, _, btn) => {
-            console.log(btn);
-            //Todo: Cambiar el tema al editor
-          }
-        },
-        info: {
-          name: 'info',
-          iconURL: 'assets/icons/info-circle-solid.svg',
-          popup: (editor) => {
-            const text = editor.editor.innerText;
-            const wordCount = text.split(/[\s\n\r\t]+/).filter((value) => value).length;
-            const charCount = text.replace(/[\s\n\r\t]+/, '').length;
+          },
+          theme: {
+            name: 'Tema',
+            iconURL: iconSwitchTheme,
+            tooltip: 'Doble click para cambiar de tema',
+            value: 'default',
+            exec: (editor, _, btn) => {
+              console.log(btn);
+              //Todo: Cambiar el tema al editor
+            }
+          },
+          info: {
+            name: 'info',
+            iconURL: 'assets/icons/info-circle-solid.svg',
+            popup: (editor) => {
+              const text = editor.editor.innerText;
+              const wordCount = text.split(/[\s\n\r\t]+/).filter((value) => value).length;
+              const charCount = text.replace(/[\s\n\r\t]+/, '').length;
 
-            return '<div style="padding: 10px; color: lightgrey">' +
-              'Words: ' + wordCount + '<br>' +
-              'Chars: ' + charCount + '<br>' +
-              '</div>';
-          }
-        }
-      },
-      events: {
-        keypress: () => {
-          const text = this.joditEditor.editor.editor.innerText;
-          //Todo: No coincide con el contador por defecto del editor
-          const charCount = text.replace(/[\s\n\r\t]+/, '').length;
-          if (charCount >= this.maxChars) {
-            return SwAlert.fire({
-              title: `No puede agregar más texto!`,
-              html: `Sobrepasó  los <br>${this.maxChars}</b> de máximo de caracteres permitidos.`,
-              icon: 'warning'
-            }).then(_ => false);
+              return '<div style="padding: 10px; color: lightgrey">' +
+                'Words: ' + wordCount + '<br>' +
+                'Chars: ' + charCount + '<br>' +
+                '</div>';
+            }
           }
         },
-        keydown: (event) => {
-          //TODO: Examinar generar bugs
-          // const { key } = event;
-          // if (key === 'Backspace' || key === 'Delete') {
-          //   const selection: any = this.joditEditor.editor.ownerDocument.getSelection();
-          //   const { id, className }: HTMLElement = selection.focusNode.parentElement;
-          //   if (className === 'labels') {
-          //     document.getElementById(id).remove();
-          //   }
-          // }
-        },
-        beforePaste: (event) => {
-          if (event.clipboardData.types.length === 0) {
+        events: {
+          keypress: () => {
+            const text = this.joditEditor.editor.editor.innerText;
+            //Todo: No coincide con el contador por defecto del editor
+            const charCount = text.replace(/[\s\n\r\t]+/, '').length;
+            if (charCount >= this.maxChars) {
+              return SwAlert.fire({
+                title: `No puede agregar más texto!`,
+                html: `Sobrepasó  los <br>${this.maxChars}</b> de máximo de caracteres permitidos.`,
+                icon: 'warning'
+              }).then(_ => false);
+            }
+          },
+          keydown: (event) => {
+            //TODO: Examinar generar bugs
+            // const { key } = event;
+            // if (key === 'Backspace' || key === 'Delete') {
+            //   const selection: any = this.joditEditor.editor.ownerDocument.getSelection();
+            //   const { id, className }: HTMLElement = selection.focusNode.parentElement;
+            //   if (className === 'labels') {
+            //     document.getElementById(id).remove();
+            //   }
+            // }
+          },
+          beforePaste: (event) => {
+            if (event.clipboardData.types.length === 0) {
+              SwAlert.fire('No puedes cargar la plantilla de esta forma, utiliza la herramienta de cargar imágenes!', '', 'error').then();
+              return false;
+            }
+          },
+          drop: (event) => {
             SwAlert.fire('No puedes cargar la plantilla de esta forma, utiliza la herramienta de cargar imágenes!', '', 'error').then();
-            return false;
+            event.preventDefault();
+            event.stopPropagation();
           }
-        },
-        drop: (event) => {
-          SwAlert.fire('No puedes cargar la plantilla de esta forma, utiliza la herramienta de cargar imágenes!', '', 'error').then();
-          event.preventDefault();
-          event.stopPropagation();
         }
-      }
-    };
+      };
+    });
   }
 
   onClose(close?: boolean): void {
@@ -269,7 +310,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   }
 
   onSave() {
-    if(this.uploadImagesSvc.imgURI?.includes('blob')){
+    if (this.uploadImagesSvc.imgURI?.includes('blob')) {
       this.uploadImagesSvc.imageUpload()
         .pipe(takeUntil(this.destroy$))
         .subscribe(img => {
@@ -297,7 +338,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                 <span>&nbsp;&nbsp;Necesitas <a href=''>ayuda</a>?</span>.`
           }).then();
         });
-    }else{
+    } else {
       this.getAssociations();
     }
   }
@@ -319,7 +360,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
               SwAlert.fire(`Plantilla ${this.data?.card ? 'Actualizada!' : 'Guardada!'} `, '', 'success').then();
               if (this.uriCardImageEdit && this.uriCardImageEdit !== this.uploadImagesSvc.imgURI) {
                 this.uploadImagesSvc.onDeleteImage(this.uriCardImageEdit);
-              }else if (this.actionTODO === 'EDITAR') {
+              } else if (this.actionTODO === 'EDITAR') {
                 SwAlert.showValidationMessage('La imagen de la plantilla no se cambió');
               }
               this.onClose(true);

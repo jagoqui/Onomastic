@@ -10,15 +10,16 @@ import { DomSanitizerService } from '@appShared/services/dom-sanitizer.service';
 import { LoaderService } from '@appShared/services/loader.service';
 import SwAlert from 'sweetalert2';
 import { Subject } from 'rxjs';
+import { ResponsiveService } from '@appShared/services/responsive.service';
 
 @Component({
   selector: 'app-templates-cards',
   template: `
     <div class='container'>
       <button mat-mini-fab color='primary' title='Nueva plantilla' (click)='onOpenModal(null)'>
-        <mat-icon matBadge="+" matBadgeColor="warn" matBadgeSize='small'>card_giftcard</mat-icon>
+        <mat-icon matBadge='+' matBadgeColor='warn' matBadgeSize='small'>card_giftcard</mat-icon>
       </button>
-      <button class='reload-button' mat-mini-fab color='primary' title='Recargar plantillas' (click)='onRefresh()'>
+      <button mat-mini-fab color='primary' title='Recargar plantillas' (click)='onRefresh()'>
         <mat-icon>refresh</mat-icon>
       </button>
       <section class='cards-container' *ngIf='this.onViewCard' fxLayoutAlign='center center'>
@@ -34,6 +35,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit, OnDestroy
   private destroy$ = new Subject<any>();
 
   constructor(
+    private responsiveSvc: ResponsiveService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
     private domSanitizerSvc: DomSanitizerService,
@@ -51,7 +53,8 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit, OnDestroy
     this.onViewCard = false;
     const dialogRef = this.dialog.open(ModalTemplateCardsComponent, {
       height: 'auto',
-      width: '75%',
+      width: 'auto',
+      maxWidth:'90%',
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,

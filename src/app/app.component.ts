@@ -7,11 +7,33 @@ import { takeUntil } from 'rxjs/operators';
 import { SidenavControllerService } from '@appShared/services/sidenav-controller.service';
 import { ThemeSwitcherControllerService } from '@appShared/services/theme-switcher-controller.service';
 import { LoaderService } from '@appShared/services/loader.service';
+import { ResponsiveService } from '@appShared/services/responsive.service';
+import { SIZE } from '@adminShared/models/shared.model';
 
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  template: `
+    <mat-sidenav-container hasBackdrop='true' fullscreen (window:resize)='onResize()'>
+      <mat-sidenav #sidenav mode='side' [(opened)]='opened' class='app-sidenav'>
+        <mat-toolbar color='primary'>
+          <span>Menu</span>
+        </mat-toolbar>
+        <app-sidebar></app-sidebar>
+      </mat-sidenav>
+      <mat-sidenav-content fxFlex fxLayout='column'>
+        <app-header *ngIf='authSvc.isLogged$|async' (toggleSidenav)='sidenav.toggle()'></app-header>
+        <main fxFlex fxLayout='column'>
+          <ngx-spinner *ngIf='loaderSvc.isLoading$ | async'></ngx-spinner>
+          <!--          <app-scroll></app-scroll>-->
+          <router-outlet></router-outlet>
+        </main>
+        <footer>
+          <app-footer></app-footer>
+        </footer>
+      </mat-sidenav-content>
+    </mat-sidenav-container>
+  `,
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
@@ -23,6 +45,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   private destroy$ = new Subject<any>();
 
   constructor(
+    private responsiveSvc: ResponsiveService,
     public authSvc: AuthService,
     private overlayContainer: OverlayContainer,
     private sidenavController: SidenavControllerService,
@@ -30,6 +53,10 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     private spinner: NgxSpinnerService,
     public loaderSvc: LoaderService
   ) {
+  }
+
+  onResize() {
+    this.responsiveSvc.checkWidth();
   }
 
   onSetTheme(classTheme: string) {
@@ -45,12 +72,28 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
 
   ngAfterViewInit(): void {
     setTimeout(() => {
-      this.spinner.show(undefined, {
-        type: 'ball-triangle-path',
-        size: 'medium'
+      this.responsiveSvc.screenWidth$
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((media) => {
+        let size: SIZE = 'default';
+        switch (media) {
+          case 'xs' || 'sm':
+            size = 'medium';
+            break;
+          case 'md' || 'lg':
+            size = 'default';
+            break;
+          case 'xl':
+            size = 'large';
+            break;
+        }
+        this.spinner.show(undefined, {
+          type: 'ball-triangle-path',
+          size
+        });
+
       });
     });
-
   }
 
   ngOnInit(): void {

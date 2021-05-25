@@ -1,7 +1,9 @@
 export type ROLE = 'PUBLISHER' | 'ADMIN';
 export type STATE = 'ACTIVO' | 'INACTIVO';
 export type ACTIONS = 'AGREGAR' | 'EDITAR';
-export type RECURRENCY = 'ANUAL' | 'DIARIA';
+export type RECURRENCE = 'ANUAL' | 'DIARIA';
+export type MEDIA = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | null;
+export type SIZE = 'default' | 'large' | 'medium' | 'small';
 
 export const DATE_FORMAT = {
   parse: {

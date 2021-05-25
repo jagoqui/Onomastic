@@ -51,7 +51,8 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
   onOpenModal(event = {}): void {
     const dialogRef = this.dialog.open(ModalEventDayComponent, {
       height: 'auto',
-      width: '95%',
+      width: 'auto',
+      maxWidth:'95%',
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
