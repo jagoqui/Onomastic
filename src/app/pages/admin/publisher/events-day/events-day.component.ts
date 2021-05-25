@@ -59,7 +59,9 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
       data: { title: event ? 'EDITAR EVENTO' : 'NUEVO EVENTO', event }
     });
     if (dialogRef.afterClosed()) {
-      dialogRef.componentInstance.refresh.subscribe((refresh) => {
+      dialogRef.componentInstance.refresh
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((refresh) => {
         if (refresh) {
           this.onRefresh();
         }
