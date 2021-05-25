@@ -58,7 +58,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit, OnDestroy
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
-      data: { title: card ? 'EDITAR PLANTILLA' : 'NUEVA PLANTILLA', card }
+      data: { title: card ? 'EDITAR PLANTILLA' : 'NUEVA PLANTILLA', card}
     });
     dialogRef.afterClosed().subscribe(_ => {
       this.onViewCard = true;
