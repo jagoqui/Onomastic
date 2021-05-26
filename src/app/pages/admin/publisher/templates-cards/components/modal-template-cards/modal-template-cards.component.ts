@@ -82,6 +82,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       minHeight: 350,
       language: 'es',
       enter: 'br',
+      //TODO: No se actualiza, sólo toma el primer valor
       toolbarButtonSize: this.toolbarButtonSize,
       limitChars: this.maxChars,
       theme: themeEditor,
