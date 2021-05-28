@@ -19,18 +19,20 @@ type SIZEiCONS = 'tiny' | 'xsmall' | 'small' | 'middle' | 'large';
 @Component({
   selector: 'app-modal',
   template: `
-    <div fxLayout='column' fxLayoutAlign='space-between stretch'>
-      <h1 mat-dialog-title>{{data.title | uppercase }}</h1>
-      <jodit-editor #editor id='editor' [config]='config'></jodit-editor>
-    </div>
+    <div id='editor-container'>
+      <div fxLayout='column' fxLayoutAlign='space-between stretch'>
+        <h1 mat-dialog-title>{{data.title | uppercase }}</h1>
+        <jodit-editor #editor id='editor' [config]='config'></jodit-editor>
+      </div>
 
-    <div mat-dialog-actions fxLayout='row' fxLayoutAlign='end end'>
-      <button mat-raised-button fxFlex='20' color='warn' (click)='onClose(null)'>Cancelar</button>
-      <button mat-raised-button fxFlex='20' color='primary' (click)='onSave()'
-              [disabled]='!onCompleteCard'
-              [title]="onCompleteCard? 'Click para guardar':'Recuerde que debe ingresar la plantilla y almenos una condición'">
-        {{actionTODO}}
-      </button>
+      <div mat-dialog-actions fxLayout='row' fxLayoutAlign='end end'>
+        <button mat-raised-button fxFlex='20' color='warn' (click)='onClose(null)'>Cancelar</button>
+        <button mat-raised-button fxFlex='20' color='primary' (click)='onSave()'
+                [disabled]='!onCompleteCard'
+                [title]="onCompleteCard? 'Click para guardar':'Recuerde que debe ingresar la plantilla y almenos una condición'">
+          {{actionTODO}}
+        </button>
+      </div>
     </div>
   `,
   styleUrls: ['./modal-template-cards.component.scss']
@@ -104,7 +106,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           para nosotros.
           </span><br>
           <img  src='assets/images/templateCard_example.jpg' style='display: block;
-            margin: auto; width: 40vw' alt=''/>
+            margin: auto; width: 35vw' alt='template card example'/>
         `,
       showXPathInStatusbar: true,
       insertImageAsBase64URI: false,

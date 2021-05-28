@@ -212,7 +212,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
       .subscribe((dataSent) => {
         this.numMailsDataSent = dataSent.length;
       }, () => {
-        SwAlert.showValidationMessage('Error cargando las los correos enviados');
+        SwAlert.showValidationMessage('Error cargando los correos enviados');
       });
     // TODO: falta filtrar por asociacion, vunculacion y programa
     // eslint-disable-next-line prefer-arrow/prefer-arrow-functions

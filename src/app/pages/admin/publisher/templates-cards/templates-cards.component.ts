@@ -55,6 +55,7 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit, OnDestroy
       height: 'auto',
       width: 'auto',
       maxWidth:'90%',
+      minHeight: '90%',
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,

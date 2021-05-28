@@ -1,11 +1,10 @@
-﻿<div class="container">
+﻿<div class='container'>
   <h1 mat-dialog-title>{{data.title}}</h1>
   <div class='reload-button'>
     <button mat-mini-fab color='primary' title='Recargar plantillas' (click)='onRefresh()'>
       <mat-icon>refresh</mat-icon>
     </button>
   </div>
-
   <mat-sidenav-container mat-dialog-content>
     <mat-sidenav [(opened)]='sidenavOpened' fxLayout='column' fxLayoutGap='12px'>
       <mat-toolbar color='primary'>
@@ -18,126 +17,122 @@
       </div>
     </mat-sidenav>
     <mat-sidenav-content>
-      <div mat-dialog-content>
-        <form [formGroup]='eventDayForm.baseForm' fxLayout='row' fxLayoutAlign='space-between center'
-              [fxLayoutGap]="'1.667rem'">
-          <!--Template card-->
-          <div *ngIf='!selectCard; else selectedCard'
-               [ngClass]="controls.plantilla.invalid && !controls.plantilla.pristine? 'select-card-container-error' : 'select-card-container'"
-               fxFlex='40'>
-            <div class='btn-select-card'>
-              <button mat-button color='primary' (click)='loadCards()'>
-                Seleccionar plantilla<br>
-                <mat-icon>image</mat-icon>
-                <ng-container *ngIf='controls.plantilla.invalid && !controls.plantilla.pristine'>
-                  <mat-error *ngFor='let error of eventDayForm.onSearchErrors(controls.plantilla)'>
-                    {{error}}
-                  </mat-error>
-                </ng-container>
-              </button>
-            </div>
+      <form [formGroup]='eventDayForm.baseForm' fxFlex fxLayout.xs='column' fxLayout='row' [fxLayoutGap]="'1vw'">
+        <!--Template card-->
+        <div *ngIf='!selectCard; else selectedCard'
+             [ngClass]="controls.plantilla.invalid && !controls.plantilla.pristine? 'select-card-container-error' : 'select-card-container'">
+          <div class='btn-select-card'>
+            <button mat-button color='primary' (click)='loadCards()'>
+              Seleccionar plantilla<br>
+              <mat-icon>image</mat-icon>
+              <ng-container *ngIf='controls.plantilla.invalid && !controls.plantilla.pristine'>
+                <mat-error *ngFor='let error of eventDayForm.onSearchErrors(controls.plantilla)'>
+                  {{error}}
+                </mat-error>
+              </ng-container>
+            </button>
           </div>
-          <ng-template #selectedCard>
-            <app-template-card
-              #cardHtml *ngIf='selectCard' [card]='selectCard' [actions]='false' title='click para cambiar plantilla'
-              (refreshCards)='onRefresh($event)' (click)='loadCards(true)'></app-template-card>
-          </ng-template>
-          <!--Event day form-->
-          <div fxFlex='60' fxLayout='column'>
-            <div fxLayout='row' fxLayoutAlign='space-between center'>
-              <!-- Subject -->
-              <mat-form-field hideRequiredMarker appearance='outline' fxFlex='47'>
-                <mat-label>Asunto</mat-label>
-                <label>
-                  <input type='text' matInput required formControlName='nombre'>
-                </label>
-                <mat-icon matSuffix>event_note</mat-icon>
-                <mat-error *ngFor='let error of eventDayForm.onSearchErrors(controls.nombre)'>
-                  {{error}}
-                </mat-error>
-              </mat-form-field>
-              <!-- State -->
-              <mat-form-field fxFlex='47' hideRequiredMarker appearance='outline'>
-                <mat-label>Estado</mat-label>
-                <mat-select #state formControlName='estado'>
-                  <mat-option>-- Seleccione una opción --</mat-option>
-                  <mat-option value='ACTIVO'>ACTIVO</mat-option>
-                  <mat-option value='INACTIVO'>INACTIVO</mat-option>
-                </mat-select>
-                <ng-container [ngSwitch]='state.value' matSuffix>
-                  <mat-icon *ngSwitchCase="'ACTIVO'" matSuffix>notifications_active</mat-icon>
-                  <mat-icon *ngSwitchCase="'INACTIVO'" matSuffix>notifications_off</mat-icon>
-                  <mat-icon *ngSwitchDefault matSuffix>edit_notifications</mat-icon>
-                </ng-container>
-                <mat-error
-                  *ngFor='let error of eventDayForm.onSearchErrors(controls.estado)'>
-                  {{error}}
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <div fxLayout='row' fxLayoutAlign='space-between center'>
-              <!-- Start date-->
-              <mat-form-field fxFlex='47' appearance='outline'>
-                <mat-label>Fecha de inicio</mat-label>
-                <label>
-                  <input matInput [matDatepicker]='dp' formControlName='fecha' [matDatepickerFilter]='dateFilter'
-                         (dateChange)='setDateFormat($event)'
-                         placeholder='YYYY-MM-DD' readonly>
-                </label>
-                <mat-datepicker-toggle matSuffix [for]='dp'></mat-datepicker-toggle>
-                <mat-datepicker #dp></mat-datepicker>
-                <!--              TODO: Solucionar error al resetear para poder usar el mat-error-->
-                <!--              <mat-error-->
-                <!--                *ngFor='let error of eventDayForm.onSearchErrors(controls.fecha)'>-->
-                <!--                {{error}}-->
-                <!--              </mat-error>-->
-              </mat-form-field>
-              <!-- Recurrency -->
-              <mat-form-field fxFlex='47' hideRequiredMarker appearance='outline'>
-                <mat-label>Recurrencia</mat-label>
-                <mat-select #recurrency formControlName='recurrencia'>
-                  <mat-option value=''>-- Seleccione una opción --</mat-option>
-                  <mat-option value='ANUAL'>ANUAL</mat-option>
-                  <mat-option value='DIARIA'>DIARIA</mat-option>
-                </mat-select>
-                <ng-container [ngSwitch]='recurrency.value' matSuffix>
-                  <mat-icon *ngSwitchCase="'ANUAL'" matSuffix>more_time</mat-icon>
-                  <mat-icon *ngSwitchCase="'DIARIA'" matSuffix>update</mat-icon>
-                  <mat-icon *ngSwitchDefault matSuffix>schedule</mat-icon>
-                </ng-container>
-                <mat-error
-                  *ngFor='let error of eventDayForm.onSearchErrors(controls.recurrencia)'>
-                  {{error}}
-                </mat-error>
-              </mat-form-field>
-            </div>
-            <!--         Conditions -->
-            <ng-select
-              [items]='conditionsRes'
-              groupBy='parametros'
-              bindLabel='value'
-              placeholder='Condiciones'
-              appearance='outline'
-              notFoundText='No hay más condiones en la lista'
-              typeToSearchText='Search'
-              [loading]='loading'
-              [multiple]='true'
-              [minTermLength]='3'
-              [hideSelected]='true'
-              [closeOnSelect]='false'
-              [clearSearchOnAdd]='true'
-              [selectableGroupAsModel]='true'
-              formControlName='condicionesEvento'>
-              <ng-template ng-optgroup-tmp let-condition='item'>
-                <ng-container>
-                  <mat-icon> local_offer</mat-icon>
-                </ng-container>
-                {{condition.name| uppercase}}
-              </ng-template>
-            </ng-select>
+        </div>
+        <ng-template #selectedCard>
+          <app-template-card
+            #cardHtml *ngIf='selectCard' [card]='selectCard' [actions]='false' title='click para cambiar plantilla'
+            (refreshCards)='onRefresh($event)' (click)='loadCards(true)'></app-template-card>
+        </ng-template>
+        <!--Event day form-->
+        <div  fxflex fxLayout='column'>
+          <div fxFlex fxLayout.xs='column' fxLayout.sm='column' fxLayout='row' [fxLayoutGap]="'1vw'">
+            <!-- Subject -->
+            <mat-form-field hideRequiredMarker appearance='outline' fxFlex>
+              <mat-label>Asunto</mat-label>
+              <label>
+                <input type='text' matInput required formControlName='nombre'>
+              </label>
+              <mat-icon matSuffix>event_note</mat-icon>
+              <mat-error *ngFor='let error of eventDayForm.onSearchErrors(controls.nombre)'>
+                {{error}}
+              </mat-error>
+            </mat-form-field>
+            <!-- State -->
+            <mat-form-field fxFlex hideRequiredMarker appearance='outline'>
+              <mat-label>Estado</mat-label>
+              <mat-select #state formControlName='estado'>
+                <mat-option>-- Seleccione una opción --</mat-option>
+                <mat-option value='ACTIVO'>ACTIVO</mat-option>
+                <mat-option value='INACTIVO'>INACTIVO</mat-option>
+              </mat-select>
+              <ng-container [ngSwitch]='state.value' matSuffix>
+                <mat-icon *ngSwitchCase="'ACTIVO'" matSuffix>notifications_active</mat-icon>
+                <mat-icon *ngSwitchCase="'INACTIVO'" matSuffix>notifications_off</mat-icon>
+                <mat-icon *ngSwitchDefault matSuffix>edit_notifications</mat-icon>
+              </ng-container>
+              <mat-error
+                *ngFor='let error of eventDayForm.onSearchErrors(controls.estado)'>
+                {{error}}
+              </mat-error>
+            </mat-form-field>
           </div>
-        </form>
-      </div>
+          <div fxFlex fxLayout.xs='column' fxLayout.sm='column' fxLayout='row' [fxLayoutGap]="'1vw'">
+            <!-- Start date-->
+            <mat-form-field fxFlex appearance='outline'>
+              <mat-label>Fecha de inicio</mat-label>
+              <label>
+                <input matInput [matDatepicker]='dp' formControlName='fecha' [matDatepickerFilter]='dateFilter'
+                       (dateChange)='setDateFormat($event)'
+                       placeholder='YYYY-MM-DD' readonly>
+              </label>
+              <mat-datepicker-toggle matSuffix [for]='dp'></mat-datepicker-toggle>
+              <mat-datepicker #dp></mat-datepicker>
+              <!--              TODO: Solucionar error al resetear para poder usar el mat-error-->
+              <!--              <mat-error-->
+              <!--                *ngFor='let error of eventDayForm.onSearchErrors(controls.fecha)'>-->
+              <!--                {{error}}-->
+              <!--              </mat-error>-->
+            </mat-form-field>
+            <!-- Recurrency -->
+            <mat-form-field fxFlex hideRequiredMarker appearance='outline'>
+              <mat-label>Recurrencia</mat-label>
+              <mat-select #recurrency formControlName='recurrencia'>
+                <mat-option value=''>-- Seleccione una opción --</mat-option>
+                <mat-option value='ANUAL'>ANUAL</mat-option>
+                <mat-option value='DIARIA'>DIARIA</mat-option>
+              </mat-select>
+              <ng-container [ngSwitch]='recurrency.value' matSuffix>
+                <mat-icon *ngSwitchCase="'ANUAL'" matSuffix>more_time</mat-icon>
+                <mat-icon *ngSwitchCase="'DIARIA'" matSuffix>update</mat-icon>
+                <mat-icon *ngSwitchDefault matSuffix>schedule</mat-icon>
+              </ng-container>
+              <mat-error
+                *ngFor='let error of eventDayForm.onSearchErrors(controls.recurrencia)'>
+                {{error}}
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <!--         Conditions -->
+          <ng-select fxFlex
+                     [items]='conditionsRes'
+                     groupBy='parametros'
+                     bindLabel='value'
+                     placeholder='Condiciones'
+                     appearance='outline'
+                     notFoundText='No hay más condiones en la lista'
+                     typeToSearchText='Search'
+                     [loading]='loading'
+                     [multiple]='true'
+                     [minTermLength]='3'
+                     [hideSelected]='true'
+                     [closeOnSelect]='false'
+                     [clearSearchOnAdd]='true'
+                     [selectableGroupAsModel]='true'
+                     formControlName='condicionesEvento'>
+            <ng-template ng-optgroup-tmp let-condition='item'>
+              <ng-container>
+                <mat-icon> local_offer</mat-icon>
+              </ng-container>
+              {{condition.name| uppercase}}
+            </ng-template>
+          </ng-select>
+        </div>
+      </form>
     </mat-sidenav-content>
   </mat-sidenav-container>
 

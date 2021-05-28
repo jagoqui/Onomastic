@@ -33,7 +33,7 @@
               <ng-container [ngSwitch]='rol.nombre'>
                 <mat-icon *ngSwitchCase="'ADMIN'">admin_panel_settings</mat-icon>
                 <mat-icon *ngSwitchCase="'PUBLISHER'">public</mat-icon>
-                <!--                <mat-icon *ngSwitchDefault>privacy_tip</mat-icon>-->
+                <mat-icon *ngSwitchDefault>privacy_tip</mat-icon>
               </ng-container>
               {{rol.nombre| uppercase}}
             </ng-template>
