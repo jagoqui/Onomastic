@@ -19,9 +19,11 @@ import { ResponsiveService } from '@appShared/services/responsive.service';
       <button mat-mini-fab color='primary' title='Nueva plantilla' (click)='onOpenModal(null)'>
         <mat-icon matBadge='+' matBadgeColor='warn' matBadgeSize='small'>card_giftcard</mat-icon>
       </button>
-      <button mat-mini-fab color='primary' title='Recargar plantillas' (click)='onRefresh()' class='reload-button'>
-        <mat-icon>refresh</mat-icon>
-      </button>
+      <div class='reload-button'>
+        <button mat-mini-fab color='primary' title='Recargar plantillas' (click)='onRefresh()'>
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
       <section class='cards-container' *ngIf='this.onViewCard' fxLayoutAlign='center center'>
         <app-template-card *ngFor='let card of cards' [card]='card' (refreshCards)='onRefresh($event)'></app-template-card>
       </section>

@@ -13,6 +13,11 @@ body {
   padding: 0;
   width: 95%;
 
+  .reload-button {
+    text-align: right;
+    margin: 1vw;
+  }
+
   .mat-fab, .mat-mini-fab {
     cursor: pointer;
     padding: 0.4vw;
@@ -21,13 +26,16 @@ body {
     width: calc(var(--size-fab));
     height: calc(var(--size-fab));
 
-    .mat-raised-button.mat-icon, .mat-icon, &.mat-icon {
-      font-size: $size;
-    }
-
     .mat-badge-content {
       $size: calc(8px + 0.5vw);
       @include md-icon-size($size);
+    }
+  }
+
+  .mat-icon {
+    &.material-icons {
+      $size: calc(12px + 0.5vw);
+      font-size: $size;
     }
   }
 
@@ -53,13 +61,8 @@ body {
         display: table;
         border-collapse: collapse;
 
-        .mat-icon {
-          padding: 0;
-          $size: calc(10x + 1vw);
-          @include md-icon-size($size);
-        }
-      }
 
+      }
       .mat-cell,
       .mat-header-cell {
         word-wrap: initial;
@@ -79,8 +82,11 @@ body {
       font-size: 95%;
     }
   }
-}
 
+  .mat-error{
+    font-size: 70%;
+  }
+}
 .mat-dialog-container {
   padding: 1.6vw !important;
   margin: 0 !important;
@@ -98,7 +104,7 @@ body {
 }
 
 .mat-dialog-actions {
-  button{
+  button {
     text-transform: uppercase;
     padding: 0 !important;
   }

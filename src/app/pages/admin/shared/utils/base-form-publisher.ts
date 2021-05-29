@@ -23,10 +23,10 @@ export class BaseFormPublisher {
       email: ['', [Validators.required, Validators.email]],
       estado: ['', [Validators.required]],
       rol: this.fb.group({
-        id: [null, [Validators.required]],
-        nombre: [null, [Validators.required]]
-      }),
-      asociacionPorUsuario: [this.createAssociationField(), [Validators.required]]
+        id: [null],
+        nombre: [null]
+      }, Validators.required),
+      asociacionPorUsuario: [this.createAssociationField(), Validators.required]
     });
   }
 
@@ -36,8 +36,8 @@ export class BaseFormPublisher {
 
   private createAssociationField(): FormGroup {
     return this.fb.group({
-      id: ['', Validators.required],
-      nombre: ['', Validators.required]
+      id: [null],
+      nombre: [null]
     });
   }
 

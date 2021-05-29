@@ -52,9 +52,9 @@ export class BaseFormEventDay {
 
   private createConditionField(): FormGroup {
     return this.fb.group({
-      id: [null, Validators.required],
-      condicion: [null, Validators.required],
-      value: [null, Validators.required]
+      id: [null],
+      condicion: [null],
+      value: [null]
     });
   }
 }

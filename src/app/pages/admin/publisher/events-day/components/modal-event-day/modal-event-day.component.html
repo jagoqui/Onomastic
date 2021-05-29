@@ -5,8 +5,8 @@
       <mat-icon>refresh</mat-icon>
     </button>
   </div>
-  <mat-sidenav-container mat-dialog-content>
-    <mat-sidenav [(opened)]='sidenavOpened' fxLayout='column' fxLayoutGap='12px'>
+  <mat-sidenav-container>
+    <mat-sidenav [(opened)]='sidenavOpened' fxLayout='column' fxLayoutGap='2vw'>
       <mat-toolbar color='primary'>
         <h1>Plantillas</h1>
       </mat-toolbar>
@@ -16,7 +16,7 @@
           (refreshCards)='onRefresh($event)' (click)='onSelectCard(card)'></app-template-card>
       </div>
     </mat-sidenav>
-    <mat-sidenav-content>
+    <mat-sidenav-content mat-dialog-content>
       <form [formGroup]='eventDayForm.baseForm' fxFlex fxLayout.xs='column' fxLayout='row' [fxLayoutGap]="'1vw'">
         <!--Template card-->
         <div *ngIf='!selectCard; else selectedCard'
@@ -39,7 +39,7 @@
             (refreshCards)='onRefresh($event)' (click)='loadCards(true)'></app-template-card>
         </ng-template>
         <!--Event day form-->
-        <div  fxflex fxLayout='column'>
+        <div fxflex fxLayout='column'>
           <div fxFlex fxLayout.xs='column' fxLayout.sm='column' fxLayout='row' [fxLayoutGap]="'1vw'">
             <!-- Subject -->
             <mat-form-field hideRequiredMarker appearance='outline' fxFlex>
@@ -108,7 +108,7 @@
             </mat-form-field>
           </div>
           <!--         Conditions -->
-          <ng-select fxFlex
+          <ng-select
                      [items]='conditionsRes'
                      groupBy='parametros'
                      bindLabel='value'
@@ -135,7 +135,6 @@
       </form>
     </mat-sidenav-content>
   </mat-sidenav-container>
-
   <div mat-dialog-actions fxLayout='row' fxLayoutAlign='end end'>
     <button mat-raised-button fxFlex='20' color='warn' (click)='onClose(null)'>Cancelar</button>
     <button mat-raised-button fxFlex='20' color='primary' (click)='onSave()' [disabled]='eventDayForm.baseForm.invalid'>
