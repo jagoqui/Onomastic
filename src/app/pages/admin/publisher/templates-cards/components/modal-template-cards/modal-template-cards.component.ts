@@ -85,7 +85,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       language: 'es',
       enter: 'br',
       //TODO: No se actualiza, sólo toma el primer valor
-      toolbarButtonSize: this.toolbarButtonSize,
+      toolbarButtonSize: 'medium',
       limitChars: this.maxChars,
       theme: themeEditor,
       placeholder:
@@ -394,6 +394,10 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                   this.toolbarButtonSize = 'large' as SIZEiCONS;
                   break;
               }
+              this.config = {
+                ...this.config,
+                toolbarButtonSize: this.toolbarButtonSize
+              };
             }
           );
         this.setEditorConfig(themeEditor);

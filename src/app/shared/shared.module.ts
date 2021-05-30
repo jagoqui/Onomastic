@@ -19,6 +19,7 @@ import { NgxSpinnerModule } from 'ngx-spinner';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { ScrollComponent } from './components/scroll/scroll.component';
 
+
 const imports = [
   CommonModule,
   FlexLayoutModule,
@@ -28,7 +29,7 @@ const imports = [
   ReactiveFormsModule,
   NgxCaptchaModule,
   NgxSpinnerModule,
-  NgSelectModule
+  NgSelectModule,
 ];
 export default imports;
 
