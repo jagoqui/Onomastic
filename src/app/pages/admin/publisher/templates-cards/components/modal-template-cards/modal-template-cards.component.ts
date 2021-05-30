@@ -15,6 +15,13 @@ import { ACTIONS, MEDIA } from '@adminShared/models/shared.model';
 import { ResponsiveService } from '@appShared/services/responsive.service';
 
 type SIZEiCONS = 'tiny' | 'xsmall' | 'small' | 'middle' | 'large';
+interface SIZES{
+  xs: SIZEiCONS;
+  sm: SIZEiCONS;
+  md: SIZEiCONS;
+  lg: SIZEiCONS;
+  xl: SIZEiCONS;
+}
 
 @Component({
   selector: 'app-modal',
@@ -85,7 +92,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       language: 'es',
       enter: 'br',
       //TODO: No se actualiza, sólo toma el primer valor
-      toolbarButtonSize: 'medium',
+      toolbarButtonSize: this.toolbarButtonSize,
       limitChars: this.maxChars,
       theme: themeEditor,
       placeholder:
@@ -377,27 +384,14 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         this.responsiveSvc.screenWidth$
           .pipe(takeUntil(this.destroy$))
           .subscribe((media) => {
-              switch (media) {
-                case 'xs':
-                  this.toolbarButtonSize = 'tiny' as SIZEiCONS;
-                  break;
-                case 'sm':
-                  this.toolbarButtonSize = 'xsmall' as SIZEiCONS;
-                  break;
-                case 'md':
-                  this.toolbarButtonSize = 'xsmall' as SIZEiCONS;
-                  break;
-                case 'lg':
-                  this.toolbarButtonSize = 'medium' as SIZEiCONS;
-                  break;
-                case 'xl':
-                  this.toolbarButtonSize = 'large' as SIZEiCONS;
-                  break;
-              }
-              this.config = {
-                ...this.config,
-                toolbarButtonSize: this.toolbarButtonSize
+              const size: SIZES = {
+                xs: 'tiny',
+                sm: 'xsmall',
+                md: 'xsmall',
+                lg: 'middle',
+                xl: 'large'
               };
+              this.toolbarButtonSize = size[media];
             }
           );
         this.setEditorConfig(themeEditor);
