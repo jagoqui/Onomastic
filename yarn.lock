@@ -6404,10 +6404,10 @@ ngx-quicklink@^0.2.6:
   dependencies:
     tslib "^2.0.0"
 
-ngx-spinner@^10.0.1:
-  version "10.0.1"
-  resolved "https://registry.yarnpkg.com/ngx-spinner/-/ngx-spinner-10.0.1.tgz#f08932a34bf98b302488a9c475584970ed386d23"
-  integrity sha512-3fkzS4t+oKg1jobUmWxeGD3zLymdIOMijib517tgrDnW4Q2fKKwZPVCfTR5ztm9G0/l9G/DRoOoBcHPPupUBdg==
+ngx-spinner@^11.0.1:
+  version "11.0.1"
+  resolved "https://registry.yarnpkg.com/ngx-spinner/-/ngx-spinner-11.0.1.tgz#6a28953741e4954e61a5bafb6b59d6e35606e5b6"
+  integrity sha512-fHCCxlF1kgEJqeKlgJDJdts/YLM3YH1qrBYcOiqo4b3dKZM1Vzv6yGMEekjsO1tETrmvvqOqsDH1gjJh3QVqjQ==
   dependencies:
     tslib "^2.0.0"
 
