@@ -54,7 +54,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   get numMailsSent(): string {
-    return this.getPartialUsers(this.numMailsDataSent+70000);
+    return this.getPartialUsers(this.numMailsDataSent);
   }
 
   openModalLogs() {
