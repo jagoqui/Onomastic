@@ -6383,10 +6383,12 @@ next-tick@~1.0.0:
   resolved "https://registry.yarnpkg.com/next-tick/-/next-tick-1.0.0.tgz#ca86d1fe8828169b0120208e3dc8424b9db8342c"
   integrity sha1-yobR/ogoFpsBICCOPchCS524NCw=
 
-ngx-captcha@^8.0.1:
-  version "8.0.1"
-  resolved "https://registry.yarnpkg.com/ngx-captcha/-/ngx-captcha-8.0.1.tgz#54118cfccfb9e078b55ea78a44bede9167d43d11"
-  integrity sha512-YPRaHOwegkCU0+F/g9kI/xR6B6IEoqSZVUdgd84xNEEFEhM5PfdWY+xHc0dj75epriGAlquWA+NtpIRynxIFRg==
+ngx-captcha@^9.0.1:
+  version "9.0.1"
+  resolved "https://registry.yarnpkg.com/ngx-captcha/-/ngx-captcha-9.0.1.tgz#d4b487a440840923439d06db32608fc0b446fd4d"
+  integrity sha512-Fq83lO/TlTktaNxaOGygDTTsCc0DTZYDqYPRXZdiA+nSH2y4LE8yWSfSWwSxf2Vl/AldUWU7igWtFoVidVOXmw==
+  dependencies:
+    tslib "^2.0.0"
 
 ngx-image-compress@^11.0.3:
   version "11.0.3"
