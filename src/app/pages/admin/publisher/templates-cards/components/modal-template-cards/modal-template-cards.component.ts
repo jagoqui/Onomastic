@@ -391,7 +391,11 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                 lg: 'middle',
                 xl: 'large'
               };
-              this.toolbarButtonSize = size[media];
+              const toolbarButtonSize=size[media];
+              this.config={
+                ...this.config,
+                toolbarButtonSize
+              };
             }
           );
         this.setEditorConfig(themeEditor);
