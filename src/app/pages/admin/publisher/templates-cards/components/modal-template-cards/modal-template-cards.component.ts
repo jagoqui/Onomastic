@@ -25,7 +25,6 @@ import {ACTIONS, MEDIA, THEME} from '@adminShared/models/shared.model';
 import {ResponsiveService} from '@appShared/services/responsive.service';
 
 type SIZEiCONS = 'tiny' | 'xsmall' | 'small' | 'middle' | 'large';
-type HEIGHT = '400px' | '500px' | '550px' | '600px' | '700px';
 
 interface SIZES {
   xs: SIZEiCONS;
@@ -33,14 +32,6 @@ interface SIZES {
   md: SIZEiCONS;
   lg: SIZEiCONS;
   xl: SIZEiCONS;
-}
-
-interface HEIGHTS {
-  xs: HEIGHT;
-  sm: HEIGHT;
-  md: HEIGHT;
-  lg: HEIGHT;
-  xl: HEIGHT;
 }
 
 @Component({
@@ -108,6 +99,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       toolbarAdaptive: false,
       width: '100%',
       height: '100%',
+      minHeight: '500px',
       language: 'es',
       enter: 'br',
       limitChars: this.maxChars,
@@ -410,19 +402,10 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                 lg: 'middle',
                 xl: 'large'
               };
-              const heights: HEIGHTS = {
-                xs: '400px',
-                sm: '500px',
-                md: '550px',
-                lg: '600px',
-                xl: '700px'
-              };
               const toolbarButtonSize = sizes[media];
-              const minHeight = heights[media];
               this.config = {
                 ...this.config,
-                toolbarButtonSize,
-                minHeight
+                toolbarButtonSize
               };
             }
           );
