@@ -5538,7 +5538,7 @@ jest-worker@^26.5.0:
     merge-stream "^2.0.0"
     supports-color "^7.0.0"
 
-jodit-angular@^1.0.119:
+jodit-angular@^1.11.3:
   version "1.11.3"
   resolved "https://registry.yarnpkg.com/jodit-angular/-/jodit-angular-1.11.3.tgz#18a95508e962b4cc190dc8028c9b94c085613563"
   integrity sha512-ZHKW0WcyDmoxs1cj+fJRwTEhm/vJv0fdiiC1ZjXd6akFUkzE4swKFQ96IMJM0S3FeOGByLXaBbQ+azafViFqRg==
@@ -5958,6 +5958,11 @@ loglevel@^1.6.8:
   version "1.7.1"
   resolved "https://registry.yarnpkg.com/loglevel/-/loglevel-1.7.1.tgz#005fde2f5e6e47068f935ff28573e125ef72f197"
   integrity sha512-Hesni4s5UkWkwCGJMQGAh71PaLUmKFM60dHvq0zi/vDhhrzuk+4GgNbTXJ12YYQJn6ZKBDNIjYcuQGKudvqrIw==
+
+lottie-web@^5.7.9:
+  version "5.7.9"
+  resolved "https://registry.yarnpkg.com/lottie-web/-/lottie-web-5.7.9.tgz#d3327c069c1f209e110ae9388725f926a94774a5"
+  integrity sha512-wWqnah5YTCabVG5BzN2uI7vqOMCHaF6VlEdR99zoR8czg+YQQUtsmaKvaZo1nINshyjSDWQzVoXpMwbR5BdVZQ==
 
 lru-cache@^5.1.1:
   version "5.1.1"
@@ -6396,6 +6401,13 @@ ngx-image-compress@^11.0.3:
   integrity sha512-F1+93cBosm9bNEUmuQM3LvfBg9lzhEITfh8tEhqYb5+OH1HYsjW/nZLQGu5rDS4YCDEA8TQKwmYrrsYjR1t/WA==
   dependencies:
     tslib "^2.0.0"
+
+ngx-lottie@^7.0.1:
+  version "7.0.1"
+  resolved "https://registry.yarnpkg.com/ngx-lottie/-/ngx-lottie-7.0.1.tgz#a0fd51954b02c15e7ae9bb1ec28c47bc68fc37cc"
+  integrity sha512-zvRYZJ6RVpGOZK8Msg9DnXxmMwl7Bu8/Xvy03R5pyP8nfOv8a8vhjofM5xt/EFh3Fcecnt9uXA9byR41nMcQOQ==
+  dependencies:
+    tslib "^2.1.0"
 
 ngx-quicklink@^0.2.6:
   version "0.2.7"
@@ -9184,7 +9196,7 @@ tslib@^1.10.0, tslib@^1.13.0, tslib@^1.8.1, tslib@^1.9.0:
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-1.14.1.tgz#cf2d38bdc34a134bcaf1091c41f6619e2f672d00"
   integrity sha512-Xni35NKzjgMrwevysHTCArtLDpPvye8zV/0E4EyYn43P7/7qvQwPh9BGkHewbMulVntbigmcT7rdX3BNo9wRJg==
 
-tslib@^2.0.0:
+tslib@^2.0.0, tslib@^2.1.0:
   version "2.2.0"
   resolved "https://registry.yarnpkg.com/tslib/-/tslib-2.2.0.tgz#fb2c475977e35e241311ede2693cee1ec6698f5c"
   integrity sha512-gS9GVHRU+RGn5KQM2rllAlR3dU6m7AcpJKdtH8gFvQiC4Otgk98XnmMU+nZenHt/+VhnBPWwgrJsyrdcw6i23w==

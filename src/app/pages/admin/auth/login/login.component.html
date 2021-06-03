@@ -1,46 +1,47 @@
 <ngx-spinner *ngIf='!captchaElem.isLoaded'></ngx-spinner>
 <main>
   <div class='bg'>
-    <mat-icon class='arrow bounce' color='primary'>keyboard_arrow_up</mat-icon>
+    <ng-lottie [options]="onScroll" id="scrollUp"></ng-lottie>
   </div>
   <section class='container'>
     <!-- Login form -->
-    <div fxLayout='column' fxFlex.xs='85' fxFlex.sm='55' fxFlex.md='40'  fxFlex='35'>
-      <form [formGroup]='loginForm.baseForm' (ngSubmit)='onLogin()' fxLayout='column'
-            (keydown.enter)='$event.preventDefault()'>
+    <div fxFlex='35' fxFlex.md='40' fxFlex.sm='55' fxFlex.xs='85' fxLayout='column'>
+      <form (keydown.enter)='$event.preventDefault()' (ngSubmit)='onLogin()' [formGroup]='loginForm.baseForm'
+            fxLayout='column'>
         <!-- userEmail -->
-        <mat-form-field id='user-input' hideRequiredMarker appearance='outline'>
-          <mat-label>correo</mat-label>
+        <mat-form-field appearance='outline' hideRequiredMarker id='user-input'>
+          <mat-label>email/usuario</mat-label>
           <label>
-            <input matInput type='text' required formControlName='userEmail'>
+            <input formControlName='userEmail' matInput required type='text'>
           </label>
           <mat-error *ngIf="checkField('userEmail')">{{loginForm.errorMessage["userEmail"]}}</mat-error>
         </mat-form-field>
         <!-- Password -->
-        <mat-form-field id='password-input' hideRequiredMarker appearance='outline'>
+        <mat-form-field appearance='outline' hideRequiredMarker id='password-input'>
           <mat-label>contraseña</mat-label>
           <label>
-            <input matInput [type]="hidePassword? 'password':'text'" required formControlName='password'
+            <input [type]="hidePassword? 'password':'text'" formControlName='password' matInput required
             >
           </label>
-          <button id='hide-password-button' mat-icon-button matSuffix (click)='hidePassword= !hidePassword'
-                  [title]="hidePassword ? 'Show password': 'Hide password'">
+          <button (click)='hidePassword= !hidePassword' [title]="hidePassword ? 'Show password': 'Hide password'"
+                  id='hide-password-button' mat-icon-button
+                  matSuffix>
             <mat-icon>{{hidePassword ? "visibility_off" : "visibility"}}</mat-icon>
           </button>
           <mat-error *ngIf="checkField('password')">{{loginForm.errorMessage["password"]}}</mat-error>
         </mat-form-field>
         <!-- Captcha -->
-        <ngx-recaptcha2 #captchaElem [siteKey]='recaptchaConfig.siteKey'
-                        (success)='handleSuccessRecaptcha()' [useGlobalDomain]='false' [size]='recaptchaConfig.size'
-                        [hl]='recaptchaConfig.lang' [theme]='recaptchaConfig.theme' [type]='recaptchaConfig.type'>
+        <ngx-recaptcha2 #captchaElem (success)='handleSuccessRecaptcha()'
+                        [hl]='recaptchaConfig.lang' [siteKey]='recaptchaConfig.siteKey' [size]='recaptchaConfig.size'
+                        [theme]='recaptchaConfig.theme' [type]='recaptchaConfig.type' [useGlobalDomain]='false'>
         </ngx-recaptcha2>
         <!-- Login -->
-        <button id='login-button' type='submit' mat-button mat-raised-button color='primary'
-                [disabled]='isValidForm()'>conectar
+        <button [disabled]='isValidForm()' color='primary' id='login-button' mat-button mat-raised-button
+                type='submit'>conectar
         </button>
       </form>
       <!-- Password recovery -->
-      <a mat-hint class='forgot-password' routerLink='/forgot-password' mat-menu-item>
+      <a class='forgot-password' mat-hint mat-menu-item routerLink='/forgot-password'>
         ¿Olvidaste tu contraseña?
       </a>
     </div>

@@ -4,6 +4,7 @@ export type ACTIONS = 'AGREGAR' | 'EDITAR';
 export type RECURRENCE = 'ANUAL' | 'DIARIA';
 export type MEDIA = 'xs' | 'sm' | 'md' | 'lg' | 'xl' | null;
 export type SIZE = 'default' | 'large' | 'medium' | 'small';
+export type THEME = 'light-theme' | 'dark-theme';
 
 export const DATE_FORMAT = {
   parse: {

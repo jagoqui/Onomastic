@@ -234,7 +234,6 @@ $mat-theming-theme-dark: mat-dark-theme($theme-primary, $theme-accent, $theme-wa
   @include custom-color($mat-theming-theme-dark);
 }
 
-
 // Specific component overrides, pieces that are not in line with the general theming
 
 // Handle buttons appropriately, with respect to line-height

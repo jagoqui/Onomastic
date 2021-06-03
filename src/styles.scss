@@ -87,6 +87,14 @@ body {
     font-size: 70%;
   }
 }
+
+ng-lottie {
+  text-align: center;
+  display: inline-block;
+  $size: calc(24px + 0.5vw);
+  width: $size;
+  height: $size;
+}
 .mat-dialog-container {
   padding: 1.6vw !important;
   margin: 0 !important;

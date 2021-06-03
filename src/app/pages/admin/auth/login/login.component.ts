@@ -1,14 +1,16 @@
-import { Component, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
-import { ReCaptcha2Component } from 'ngx-captcha';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { Subscription } from 'rxjs';
-import { environment } from '@env/environment';
+import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
+import {Router} from '@angular/router';
+import {ReCaptcha2Component} from 'ngx-captcha';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {Subscription} from 'rxjs';
+import {environment} from '@env/environment';
 
-import { AuthService } from '@adminShared/services/auth.service';
-import { BaseFormAuth } from '@adminShared/utils/base-form-auth';
+import {AuthService} from '@adminShared/services/auth.service';
+import {BaseFormAuth} from '@adminShared/utils/base-form-auth';
 import SwAlert from 'sweetalert2';
-import { DOCUMENT } from '@angular/common';
+import {DOCUMENT} from '@angular/common';
+import {AnimationOptions} from 'ngx-lottie';
+import {AnimationItem} from 'lottie-web';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +29,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     type: 'image',
     success: false
   };
+  onScroll: AnimationOptions = {
+    path: 'https://assets5.lottiefiles.com/packages/lf20_MbJfuz.json',
+    // autoplay: false,
+    // loop: false
+  };
+  private animationItem: AnimationItem;
   private subscription: Subscription = new Subscription();
 
   constructor(
@@ -40,15 +48,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.recaptchaConfig.success = false;
   }
 
-
   onLogin(): void {
     const formValue = this.loginForm.baseForm.value;
     this.subscription.add(
       this.authSvc.login(formValue).subscribe(userRes => {
         if (userRes) {
-          if(this.authSvc.isPublisherAdmin){
+          if (this.authSvc.isPublisherAdmin) {
             this.router.navigate(['/ADMIN/publishers']).then();
-          }else{
+          } else {
             this.router.navigate(['/PUBLISHER/mail-users']).then();
           }
           this.loginForm.baseForm.reset();
@@ -99,5 +106,4 @@ export class LoginComponent implements OnInit, OnDestroy {
   private onResetCaptcha(): void {
     this.captchaElem?.resetCaptcha();
   }
-
 }
