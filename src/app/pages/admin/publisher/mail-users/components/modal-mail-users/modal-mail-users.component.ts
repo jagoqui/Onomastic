@@ -69,6 +69,11 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
   }
 
 
+  onRefresh() {
+    this.refresh.emit(true);
+    this.ngOnInit();
+  }
+
   onClose(close?: boolean): void {
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.mailUserForm.baseForm.reset();
@@ -79,7 +84,7 @@ export class ModalMailUsersComponent implements OnInit, OnDestroy {
 
   onSave(): void {
     const user = this.mailUserForm.baseForm.value;
-    this.userSvc.save(user, this.actionTODO==='EDITAR'? user.id: null).subscribe(() => {
+    this.userSvc.save(user, this.actionTODO === 'EDITAR' ? user.id : null).subscribe(() => {
       SwAlert.fire(
         `${this.actionTODO === 'AGREGAR' ? 'GUARDADO' : 'ACTUALIZADO'}`,
         `<b>El destinatario se pudo ${this.actionTODO.toLowerCase()} exitosamente</b>`,

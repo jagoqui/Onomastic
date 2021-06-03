@@ -15,7 +15,9 @@ export class BaseFormAuth {
   emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
   baseForm = this.fb.group({
     name: ['', [Validators.required, Validators.minLength(10)]],
-    userEmail: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
+    // userEmail: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
+    //TODO: Hacer valide si es un email, si detecta que es un correo.
+    userEmail: ['', [Validators.required]],
     password: ['', [Validators.required]],
     recaptcha: ['', Validators.required],
     association: ['', [Validators.required]],

@@ -1,36 +1,56 @@
-import { AfterViewInit, Component, ElementRef, Inject, Input, OnDestroy, OnInit, Renderer2, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { TemplateCardsService } from '@pages/admin/publisher/shared/services/template-cards.service';
-import { JoditAngularComponent } from 'jodit-angular';
-import { Subject } from 'rxjs';
+import {
+  AfterViewInit,
+  Component,
+  ElementRef,
+  Inject,
+  Input,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+  ViewChild
+} from '@angular/core';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {TemplateCardsService} from '@pages/admin/publisher/shared/services/template-cards.service';
+import {JoditAngularComponent} from 'jodit-angular';
+import {Subject} from 'rxjs';
 import SwAlert from 'sweetalert2';
-import { UploadImageService } from '@pages/admin/publisher/shared/services/upload-image.service';
-import { environment } from '@env/environment';
-import { takeUntil } from 'rxjs/operators';
-import { EmailUserService } from '@pages/admin/publisher/shared/services/email-user.service';
-import { AssociationService } from '@pages/admin/shared/services/association.service';
-import { TemplateCard } from '@adminShared/models/template-card.model';
-import { ThemeSwitcherControllerService } from '@appShared/services/theme-switcher-controller.service';
-import { ACTIONS, MEDIA } from '@adminShared/models/shared.model';
-import { ResponsiveService } from '@appShared/services/responsive.service';
+import {UploadImageService} from '@pages/admin/publisher/shared/services/upload-image.service';
+import {environment} from '@env/environment';
+import {takeUntil} from 'rxjs/operators';
+import {EmailUserService} from '@pages/admin/publisher/shared/services/email-user.service';
+import {AssociationService} from '@pages/admin/shared/services/association.service';
+import {TemplateCard} from '@adminShared/models/template-card.model';
+import {ThemeSwitcherControllerService} from '@appShared/services/theme-switcher-controller.service';
+import {ACTIONS, MEDIA, THEME} from '@adminShared/models/shared.model';
+import {ResponsiveService} from '@appShared/services/responsive.service';
 
 type SIZEiCONS = 'tiny' | 'xsmall' | 'small' | 'middle' | 'large';
+
+interface SIZES {
+  xs: SIZEiCONS;
+  sm: SIZEiCONS;
+  md: SIZEiCONS;
+  lg: SIZEiCONS;
+  xl: SIZEiCONS;
+}
 
 @Component({
   selector: 'app-modal',
   template: `
-    <div fxLayout='column' fxLayoutAlign='space-between stretch'>
-      <h1 mat-dialog-title>{{data.title | uppercase }}</h1>
-      <jodit-editor #editor id='editor' [config]='config'></jodit-editor>
-    </div>
+    <div class="container">
+      <div fxLayout="column" fxLayoutAlign="space-between stretch">
+        <h1 mat-dialog-title>{{data.title | uppercase }}</h1>
+        <jodit-editor #editor id="editor" [config]="config"></jodit-editor>
+      </div>
 
-    <div mat-dialog-actions fxLayout='row' fxLayoutAlign='end end'>
-      <button mat-raised-button fxFlex='20' color='warn' (click)='onClose(null)'>Cancelar</button>
-      <button mat-raised-button fxFlex='20' color='primary' (click)='onSave()'
-              [disabled]='!onCompleteCard'
-              [title]="onCompleteCard? 'Click para guardar':'Recuerde que debe ingresar la plantilla y almenos una condición'">
-        {{actionTODO}}
-      </button>
+      <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end end">
+        <button mat-raised-button fxFlex="20" color="warn" (click)="onClose(null)">Cancelar</button>
+        <button mat-raised-button fxFlex="20" color="primary" (click)="onSave()"
+                [disabled]="!onCompleteCard"
+                [title]="onCompleteCard? 'Click para guardar':'Recuerde que debe ingresar la plantilla y almenos una condición'">
+          {{actionTODO}}
+        </button>
+      </div>
     </div>
   `,
   styleUrls: ['./modal-template-cards.component.scss']
@@ -45,7 +65,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   maxChars = 400;
   actionTODO: ACTIONS = 'AGREGAR';
   uriCardImageEdit: string = null;
-  toolbarButtonSize: SIZEiCONS = 'middle';
   private destroy$ = new Subject<any>();
 
   constructor(
@@ -78,12 +97,11 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       autofocus: true,
       enableDragAndDropFileToEditor: false,
       toolbarAdaptive: false,
-      minWidth: 250,
-      minHeight: 350,
+      width: '100%',
+      height: '100%',
+      minHeight: '500px',
       language: 'es',
       enter: 'br',
-      //TODO: No se actualiza, sólo toma el primer valor
-      toolbarButtonSize: this.toolbarButtonSize,
       limitChars: this.maxChars,
       theme: themeEditor,
       placeholder:
@@ -103,8 +121,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           <b>&ltESTAMENTO&gt;</b>, eres muy importante
           para nosotros.
           </span><br>
-          <img  src='assets/images/templateCard_example.jpg' style='display: block;
-            margin: auto; width: 40vw' alt=''/>
+          <img  src="assets/images/templateCard_example.jpg" style="display: block;
+            margin: auto; width: 35vw" alt="template card example"/>
         `,
       showXPathInStatusbar: true,
       insertImageAsBase64URI: false,
@@ -143,6 +161,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           exec: (editor, _, $btn) => {
             const key = $btn.control.text;
             switch (key) {
+
               case 'Nombre': {
                 editor.selection.insertHTML(
                   '<span id="name" class ="labels">&lt;NOMBRE&gt;</span>&nbsp;'
@@ -191,7 +210,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                 text: ' Desea reemplazar la plantilla actual?',
                 icon: 'warning',
                 footer: `
-                    <span style='color:darkorange'>
+                    <span style="color:darkorange">
                         Si reemplaza la plantilla, la anterior se eliminará  de la base de datos y no podrá revertirse!
                     </span>`,
                 showCancelButton: true,
@@ -312,11 +331,11 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
               La imagen de la plantilla no se  guardó, por integridad de los datos no se
               ${this.data?.card ? 'actualizará' : 'creará'} la plantilla.`,
             footer: `
-                <span style='color: red;'>
+                <span style="color: red;">
                     Error ${err.status}! <b> ${err.status === 403 ? 'Necesita permisos de admin.' : err.error?.error}</b>
                     ${err.status === 401 ? 'Por seguridad se cerrará la sesión.' : ''}
                 </span>
-                <span>&nbsp;&nbsp;Necesitas <a href=''>ayuda</a>?</span>.`
+                <span>&nbsp;&nbsp;Necesitas <a href="">ayuda</a>?</span>.`
           }).then();
         });
     } else {
@@ -352,11 +371,11 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
               title: 'Algo salió mal!',
               html: `La plantilla no se  ${this.data?.card ? 'actualizó' : 'guardó'}`,
               footer: `
-                <span style='color: red;'>
+                <span style="color: red;">
                     Error ${err.status}! <b> ${err.status === 403 ? 'Necesita permisos de admin.' : err.error?.error}</b>
                     ${err.status === 401 ? 'Por seguridad se cerrará la sesión.' : ''}
                 </span>
-                <span>&nbsp;&nbsp;Necesitas <a href=''>ayuda</a>?</span>.`
+                <span>&nbsp;&nbsp;Necesitas <a href="">ayuda</a>?</span>.`
             }).then(() => {
               if (this.actionTODO === 'AGREGAR') {
                 this.uploadImagesSvc.onDeleteImage();
@@ -370,31 +389,26 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   ngOnInit() {
     this.themeSwitcherController.themeClass$
       .pipe(takeUntil(this.destroy$))
-      .subscribe((theme: string) => {
+      .subscribe((theme: THEME) => {
         const themeEditor = theme === 'light-theme' ? 'default' : 'dark';
+        this.setEditorConfig(themeEditor);
         this.responsiveSvc.screenWidth$
           .pipe(takeUntil(this.destroy$))
           .subscribe((media) => {
-              switch (media) {
-                case 'xs':
-                  this.toolbarButtonSize = 'tiny' as SIZEiCONS;
-                  break;
-                case 'sm':
-                  this.toolbarButtonSize = 'xsmall' as SIZEiCONS;
-                  break;
-                case 'md':
-                  this.toolbarButtonSize = 'xsmall' as SIZEiCONS;
-                  break;
-                case 'lg':
-                  this.toolbarButtonSize = 'medium' as SIZEiCONS;
-                  break;
-                case 'xl':
-                  this.toolbarButtonSize = 'large' as SIZEiCONS;
-                  break;
-              }
+              const sizes: SIZES = {
+                xs: 'tiny',
+                sm: 'xsmall',
+                md: 'xsmall',
+                lg: 'middle',
+                xl: 'large'
+              };
+              const toolbarButtonSize = sizes[media];
+              this.config = {
+                ...this.config,
+                toolbarButtonSize
+              };
             }
           );
-        this.setEditorConfig(themeEditor);
       });
   };
 

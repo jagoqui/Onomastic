@@ -1,29 +1,31 @@
-import { AfterViewInit, Component, OnDestroy, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material/dialog';
-import { SafeHtml } from '@angular/platform-browser';
+import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
+import {MatDialog} from '@angular/material/dialog';
+import {SafeHtml} from '@angular/platform-browser';
 
-import { TemplateCardsService } from '../shared/services/template-cards.service';
-import { ModalTemplateCardsComponent } from './components/modal-template-cards/modal-template-cards.component';
-import { ActivatedRoute, Router } from '@angular/router';
-import { TemplateCard } from '@adminShared/models/template-card.model';
-import { DomSanitizerService } from '@appShared/services/dom-sanitizer.service';
-import { LoaderService } from '@appShared/services/loader.service';
+import {TemplateCardsService} from '../shared/services/template-cards.service';
+import {ModalTemplateCardsComponent} from './components/modal-template-cards/modal-template-cards.component';
+import {ActivatedRoute, Router} from '@angular/router';
+import {TemplateCard} from '@adminShared/models/template-card.model';
+import {DomSanitizerService} from '@appShared/services/dom-sanitizer.service';
 import SwAlert from 'sweetalert2';
-import { Subject } from 'rxjs';
-import { ResponsiveService } from '@appShared/services/responsive.service';
+import {Subject} from 'rxjs';
+import {ResponsiveService} from '@appShared/services/responsive.service';
 
 @Component({
   selector: 'app-templates-cards',
   template: `
-    <div class='container'>
-      <button mat-mini-fab color='primary' title='Nueva plantilla' (click)='onOpenModal(null)'>
-        <mat-icon matBadge='+' matBadgeColor='warn' matBadgeSize='small'>card_giftcard</mat-icon>
+    <div class="container">
+      <button mat-mini-fab color="primary" title="Nueva plantilla" (click)="onOpenModal(null)">
+        <mat-icon matBadge="+" matBadgeColor="warn" matBadgeSize="small">card_giftcard</mat-icon>
       </button>
-      <button mat-mini-fab color='primary' title='Recargar plantillas' (click)='onRefresh()' class='reload-button'>
-        <mat-icon>refresh</mat-icon>
-      </button>
-      <section class='cards-container' *ngIf='this.onViewCard' fxLayoutAlign='center center'>
-        <app-template-card *ngFor='let card of cards' [card]='card' (refreshCards)='onRefresh($event)'></app-template-card>
+      <div class="reload-button">
+        <button mat-mini-fab color="primary" title="Recargar plantillas" (click)="onRefresh()">
+          <mat-icon>refresh</mat-icon>
+        </button>
+      </div>
+      <section class="cards-container" *ngIf="this.onViewCard" fxLayoutAlign="center center">
+        <app-template-card *ngFor="let card of cards" [card]="card"
+                           (refreshCards)="onRefresh($event)"></app-template-card>
       </section>
     </div>
   `,
@@ -40,7 +42,6 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit, OnDestroy
     private route: ActivatedRoute,
     private domSanitizerSvc: DomSanitizerService,
     private templateCardsService: TemplateCardsService,
-    public loaderSvc: LoaderService,
     private router: Router
   ) {
   }
@@ -54,11 +55,10 @@ export class TemplatesCardsComponent implements OnInit, AfterViewInit, OnDestroy
     const dialogRef = this.dialog.open(ModalTemplateCardsComponent, {
       height: 'auto',
       width: 'auto',
-      maxWidth:'90%',
       panelClass: 'app-full-bleed-dialog',
       hasBackdrop: true,
       disableClose: true,
-      data: { title: card ? 'EDITAR PLANTILLA' : 'NUEVA PLANTILLA', card}
+      data: {title: card ? 'EDITAR PLANTILLA' : 'NUEVA PLANTILLA', card}
     });
     dialogRef.afterClosed().subscribe(_ => {
       this.onViewCard = true;

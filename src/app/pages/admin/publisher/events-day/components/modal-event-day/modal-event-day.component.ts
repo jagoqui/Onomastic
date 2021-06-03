@@ -130,6 +130,7 @@ export class ModalEventDayComponent implements OnInit, AfterViewInit, OnDestroy 
     if (refreshEvent || refreshEvent !== false) {
       this.loadCards();
     }
+    this.ngOnInit();
   }
 
   onSave() {

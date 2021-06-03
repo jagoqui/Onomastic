@@ -216,16 +216,23 @@ $theme-warn: mat-palette($mat-warn, main, lighter, darker);
 $mat-theming-theme: mat-light-theme($theme-primary, $theme-accent, $theme-warn);
 $mat-theming-theme-dark: mat-dark-theme($theme-primary, $theme-accent, $theme-warn);
 
+@mixin custom-color($config-or-theme) {
+  $config: mat-get-color-config($config-or-theme);
+  $background: map-get($config, background);
+  $foreground: map-get($config, foreground);
+  --bg: #{mat-color($background, dialog)};
+  --foreground:#{mat-color($foreground, text)};
+}
+
 .light-theme {
   @include angular-material-theme($mat-theming-theme);
-  --bg:  #{$light-background};
+  @include custom-color($mat-theming-theme);
 }
 
 .dark-theme {
   @include angular-material-theme($mat-theming-theme-dark);
-  --bg:  #{$dark-background};
+  @include custom-color($mat-theming-theme-dark);
 }
-
 
 // Specific component overrides, pieces that are not in line with the general theming
 

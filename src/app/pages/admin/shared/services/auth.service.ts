@@ -1,12 +1,12 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, Router, RouterEvent } from '@angular/router';
-import { JwtHelperService } from '@auth0/angular-jwt';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter, map } from 'rxjs/operators';
-import { AuthRes} from '@adminShared/models/auth.model';
-import { environment } from '@env/environment';
-import { ThemeSwitcherControllerService } from '@appShared/services/theme-switcher-controller.service';
+import {HttpClient, HttpParams} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {ActivatedRoute, Router} from '@angular/router';
+import {JwtHelperService} from '@auth0/angular-jwt';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {map} from 'rxjs/operators';
+import {AuthRes} from '@adminShared/models/auth.model';
+import {environment} from '@env/environment';
+import {ThemeSwitcherControllerService} from '@appShared/services/theme-switcher-controller.service';
 
 const jwtHelper = new JwtHelperService();
 
@@ -43,11 +43,11 @@ export class AuthService {
     return this.isLogged.getValue();
   }
 
-  get isPublisherAdmin(): boolean{
+  get isPublisherAdmin(): boolean {
     let isAdmin = false;
     this.userResponse$.subscribe((userRes: AuthRes) => {
       if (userRes) {
-        isAdmin = userRes.role ==='ADMIN';
+        isAdmin = userRes.role === 'ADMIN';
       }
     });
     return isAdmin;
@@ -74,6 +74,7 @@ export class AuthService {
   }
 
   login(authData: AuthRes): Observable<AuthRes | void> {
+    authData.userEmail = `${authData.userEmail}${authData.userEmail.indexOf('@') === -1 ? '@udea.edu.co' : ''}`.trim();
     return this.http.post<AuthRes>(`${environment.apiUrl}/auth/signin`, authData).pipe(
       map((userResponse: any) => {
         const decode = jwtHelper.decodeToken(userResponse.accessToken);
@@ -92,23 +93,23 @@ export class AuthService {
     );
   }
 
-  sendMailResetPassword(email: string): Observable<any>{
+  sendMailResetPassword(email: string): Observable<any> {
     const params = new HttpParams({
       fromObject: {
         email,
       }
     });
-    return this.http.get<any>(`${environment.apiUrl}/auth/forgotpwd`,{params});
+    return this.http.get<any>(`${environment.apiUrl}/auth/forgotpwd`, {params});
   };
 
-  resetPassword(token: string, password: string){
+  resetPassword(token: string, password: string) {
     const params = new HttpParams({
       fromObject: {
         token,
         password
       }
     });
-    return this.http.post<any>(`${environment.apiUrl}/auth/resetpwd`,null,{params});
+    return this.http.post<any>(`${environment.apiUrl}/auth/resetpwd`, null, {params});
   }
 
   logout() {

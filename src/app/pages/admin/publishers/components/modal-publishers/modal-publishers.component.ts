@@ -58,6 +58,11 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
     }
   }
 
+  onRefresh() {
+    this.refresh.emit(true);
+    this.ngOnInit();
+  }
+
   onSave() {
     const publisher: Publisher = this.publisherForm.baseForm.value;
     this.publisherSvc.save(publisher)
@@ -96,5 +101,4 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
     this.destroy$.next({});
     this.destroy$.complete();
   };
-
 }

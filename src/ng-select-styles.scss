@@ -1,22 +1,23 @@
 @import 'src/material_custom_theme';
 
 .ng-select {
-  padding-bottom: 1.25em;
+  padding-bottom: calc(10px + 1vw);
 
   .ng-has-value {
     .ng-placeholder {
       display: initial;
+      //TODO: Se sale de la escala en responsive
       transform: translateY(-1.28125em) scale(0.75) perspective(5.556rem) translateZ(0rem);
     }
   }
 
   .ng-select-container {
-    color: CurrentColor;
+    color: var(--foreground);
     align-items: baseline;
-    min-height: 2.861rem;
+    height: 100%;
 
     &:after {
-      border-bottom: CurrentColor;
+      border-bottom: var(--foreground);
       content: '';
       bottom: 0;
       left: 0;
@@ -27,32 +28,32 @@
 
     .ng-value-container {
       align-items: stretch;
-      padding: .4375em 0;
-      border-top: .84375em solid transparent;
+      padding: calc(1px + 0.5vw) 0;
+      border-top: calc(5px + 0.5vw) solid transparent;
 
       .ng-placeholder {
         position: absolute;
-        color: CurrentColor;
+        color: var(--foreground);
         transform-origin: left 0;
         transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), color 0.4s cubic-bezier(0.25, 0.8, 0.25, 1), width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
       }
 
       .ng-input {
-        bottom: .4375em;
+        bottom: calc(1px + 0.5vw);
       }
 
       .ng-input > input {
-        color: CurrentColor;
+        color: var(--foreground);
       }
     }
   }
 
   .ng-select-container.ng-appearance-outline {
-    padding: 0 .5em;
-    min-height: 3.333rem;
+    padding: 0 0.5vw;
+    height: 100%;
 
     &:after {
-      border: solid 0.056rem mat-color($mat-accent, main);
+      border: solid 0.1vw mat-color($mat-accent, main);
       border-radius: 0.278rem;
       height: calc(100% - .5em);
       pointer-events: none;
@@ -77,10 +78,10 @@
   }
 
   .ng-clear-wrapper {
-    color: CurrentColor;
+    color: var(--foreground);
 
     &:hover {
-      color: CurrentColor;
+      color: var(--foreground);
     }
   }
 
@@ -92,7 +93,7 @@
       border-right: 0.278rem solid transparent;
       border-top: 0.278rem solid;
       margin: 0 0.222rem;
-      color: CurrentColor;
+      color: var(--foreground);
     }
   }
 
@@ -135,20 +136,20 @@
 .ng-select.ng-select-focused {
   .ng-select-container {
     &:after {
-      border-color: CurrentColor;
+      border-color: var(--foreground);
       border-width: 0.111rem;
     }
 
     .ng-value-container {
       .ng-placeholder {
-        color: CurrentColor;
+        color: var(--foreground);
         background-color: var(--bg);
       }
     }
 
     .ng-arrow-wrapper {
       .ng-arrow {
-        color: CurrentColor;
+        color: var(--foreground);
       }
     }
   }
@@ -161,7 +162,7 @@
 
     &:hover {
       &:after {
-        border-color: CurrentColor;
+        border-color: var(--foreground);
         border-width: 0.111rem;
       }
     }
@@ -193,6 +194,11 @@
     }
   }
 
+  .ng-placeholder {
+    color: var(--foreground);
+    background-color: var(--bg);
+  }
+
   .ng-select-container {
     .ng-arrow-wrapper {
       align-self: flex-end;
@@ -210,8 +216,8 @@
   .ng-select-container {
     .ng-value-container {
       .ng-value {
-        background-color: CurrentColor;
-        color: CurrentColor;
+        background-color: var(--bg);
+        color: var(--foreground);
       }
     }
   }
@@ -219,13 +225,13 @@
   .ng-appearance-outline {
     &:after {
       background-image: none;
-      border: dotted 0.056rem CurrentColor;
+      border: dotted 0.056rem var(--foreground);
     }
 
     &:hover {
       &:after {
         background-image: none;
-        border: dotted 0.056rem CurrentColor;
+        border: dotted 0.056rem var(--foreground);
       }
     }
   }
@@ -262,13 +268,12 @@
         margin: 0 0.4375em 0.4375em 0;
 
         .ng-value-label {
-          font-size: 0.778rem;
+          font-size: calc(5px + 0.5vw);;
           font-weight: 500;
         }
 
         .ng-value-icon {
-          color: rgba(255, 255, 255, 0.54);
-          padding-right: 0.278rem;
+          color: var(--foreground);
 
           &:hover {
             color: rgba(255, 255, 255, 0.87);
@@ -276,13 +281,18 @@
         }
       }
 
+      .ng-placeholder {
+        color: var(--foreground);
+        background-color: var(--bg);
+      }
+
       .ng-value.ng-value-disabled {
-        background-color: rgba(0, 0, 0, 0.12);
-        color: rgba(0, 0, 0, 0.26);
+        background-color: var(--bg);
+        color: mat-color($mat-accent, lighter);
       }
 
       .ng-input {
-        line-height: 1.375em;
+        line-height: 1;
       }
     }
   }
@@ -306,8 +316,9 @@
 }
 
 .ng-dropdown-panel {
-  background: #fff;
+  background: var(--bg);
   left: 0;
+  position: unset !important;
 
   .ng-dropdown-header {
     border-bottom: 0.056rem solid mat-color($mat-accent, main);
@@ -381,7 +392,7 @@
     }
 
     .ng-option.ng-option-disabled {
-      color: rgba(0, 0, 0, 0.38);
+      color: mat-color($mat-accent, lighter);
     }
 
     .ng-option.ng-option-child {
@@ -402,10 +413,31 @@
 
 .ng-dropdown-panel.multiple {
   .ng-option.selected {
-    background: #fff;
+    background: var(--bg);
   }
 
   .ng-option.marked {
     background: rgba(0, 0, 0, 0.04);
   }
 }
+
+/* Border Color */
+.ng-select.ng-invalid.ng-touched .ng-select-container{
+  border-color: red;
+}
+
+/* Arrow Color */
+.ng-select.ng-invalid.ng-touched .ng-arrow-wrapper .ng-arrow  {
+  border-color: mat-color($mat-warn, main) transparent transparent;
+}
+
+/* Placeholder Color */
+.ng-select.ng-invalid.ng-touched .ng-select-container .ng-placeholder {
+  color: mat-color($mat-warn, main);
+}
+
+
+.ng-select.dropdown{
+  border-color: mat-color($mat-warn, main) transparent transparent;
+}
+

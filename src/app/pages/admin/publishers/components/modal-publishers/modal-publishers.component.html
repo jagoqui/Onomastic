@@ -1,5 +1,10 @@
-<div>
+<div class='container'>
   <h1 mat-dialog-title>{{data.title}}</h1>
+  <div class='reload-button'>
+    <button mat-mini-fab color='primary' title='Refresh' (click)='onRefresh()'>
+      <mat-icon>refresh</mat-icon>
+    </button>
+  </div>
   <div mat-dialog-content>
     <form [formGroup]='publisherForm.baseForm' fxLayout='row' fxLayoutAlign='space-between center'
           [fxLayoutGap]="'1.667rem'">
@@ -25,6 +30,7 @@
                      appearance='outline'
                      labelForId='rol'
                      title='Seleccione el rol del publicador'
+                     required
                      [clearable]='false'
                      [searchable]='false'
                      [selectableGroupAsModel]='true'
@@ -33,7 +39,7 @@
               <ng-container [ngSwitch]='rol.nombre'>
                 <mat-icon *ngSwitchCase="'ADMIN'">admin_panel_settings</mat-icon>
                 <mat-icon *ngSwitchCase="'PUBLISHER'">public</mat-icon>
-                <!--                <mat-icon *ngSwitchDefault>privacy_tip</mat-icon>-->
+                <mat-icon *ngSwitchDefault>privacy_tip</mat-icon>
               </ng-container>
               {{rol.nombre| uppercase}}
             </ng-template>
@@ -78,6 +84,7 @@
           notFoundText='No hay más asociaciones en la lista!'
           typeToSearchText='Search'
           title='Seleccione la asociación/es del publicador'
+          required
           [loading]='true'
           [multiple]='true'
           [minTermLength]='3'

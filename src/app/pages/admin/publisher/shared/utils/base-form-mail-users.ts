@@ -24,14 +24,14 @@ export class BaseFormMailUsers {
   private static createByNameFormGroup(id: string): FormGroup {
     if (id === 'id') {
       return new FormGroup({
-        id: new FormControl('', Validators.required),
-        nombre: new FormControl('', Validators.required)
+        id: new FormControl(null),
+        nombre: new FormControl(null)
       });
     } else {
       return new FormGroup({
-        id: new FormControl('', Validators.required),
-        codigo: new FormControl('', Validators.required),
-        nombre: new FormControl('', Validators.required)
+        id: new FormControl(null),
+        codigo: new FormControl(null),
+        nombre: new FormControl(null)
       });
     }
   }
@@ -48,10 +48,10 @@ export class BaseFormMailUsers {
       genero: ['', [Validators.required]], //TODO: No está detectando campo invalido si éste campo no lo tiene al editar.
       email: ['', [Validators.required, Validators.email]],
       estado: ['', [Validators.required]],
-      asociacionPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id')],
+      asociacionPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id'), Validators.required],
       programaAcademicoPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('codigo')],
-      vinculacionPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id')],
-      plataformaPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id')]
+      vinculacionPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id'), Validators.required],
+      plataformaPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id'), Validators.required]
     });
   }
 

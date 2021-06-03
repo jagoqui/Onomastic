@@ -1,7 +1,7 @@
 <div class='container'>
   <!-- Actions buttons -->
   <button mat-mini-fab color='primary' title='Nueva publicador' (click)='onOpenModal(null)'>
-    <mat-icon matBadge="+" matBadgeColor="warn" matBadgeSize='small'>public</mat-icon>
+    <mat-icon matBadge='+' matBadgeColor='warn' matBadgeSize='small'>public</mat-icon>
   </button>
   <!-- Table -->
   <div class=' table-container mat-elevation-z8'>
@@ -10,11 +10,11 @@
         <mat-form-field fxFlex='95'>
           <mat-label>Buscar</mat-label>
           <label>
-            <input matInput (keyup)='applyFilter($event.target["value"])' placeholder='Ingrese el valor del campo a buscar'
-                   autocomplete='off'>
+            <input matInput (keyup)='applyFilter($event.target["value"])'
+                   placeholder='Ingrese el valor del campo a buscar' autocomplete='off'>
           </label>
         </mat-form-field>
-        <div>
+        <div class='reload-button'>
           <button mat-mini-fab color='primary' title='Refresh' (click)='onRefresh()'>
             <mat-icon>refresh</mat-icon>
           </button>

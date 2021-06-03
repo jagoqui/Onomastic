@@ -123,7 +123,7 @@ export class UploadImageService {
       display: block !important;
       margin:auto !important;
       width:100% !important;
-      max-width:90% !important;
+      max-width:80% !important;
       height: auto !important;
       max-height:40vw !important;
       object-fit: cover !important;
