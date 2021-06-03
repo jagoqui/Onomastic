@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import {BehaviorSubject, Observable} from 'rxjs';
 import {THEME} from '@adminShared/models/shared.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ThemeSwitcherControllerService {
-  private themeClass = new BehaviorSubject<string>('light-theme');
+  private themeClass = new BehaviorSubject<THEME>('light-theme');
 
   constructor() {
     let appTheme: THEME | null = localStorage.getItem('AppTheme') as THEME;
@@ -18,11 +18,11 @@ export class ThemeSwitcherControllerService {
     }
   }
 
-  get themeClass$() {
+  get themeClass$(): Observable<THEME> {
     return this.themeClass.asObservable();
   }
 
-  setThemeClass(themeClass: string): void {
+  setThemeClass(themeClass: THEME): void {
     this.themeClass.next(themeClass);
     localStorage.setItem('AppTheme', themeClass);
   }

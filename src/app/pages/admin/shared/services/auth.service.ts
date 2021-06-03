@@ -1,9 +1,9 @@
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Injectable} from '@angular/core';
-import {ActivatedRoute, NavigationEnd, Router, RouterEvent} from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import {JwtHelperService} from '@auth0/angular-jwt';
 import {BehaviorSubject, Observable} from 'rxjs';
-import {filter, map} from 'rxjs/operators';
+import {map} from 'rxjs/operators';
 import {AuthRes} from '@adminShared/models/auth.model';
 import {environment} from '@env/environment';
 import {ThemeSwitcherControllerService} from '@appShared/services/theme-switcher-controller.service';
@@ -74,7 +74,7 @@ export class AuthService {
   }
 
   login(authData: AuthRes): Observable<AuthRes | void> {
-    authData.userEmail = `${authData.userEmail}${authData.userEmail.indexOf('@')===-1 ? '@udea.edu.co' : ''}`.trim();
+    authData.userEmail = `${authData.userEmail}${authData.userEmail.indexOf('@') === -1 ? '@udea.edu.co' : ''}`.trim();
     return this.http.post<AuthRes>(`${environment.apiUrl}/auth/signin`, authData).pipe(
       map((userResponse: any) => {
         const decode = jwtHelper.decodeToken(userResponse.accessToken);
