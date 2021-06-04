@@ -25,13 +25,22 @@ import {ACTIONS, MEDIA, THEME} from '@adminShared/models/shared.model';
 import {ResponsiveService} from '@appShared/services/responsive.service';
 
 type SIZEiCONS = 'tiny' | 'xsmall' | 'small' | 'middle' | 'large';
+type LABELS = 'nombre' | 'fecha' | 'facultad/escuela' | 'estamento' | 'programa';
 
-interface SIZES {
+interface Sizes {
   xs: SIZEiCONS;
   sm: SIZEiCONS;
   md: SIZEiCONS;
   lg: SIZEiCONS;
   xl: SIZEiCONS;
+}
+
+interface OptionGroupLabels {
+  name: LABELS;
+  date: LABELS;
+  school: LABELS;
+  bodyType: LABELS;
+  program: LABELS;
 }
 
 @Component({
@@ -65,6 +74,13 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   maxChars = 400;
   actionTODO: ACTIONS = 'AGREGAR';
   uriCardImageEdit: string = null;
+  optionGroupLabels: OptionGroupLabels = {
+    name: 'nombre',
+    date: 'fecha',
+    school: 'facultad/escuela',
+    bodyType: 'estamento',
+    program: 'programa'
+  };
   private destroy$ = new Subject<any>();
 
   constructor(
@@ -109,7 +125,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           Ingrese el texto aquí:<br><br>
           <hr><hr>
           <b>Nota importane</b>:<br>
-          Recuerde que el texto debe contener <b>al menos una condición</b> y no puede superar los <b>${this.maxChars}</b></b>
+          Tenga en cuenta que el texto debe contener <b>al menos una condición</b> y no puede superar los <b>${this.maxChars}</b></b>
           caracteres,además recuerde que, debe subir una imagen con la plantilla que cumpla con el siguiente formato
           <b>['image/jpg', 'image/png', 'image/jpeg', 'image/gif']</b>.<br>
           Ejemplo:<br><br>
@@ -151,53 +167,12 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           name: 'labels',
           iconURL: 'assets/icons/user-tag-solid.svg',
           tooltip: 'Etiquetas para filtrar información del destinatarios',
-          list: {
-            name: 'Nombre',
-            date: 'Fecha',
-            school: 'Facultad/Escuela',
-            bodyType: 'Estamento',
-            program: 'Programa acádemico'
-          },
+          list: this.optionGroupLabels,
           exec: (editor, _, $btn) => {
-            const key = $btn.control.text;
-            switch (key) {
-
-              case 'Nombre': {
-                editor.selection.insertHTML(
-                  '<span id="name" class ="labels">&lt;NOMBRE&gt;</span>&nbsp;'
-                );
-                break;
-              }
-              case 'Fecha': {
-                editor.selection.insertHTML(
-                  '<span id="date" class ="labels">&lt;FECHA&gt;</span>&nbsp;'
-                );
-                break;
-              }
-              case 'Facultad/Escuela': {
-                editor.selection.insertHTML(
-                  '<span id="school" class ="labels">' +
-                  '&lt;FALCUTAD/ESCUELA&gt;</span>&nbsp;'
-                );
-                break;
-              }
-              case 'Estamento': {
-                editor.selection.insertHTML(
-                  '<span id= "bodyType" class ="labels">&ltESTAMENTO&gt;</span>&nbsp;'
-                );
-                break;
-              }
-              case 'Programa acádemico': {
-                editor.selection.insertHTML(
-                  '<span id= "academicProgram" class ="labels">&ltPROGRAMA&gt;</span>&nbsp;'
-                );
-                break;
-              }
-              default: {
-                break;
-              }
+            const {name, text} = $btn.control;
+            if (text) {
+              editor.selection.insertHTML(`<span id="${name}" class ="labels">&lt;${text}&gt;</span>&nbsp;`);
             }
-            return;
           }
         },
         imageUpload: {
@@ -276,24 +251,19 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
             }).then(_ => false);
           }
         },
-        keydown: (event) => {
-          //TODO: Examinar generar bugs
-          // const { key } = event;
-          // if (key === 'Backspace' || key === 'Delete') {
-          //   const selection: any = this.joditEditor.editor.ownerDocument.getSelection();
-          //   const { id, className }: HTMLElement = selection.focusNode.parentElement;
-          //   if (className === 'labels') {
-          //     document.getElementById(id).remove();
-          //   }
-          // }
-        },
-        beforePaste: (event) => {
-          if (event.clipboardData.types.length === 0) {
-            SwAlert.fire('No puedes cargar la plantilla de esta forma, utiliza la herramienta de cargar imágenes!', '', 'error').then();
-            return false;
-          }
-        },
+        // keydown: (event) => {
+        //   //TODO: Examinar generar bugs
+        //   const { key } = event;
+        //   if (key === 'Backspace' || key === 'Delete') {
+        //     const selection: any = this.joditEditor.editor.ownerDocument.getSelection();
+        //     const { id, className }: HTMLElement = selection.focusNode.parentElement;
+        //     if (className === 'labels') {
+        //       document.getElementById(id).remove();
+        //     }
+        //   }
+        // },
         drop: (event) => {
+          //TODO: Implementar la carga de imágenes desde el drop
           SwAlert.fire('No puedes cargar la plantilla de esta forma, utiliza la herramienta de cargar imágenes!', '', 'error').then();
           event.preventDefault();
           event.stopPropagation();
@@ -344,13 +314,13 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   }
 
   getAssociations() {
-    //TODO: Se actualiza con los actuales asociciones del publicador, reemplazando lo permisos iniciales del publicador.
     this.associationSvc.getAssociationsByPublisher()
       .pipe(takeUntil(this.destroy$))
       .subscribe(associations => {
         this.card = {
           id: this.data?.card?.id ? this.data.card.id : null,
-          texto: this.joditEditor.editor.value,
+          texto: this.joditEditor.editor.value.trim(),
+          //TODO: Se actualiza con los actuales asociciones del publicador, reemplazando lo permisos iniciales del publicador.
           asociacionesPorPlantilla: associations
         };
         this.templateCardsService.saveTemplateCard(this.card)
@@ -395,7 +365,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         this.responsiveSvc.screenWidth$
           .pipe(takeUntil(this.destroy$))
           .subscribe((media) => {
-              const sizes: SIZES = {
+              const sizes: Sizes = {
                 xs: 'tiny',
                 sm: 'xsmall',
                 md: 'xsmall',

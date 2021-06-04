@@ -2,7 +2,7 @@ import {Component, Inject, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {Router} from '@angular/router';
 import {ReCaptcha2Component} from 'ngx-captcha';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {Subscription} from 'rxjs';
+import {Subject} from 'rxjs';
 import {environment} from '@env/environment';
 
 import {AuthService} from '@adminShared/services/auth.service';
@@ -11,6 +11,9 @@ import SwAlert from 'sweetalert2';
 import {DOCUMENT} from '@angular/common';
 import {AnimationOptions} from 'ngx-lottie';
 import {AnimationItem} from 'lottie-web';
+import {ThemeSwitcherControllerService} from '@appShared/services/theme-switcher-controller.service';
+import {takeUntil} from 'rxjs/operators';
+import {THEME} from '@adminShared/models/shared.model';
 
 @Component({
   selector: 'app-login',
@@ -34,15 +37,16 @@ export class LoginComponent implements OnInit, OnDestroy {
     // autoplay: false,
     // loop: false
   };
+  private destroy$ = new Subject<any>();
   private animationItem: AnimationItem;
-  private subscription: Subscription = new Subscription();
 
   constructor(
     @Inject(DOCUMENT) private document: Document,
     private authSvc: AuthService,
     private router: Router,
     public loginForm: BaseFormAuth,
-    private spinner: NgxSpinnerService
+    private spinner: NgxSpinnerService,
+    private themeSwitcherController: ThemeSwitcherControllerService
   ) {
     this.onResetCaptcha();
     this.recaptchaConfig.success = false;
@@ -50,8 +54,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   onLogin(): void {
     const formValue = this.loginForm.baseForm.value;
-    this.subscription.add(
-      this.authSvc.login(formValue).subscribe(userRes => {
+
+    this.authSvc.login(formValue)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(userRes => {
         if (userRes) {
           if (this.authSvc.isPublisherAdmin) {
             this.router.navigate(['/ADMIN/publishers']).then();
@@ -63,8 +69,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       }, () => {
         SwAlert.showValidationMessage(
           'No se pudo iniciar sesion, verifique su email y contraseña.');
-      })
-    );
+      });
   }
 
   isValidForm(): boolean {
@@ -86,10 +91,20 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
+    this.themeSwitcherController.themeClass$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (theme: THEME) => {
+          this.recaptchaConfig = {
+            ...this.recaptchaConfig,
+            theme: theme === 'light-theme' ? 'light' : 'dark'
+          };
+        });
+
     this.spinner.show(undefined, {
       type: 'ball-triangle-path',
       size: 'medium'
-    });
+    }).then();
 
     this.loginForm.baseForm.get('name').setValidators(null);
     this.loginForm.baseForm.get('name').updateValueAndValidity();
@@ -100,7 +115,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.subscription.unsubscribe();
+    this.destroy$.next({});
+    this.destroy$.complete();
   }
 
   private onResetCaptcha(): void {

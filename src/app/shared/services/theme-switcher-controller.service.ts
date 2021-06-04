@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from 'rxjs';
 import {THEME} from '@adminShared/models/shared.model';
 
@@ -9,21 +9,32 @@ export class ThemeSwitcherControllerService {
   private themeClass = new BehaviorSubject<THEME>('light-theme');
 
   constructor() {
-    let appTheme: THEME | null = localStorage.getItem('AppTheme') as THEME;
-    if (appTheme) {
-      this.themeClass.next(appTheme);
-    }else{
-      appTheme  = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark-theme': 'light-theme';
-      this.themeClass.next(appTheme);
-    }
+    this.getSchemeSystem();
   }
 
   get themeClass$(): Observable<THEME> {
     return this.themeClass.asObservable();
   }
 
-  setThemeClass(themeClass: THEME): void {
+  set themeScheme(themeClass: THEME) {
     this.themeClass.next(themeClass);
     localStorage.setItem('AppTheme', themeClass);
+  }
+
+  getSchemeSystem() {
+    const mql = window.matchMedia('(prefers-color-scheme: dark)');
+    mql.addEventListener('change', (event) => {
+      if (event.matches) {
+        this.themeScheme = 'dark-theme';
+      } else {
+        this.themeScheme = 'light-theme';
+      }
+      alert('Se seteo el tema del sistema');
+    });
+
+    const appThemeUser: THEME | null = localStorage.getItem('AppTheme') as THEME;
+    if (appThemeUser) {
+      this.themeScheme = appThemeUser;
+    }
   }
 }

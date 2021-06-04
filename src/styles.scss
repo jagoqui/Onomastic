@@ -88,6 +88,10 @@ body {
   }
 }
 
+button:disabled{
+  background-color:mat-color($mat-accent,lighter)!important;
+}
+
 ng-lottie {
   text-align: center;
   display: inline-block;
