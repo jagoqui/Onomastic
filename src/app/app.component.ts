@@ -2,7 +2,7 @@ import {OverlayContainer} from '@angular/cdk/overlay';
 import {AfterViewInit, Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
 import {AuthService} from '@adminShared/services/auth.service';
 import {NgxSpinnerService} from 'ngx-spinner';
-import {BehaviorSubject, Subject} from 'rxjs';
+import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {SidenavControllerService} from '@appShared/services/sidenav-controller.service';
 import {ThemeSwitcherControllerService} from '@appShared/services/theme-switcher-controller.service';
@@ -60,7 +60,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   onSetTheme(classTheme: THEME) {
-    this.className  = classTheme;
+    this.className = classTheme;
     this.overlayContainer.getContainerElement().classList.add(classTheme);
 
     if (classTheme === 'dark-theme') {

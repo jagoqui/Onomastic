@@ -6,6 +6,7 @@ import {takeUntil} from 'rxjs/operators';
 import {ThemeSwitcherControllerService} from '../../services/theme-switcher-controller.service';
 import {AnimationOptions} from 'ngx-lottie';
 import {AnimationItem} from 'lottie-web';
+import {THEME} from '@adminShared/models/shared.model';
 
 @Component({
   selector: 'app-header',
@@ -22,8 +23,8 @@ import {AnimationItem} from 'lottie-web';
       </span>
       <span class="spacer"></span>
       <mat-slide-toggle [formControl]="toggleDarkThemeControl">
-        <mat-icon *ngIf="darkMode" class="mat-18"> dark_mode </mat-icon>
-        <mat-icon *ngIf="!darkMode" class="mat-18"> light_mode </mat-icon>
+        <mat-icon *ngIf="darkMode" class="mat-18"> dark_mode</mat-icon>
+        <mat-icon *ngIf="!darkMode" class="mat-18"> light_mode</mat-icon>
       </mat-slide-toggle>
     </mat-toolbar>
   `,
@@ -46,11 +47,8 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private authSvc: AuthService,
-    private themeSwitcher: ThemeSwitcherControllerService) {
-    const appTheme = localStorage.getItem('AppTheme') || null;
-    if (appTheme) {
-      this.toggleDarkThemeControl.setValue(appTheme === 'dark-theme');
-    }
+    private themeSwitcherController: ThemeSwitcherControllerService
+  ) {
   }
 
   animationCreated(animationItem: AnimationItem): void {
@@ -62,15 +60,22 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   ngOnInit(): void {
-    const appTheme = localStorage.getItem('AppTheme') || null;
-    if (appTheme) {
-      this.darkMode = appTheme === 'dark-theme';
-    }
+    this.themeSwitcherController.themeClass$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(
+        (theme: THEME) => {
+          this.darkMode = theme === 'dark-theme';
+          if(this.toggleDarkThemeControl.value !== this.darkMode){
+            this.toggleDarkThemeControl.setValue(this.darkMode);
+          }
+        }
+      );
+
     this.toggleDarkThemeControl.valueChanges
       .pipe(takeUntil(this.destroy$))
       .subscribe((darkMode) => {
         this.darkMode = darkMode;
-        this.themeSwitcher.setThemeClass(darkMode ? 'dark-theme' : 'light-theme');
+        this.themeSwitcherController.themeScheme = darkMode ? 'dark-theme' : 'light-theme';
       });
   }
 
@@ -78,9 +83,9 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
     const opened = changes.sidenavState.currentValue;
 
     if (opened) {
-      this.animationItem.playSegments([2, 16], true);
+      this.animationItem?.playSegments([2, 16], true);
     } else {
-      this.animationItem.playSegments([52, 70], true);
+      this.animationItem?.playSegments([52, 70], true);
     }
   }
 

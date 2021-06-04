@@ -116,7 +116,6 @@ export class AuthService {
     this.platformUserRes.next(null);
     this.isLogged.next(false);
     this.router.navigate(['/login']).then();
-    this.themeSwitcherController.setThemeClass('light-theme');
     localStorage.clear();
   }
 

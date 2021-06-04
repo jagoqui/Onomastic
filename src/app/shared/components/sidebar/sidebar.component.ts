@@ -1,11 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { AuthService } from '@adminShared/services/auth.service';
+import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Subject} from 'rxjs';
+import {takeUntil} from 'rxjs/operators';
+import {AuthService} from '@adminShared/services/auth.service';
 
-import { SidenavControllerService } from '../../services/sidenav-controller.service';
-import { ThemeSwitcherControllerService } from '../../services/theme-switcher-controller.service';
-import { AuthRes } from '@adminShared/models/auth.model';
+import {SidenavControllerService} from '../../services/sidenav-controller.service';
+import {AuthRes} from '@adminShared/models/auth.model';
 
 @Component({
   selector: 'app-sidebar',
@@ -19,8 +18,7 @@ export class SidebarComponent implements OnInit, OnDestroy {
 
   constructor(
     private authSvc: AuthService,
-    public sidenavController: SidenavControllerService,
-    private themeSwitcherController: ThemeSwitcherControllerService
+    public sidenavController: SidenavControllerService
   ) {
   }
 
@@ -31,7 +29,6 @@ export class SidebarComponent implements OnInit, OnDestroy {
   onExit() {
     if (confirm('Está seguro que desea cerrar sesión')) {
       this.sidenavController.openSidebar(false);
-      this.themeSwitcherController.setThemeClass('light-theme');
       this.authSvc.logout();
     }
   }
