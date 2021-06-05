@@ -21,20 +21,25 @@ export class ThemeSwitcherControllerService {
     localStorage.setItem('AppTheme', themeClass);
   }
 
-  getSchemeSystem() {
-    const mql = window.matchMedia('(prefers-color-scheme: dark)');
-    mql.addEventListener('change', (event) => {
-      if (event.matches) {
-        this.themeScheme = 'dark-theme';
-      } else {
-        this.themeScheme = 'light-theme';
-      }
+  private getSchemeSystem() {
+    const schemeSystemEvent = window.matchMedia('(prefers-color-scheme: dark)');
+
+    schemeSystemEvent.addEventListener('change', (event) => {
+      this.themeScheme = event.matches? 'dark-theme':'light-theme';
       alert('Se seteo el tema del sistema');
     });
 
     const appThemeUser: THEME | null = localStorage.getItem('AppTheme') as THEME;
     if (appThemeUser) {
       this.themeScheme = appThemeUser;
+    }else{
+      this.themeScheme = schemeSystemEvent.matches? 'dark-theme':'light-theme';
     }
+
+    window.addEventListener('beforeunload', () =>{
+      if (!appThemeUser) {
+        this.themeScheme = schemeSystemEvent.matches? 'dark-theme':'light-theme';
+      }
+    });
   }
 }

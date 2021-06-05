@@ -37,6 +37,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     // autoplay: false,
     // loop: false
   };
+
   private destroy$ = new Subject<any>();
   private animationItem: AnimationItem;
 
@@ -78,11 +79,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   checkField(field: string): boolean {
     return this.loginForm.isValidField(field);
-  }
-
-
-  handleExpireRecaptcha() {
-    this.recaptchaConfig.success = false;
   }
 
   handleSuccessRecaptcha() {
