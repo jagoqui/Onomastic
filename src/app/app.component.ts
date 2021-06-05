@@ -60,14 +60,9 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   onSetTheme(classTheme: THEME) {
-    this.className = classTheme;
     this.overlayContainer.getContainerElement().classList.add(classTheme);
-
-    if (classTheme === 'dark-theme') {
-      this.overlayContainer.getContainerElement().classList.remove('light-theme' as THEME);
-    } else {
-      this.overlayContainer.getContainerElement().classList.remove('dark-theme' as THEME);
-    }
+    this.overlayContainer.getContainerElement().classList.remove(this.className);
+    this.className = classTheme;
   }
 
   ngAfterViewInit(): void {

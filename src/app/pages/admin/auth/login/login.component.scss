@@ -125,7 +125,7 @@ main {
           }
 
           &:disabled {
-            background-color: mat-color($mat-primary, lighter)
+            background-color:mat-color($mat-accent,lighter);
           }
         }
       }
