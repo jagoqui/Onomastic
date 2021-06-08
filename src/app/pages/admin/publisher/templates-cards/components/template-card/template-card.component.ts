@@ -80,7 +80,7 @@ export class TemplateCardComponent implements OnDestroy {
                 }, () => SwAlert.showValidationMessage('La plantilla no se pudo eliminar'));
             }
           });
-        },() => SwAlert.showValidationMessage('No se pudo cargar las asociaciones')
+        },() => SwAlert.showValidationMessage('No se pudo cargar los eventos.A')
       );
   }
 

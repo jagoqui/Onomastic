@@ -15,6 +15,7 @@ import { MailUsers } from '@adminShared/models/mail-users.model';
 import { ModalMailsLogComponent } from '@publisher/mail-users/components/modal-mails-log/modal-mails-log.component';
 import { FriendlyNumberAbbreviationService } from '@appShared/services/friendly-number-abbreviation.service';
 import { FormControl } from '@angular/forms';
+import {AuthService} from '@adminShared/services/auth.service';
 
 @Component({
   selector: 'app-users',
@@ -44,11 +45,15 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
     private dialog: MatDialog,
     private friendlyNumberSvc: FriendlyNumberAbbreviationService,
     private mailUserSvc: EmailUserService,
-    private mailDataSentSvc: MailsLogService
+    private mailDataSentSvc: MailsLogService,
+    private authSvc: AuthService
   ) {
     this.onSearch();
   }
 
+  get isAdmin(): boolean{
+    return this.authSvc.isPublisherAdmin;
+  }
   get numMailUsers(): string {
     return this.getPartialUsers(this.numUsers);
   }
