@@ -8,13 +8,9 @@ import {NgxCaptchaModule} from 'ngx-captcha';
 import {MaterialModule} from '../material-module.module';
 import {FooterComponent} from './components/footer/footer.component';
 import {HeaderComponent} from './components/header/header.component';
-import {
-  MailUsersSubscriptionStatusComponent,
-} from './components/mail-users-subscription-status/mail-users-subscription-status.component';
+import {MailUsersSubscriptionStatusComponent,} from './components/mail-users-subscription-status/mail-users-subscription-status.component';
 import {SidebarComponent} from './components/sidebar/sidebar.component';
-import {
-  MaterialElevationDirective,
-} from './directives/material-elevation.directive';
+import {MaterialElevationDirective,} from './directives/material-elevation.directive';
 import {NgxSpinnerModule} from 'ngx-spinner';
 import {NgSelectModule} from '@ng-select/ng-select';
 import {ScrollComponent} from './components/scroll/scroll.component';

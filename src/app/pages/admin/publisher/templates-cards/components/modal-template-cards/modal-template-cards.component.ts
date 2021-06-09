@@ -68,19 +68,19 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   @Input() media: MEDIA;
   @ViewChild('editor') joditEditor: JoditAngularComponent;
 
-  config: any;
-  iconSwitchTheme: string;
-  card: TemplateCard;
-  maxChars = 400;
   actionTODO: ACTIONS = 'AGREGAR';
-  uriCardImageEdit: string = null;
-  optionGroupLabels: OptionGroupLabels = {
+  config: any = {};
+  private card: TemplateCard;
+  private maxChars = 400;
+  private uriCardImageEdit: string = null;
+  private optionGroupLabels: OptionGroupLabels = {
     name: 'nombre',
     date: 'fecha',
     school: 'facultad/escuela',
     bodyType: 'estamento',
     program: 'programa'
   };
+  private toolbarButtonSize: SIZEiCONS='middle';
   private destroy$ = new Subject<any>();
 
   constructor(
@@ -110,6 +110,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   setEditorConfig(themeEditor: string) {
     const iconSwitchTheme = `assets/icons/toggle-${themeEditor === 'dark' ? 'on' : 'off'}-solid.svg`;
     this.config = {
+      toolbarButtonSize: this.toolbarButtonSize,
       autofocus: true,
       enableDragAndDropFileToEditor: false,
       toolbarAdaptive: false,
@@ -373,10 +374,15 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                 xl: 'large'
               };
               const toolbarButtonSize = sizes[media];
-              this.config = {
-                ...this.config,
-                toolbarButtonSize
-              };
+              if(toolbarButtonSize!== this.config.toolbarButtonSize){
+                /*TODO: No funciona bien en dispositivos móviles.*/
+                this.config = {
+                  ...this.config,
+                  toolbarButtonSize
+                };
+                /*TODO: No es dinamico, sólo se setea una vez*/
+                // this.toolbarButtonSize = sizes[media];
+              }
             }
           );
       });
