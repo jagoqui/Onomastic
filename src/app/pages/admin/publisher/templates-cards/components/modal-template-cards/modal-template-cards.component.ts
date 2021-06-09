@@ -80,7 +80,6 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     bodyType: 'estamento',
     program: 'programa'
   };
-  private toolbarButtonSize: SIZEiCONS='middle';
   private destroy$ = new Subject<any>();
 
   constructor(
@@ -110,7 +109,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   setEditorConfig(themeEditor: string) {
     const iconSwitchTheme = `assets/icons/toggle-${themeEditor === 'dark' ? 'on' : 'off'}-solid.svg`;
     this.config = {
-      toolbarButtonSize: this.toolbarButtonSize,
+      toolbarButtonSize: 'middle' as SIZEiCONS,
       autofocus: true,
       enableDragAndDropFileToEditor: false,
       toolbarAdaptive: false,
@@ -374,14 +373,12 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                 xl: 'large'
               };
               const toolbarButtonSize = sizes[media];
-              if(toolbarButtonSize!== this.config.toolbarButtonSize){
-                /*TODO: No funciona bien en dispositivos móviles.*/
+              //El if es para evitar que se llene el buffer.
+              if(toolbarButtonSize !== this.config.toolbarButtonSize){
                 this.config = {
                   ...this.config,
                   toolbarButtonSize
                 };
-                /*TODO: No es dinamico, sólo se setea una vez*/
-                // this.toolbarButtonSize = sizes[media];
               }
             }
           );
