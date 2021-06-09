@@ -1,7 +1,6 @@
-import { EventEmitter, Injectable, Output } from '@angular/core';
-import { Subject } from 'rxjs/internal/Subject';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { MEDIA } from '@adminShared/models/shared.model';
+import {EventEmitter, Injectable, Output} from '@angular/core';
+import {BehaviorSubject, Observable} from 'rxjs';
+import {MEDIA} from '@adminShared/models/shared.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +8,7 @@ import { MEDIA } from '@adminShared/models/shared.model';
 export class ResponsiveService {
   @Output() media: EventEmitter<MEDIA> = new EventEmitter(null);
 
-  private screenWidth =  new BehaviorSubject<MEDIA>(null);
+  private screenWidth = new BehaviorSubject<MEDIA>(null);
 
   constructor() {
     this.checkWidth();
@@ -28,13 +27,13 @@ export class ResponsiveService {
     } else if (width > 600 && width <= 959) {
       this.media.emit('sm');
       this.setWidth('sm');
-    }else if (width > 960 && width <= 1279) {
+    } else if (width > 960 && width <= 1279) {
       this.media.emit('md');
       this.setWidth('md');
-    }else if (width > 1280 && width <= 1919) {
+    } else if (width > 1280 && width <= 1919) {
       this.media.emit('lg');
       this.setWidth('lg');
-    }else{
+    } else {
       this.media.emit('lg');
       this.setWidth('xl');
     }

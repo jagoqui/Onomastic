@@ -55,14 +55,17 @@ body {
         font-size: 95%;
       }
 
+      .mat-icon {
+        zoom: 2;
+      }
+
       .mat-table {
         width: 100%;
         margin-bottom: 0;
         display: table;
         border-collapse: collapse;
-
-
       }
+
       .mat-cell,
       .mat-header-cell {
         word-wrap: initial;
@@ -83,18 +86,63 @@ body {
     }
   }
 
-  .mat-error{
+  .mat-error {
     font-size: 70%;
   }
+}
+
+.mat-menu-content {
+  font-size: calc(9px + 0.5vw);
+  padding: 0;
+
+  button {
+    font-size: 100%;
+  }
+
+  .mat-icon {
+    &.material-icons {
+      font-size: 100%;
+    }
+  }
+}
+
+.mat-paginator-container {
+  $fontS: calc(9px + 0.5vw);
+  font-size: $fontS;
+
+  .mat-paginator-page-size {
+    font-size: $fontS;
+
+    .mat-paginator-page-size-label {
+      font-size: 70%;
+    }
+  }
+
+  .mat-paginator-range-label {
+    font-size: calc(5px + 0.5vw);;
+  }
+
+  .mat-icon-button {
+    padding: 0;
+    $size: calc(15px + 1vw);
+    width: auto;
+    height: auto;
+
+    .mat-paginator-icon {
+      @include md-icon-size($size);
+    }
+  }
+
 }
 
 ng-lottie {
   text-align: center;
   display: inline-block;
-  $size: calc(24px + 0.5vw);
+  $size: calc(20px + 0.5vw);
   width: $size;
   height: $size;
 }
+
 .mat-dialog-container {
   padding: 1.6vw !important;
   margin: 0 !important;

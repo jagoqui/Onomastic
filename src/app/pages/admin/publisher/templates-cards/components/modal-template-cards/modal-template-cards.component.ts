@@ -68,13 +68,12 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   @Input() media: MEDIA;
   @ViewChild('editor') joditEditor: JoditAngularComponent;
 
-  config: any;
-  iconSwitchTheme: string;
-  card: TemplateCard;
-  maxChars = 400;
   actionTODO: ACTIONS = 'AGREGAR';
-  uriCardImageEdit: string = null;
-  optionGroupLabels: OptionGroupLabels = {
+  config: any = {};
+  private card: TemplateCard;
+  private maxChars = 400;
+  private uriCardImageEdit: string = null;
+  private optionGroupLabels: OptionGroupLabels = {
     name: 'nombre',
     date: 'fecha',
     school: 'facultad/escuela',
@@ -110,6 +109,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   setEditorConfig(themeEditor: string) {
     const iconSwitchTheme = `assets/icons/toggle-${themeEditor === 'dark' ? 'on' : 'off'}-solid.svg`;
     this.config = {
+      toolbarButtonSize: 'middle' as SIZEiCONS,
       autofocus: true,
       enableDragAndDropFileToEditor: false,
       toolbarAdaptive: false,
@@ -373,10 +373,13 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
                 xl: 'large'
               };
               const toolbarButtonSize = sizes[media];
-              this.config = {
-                ...this.config,
-                toolbarButtonSize
-              };
+              //El if es para evitar que se llene el buffer.
+              if(toolbarButtonSize !== this.config.toolbarButtonSize){
+                this.config = {
+                  ...this.config,
+                  toolbarButtonSize
+                };
+              }
             }
           );
       });
