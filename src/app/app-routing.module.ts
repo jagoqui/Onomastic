@@ -1,13 +1,13 @@
-import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
-import { QuicklinkStrategy } from 'ngx-quicklink';
-import { NegateCheckLoginGuard } from '@appShared/guards/negate-check-login.guard';
+import {NgModule} from '@angular/core';
+import {RouterModule, Routes} from '@angular/router';
+import {QuicklinkStrategy} from 'ngx-quicklink';
+import {NegateCheckLoginGuard} from '@appShared/guards/negate-check-login.guard';
 // eslint-disable-next-line max-len
-import { MailUsersSubscriptionStatusComponent } from '@appShared/components/mail-users-subscription-status/mail-users-subscription-status.component';
-import { CheckLoginGuard } from '@appShared/guards/check-login.guard';
-import { PageNotFoundComponent } from '@appShared/components/page-not-found/page-not-found.component';
-import { ForgotPasswordComponent } from '@auth/forgot-password/forgot-password.component';
-import { ResetPasswordComponent } from '@auth/reset-password/reset-password.component';
+import {MailUsersSubscriptionStatusComponent} from '@appShared/components/mail-users-subscription-status/mail-users-subscription-status.component';
+import {CheckLoginGuard} from '@appShared/guards/check-login.guard';
+import {PageNotFoundComponent} from '@appShared/components/page-not-found/page-not-found.component';
+import {ForgotPasswordComponent} from '@auth/forgot-password/forgot-password.component';
+import {ResetPasswordComponent} from '@auth/reset-password/reset-password.component';
 
 const routes: Routes = [
   {
