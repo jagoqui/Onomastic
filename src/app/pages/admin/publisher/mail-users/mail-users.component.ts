@@ -30,7 +30,7 @@ export class MailUsersComponent implements AfterViewInit, OnInit, OnDestroy {
     'id', 'plataformaPorUsuarioCorreo',
     'nombre', 'email', 'fechaNacimiento',
     'vinculacionPorUsuarioCorreo',
-    'asociacionPorUsuarioCorreo',
+    'asociacionPorCorreoUsuario',
     'programaAcademicoPorUsuarioCorreo',
     'estado', 'actions'
   ];

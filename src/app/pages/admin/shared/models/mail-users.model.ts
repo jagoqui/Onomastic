@@ -8,7 +8,7 @@ export interface MailUsers {
   fechaNacimiento: Date;
   estado: string;
   genero: string;
-  asociacionPorUsuarioCorreo?: ByIdOrCode[];
+  asociacionPorCorreoUsuario?: ByIdOrCode[];
   programaAcademicoPorUsuarioCorreo?: ByIdOrCode[];
   plataformaPorUsuarioCorreo?: ByIdOrCode[];
   vinculacionPorUsuarioCorreo?: ByIdOrCode[];
