@@ -26,7 +26,8 @@ export class BaseFormPublisher {
         id: [null],
         nombre: [null]
       }, Validators.required),
-      asociacionPorUsuario: [this.createAssociationField(), Validators.required]
+      unidadAdministrativaPorUsuario: [this.createAssociationField(), Validators.required],
+      unidadAcademicaPorUsuario: [this.createAssociationField(), Validators.required]
     });
   }
 

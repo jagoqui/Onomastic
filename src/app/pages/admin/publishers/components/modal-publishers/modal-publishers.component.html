@@ -75,15 +75,15 @@
             </mat-error>
           </mat-form-field>
         </div>
-        <!--Association-->
+        <!--Academic units-->
         <ng-select
-          [items]='associations'
+          [items]='academicUnits'
           bindLabel='nombre'
-          placeholder='Facultad/Escuela'
+          placeholder='Unidada Académica'
           appearance='outline'
-          notFoundText='No hay más asociaciones en la lista!'
+          notFoundText='No hay más unidades académicas en la lista!'
           typeToSearchText='Search'
-          title='Seleccione la asociación/es del publicador'
+          title='Seleccione las unidades académicas del publicador'
           required
           [loading]='true'
           [multiple]='true'
@@ -92,10 +92,33 @@
           [closeOnSelect]='false'
           [clearSearchOnAdd]='true'
           [selectableGroupAsModel]='true'
-          formControlName='asociacionPorUsuario'>
-          <ng-template ng-option-tmp let-association='item' let-item$='item$'>
+          formControlName='unidadAcademicaPorCorreoUsuario'>
+          <ng-template ng-option-tmp let-academicUnits='item' let-item$='item$'>
             <ng-container><mat-icon> account_balance</mat-icon></ng-container>
-            {{association.nombre| uppercase}}
+            {{academicUnits.nombre| uppercase}}
+          </ng-template>
+        </ng-select>
+        <!--Administrative units-->
+        <ng-select
+          [items]='administrativeUnits'
+          bindLabel='nombre'
+          placeholder='Unidada Administrativa'
+          appearance='outline'
+          notFoundText='No hay más unidades administrativas en la lista!'
+          typeToSearchText='Search'
+          title='Seleccione las unidades administrativas del publicador'
+          required
+          [loading]='true'
+          [multiple]='true'
+          [minTermLength]='3'
+          [hideSelected]='true'
+          [closeOnSelect]='false'
+          [clearSearchOnAdd]='true'
+          [selectableGroupAsModel]='true'
+          formControlName='unidadAdministrativaPorCorreoUsuario'>
+          <ng-template ng-option-tmp let-administrativeUnits='item' let-item$='item$'>
+            <ng-container><mat-icon> account_balance</mat-icon></ng-container>
+            {{administrativeUnits.nombre| uppercase}}
           </ng-template>
         </ng-select>
       </div>

@@ -8,7 +8,8 @@ export interface Publisher {
   estado: string;
   createTime?: Date;
   rol: Role;
-  asociacionPorUsuario?: ByIdOrCode[];
+  unidadAdministrativaPorUsuario?: ByIdOrCode[];
+  unidadAcademicaPorUsuario?: ByIdOrCode[];
 }
 
 export interface Role {

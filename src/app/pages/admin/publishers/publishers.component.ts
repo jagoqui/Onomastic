@@ -24,7 +24,8 @@ export class PublishersComponent implements OnInit, AfterViewInit, OnDestroy {
   dataSource = new MatTableDataSource();
   columnsToDisplay = [
     'nombre', 'email',
-    'asociacionPorUsuario',
+    'unidadAcademicaPorUsuario',
+    'unidadAdministrativaPorUsuario',
     'rol', 'estado', 'createTime'
   ];
 

@@ -1,7 +1,7 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import SwAlert from 'sweetalert2';
-import { EmailUserService } from '@pages/admin/publisher/shared/services/email-user.service';
+import { RecipientService } from '@admin//publisher-actions/shared/services/recipient.service';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
@@ -15,7 +15,7 @@ export class MailUsersSubscriptionStatusComponent implements OnInit, OnDestroy {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private mailUserSvc: EmailUserService
+    private mailUserSvc: RecipientService
   ) {
   }
 
