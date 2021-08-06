@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {Observable} from 'rxjs';
 import {environment} from '@env/environment';
 import {HttpClient} from '@angular/common/http';
-import {ByIdOrCode} from '@adminShared/models/shared.model';
+import {ByIdAndName} from '@adminShared/models/shared.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,18 +12,18 @@ export class UnitsService {
   constructor(private http: HttpClient) {
   }
 
-  getAdministrativeUnits(): Observable<ByIdOrCode[]> {
+  getAdministrativeUnits(): Observable<ByIdAndName[]> {
     return this.http
-      .get<ByIdOrCode[]>(`${environment.apiUrl}/unidadAdministrativa`);
+      .get<ByIdAndName[]>(`${environment.apiUrl}/unidadesadministrativas`);
   }
 
-  getAcademicUnits(): Observable<ByIdOrCode[]> {
+  getAcademicUnits(): Observable<ByIdAndName[]> {
     return this.http
-      .get<ByIdOrCode[]>(`${environment.apiUrl}/unidadAcademica`);
+      .get<ByIdAndName[]>(`${environment.apiUrl}/unidadesacademicas`);
   }
 
-  getAssociationsByPublisher(): Observable<ByIdOrCode[]> { /*TODO: Éste método puede sobrar*/
+  getAssociationsByPublisher(): Observable<ByIdAndName[]> { /*TODO: Éste método puede sobrar*/
     return this.http
-      .get<ByIdOrCode[]>(`${environment.apiUrl}/usuarios/asociacion`);
+      .get<ByIdAndName[]>(`${environment.apiUrl}/usuarios/asociacion`);
   }
 }

@@ -13,7 +13,7 @@ import {PlatformService} from '@pages/admin/shared/services/platform.service';
 import {UnitsService} from '@adminShared/services/units.service';
 import {AcademicProgramService} from '@pages/admin/shared/services/academic-program.service';
 import {BodyTypeService} from '@pages/admin/shared/services/body-type.service';
-import {ACTIONS, ByIdOrCode, DATE_FORMAT} from '@adminShared/models/shared.model';
+import {ACTIONS, ByIdAndName, DATE_FORMAT, Program} from '@adminShared/models/shared.model';
 
 
 @Component({
@@ -42,11 +42,10 @@ export class ModalRecipientsComponent implements OnInit, OnDestroy {
   };
   today = new Date();
   close = false;
-  academicUnits: ByIdOrCode[];
-  administrativeUnits: ByIdOrCode[];
-  programs: ByIdOrCode[];
-  bondingTypes: ByIdOrCode[];
-  platforms: ByIdOrCode[];
+  administrativeUnits: ByIdAndName[];
+  programs: Program[];
+  bondingTypes: ByIdAndName[];
+  platforms: ByIdAndName[];
   private subscription: Subscription = new Subscription();
 
   constructor(
@@ -106,17 +105,6 @@ export class ModalRecipientsComponent implements OnInit, OnDestroy {
     }
 
     this.subscription.add(
-      this.unitSvc.getAcademicUnits()
-        .subscribe(administrativeUnits => {
-          if (administrativeUnits) {
-            this.administrativeUnits = administrativeUnits;
-          }
-        }, () => {
-          SwAlert.showValidationMessage('Error cargando las unidades acádemicas.');
-        })
-    );
-
-    this.subscription.add(
       this.unitSvc.getAdministrativeUnits()
         .subscribe(administrativeUnits => {
           if (administrativeUnits) {
@@ -128,23 +116,25 @@ export class ModalRecipientsComponent implements OnInit, OnDestroy {
     );
 
     this.subscription.add(
-      this.academicProgramSvc.getAcademicPrograms().subscribe(programs => {
-        if (programs) {
-          this.programs = programs;
-        }
-      }, () => {
-        SwAlert.showValidationMessage('Error cargando los programas academicos');
-      })
+      this.academicProgramSvc.getAcademicPrograms()
+        .subscribe((programs) => {
+          if (programs) {
+            this.programs = programs;
+          }
+        }, () => {
+          SwAlert.showValidationMessage('Error cargando los programas academicos');
+        })
     );
 
     this.subscription.add(
-      this.bodyTypeSvc.getBondingTypes().subscribe(types => {
-        if (types) {
-          this.bondingTypes = types;
-        }
-      }, () => {
-        SwAlert.showValidationMessage('Error cargando las vinculaciones');
-      })
+      this.bodyTypeSvc.getBondingTypes()
+        .subscribe(types => {
+          if (types) {
+            this.bondingTypes = types;
+          }
+        }, () => {
+          SwAlert.showValidationMessage('Error cargando las vinculaciones');
+        })
     );
 
     this.subscription.add(

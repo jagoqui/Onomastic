@@ -1,4 +1,4 @@
-import { ByIdOrCode, ID } from '@adminShared/models/shared.model';
+import {ByIdAndName, ID, Program} from '@adminShared/models/shared.model';
 
 export interface Recipient {
   id: ID;
@@ -8,9 +8,8 @@ export interface Recipient {
   fechaNacimiento: Date;
   estado: string;
   genero: string;
-  unidadAdministrativaPorCorreoUsuario?: ByIdOrCode[];
-  unidadAcademicaPorCorreoUsuario?: ByIdOrCode[];
-  programaAcademicoPorUsuarioCorreo?: ByIdOrCode[];
-  plataformaPorUsuarioCorreo?: ByIdOrCode[];
-  vinculacionPorUsuarioCorreo?: ByIdOrCode[];
+  unidadAdministrativaPorCorreoUsuario?: ByIdAndName[];
+  programaAcademicoPorUsuarioCorreo?: Program[];
+  plataformaPorUsuarioCorreo?: ByIdAndName[];
+  vinculacionPorUsuarioCorreo?: ByIdAndName[];
 }

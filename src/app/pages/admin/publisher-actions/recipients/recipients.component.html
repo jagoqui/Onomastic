@@ -80,13 +80,6 @@
             <tr *ngFor='let item of element.vinculacionPorUsuarioCorreo'>{{ item["nombre"] }}</tr>
           </td>
         </ng-container>
-        <!-- Academic unit  -->
-        <ng-container matColumnDef='unidadAcademicaPorCorreoUsuario'>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Unidad Académica</th>
-          <td mat-cell *matCellDef='let element'>
-            <tr *ngFor='let item of element.unidadAcademicaPorCorreoUsuario'>{{ item["nombre"] }}</tr>
-          </td>
-        </ng-container>
         <!-- Administrative unit -->
         <ng-container matColumnDef='unidadAdministrativaPorCorreoUsuario'>
           <th mat-header-cell *matHeaderCellDef mat-sort-header>Unidad Administrativa</th>

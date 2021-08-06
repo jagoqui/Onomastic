@@ -23,8 +23,12 @@ export interface ID {
   numeroIdentificacion: string;
 }
 
-export interface ByIdOrCode {
-  id?: number;
-  codigo?: number;
+export interface ByIdAndName {
+  id: number;
+  nombre: string;
+}
+export interface Program {
+  idUnidadAcademica: number;
+  codigo: number;
   nombre: string;
 }

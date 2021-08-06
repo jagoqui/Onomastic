@@ -30,7 +30,6 @@ export class RecipientsComponent implements AfterViewInit, OnInit, OnDestroy {
     'id', 'plataformaPorUsuarioCorreo',
     'nombre', 'email', 'fechaNacimiento',
     'vinculacionPorUsuarioCorreo',
-    'unidadAcademicaPorCorreoUsuario',
     'unidadAdministrativaPorCorreoUsuario',
     'programaAcademicoPorUsuarioCorreo',
     'estado', 'actions'

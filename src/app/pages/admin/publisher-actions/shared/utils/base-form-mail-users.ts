@@ -29,7 +29,7 @@ export class BaseFormMailUsers {
       });
     } else {
       return new FormGroup({
-        id: new FormControl(null),
+        idUnidadAcademica: new FormControl(null),
         codigo: new FormControl(null),
         nombre: new FormControl(null)
       });
@@ -48,8 +48,7 @@ export class BaseFormMailUsers {
       genero: ['', [Validators.required]], //TODO: No está detectando campo invalido si éste campo no lo tiene al editar.
       email: ['', [Validators.required, Validators.email]],
       estado: ['', [Validators.required]],
-      asociacionPorCorreoUsuario: [BaseFormMailUsers.createByNameFormGroup('id'), Validators.required], //TODO:
-      // Hacer refactor del nombre desde el back
+      unidadAdministrativaPorCorreoUsuario: [BaseFormMailUsers.createByNameFormGroup('id'), Validators.required],
       programaAcademicoPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('codigo')],
       vinculacionPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id'), Validators.required],
       plataformaPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id'), Validators.required]

@@ -4,7 +4,7 @@ import { AbstractControl, FormGroup } from '@angular/forms';
 import { takeUntil } from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 import { Subject } from 'rxjs';
-import { ACTIONS, ByIdOrCode } from '@adminShared/models/shared.model';
+import { ACTIONS, ByIdAndName } from '@adminShared/models/shared.model';
 import { PublisherService } from '@adminShared/services/publisher.service';
 import { UnitsService } from '@adminShared/services/units.service';
 import { BaseFormPublisher } from '@adminShared/utils/base-form-publisher';
@@ -20,8 +20,8 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
   @Output() refresh = new EventEmitter<boolean>(false);
 
   actionTODO: ACTIONS;
-  administrativeUnits: ByIdOrCode[];
-  academicUnits: ByIdOrCode[];
+  administrativeUnits: ByIdAndName[];
+  academicUnits: ByIdAndName[];
   roleOptions: Role[] = [
     {
       id: 1,
@@ -92,9 +92,9 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
 
     this.unitSvc.getAcademicUnits()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(administrativeUnits => {
-        if (administrativeUnits) {
-          this.administrativeUnits = administrativeUnits;
+      .subscribe((academicUnits) => {
+        if (academicUnits) {
+          this.academicUnits = academicUnits;
         }
       }, () => {
         SwAlert.showValidationMessage('Error cargando las unidades acádemicas.');
@@ -102,11 +102,11 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
 
     this.unitSvc.getAdministrativeUnits()
       .pipe(takeUntil(this.destroy$))
-      .subscribe(administrativeUnits => {
+      .subscribe((administrativeUnits) => {
         if (administrativeUnits) {
           this.administrativeUnits = administrativeUnits;
         }
-      }, () => SwAlert.showValidationMessage('Error obteniendo asociaciones'));
+      }, () => SwAlert.showValidationMessage('Error obteniendo unidades administrativas'));
   }
 
   ngOnDestroy(): void {

@@ -1,7 +1,7 @@
-import {ByIdOrCode} from '@adminShared/models/shared.model';
+import {ByIdAndName} from '@adminShared/models/shared.model';
 
 export interface TemplateCard {
   id?: number;
   texto: string;
-  asociacionesPorPlantilla?: ByIdOrCode[]; /*TODO: Check!, possibly this is redundant*/
+  asociacionesPorPlantilla?: ByIdAndName[]; /*TODO: Check!, possibly this is redundant*/
 }

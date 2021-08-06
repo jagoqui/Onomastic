@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
-import { ByIdOrCode } from '@adminShared/models/shared.model';
+import { ByIdAndName } from '@adminShared/models/shared.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,13 +12,13 @@ export class PlatformService {
   constructor(private http: HttpClient) {
   }
 
-  getPlatforms(): Observable<ByIdOrCode[]> {
+  getPlatforms(): Observable<ByIdAndName[]> {
     return this.http
-      .get<ByIdOrCode[]>(`${environment.apiUrl}/plataformas`);
+      .get<ByIdAndName[]>(`${environment.apiUrl}/plataformas`);
   }
 
-  getPlatformById(id: string): Observable<ByIdOrCode> {
+  getPlatformById(id: string): Observable<ByIdAndName> {
     return this.http
-      .get<ByIdOrCode>(`${environment.apiUrl}/plataformas/${id}`);
+      .get<ByIdAndName>(`${environment.apiUrl}/plataformas/${id}`);
   }
 }
