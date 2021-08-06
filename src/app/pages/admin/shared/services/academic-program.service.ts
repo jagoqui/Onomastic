@@ -1,24 +1,19 @@
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { environment } from '@env/environment';
-import { HttpClient } from '@angular/common/http';
-import { ByIdOrCode } from '@adminShared/models/shared.model';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {environment} from '@env/environment';
+import {HttpClient} from '@angular/common/http';
+import {Program} from '@adminShared/models/shared.model';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AcademicProgramService {
 
-  constructor(private http: HttpClient) { }
-
-  getAcademicPrograms(): Observable<ByIdOrCode[]> {
-    return this.http
-      .get<ByIdOrCode[]>(`${environment.apiUrl}/usuarios/programasporasociacion`);
+  constructor(private http: HttpClient) {
   }
 
-  getAcademicProgramByCode(code: number): Observable<ByIdOrCode> {
+  getAcademicPrograms(): Observable<Program[]> {
     return this.http
-      .get<ByIdOrCode>(`${environment.apiUrl}/programasacademicos/${code}`);
+      .get<Program[]>(`${environment.apiUrl}/programasacademicos`);
   }
-
 }

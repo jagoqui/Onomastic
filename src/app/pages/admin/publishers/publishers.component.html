@@ -25,7 +25,8 @@
       <table mat-table [dataSource]='dataSource' multiTemplateDataRows class='mat-elevation-z8' matSort>
         <ng-container matColumnDef='{{key}}' *ngFor='let key of columnsToDisplay'>
           <th mat-header-cell *matHeaderCellDef
-              mat-sort-header> {{key === 'asociacionPorUsuario' ? 'Asociación' : key | titlecase}} </th>
+              mat-sort-header> {{(key === 'unidadAdministrativaPorUsuario' || key === 'unidadAcademicaPorUsuario'?
+            key.replace('PorUsuario', '').replace('unidad', 'unidad ') : key) | titlecase}} </th>
           <td mat-cell *matCellDef='let publisher'>
             <!--            TODO: No hace sort en los roles-->
             <tr *ngFor='let value of showProperty(publisher, key)'>{{value}}</tr>

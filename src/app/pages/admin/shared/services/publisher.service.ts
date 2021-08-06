@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '@env/environment';
-import { MailUsers } from '@adminShared/models/mail-users.model';
+import { Recipient } from '@adminShared/models/recipient.model';
 import { Publisher } from '@adminShared/models/publisher.model';
 
 @Injectable({
@@ -33,9 +33,9 @@ export class PublisherService {
       .delete<[]>(`${environment.apiUrl}/usuarios/${id}`);
   }
 
-  activate(email: string): Observable<MailUsers> {
+  activate(email: string): Observable<Recipient> {
     return this.http
-      .put<MailUsers>(`${environment.apiUrl}/usuarios/activar/${email}`, null);
+      .put<Recipient>(`${environment.apiUrl}/usuarios/activar/${email}`, null);
   }
 
   deactivate(email: string): Observable<Publisher> {

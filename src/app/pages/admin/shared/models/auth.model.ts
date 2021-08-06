@@ -1,6 +1,5 @@
 import { ROLE } from '@adminShared/models/shared.model';
 
-
 export interface AuthRes {
   id?: number;
   userEmail: string;

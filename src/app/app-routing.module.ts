@@ -32,7 +32,7 @@ const routes: Routes = [
   },
   {
     path: 'profile',
-    loadChildren: () => import('./pages/admin/publisher/profile/profile.module').then(m => m.ProfileModule),
+    loadChildren: () => import('./pages/admin/publisher-actions/profile/profile.module').then(m => m.ProfileModule),
     canActivate: [CheckLoginGuard]
   },
   {
@@ -41,7 +41,7 @@ const routes: Routes = [
   },
   {
     path: 'PUBLISHER',
-    loadChildren: () => import('./pages/admin/publisher/publisher.module').then(m => m.PublisherModule),
+    loadChildren: () => import('./pages/admin/publisher-actions/publisher.module').then(m => m.PublisherModule),
     canActivate: [CheckLoginGuard]
   },
   {
