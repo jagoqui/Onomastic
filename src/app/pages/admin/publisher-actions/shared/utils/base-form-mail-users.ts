@@ -29,7 +29,7 @@ export class BaseFormMailUsers {
       });
     } else {
       return new FormGroup({
-        idUnidadAcademica: new FormControl(null),
+        unidadAcademica: this.createByNameFormGroup('id'),
         codigo: new FormControl(null),
         nombre: new FormControl(null)
       });
