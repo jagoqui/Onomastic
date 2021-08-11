@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import {Injectable} from '@angular/core';
+import {AbstractControl, FormBuilder, FormControl, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment';
-import { FormErrorsService } from '@appShared/services/form-errors.service';
-import { MatDatepickerInputEvent } from '@angular/material/datepicker';
-import { DATE_FORMAT } from '@adminShared/models/shared.model';
+import {FormErrorsService} from '@appShared/services/form-errors.service';
+import {MatDatepickerInputEvent} from '@angular/material/datepicker';
+import {DATE_FORMAT} from '@adminShared/models/shared.model';
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class BaseFormEventDay {
   public baseForm = this.createBaseForm();
 
@@ -26,10 +26,12 @@ export class BaseFormEventDay {
       fecha: [null, [Validators.required, this.validDate]],
       estado: [null, [Validators.required]],
       recurrencia: [null, [Validators.required]],
-      condicionesEvento: [this.createConditionField()],
+      condicionesEvento: [this.createField('condition')],
       plantilla: this.fb.group({
         id: [null, [Validators.required]],
-        texto: [null, [Validators.required]]
+        texto: [null, [Validators.required]],
+        unidadAdministrativaPorPlantilla: [this.createField('name')],
+        unidadAcademicaPorPlantilla: [this.createField('name')]
       })
     });
   }
@@ -50,12 +52,19 @@ export class BaseFormEventDay {
     return this.formErrorsSvc.searchErrors(field);
   }
 
-  private createConditionField(): FormGroup {
-    return this.fb.group({
-      id: [null],
-      condicion: [null],
-      value: [null]
-    });
+  private createField(type: string): FormGroup {
+    if (type === 'name') {
+      return this.fb.group({
+        id: [null],
+        name: [null]
+      });
+    } else if (type === 'condition') {
+      return this.fb.group({
+        id: [null],
+        condicion: [null],
+        value: [null]
+      });
+    }
   }
 }
 

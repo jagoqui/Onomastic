@@ -321,7 +321,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           id: this.data?.card?.id ? this.data.card.id : null,
           texto: this.joditEditor.editor.value.trim(),
           //TODO: Se actualiza con los actuales asociciones del publicador, reemplazando lo permisos iniciales del publicador.
-          asociacionesPorPlantilla: associations/*TODO: Posiblemente no sea necesario*/
+          // asociacionesPorPlantilla: associations/*TODO: Posiblemente no sea necesario*/
         };
         this.templateCardsService.saveTemplateCard(this.card)
           .pipe(takeUntil(this.destroy$))

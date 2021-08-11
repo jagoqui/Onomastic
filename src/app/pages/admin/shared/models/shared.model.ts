@@ -28,7 +28,7 @@ export interface ByIdAndName {
   nombre: string;
 }
 export interface Program {
-  idUnidadAcademica: number;
+  unidadAcademica: ByIdAndName;
   codigo: number;
   nombre: string;
 }
