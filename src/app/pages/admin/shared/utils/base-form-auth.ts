@@ -4,30 +4,23 @@ import {FormBuilder, Validators} from '@angular/forms';
 @Injectable({providedIn: 'root'})
 export class BaseFormAuth {
   errorMessage = {
-    name: '',
     userEmail: '',
     password: '',
-    recaptcha: 'No marcado',
-    association: '',
-    role: ''
+    recaptchaKey: 'No marcado'
   };
 
   emailPattern = '^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,4}$';
   baseForm = this.fb.group({
-    name: ['', [Validators.required, Validators.minLength(10)]],
     // userEmail: ['', [Validators.required, Validators.pattern(this.emailPattern)]],
     //TODO: Hacer valide si es un email, si detecta que es un correo.
     userEmail: ['', [Validators.required]],
     password: ['', [Validators.required]],
-    recaptcha: ['', Validators.required],
-    association: ['', [Validators.required]],
-    role: ['', [Validators.required]],
+    recaptchaKey: ['', Validators.required],
   });
 
 
   constructor(private fb: FormBuilder) {
   }
-
 
   isValidField(field: string): boolean {
     this.getErrorMessage(field);

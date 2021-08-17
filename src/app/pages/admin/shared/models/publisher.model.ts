@@ -2,8 +2,7 @@ import { ByIdAndName, ROLE } from '@adminShared/models/shared.model';
 
 export interface Publisher {
   id?: number;
-  nombre?: string;
-  password?: string;
+  nombre: string;
   email: string;
   estado: string;
   createTime?: Date;

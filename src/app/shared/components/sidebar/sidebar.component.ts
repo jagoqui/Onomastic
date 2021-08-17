@@ -3,8 +3,9 @@ import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
 import {AuthService} from '@adminShared/services/auth.service';
 
-import {SidenavControllerService} from '../../services/sidenav-controller.service';
-import {AuthRes} from '@adminShared/models/auth.model';
+import {SidenavControllerService} from '@appShared/services';
+import {AuthRes, DecodeToken} from '@adminShared/models/auth.model';
+import SwAlert from "sweetalert2";
 
 @Component({
   selector: 'app-sidebar',
@@ -13,7 +14,7 @@ import {AuthRes} from '@adminShared/models/auth.model';
 })
 export class SidebarComponent implements OnInit, OnDestroy {
   opened = false;
-  platformUserData: AuthRes;
+  publisherLogged: DecodeToken;
   private destroy$ = new Subject<any>();
 
   constructor(
@@ -39,12 +40,15 @@ export class SidebarComponent implements OnInit, OnDestroy {
       .subscribe(
         (res: boolean) => (this.opened = res)
       );
-    this.authSvc.userResponse$
+    this.authSvc.authRes$
       .pipe(takeUntil(this.destroy$))
       .subscribe((userRes: AuthRes) => {
         if (userRes) {
-          this.platformUserData = userRes;
+          this.publisherLogged = this.authSvc.decodeToken(userRes.accessToken);
         }
+      }, () => {
+        SwAlert.showValidationMessage(
+          'Error obteniendo publicador.');
       });
   }
 

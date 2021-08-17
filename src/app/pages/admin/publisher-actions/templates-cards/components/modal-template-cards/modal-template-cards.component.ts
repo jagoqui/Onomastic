@@ -17,12 +17,12 @@ import SwAlert from 'sweetalert2';
 import {UploadImageService} from '@pages/admin/publisher-actions/shared/services/upload-image.service';
 import {environment} from '@env/environment';
 import {takeUntil} from 'rxjs/operators';
-import {RecipientService} from '@admin//publisher-actions/shared/services/recipient.service';
 import {UnitsService} from '@adminShared/services/units.service';
 import {TemplateCard} from '@adminShared/models/template-card.model';
 import {ThemeSwitcherControllerService} from '@appShared/services/theme-switcher-controller.service';
-import {ACTIONS, MEDIA, THEME} from '@adminShared/models/shared.model';
+import {ACTIONS, ByIdAndName, MEDIA, THEME} from '@adminShared/models/shared.model';
 import {ResponsiveService} from '@appShared/services/responsive.service';
+import {BaseFormTemplateCard} from '@adminShared/utils/base-form-template-card';
 
 type SIZEiCONS = 'tiny' | 'xsmall' | 'small' | 'middle' | 'large';
 type LABELS = 'nombre' | 'fecha' | 'facultad/escuela' | 'estamento' | 'programa';
@@ -45,23 +45,7 @@ interface OptionGroupLabels {
 
 @Component({
   selector: 'app-modal',
-  template: `
-    <div class="container">
-      <div fxLayout="column" fxLayoutAlign="space-between stretch">
-        <h1 mat-dialog-title>{{data.title | uppercase }}</h1>
-        <jodit-editor #editor id="editor" [config]="config"></jodit-editor>
-      </div>
-
-      <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end end">
-        <button mat-raised-button fxFlex="20" color="warn" (click)="onClose(null)">Cancelar</button>
-        <button mat-raised-button fxFlex="20" color="primary" (click)="onSave()"
-                [disabled]="!onCompleteCard"
-                [title]="onCompleteCard? 'Click para guardar':'Recuerde que debe ingresar la plantilla y almenos una condición'">
-          {{actionTODO}}
-        </button>
-      </div>
-    </div>
-  `,
+  templateUrl:'modal-template-cards.component.html',
   styleUrls: ['./modal-template-cards.component.scss']
 })
 export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -69,7 +53,10 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   @ViewChild('editor') joditEditor: JoditAngularComponent;
 
   actionTODO: ACTIONS = 'AGREGAR';
+  administrativeUnits: ByIdAndName[];
+  academicUnits: ByIdAndName[];
   config: any = {};
+
   private card: TemplateCard;
   private maxChars = 400;
   private uriCardImageEdit: string = null;
@@ -87,18 +74,18 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     private dialogRef: MatDialogRef<ModalTemplateCardsComponent>,
     public responsiveSvc: ResponsiveService,
     private render2: Renderer2,
+    public templateCardForm: BaseFormTemplateCard,
+    private unitSvc: UnitsService,
     private elementRef: ElementRef,
     private themeSwitcherController: ThemeSwitcherControllerService,
     private templateCardsService: TemplateCardsService,
-    private uploadImagesSvc: UploadImageService,
-    private emailUserSvc: RecipientService,
-    private associationSvc: UnitsService
+    private uploadImagesSvc: UploadImageService
   ) {
   }
 
   get onCompleteCard() {
     //TODO: Agregar más condiciones
-    return !!this.imgCard;
+    return !!this.imgCard && this.templateCardForm.baseForm.valid;
   }
 
   get imgCard() {
@@ -275,6 +262,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   onClose(close?: boolean): void {
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.joditEditor.resetEditor();
+      this.templateCardForm.baseForm.reset();
       this.dialogRef.close();
     }
   }
@@ -292,7 +280,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
               this.uploadImagesSvc.imgURI = img.fileDownloadUri;
             });
           }
-          this.getAssociations();
+          this.saveTemplateCard();
         }, (err) => {
           SwAlert.fire({
             icon: 'error',
@@ -309,50 +297,45 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
           }).then();
         });
     } else {
-      this.getAssociations();
+      this.saveTemplateCard();
     }
   }
 
-  getAssociations() {
-    this.associationSvc.getAssociationsByPublisher()
+  saveTemplateCard() {
+    this.templateCardForm.baseForm.patchValue({
+      texto: this.joditEditor.editor.value.trim()
+    });
+    this.card = this.templateCardForm.baseForm.value;
+    console.warn(this.card);
+    this.templateCardsService.saveTemplateCard(this.card)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(associations => {
-        this.card = {
-          id: this.data?.card?.id ? this.data.card.id : null,
-          texto: this.joditEditor.editor.value.trim(),
-          //TODO: Se actualiza con los actuales asociciones del publicador, reemplazando lo permisos iniciales del publicador.
-          // asociacionesPorPlantilla: associations/*TODO: Posiblemente no sea necesario*/
-        };
-        this.templateCardsService.saveTemplateCard(this.card)
-          .pipe(takeUntil(this.destroy$))
-          .subscribe((cardRes) => {
-            if (cardRes) {
-              SwAlert.fire(`Plantilla ${this.data?.card ? 'Actualizada!' : 'Guardada!'} `, '', 'success').then();
-              if (this.uriCardImageEdit && this.uriCardImageEdit !== this.uploadImagesSvc.imgURI) {
-                this.uploadImagesSvc.onDeleteImage(this.uriCardImageEdit);
-              } else if (this.actionTODO === 'EDITAR') {
-                SwAlert.showValidationMessage('La imagen de la plantilla no se cambió');
-              }
-              this.onClose(true);
-            }
-          }, (err) => {
-            SwAlert.fire({
-              icon: 'error',
-              title: 'Algo salió mal!',
-              html: `La plantilla no se  ${this.data?.card ? 'actualizó' : 'guardó'}`,
-              footer: `
+      .subscribe((cardRes) => {
+        if (cardRes) {
+          SwAlert.fire(`Plantilla ${this.data?.card ? 'Actualizada!' : 'Guardada!'} `, '', 'success').then();
+          if (this.uriCardImageEdit && this.uriCardImageEdit !== this.uploadImagesSvc.imgURI) {
+            this.uploadImagesSvc.onDeleteImage(this.uriCardImageEdit);
+          } else if (this.actionTODO === 'EDITAR') {
+            SwAlert.showValidationMessage('La imagen de la plantilla no se cambió');
+          }
+          this.onClose(true);
+        }
+      }, (err) => {
+        SwAlert.fire({
+          icon: 'error',
+          title: 'Algo salió mal!',
+          html: `La plantilla no se  ${this.data?.card ? 'actualizó' : 'guardó'}`,
+          footer: `
                 <span style="color: red;">
                     Error ${err.status}! <b> ${err.status === 403 ? 'Necesita permisos de admin.' : err.error?.error}</b>
                     ${err.status === 401 ? 'Por seguridad se cerrará la sesión.' : ''}
                 </span>
                 <span>&nbsp;&nbsp;Necesitas <a href="">ayuda</a>?</span>.`
-            }).then(() => {
-              if (this.actionTODO === 'AGREGAR') {
-                this.uploadImagesSvc.onDeleteImage();
-              }
-            });
-          });
-      }, () => SwAlert.showValidationMessage('Error cargando asociaciones'));
+        }).then(() => {
+          if (this.actionTODO === 'AGREGAR') {
+            this.uploadImagesSvc.onDeleteImage();
+          }
+        });
+      });
     this.uploadImagesSvc.img = null;
   }
 
@@ -374,7 +357,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
               };
               const toolbarButtonSize = sizes[media];
               //El if es para evitar que se llene el buffer.
-              if(toolbarButtonSize !== this.config.toolbarButtonSize){
+              if (toolbarButtonSize !== this.config.toolbarButtonSize) {
                 this.config = {
                   ...this.config,
                   toolbarButtonSize
@@ -383,12 +366,32 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
             }
           );
       });
+
+    this.unitSvc.getAcademicUnits()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((academicUnits) => {
+        if (academicUnits) {
+          this.academicUnits = academicUnits;
+        }
+      }, () => {
+        SwAlert.showValidationMessage('Error cargando las unidades academicas para las plantillas.');
+      });
+
+    this.unitSvc.getAdministrativeUnits()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe((administrativeUnits) => {
+        if (administrativeUnits) {
+          this.administrativeUnits = administrativeUnits;
+        }
+      }, () => SwAlert.showValidationMessage('Error obteniendo unidades administrativas'));
   };
 
   async ngAfterViewInit() {
-    if (this.data?.card) {
+    const {card} = this.data;
+    if (card) {
       this.actionTODO = 'EDITAR';
-      this.joditEditor.editor.value = this.data.card.texto;
+      this.templateCardForm.baseForm.patchValue(card);
+      this.joditEditor.editor.value = card.texto;
       //TODO: Verificar que la imagen si existe en db
       this.uriCardImageEdit = this.imgCard.getAttributeNode('src').value;
       const nameImage = this.uriCardImageEdit.replace(environment.downloadImagesUriServer + '/', '');
@@ -397,8 +400,14 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         this.uploadImagesSvc.imgURI = this.uriCardImageEdit;
       });
     } else {
+      this.templateCardForm.baseForm.get('id').setValidators(null);
+      this.templateCardForm.baseForm.get('id').updateValueAndValidity();
       this.actionTODO = 'AGREGAR';
     }
+    this.templateCardForm.baseForm.get('unidadAcademicaPorPlantilla').setValidators(null);
+    this.templateCardForm.baseForm.get('unidadAcademicaPorPlantilla').updateValueAndValidity();
+    this.templateCardForm.baseForm.get('unidadAdministrativaPorPlantilla').setValidators(null);
+    this.templateCardForm.baseForm.get('unidadAdministrativaPorPlantilla').updateValueAndValidity();
   }
 
   ngOnDestroy(): void {

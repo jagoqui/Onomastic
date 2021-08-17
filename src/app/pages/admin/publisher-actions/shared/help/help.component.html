@@ -22,9 +22,9 @@
         <mat-list role='list'></mat-list>
       </div>
     </mat-tab>
-    <mat-tab label='Mas información'>
+    <mat-tab label='Mas información' >
       <div fxflex fxLayout='column' fxLayoutAlign='space-between center' class='container-btns'>
-        <mat-accordion>
+        <mat-accordion style='width: 100%;'>
           <mat-expansion-panel>
             <mat-expansion-panel-header>
               <mat-panel-title>
@@ -32,6 +32,13 @@
                 Manual de usuario
               </mat-panel-title>
             </mat-expansion-panel-header>
+            <div style='width: 100%;'>
+              <div style='position: relative; padding-bottom: 56.25%; padding-top: 0; height: 0;'>
+                <iframe
+                  style='position: absolute;width: 100%; height: 100%;'
+                  src='assets/manual'></iframe>
+              </div>
+            </div>
           </mat-expansion-panel>
         </mat-accordion>
       </div>

@@ -14,6 +14,7 @@ import {AnimationItem} from 'lottie-web';
 import {ThemeSwitcherControllerService} from '@appShared/services/theme-switcher-controller.service';
 import {takeUntil} from 'rxjs/operators';
 import {THEME} from '@adminShared/models/shared.model';
+import {Auth} from "@adminShared/models/auth.model";
 
 @Component({
   selector: 'app-login',
@@ -54,7 +55,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onLogin(): void {
-    const formValue = this.loginForm.baseForm.value;
+    const formValue: Auth = this.loginForm.baseForm.value;
 
     this.authSvc.login(formValue)
       .pipe(takeUntil(this.destroy$))
