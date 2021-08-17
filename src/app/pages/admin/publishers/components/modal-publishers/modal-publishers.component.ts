@@ -82,6 +82,8 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
       this.actionTODO = 'EDITAR';
       this.publisherForm.baseForm.patchValue(publisher);
     } else {
+      this.publisherForm.baseForm.get('id').setValidators(null);
+      this.publisherForm.baseForm.get('id').updateValueAndValidity();
       this.actionTODO = 'AGREGAR';
     }
 
