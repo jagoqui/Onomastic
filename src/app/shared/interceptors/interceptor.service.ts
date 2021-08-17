@@ -23,7 +23,6 @@ export class InterceptorService implements HttpInterceptor {
     let requestClone: HttpRequest<any>;
     if (req.url.replace(environment.apiUrl, '') === '/auth/signin') {
       this.loaderSvc.setLoading(false);
-      console.warn('Inicio de sesión');
       requestClone = req.clone();
     } else {
       const authRes = this.authSvc.authResValue;

@@ -17,12 +17,12 @@ import SwAlert from 'sweetalert2';
 import {UploadImageService} from '@pages/admin/publisher-actions/shared/services/upload-image.service';
 import {environment} from '@env/environment';
 import {takeUntil} from 'rxjs/operators';
-import {RecipientService} from '@admin//publisher-actions/shared/services/recipient.service';
 import {UnitsService} from '@adminShared/services/units.service';
 import {TemplateCard} from '@adminShared/models/template-card.model';
 import {ThemeSwitcherControllerService} from '@appShared/services/theme-switcher-controller.service';
 import {ACTIONS, ByIdAndName, MEDIA, THEME} from '@adminShared/models/shared.model';
 import {ResponsiveService} from '@appShared/services/responsive.service';
+import {BaseFormTemplateCard} from '@adminShared/utils/base-form-template-card';
 
 type SIZEiCONS = 'tiny' | 'xsmall' | 'small' | 'middle' | 'large';
 type LABELS = 'nombre' | 'fecha' | 'facultad/escuela' | 'estamento' | 'programa';
@@ -74,6 +74,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     private dialogRef: MatDialogRef<ModalTemplateCardsComponent>,
     public responsiveSvc: ResponsiveService,
     private render2: Renderer2,
+    public templateCardForm: BaseFormTemplateCard,
     private unitSvc: UnitsService,
     private elementRef: ElementRef,
     private themeSwitcherController: ThemeSwitcherControllerService,
@@ -84,7 +85,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
 
   get onCompleteCard() {
     //TODO: Agregar más condiciones
-    return !!this.imgCard;
+    return !!this.imgCard && this.templateCardForm.baseForm.valid;
   }
 
   get imgCard() {
@@ -261,6 +262,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   onClose(close?: boolean): void {
     if (close ? close : confirm('No ha guardado los cambios, desea salir?')) {
       this.joditEditor.resetEditor();
+      this.templateCardForm.baseForm.reset();
       this.dialogRef.close();
     }
   }
@@ -300,10 +302,11 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   }
 
   saveTemplateCard() {
-    this.card = {
-      id: this.data?.card.id,
+    this.templateCardForm.baseForm.patchValue({
       texto: this.joditEditor.editor.value.trim()
-    };
+    });
+    this.card = this.templateCardForm.baseForm.value;
+    console.warn(this.card);
     this.templateCardsService.saveTemplateCard(this.card)
       .pipe(takeUntil(this.destroy$))
       .subscribe((cardRes) => {
@@ -384,9 +387,11 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   };
 
   async ngAfterViewInit() {
-    if (this.data?.card) {
+    const {card} = this.data;
+    if (card) {
       this.actionTODO = 'EDITAR';
-      this.joditEditor.editor.value = this.data.card.texto;
+      this.templateCardForm.baseForm.patchValue(card);
+      this.joditEditor.editor.value = card.texto;
       //TODO: Verificar que la imagen si existe en db
       this.uriCardImageEdit = this.imgCard.getAttributeNode('src').value;
       const nameImage = this.uriCardImageEdit.replace(environment.downloadImagesUriServer + '/', '');
@@ -395,8 +400,14 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         this.uploadImagesSvc.imgURI = this.uriCardImageEdit;
       });
     } else {
+      this.templateCardForm.baseForm.get('id').setValidators(null);
+      this.templateCardForm.baseForm.get('id').updateValueAndValidity();
       this.actionTODO = 'AGREGAR';
     }
+    this.templateCardForm.baseForm.get('unidadAcademicaPorPlantilla').setValidators(null);
+    this.templateCardForm.baseForm.get('unidadAcademicaPorPlantilla').updateValueAndValidity();
+    this.templateCardForm.baseForm.get('unidadAdministrativaPorPlantilla').setValidators(null);
+    this.templateCardForm.baseForm.get('unidadAdministrativaPorPlantilla').updateValueAndValidity();
   }
 
   ngOnDestroy(): void {

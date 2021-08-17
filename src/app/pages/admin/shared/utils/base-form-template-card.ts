@@ -3,7 +3,7 @@ import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/fo
 import { FormErrorsService } from '@appShared/services/form-errors.service';
 
 @Injectable({ providedIn: 'root' })
-export class BaseFormPublisher {
+export class BaseFormTemplateCard {
 
   public baseForm = this.createBaseForm();
 
@@ -19,15 +19,9 @@ export class BaseFormPublisher {
   createBaseForm(): FormGroup {
     return this.fb.group({
       id:['', [Validators.required]],
-      nombre: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      estado: ['', [Validators.required]],
-      rol: this.fb.group({
-        id: [null],
-        nombre: [null]
-      }, Validators.required),
-      unidadAcademicaPorUsuario: [this.createUnitField(), Validators.required],
-      unidadAdministrativaPorUsuario: [this.createUnitField(), Validators.required]
+      texto: ['', [Validators.required]],
+      unidadAcademicaPorPlantilla: [this.createUnitField(), [Validators.required]],
+      unidadAdministrativaPorPlantilla: [this.createUnitField(), [Validators.required]]
     });
   }
 

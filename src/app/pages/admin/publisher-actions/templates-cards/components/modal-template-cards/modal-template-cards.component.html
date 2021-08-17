@@ -1,4 +1,4 @@
-<div class="container" fxLayout="column" fxLayoutAlign="space-between stretch">
+<form [formGroup]='templateCardForm.baseForm' class="container" fxLayout="column" fxLayoutAlign="space-between stretch">
   <div fxLayout="column" fxLayoutAlign="space-between stretch">
     <h1 mat-dialog-title>{{data.title | uppercase }}</h1>
     <jodit-editor #editor id="editor" [config]="config"></jodit-editor>
@@ -15,7 +15,7 @@
     appearance='outline'
     notFoundText='No hay más unidades académicas en la lista!'
     typeToSearchText='Search'
-    title='Seleccione las unidades académicas del publicador'
+    title='Seleccione las unidades académicas para las que serán visible ésta plantilla'
     required
     [loading]='true'
     [multiple]='true'
@@ -24,7 +24,7 @@
     [closeOnSelect]='false'
     [clearSearchOnAdd]='true'
     [selectableGroupAsModel]='true'
-    formControlName='unidadAcademicaPorUsuario'>
+    formControlName='unidadAcademicaPorPlantilla'>
     <ng-template ng-option-tmp let-academicUnits='item' let-item$='item$'>
       <ng-container><mat-icon> account_balance</mat-icon></ng-container>
       {{academicUnits.nombre| uppercase}}
@@ -38,7 +38,7 @@
     appearance='outline'
     notFoundText='No hay más unidades administrativas en la lista!'
     typeToSearchText='Search'
-    title='Seleccione las unidades administrativas del publicador'
+    title='Seleccione las unidades administrativas para las que serán visible ésta plantilla'
     required
     [loading]='true'
     [multiple]='true'
@@ -47,7 +47,7 @@
     [closeOnSelect]='false'
     [clearSearchOnAdd]='true'
     [selectableGroupAsModel]='true'
-    formControlName='unidadAdministrativaPorUsuario'>
+    formControlName='unidadAdministrativaPorPlantilla'>
     <ng-template ng-option-tmp let-administrativeUnits='item' let-item$='item$'>
       <ng-container><mat-icon>badge</mat-icon></ng-container>
       {{administrativeUnits.nombre| uppercase}}
@@ -61,4 +61,4 @@
       {{actionTODO}}
     </button>
   </div>
-</div>
+</form>
