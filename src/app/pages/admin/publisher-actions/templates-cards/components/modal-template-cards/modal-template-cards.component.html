@@ -1,0 +1,64 @@
+<div class="container" fxLayout="column" fxLayoutAlign="space-between stretch">
+  <div fxLayout="column" fxLayoutAlign="space-between stretch">
+    <h1 mat-dialog-title>{{data.title | uppercase }}</h1>
+    <jodit-editor #editor id="editor" [config]="config"></jodit-editor>
+  </div>
+  <div style="margin-top: 1rem" fxLayout="row">
+    <mat-icon >visibility</mat-icon>
+    <h3><strong>VISIBILIDAD</strong></h3>
+  </div>
+  <!--Academic units-->
+  <ng-select
+    [items]='academicUnits'
+    bindLabel='nombre'
+    placeholder='Unidada Académica'
+    appearance='outline'
+    notFoundText='No hay más unidades académicas en la lista!'
+    typeToSearchText='Search'
+    title='Seleccione las unidades académicas del publicador'
+    required
+    [loading]='true'
+    [multiple]='true'
+    [minTermLength]='3'
+    [hideSelected]='true'
+    [closeOnSelect]='false'
+    [clearSearchOnAdd]='true'
+    [selectableGroupAsModel]='true'
+    formControlName='unidadAcademicaPorUsuario'>
+    <ng-template ng-option-tmp let-academicUnits='item' let-item$='item$'>
+      <ng-container><mat-icon> account_balance</mat-icon></ng-container>
+      {{academicUnits.nombre| uppercase}}
+    </ng-template>
+  </ng-select>
+  <!--Administrative units-->
+  <ng-select
+    [items]='administrativeUnits'
+    bindLabel='nombre'
+    placeholder='Unidada Administrativa'
+    appearance='outline'
+    notFoundText='No hay más unidades administrativas en la lista!'
+    typeToSearchText='Search'
+    title='Seleccione las unidades administrativas del publicador'
+    required
+    [loading]='true'
+    [multiple]='true'
+    [minTermLength]='3'
+    [hideSelected]='true'
+    [closeOnSelect]='false'
+    [clearSearchOnAdd]='true'
+    [selectableGroupAsModel]='true'
+    formControlName='unidadAdministrativaPorUsuario'>
+    <ng-template ng-option-tmp let-administrativeUnits='item' let-item$='item$'>
+      <ng-container><mat-icon>badge</mat-icon></ng-container>
+      {{administrativeUnits.nombre| uppercase}}
+    </ng-template>
+  </ng-select>
+  <div mat-dialog-actions fxLayout="row" fxLayoutAlign="end end">
+    <button mat-raised-button fxFlex="20" color="warn" (click)="onClose(null)">Cancelar</button>
+    <button mat-raised-button fxFlex="20" color="primary" (click)="onSave()"
+            [disabled]="!onCompleteCard"
+            [title]="onCompleteCard? 'Click para guardar':'Recuerde que debe ingresar la plantilla y almenos una condición'">
+      {{actionTODO}}
+    </button>
+  </div>
+</div>

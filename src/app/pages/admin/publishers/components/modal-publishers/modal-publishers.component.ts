@@ -22,6 +22,7 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
   actionTODO: ACTIONS;
   administrativeUnits: ByIdAndName[];
   academicUnits: ByIdAndName[];
+
   roleOptions: Role[] = [
     {
       id: 1,
@@ -45,10 +46,6 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
 
   get controls(): { [p: string]: AbstractControl } {
     return this.publisherForm.controls;
-  }
-
-  getFormGroup(field: AbstractControl) {
-    return field as FormGroup;
   }
 
   onClose(close?: boolean): void {
@@ -85,8 +82,6 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
       this.actionTODO = 'EDITAR';
       this.publisherForm.baseForm.patchValue(publisher);
     } else {
-      this.publisherForm.baseForm.get('id').setValidators(null);
-      this.publisherForm.baseForm.get('id').updateValueAndValidity();
       this.actionTODO = 'AGREGAR';
     }
 
@@ -97,7 +92,7 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
           this.academicUnits = academicUnits;
         }
       }, () => {
-        SwAlert.showValidationMessage('Error cargando las unidades acádemicas.');
+        SwAlert.showValidationMessage('Error cargando las unidades académicas.');
       });
 
     this.unitSvc.getAdministrativeUnits()

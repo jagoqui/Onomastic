@@ -4,9 +4,9 @@ import {Observable} from 'rxjs';
 import {tap} from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 
-import {LoaderService} from '../services/loader.service';
+import {LoaderService} from '@appShared/services';
 import {AuthService} from '@adminShared/services/auth.service';
-import {environment} from "@env/environment";
+import {environment} from '@env/environment';
 
 @Injectable({providedIn: 'root'})
 export class InterceptorService implements HttpInterceptor {
@@ -23,8 +23,9 @@ export class InterceptorService implements HttpInterceptor {
     let requestClone: HttpRequest<any>;
     if (req.url.replace(environment.apiUrl, '') === '/auth/signin') {
       this.loaderSvc.setLoading(false);
-      requestClone=req.clone();
-    }else{
+      console.warn('Inicio de sesión');
+      requestClone = req.clone();
+    } else {
       const authRes = this.authSvc.authResValue;
       if (authRes) {
         const {tokenType, accessToken} = authRes;
