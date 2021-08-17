@@ -1,10 +1,19 @@
-import { ROLE } from '@adminShared/models/shared.model';
+import {ROLE} from '@adminShared/models/shared.model';
+
+export interface Auth {
+  userEmail: string;
+  password: string;
+  recaptchaKey?: string;
+}
 
 export interface AuthRes {
-  id?: number;
-  userEmail: string;
-  password?: string;
-  name?: string;
-  role?: ROLE;
-  token?: string;
+  accessToken: string;
+  tokenType: string;
+}
+
+export interface DecodeToken {
+  sub: string;
+  rol: ROLE;
+  nombre: string;
+  userEmail?: string;
 }

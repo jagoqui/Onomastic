@@ -18,7 +18,6 @@ export class BaseFormPublisher {
 
   createBaseForm(): FormGroup {
     return this.fb.group({
-      id: ['', [Validators.required]],
       nombre: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       estado: ['', [Validators.required]],

@@ -32,11 +32,11 @@
   <div id='profile' fxLayout='column' fxLayoutAlign='center center'>
     <button mat-fab color='accent' >
       <mat-icon>
-        {{platformUserData?.role==='ADMIN'?'admin_panel_settings':'public'}}
+        {{publisherLogged?.rol==='ADMIN'?'admin_panel_settings':'public'}}
       </mat-icon>
     </button>
-    <span id='name'>{{ platformUserData?.name}}</span>
-    <span id='role'>{{platformUserData?.role }}</span>
-    <span id='email'>{{ platformUserData?.userEmail}}</span>
+    <span id='name'>{{ publisherLogged?.nombre}}</span>
+    <span id='role'>{{publisherLogged?.rol }}</span>
+    <span id='email'>{{ publisherLogged?.userEmail}}</span>
   </div>
 </mat-nav-list>

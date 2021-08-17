@@ -1,13 +1,14 @@
-import { HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
-import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import {HttpErrorResponse, HttpEvent, HttpHandler, HttpInterceptor, HttpRequest} from '@angular/common/http';
+import {Injectable} from '@angular/core';
+import {Observable} from 'rxjs';
+import {tap} from 'rxjs/operators';
 import SwAlert from 'sweetalert2';
 
-import { LoaderService } from '../services/loader.service';
-import { AuthService } from '@adminShared/services/auth.service';
+import {LoaderService} from '../services/loader.service';
+import {AuthService} from '@adminShared/services/auth.service';
+import {environment} from "@env/environment";
 
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class InterceptorService implements HttpInterceptor {
 
   constructor(
@@ -19,12 +20,35 @@ export class InterceptorService implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     this.loaderSvc.setLoading(true);
 
-    const requestClone = req.clone({
-      headers: req.headers.set(
-        'Authorization',
-        `Bearer ${this.authSvc.getUserToken()}`
-      )
-    });
+    let requestClone: HttpRequest<any>;
+    if (req.url.replace(environment.apiUrl, '') === '/auth/signin') {
+      this.loaderSvc.setLoading(false);
+      requestClone=req.clone();
+    }else{
+      const authRes = this.authSvc.authResValue;
+      if (authRes) {
+        const {tokenType, accessToken} = authRes;
+        requestClone = req.clone({
+          headers: req.headers.set(
+            'Authorization',
+            `${tokenType} ${accessToken}`
+          )
+        });
+      } else {
+        SwAlert.fire({
+          icon: 'error',
+          title: ` Algo salió mal en la petición.`,
+          footer: `
+                <span style='color: red;'>
+                    Error de permisos!. No hay ningún publicador logueado.
+                </span>
+                <span>&nbsp;&nbsp;Necesitas <a href=''>ayuda</a>?</span>.`
+        }).then(_ => {
+          this.loaderSvc.setLoading(false);
+          console.warn('No hay publicador logueado!.');
+        });
+      }
+    }
     return next.handle(requestClone).pipe(
       tap(
         () => {

@@ -16,7 +16,7 @@ export class CheckLoginGuard implements CanActivate {
   }
 
   canActivate(): Observable<boolean> {
-    return this.authSvc.userResponse$.pipe(
+    return this.authSvc.authRes$.pipe(
       take(1),
       map((userRes: AuthRes) => {
         if (userRes) {
