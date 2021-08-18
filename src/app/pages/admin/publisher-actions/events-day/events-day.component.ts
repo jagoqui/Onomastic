@@ -13,7 +13,8 @@ import Swal from 'sweetalert2';
 import { takeUntil } from 'rxjs/operators';
 import { TemplateCard } from '@pages/admin/shared/models/template-card.model';
 import { EventDay } from '@pages/admin/shared/models/event-day.model';
-import { DomSanitizerService } from '@appShared/services/dom-sanitizer.service';
+import {DomSanitizerService} from '@appShared/services/dom-sanitizer.service';
+import {AbstractControl} from "@angular/forms";
 
 @Component({
   selector: 'app-events-day',
@@ -35,6 +36,7 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
   columnsToDisplay = [
     'nombre', 'fecha',
     'recurrencia',
+    'condicionesEvento',
     'estado'
   ];
   cards: TemplateCard[];
@@ -110,6 +112,14 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  isObject(key: AbstractControl): boolean {
+    return typeof key === 'object';
+  }
+
+  fieldFormat(field: string) {
+    return field.replace('_', ' ');
+  }
+
   onDelete(eventId): void {
     SwAlert.fire({
       title: 'Está seguro?',
@@ -166,5 +176,4 @@ export class EventsDayComponent implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.next({});
     this.destroy$.complete();
   }
-
 }

@@ -121,13 +121,15 @@
             {{administrativeUnits.nombre| uppercase}}
           </ng-template>
         </ng-select>
+        <mat-icon *ngIf="!isSelectAtLeastOneUnit()" title="Seleccione al menos un valor de cualquier tipo de unidad."
+                  color="warn">info</mat-icon>
       </div>
     </form>
   </div>
   <div mat-dialog-actions fxLayout='row' fxLayoutAlign='end end'>
     <button mat-raised-button fxFlex='20' color='warn' (click)='onClose(null)'>Cancelar</button>
     <button mat-raised-button fxFlex='20' color='primary' (click)='onSave()'
-            [disabled]='publisherForm.baseForm.invalid'>
+            [disabled]='!formIsValid()' [title]="!formIsValid()? 'Complete todos los campos! ':'Guardar'">
       {{actionTODO}}
     </button>
   </div>

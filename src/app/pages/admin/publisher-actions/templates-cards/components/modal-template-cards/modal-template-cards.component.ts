@@ -404,6 +404,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       this.templateCardForm.baseForm.get('id').updateValueAndValidity();
       this.actionTODO = 'AGREGAR';
     }
+    this.templateCardForm.baseForm.get('texto').setValidators(null);
+    this.templateCardForm.baseForm.get('texto').updateValueAndValidity();
     this.templateCardForm.baseForm.get('unidadAcademicaPorPlantilla').setValidators(null);
     this.templateCardForm.baseForm.get('unidadAcademicaPorPlantilla').updateValueAndValidity();
     this.templateCardForm.baseForm.get('unidadAdministrativaPorPlantilla').setValidators(null);

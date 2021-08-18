@@ -3,9 +3,9 @@
     <h1 mat-dialog-title>{{data.title | uppercase }}</h1>
     <jodit-editor #editor id="editor" [config]="config"></jodit-editor>
   </div>
-  <div style="margin-top: 1rem" fxLayout="row">
-    <mat-icon >visibility</mat-icon>
-    <h3><strong>VISIBILIDAD</strong></h3>
+  <div style="margin-top: 1rem" fxLayout="row" title="Seleccione en que unidad quiere que sea visible esta plantilla.">
+    <mat-icon>visibility</mat-icon>
+    <h3><strong>VISIBILIDAD POR UNIDAD</strong></h3>
   </div>
   <!--Academic units-->
   <ng-select

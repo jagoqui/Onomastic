@@ -1,10 +1,7 @@
 import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 
-import {PublisherComponent} from './publisher.component';
-
 const routes: Routes = [
-  {path: '', component: PublisherComponent},
   {
     path: 'mail-users',
     loadChildren: () => import('./recipients/recipients.module').then(m => m.RecipientsModule)
