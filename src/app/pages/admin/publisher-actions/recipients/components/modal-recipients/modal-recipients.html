@@ -1,38 +1,38 @@
 <div class='container'>
   <h1 mat-dialog-title>{{data.title | uppercase }}</h1>
   <div class='reload-button'>
-    <button mat-mini-fab color='primary' title='Recargar plantillas' (click)='onRefresh()'>
+    <button (click)='onRefresh()' color='primary' mat-mini-fab title='Recargar plantillas'>
       <mat-icon>refresh</mat-icon>
     </button>
   </div>
   <div mat-dialog-content>
     <!--TODO: Poner boton de refresh en el formulario -->
-    <form [formGroup]='mailUserForm.baseForm' (ngSubmit)='onSave()' fxLayout='column'
-          (keydown.enter)='$event.preventDefault()'>
+    <form (keydown.enter)='$event.preventDefault()' (ngSubmit)='onSave()' [formGroup]='recipientForm.baseForm'
+          fxLayout='column'>
       <div fxLayout='row' fxLayoutAlign='space-between center'>
         <!-- Name -->
-        <mat-form-field hideRequiredMarker appearance='outline' fxFlex='47'>
+        <mat-form-field appearance='outline' fxFlex='47' hideRequiredMarker>
           <mat-label>Nombre</mat-label>
           <label>
-            <input type='text' matInput required formControlName='nombre'>
+            <input formControlName='nombre' matInput required type='text'>
           </label>
           <mat-icon matSuffix>account_circle</mat-icon>
-          <mat-error *ngIf="checkField('nombre', null, null)">{{mailUserForm.errorsMessage["nombre"]}}</mat-error>
+          <mat-error *ngIf="checkField('nombre', null, null)">{{recipientForm.errorsMessage["nombre"]}}</mat-error>
         </mat-form-field>
         <!-- Lastname -->
-        <mat-form-field hideRequiredMarker appearance='outline' fxFlex='47'>
+        <mat-form-field appearance='outline' fxFlex='47' hideRequiredMarker>
           <mat-label>Apellidos</mat-label>
           <label>
-            <input type='text' matInput required formControlName='apellido'>
+            <input formControlName='apellido' matInput required type='text'>
           </label>
           <mat-icon matSuffix>account_circle</mat-icon>
-          <mat-error *ngIf="checkField('apellido',null, null)">{{mailUserForm.errorsMessage["apellido"]}}</mat-error>
+          <mat-error *ngIf="checkField('apellido',null, null)">{{recipientForm.errorsMessage["apellido"]}}</mat-error>
         </mat-form-field>
       </div>
       <!-- ID -->
       <div fxLayout='row' fxLayoutAlign='space-between center'>
         <!-- ID type -->
-        <mat-form-field hideRequiredMarker fxFlex='47' formGroupName='id' appearance='outline'>
+        <mat-form-field appearance='outline' formGroupName='id' fxFlex='47' hideRequiredMarker>
           <mat-label>Tipo de documento</mat-label>
           <mat-select formControlName='tipoIdentificacion'>
             <mat-option>-- Seleccione una opción --</mat-option>
@@ -47,36 +47,38 @@
           </mat-select>
           <mat-icon matSuffix>account_box</mat-icon>
           <mat-error *ngIf="checkField('tipoIdentificacion','id', null)">
-            {{mailUserForm.errorsMessage['id'].tipoIdentificacion}}</mat-error>
+            {{recipientForm.errorsMessage['id'].tipoIdentificacion}}</mat-error>
         </mat-form-field>
         <!-- ID number -->
-        <mat-form-field hideRequiredMarker appearance='outline' fxFlex='47' formGroupName='id'>
+        <mat-form-field appearance='outline' formGroupName='id' fxFlex='47' hideRequiredMarker>
           <mat-label>Número de identificación</mat-label>
           <label>
-            <input type='text' matInput required formControlName='numeroIdentificacion'
+            <input formControlName='numeroIdentificacion' matInput required type='text'
             >
           </label>
           <mat-icon matSuffix>account_box</mat-icon>
           <mat-error *ngIf="checkField('numeroIdentificacion','id', null )">
-            {{mailUserForm.errorsMessage['id'].numeroIdentificacion}}</mat-error>
+            {{recipientForm.errorsMessage['id'].numeroIdentificacion}}</mat-error>
         </mat-form-field>
       </div>
       <!-- Birhtday/Gender -->
       <div fxLayout='row' fxLayoutAlign='space-between center'>
         <!-- Birhtday -->
-        <mat-form-field fxFlex='47' appearance='outline'>
+        <mat-form-field appearance='outline' fxFlex='47'>
           <mat-label>Fecha de nacimiento</mat-label>
           <label>
-            <input matInput [matDatepicker]='dp' [max]='today' formControlName='fechaNacimiento'
-                   (dateChange)='setBirthdayFormat($event)' placeholder='YYYY-MM-DD'>
+            <input (dateChange)='setBirthdayFormat($event)' [matDatepicker]='dp' [max]='today'
+                   formControlName='fechaNacimiento'
+                   matInput placeholder='YYYY-MM-DD'>
           </label>
-          <mat-datepicker-toggle matSuffix [for]='dp'></mat-datepicker-toggle>
+          <mat-datepicker-toggle [for]='dp' matSuffix></mat-datepicker-toggle>
           <mat-datepicker #dp></mat-datepicker>
-          <mat-error *ngIf="checkField('fechaNacimiento', null, null)">{{mailUserForm.errorsMessage["fechaNacimiento"]}}
+          <mat-error
+            *ngIf="checkField('fechaNacimiento', null, null)">{{recipientForm.errorsMessage["fechaNacimiento"]}}
           </mat-error>
         </mat-form-field>
         <!-- Gender -->
-        <mat-form-field fxFlex='47' appearance='outline'>
+        <mat-form-field appearance='outline' fxFlex='47'>
           <mat-label>Género</mat-label>
           <mat-select formControlName='genero'>
             <mat-option>-- Seleccione una opción --</mat-option>
@@ -85,22 +87,22 @@
           </mat-select>
           <mat-icon matSuffix>group</mat-icon>
           <mat-error *ngIf="checkField('genero', null, null)">
-            {{mailUserForm.errorsMessage["genero"]}}</mat-error>
+            {{recipientForm.errorsMessage["genero"]}}</mat-error>
         </mat-form-field>
       </div>
       <!-- Email/State -->
       <div fxLayout='row' fxLayoutAlign='space-between center'>
         <!-- Email -->
-        <mat-form-field fxFlex='47' appearance='outline' hideRequiredMarker='true'>
+        <mat-form-field appearance='outline' fxFlex='47' hideRequiredMarker='true'>
           <mat-label>Email</mat-label>
           <label>
-            <input type='text' matInput required formControlName='email'>
+            <input formControlName='email' matInput required type='text'>
           </label>
-          <mat-error *ngIf="checkField('email', null, null)">{{mailUserForm.errorsMessage["email"]}}</mat-error>
+          <mat-error *ngIf="checkField('email', null, null)">{{recipientForm.errorsMessage["email"]}}</mat-error>
           <mat-icon matSuffix>contact_mail</mat-icon>
         </mat-form-field>
         <!-- State -->
-        <mat-form-field fxFlex='47' hideRequiredMarker appearance='outline'>
+        <mat-form-field appearance='outline' fxFlex='47' hideRequiredMarker>
           <mat-label>Estado</mat-label>
           <mat-select #state formControlName='estado'>
             <mat-option>-- Seleccione una opción --</mat-option>
@@ -113,28 +115,28 @@
             <mat-icon *ngSwitchDefault matSuffix>contact_mail</mat-icon>
           </ng-container>
           <mat-error *ngIf="checkField('estado', null, null)">
-            {{mailUserForm.errorsMessage["estado"]}}</mat-error>
+            {{recipientForm.errorsMessage["estado"]}}</mat-error>
         </mat-form-field>
       </div>
       <!-- Administrative units -->
       <ng-select
-        [items]='administrativeUnits'
-        bindLabel='nombre'
-        placeholder='Unidad Administrativa'
-        appearance='outline'
-        notFoundText='No hay más unidades administrativas en la lista!'
-        typeToSearchText='Search'
-        title='Seleccione las unidadades administrativas del destinatario'
-        required
-        [loading]='true'
-        [multiple]='true'
-        [minTermLength]='3'
-        [hideSelected]='true'
-        [closeOnSelect]='false'
         [clearSearchOnAdd]='true'
+        [closeOnSelect]='false'
+        [hideSelected]='true'
+        [items]='administrativeUnits'
+        [loading]='true'
+        [minTermLength]='3'
+        [multiple]='true'
         [selectableGroupAsModel]='true'
-        formControlName='unidadAdministrativaPorCorreoUsuario'>
-        <ng-template ng-option-tmp let-administrativeUnits='item'>
+        appearance='outline'
+        bindLabel='nombre'
+        formControlName='unidadAdministrativaPorCorreoUsuario'
+        notFoundText='No hay más unidades administrativas en la lista!'
+        placeholder='Unidad Administrativa'
+        required
+        title='Seleccione las unidadades administrativas del destinatario'
+        typeToSearchText='Search'>
+        <ng-template let-administrativeUnits='item' ng-option-tmp>
           <ng-container>
             <mat-icon>badge</mat-icon>
           </ng-container>
@@ -143,47 +145,51 @@
       </ng-select>
       <!-- Academic program-->
       <ng-select
-        [items]='programs'
-        bindLabel='nombre'
-        placeholder='Programa acádemico'
-        appearance='outline'
-        notFoundText='No hay más programas academicos en la lista!'
-        typeToSearchText='Search'
-        title='Seleccione el programa/s del destinatario'
-        [loading]='true'
-        [multiple]='true'
-        [minTermLength]='3'
-        [hideSelected]='true'
-        [closeOnSelect]='false'
         [clearSearchOnAdd]='true'
+        [closeOnSelect]='false'
+        [hideSelected]='true'
+        [items]='programs'
+        [loading]='true'
+        [minTermLength]='3'
+        [multiple]='true'
         [selectableGroupAsModel]='true'
-        formControlName='programaAcademicoPorUsuarioCorreo'>
-        <ng-template ng-option-tmp let-program='item'>
+        appearance='outline'
+        bindLabel='nombre'
+        formControlName='programaAcademicoPorUsuarioCorreo'
+        notFoundText='No hay más programas academicos en la lista!'
+        placeholder='Programa acádemico'
+        title='Seleccione el programa/s del destinatario'
+        typeToSearchText='Search'>
+        <ng-template let-program='item' ng-option-tmp>
           <ng-container>
             <mat-icon> school</mat-icon>
           </ng-container>
           {{program.nombre| uppercase}}
         </ng-template>
       </ng-select>
+      <mat-icon *ngIf="!isSelectAtLeastOneUnitOrProgram()"
+                color="warn"
+                title="Seleccione al menos un valor de las unidades administrativas o programas académicos.">info
+      </mat-icon>
       <!-- Bonding -->
       <ng-select
+        [clearSearchOnAdd]='true'
+        [closeOnSelect]='false'
+        [hideSelected]='true'
         [items]='bondingTypes'
-        bindLabel='nombre'
-        placeholder='Estamento'
+        [loading]='true'
+        [minTermLength]='3'
+        [multiple]='true'
+        [selectableGroupAsModel]='true'
         appearance='outline'
+        bindLabel='nombre'
+        formControlName='vinculacionPorUsuarioCorreo'
         notFoundText='No hay más vinculaciones en la lista!'
-        typeToSearchText='Search'
+        placeholder='Estamento'
         required
         title='Seleccione el estamento/s del destinatario'
-        [loading]='true'
-        [multiple]='true'
-        [minTermLength]='3'
-        [hideSelected]='true'
-        [closeOnSelect]='false'
-        [clearSearchOnAdd]='true'
-        [selectableGroupAsModel]='true'
-        formControlName='vinculacionPorUsuarioCorreo'>
-        <ng-template ng-option-tmp let-bondingType='item'>
+        typeToSearchText='Search'>
+        <ng-template let-bondingType='item' ng-option-tmp>
           <ng-container>
             <mat-icon> group_work</mat-icon>
           </ng-container>
@@ -192,23 +198,23 @@
       </ng-select>
       <!-- Platform -->
       <ng-select
-        [items]='platforms'
-        bindLabel='nombre'
-        placeholder='Plataforma'
-        appearance='outline'
-        notFoundText='No hay más plataformas en la lista!'
-        typeToSearchText='Search'
-        title='Seleccione la plataforma/s del destinatario'
-        required
-        [loading]='true'
-        [multiple]='true'
-        [minTermLength]='3'
-        [hideSelected]='true'
-        [closeOnSelect]='false'
         [clearSearchOnAdd]='true'
+        [closeOnSelect]='false'
+        [hideSelected]='true'
+        [items]='platforms'
+        [loading]='true'
+        [minTermLength]='3'
+        [multiple]='true'
         [selectableGroupAsModel]='true'
-        formControlName='plataformaPorUsuarioCorreo'>
-        <ng-template ng-option-tmp let-bondingType='item'>
+        appearance='outline'
+        bindLabel='nombre'
+        formControlName='plataformaPorUsuarioCorreo'
+        notFoundText='No hay más plataformas en la lista!'
+        placeholder='Plataforma'
+        required
+        title='Seleccione la plataforma/s del destinatario'
+        typeToSearchText='Search'>
+        <ng-template let-bondingType='item' ng-option-tmp>
           <ng-container>
             <mat-icon> storage</mat-icon>
           </ng-container>
@@ -217,9 +223,11 @@
       </ng-select>
     </form>
   </div>
-  <div mat-dialog-actions fxLayout='row' fxLayoutAlign='end end'>
-    <button mat-raised-button fxFlex='20' color='warn' (click)='onClose(null)'>Cancelar</button>
-    <button mat-raised-button fxFlex='20' [disabled]='mailUserForm.baseForm.invalid' color='primary' (click)='onSave()'>
+  <div fxLayout='row' fxLayoutAlign='end end' mat-dialog-actions>
+    <button (click)='onClose(null)' color='warn' fxFlex='20' mat-raised-button>Cancelar</button>
+    <button (click)='onSave()' [disabled]='!formIsValid()'
+            [title]="!formIsValid()? 'Complete todos los campos! ':'Guardar'"
+            color='primary' fxFlex='20' mat-raised-button>
       {{actionTODO}}
     </button>
   </div>

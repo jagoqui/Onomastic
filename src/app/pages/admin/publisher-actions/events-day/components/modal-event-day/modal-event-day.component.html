@@ -107,16 +107,20 @@
               </mat-error>
             </mat-form-field>
           </div>
+          <mat-icon color="warn" style="margin-bottom:1rem"
+                    title="Si no selecciona ninguna condición, por defecto se enviara el evento a todas las unidades o programas a las que tenga acceso el Publicador.">
+            info
+          </mat-icon>
           <!--         Conditions -->
           <ng-select
-                     [items]='conditionsRes'
-                     groupBy='parametros'
-                     bindLabel='value'
-                     placeholder='Condiciones'
-                     appearance='outline'
-                     notFoundText='No hay más condiones en la lista'
-                     typeToSearchText='Search'
-                     [loading]='loading'
+            [items]='conditionsRes'
+            [loading]='loading'
+            appearance='outline'
+            bindLabel='value'
+            groupBy='parametros'
+            notFoundText='No hay más condiones en la lista'
+            placeholder='Condiciones'
+            typeToSearchText='Search'
                      [multiple]='true'
                      [minTermLength]='3'
                      [hideSelected]='true'

@@ -10,6 +10,6 @@ export interface Recipient {
   genero: string;
   unidadAdministrativaPorCorreoUsuario?: ByIdAndName[];
   programaAcademicoPorUsuarioCorreo?: Program[];
-  plataformaPorUsuarioCorreo?: ByIdAndName[];
-  vinculacionPorUsuarioCorreo?: ByIdAndName[];
+  plataformaPorUsuarioCorreo: ByIdAndName[];
+  vinculacionPorUsuarioCorreo: ByIdAndName[];
 }

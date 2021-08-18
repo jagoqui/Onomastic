@@ -22,12 +22,13 @@ export class BaseFormPublisher {
       nombre: ['', [Validators.required]],
       email: ['', [Validators.required, Validators.email]],
       estado: ['', [Validators.required]],
+      createTime:['', [Validators.required]],
       rol: this.fb.group({
         id: [null],
         nombre: [null]
       }, Validators.required),
-      unidadAcademicaPorUsuario: [this.createUnitField(), Validators.required],
-      unidadAdministrativaPorUsuario: [this.createUnitField(), Validators.required]
+      unidadAcademicaPorUsuario: [this.createUnitField()],
+      unidadAdministrativaPorUsuario: [this.createUnitField()]
     });
   }
 

@@ -48,7 +48,20 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
     return this.publisherForm.controls;
   }
 
+  formIsValid(): boolean {
+    this.controls.unidadAcademicaPorUsuario.setErrors(null);
+    this.controls.unidadAdministrativaPorUsuario.setErrors(null);
+    return this.publisherForm.baseForm.valid && this.isSelectAtLeastOneUnit();
+  }
+
+  isSelectAtLeastOneUnit(): boolean {
+    const numAcademicUnits: boolean = this.publisherForm.baseForm.value.unidadAcademicaPorUsuario?.length>0;
+    const numAdministrativeUnits: boolean = this.publisherForm.baseForm.value.unidadAdministrativaPorUsuario?.length>0;
+    return numAcademicUnits || numAdministrativeUnits;
+  }
+
   onClose(close?: boolean): void {
+    console.warn(this.publisherForm.baseForm);
     if (close ? close : confirm('No se han guardado los cambios, desea salir?')) {
       this.publisherForm.baseForm.reset();
       this.refresh.emit(true);
@@ -86,6 +99,13 @@ export class ModalPublishersComponent implements OnInit, OnDestroy {
       this.publisherForm.baseForm.get('id').updateValueAndValidity();
       this.actionTODO = 'AGREGAR';
     }
+
+    this.publisherForm.baseForm.get('createTime').setValidators(null);
+    this.publisherForm.baseForm.get('createTime').updateValueAndValidity();
+    this.publisherForm.baseForm.get('unidadAcademicaPorUsuario').setValidators(null);
+    this.publisherForm.baseForm.get('unidadAcademicaPorUsuario').updateValueAndValidity();
+    this.publisherForm.baseForm.get('unidadAdministrativaPorUsuario').setValidators(null);
+    this.publisherForm.baseForm.get('unidadAdministrativaPorUsuario').updateValueAndValidity();
 
     this.unitSvc.getAcademicUnits()
       .pipe(takeUntil(this.destroy$))

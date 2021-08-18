@@ -3,7 +3,7 @@ import { FormArray, FormBuilder, FormControl, FormGroup, ValidationErrors, Valid
 import * as moment from 'moment';
 
 @Injectable({ providedIn: 'root' })
-export class BaseFormMailUsers {
+export class BaseFormRecipients {
   errorsMessage = {
     nombre: '',
     apellido: '',
@@ -48,10 +48,10 @@ export class BaseFormMailUsers {
       genero: ['', [Validators.required]], //TODO: No está detectando campo invalido si éste campo no lo tiene al editar.
       email: ['', [Validators.required, Validators.email]],
       estado: ['', [Validators.required]],
-      unidadAdministrativaPorCorreoUsuario: [BaseFormMailUsers.createByNameFormGroup('id'), Validators.required],
-      programaAcademicoPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('codigo')],
-      vinculacionPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id'), Validators.required],
-      plataformaPorUsuarioCorreo: [BaseFormMailUsers.createByNameFormGroup('id'), Validators.required]
+      unidadAdministrativaPorCorreoUsuario: [BaseFormRecipients.createByNameFormGroup('id')],
+      programaAcademicoPorUsuarioCorreo: [BaseFormRecipients.createByNameFormGroup('codigo')],
+      vinculacionPorUsuarioCorreo: [BaseFormRecipients.createByNameFormGroup('id'), Validators.required],
+      plataformaPorUsuarioCorreo: [BaseFormRecipients.createByNameFormGroup('id'), Validators.required]
     });
   }
 

@@ -87,20 +87,16 @@
             <tr *ngFor='let item of element.unidadAdministrativaPorCorreoUsuario'>{{ item["nombre"] }}</tr>
           </td>
         </ng-container>
-        <!-- Academic unit -->
-<!--        <ng-container matColumnDef='programaAcademicoPorUsuarioCorreo'>-->
-<!--          <th mat-header-cell *matHeaderCellDef mat-sort-header>Unidad Academica</th>-->
-<!--          <td mat-cell *matCellDef='let element'>-->
-<!--            <tr-->
-<!--              *ngFor='let academicUnit of element.unidadAcademica'>{{ academicUnit.unidadAcademica.nombre }}</tr>-->
-<!--          </td>-->
-<!--        </ng-container>-->
         <!-- Academic program -->
         <ng-container matColumnDef='programaAcademicoPorUsuarioCorreo'>
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Programa académico</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Programa académico&nbsp;<strong>></strong>&nbsp;Unidad
+            Académica</th>
           <td mat-cell *matCellDef='let element'>
-            <tr *ngFor='let academicProgram of element.programaAcademicoPorUsuarioCorreo'>{{
-              academicProgram["nombre"] }} -> {{academicProgram.unidadAcademica.nombre}}</tr>
+            <tr *ngFor='let academicProgram of element.programaAcademicoPorUsuarioCorreo' fxLayout="row"
+                fxLayoutAlign="space-between center">
+              <ng-container>{{academicProgram["nombre"] }}</ng-container>
+              <ng-container>&nbsp;<strong>></strong>&nbsp;{{academicProgram.unidadAcademica.nombre}}</ng-container>
+            </tr>
           </td>
         </ng-container>
         <!-- State -->
