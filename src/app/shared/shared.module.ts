@@ -46,15 +46,15 @@ export default imports;
   imports: [
     imports
   ],
-  exports: [
-    imports,
-    HeaderComponent,
-    MailUsersSubscriptionStatusComponent,
-    SidebarComponent,
-    FooterComponent,
-    MaterialElevationDirective,
-    ScrollComponent
-  ]
+    exports: [
+        imports,
+        HeaderComponent,
+        MailUsersSubscriptionStatusComponent,
+        SidebarComponent,
+        FooterComponent,
+        MaterialElevationDirective,
+        ScrollComponent
+    ]
 })
 export class SharedModule {
 }

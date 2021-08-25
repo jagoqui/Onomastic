@@ -1,5 +1,5 @@
 import {OverlayContainer} from '@angular/cdk/overlay';
-import {AfterViewInit, Component, HostBinding, OnDestroy, OnInit} from '@angular/core';
+import {AfterViewInit, Component, HostBinding, OnDestroy, OnInit, Renderer2} from '@angular/core';
 import {AuthService} from '@adminShared/services/auth.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {Subject} from 'rxjs';
@@ -9,6 +9,7 @@ import {ThemeSwitcherControllerService} from '@appShared/services/theme-switcher
 import {LoaderService} from '@appShared/services/loader.service';
 import {ResponsiveService} from '@appShared/services/responsive.service';
 import {SIZE, THEME} from '@adminShared/models/shared.model';
+import {AppModeService} from '@appShared/services/app-mode.service';
 
 
 @Component({
@@ -39,12 +40,15 @@ import {SIZE, THEME} from '@adminShared/models/shared.model';
 })
 export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   @HostBinding('class') className: THEME;
+  globalListenFunc: { (): void; (): void; };
 
   opened = false;
   title = 'Onomastic';
   private destroy$ = new Subject<any>();
 
   constructor(
+    private appModeSvc: AppModeService,
+    private renderer: Renderer2,
     private responsiveSvc: ResponsiveService,
     public authSvc: AuthService,
     private overlayContainer: OverlayContainer,
@@ -92,6 +96,16 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    this.globalListenFunc = this.renderer.listen('document', 'keydown.alt.l', () => {
+      this.appModeSvc.mode = 'local';
+    });
+    this.globalListenFunc = this.renderer.listen('document', 'keydown.alt.a', () => {
+      this.appModeSvc.mode = 'test';
+    });
+    this.globalListenFunc = this.renderer.listen('document', 'keydown.alt.p', () => {
+      this.appModeSvc.mode = 'production';
+    });
+
     this.themeSwitcherController.themeClass$
       .pipe(takeUntil(this.destroy$))
       .subscribe(
@@ -107,5 +121,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next({});
     this.destroy$.complete();
+    // remove listener
+    this.globalListenFunc();
   }
 }

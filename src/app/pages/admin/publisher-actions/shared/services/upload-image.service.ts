@@ -95,7 +95,8 @@ export class UploadImageService {
       const formData = new FormData();
       formData.append('file', this.imgFile);
       return this.http
-        .post<ImageUpload>(`${environment.uploadImagesUriServer}/${new Date().getTime()}${this.imgFile.name}`, formData);
+        .post<ImageUpload>(`
+          ${environment.apiUrl}/${environment.uploadImagesUriServer}/${new Date().getTime()}${this.imgFile.name}`, formData);
     }
     return of(null);
   }
@@ -141,7 +142,7 @@ export class UploadImageService {
       document.getElementById('templateCardImage')?.remove();
       return;
     }
-    this.deleteImage(imgUriEdit?.replace(environment.downloadImagesUriServer + '/', ''))
+    this.deleteImage(imgUriEdit?.replace(environment.apiUrl + environment.downloadImagesUriServer + '/', ''))
       .subscribe(() => {
         SwAlert.showValidationMessage('La anterior imagen de la plantilla fue eliminada correctamente');
         document.getElementById('templateCardImage')?.remove();
