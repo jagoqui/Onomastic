@@ -121,7 +121,6 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next({});
     this.destroy$.complete();
-    // remove listener
     this.globalListenFunc();
   }
 }
