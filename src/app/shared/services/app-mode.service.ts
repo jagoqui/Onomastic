@@ -39,7 +39,7 @@ export class AppModeService {
           confirmButtonText: 'Aceptar',
           showLoaderOnConfirm: true
         }).then((result) => {
-          if (result.value === '123456') {
+          if (result.value === '123456') {environment.apiUrl = environment.modesApp[mode];
             localStorage.clear();
             Swal.fire({
               icon: 'success',
