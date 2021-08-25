@@ -1,7 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from '@env/environment';
 import SwAlert from 'sweetalert2';
-import Swal from 'sweetalert2';
 
 type MODES = 'local' | 'test' | 'production';
 
@@ -11,11 +10,12 @@ type MODES = 'local' | 'test' | 'production';
 export class AppModeService {
 
   constructor() {
-    if (environment.production) {
-      environment.apiUrl = environment.modesApp.production;
-    } else {
-      environment.apiUrl = environment.modesApp.test;
+    const appMode: MODES = localStorage.getItem('AppMode') as MODES;
+    if (appMode) {
+      this.mode = appMode;
+      return;
     }
+    AppModeService.defaultMode();
   }
 
   set mode(mode: MODES) {
@@ -39,22 +39,35 @@ export class AppModeService {
           confirmButtonText: 'Aceptar',
           showLoaderOnConfirm: true
         }).then((result) => {
-          if (result.value === '123456') {environment.apiUrl = environment.modesApp[mode];
-            localStorage.clear();
-            Swal.fire({
+          if (result.value === '123456') {
+            environment.apiUrl = environment.modesApp[mode];
+            localStorage.removeItem('AuthRes');
+            localStorage.setItem('AppMode', mode);
+            SwAlert.fire({
               icon: 'success',
               title: 'Se cambio de modo exitosamente!',
               confirmButtonText: 'Aceptar!'
             }).then();
           } else {
-            Swal.fire({
+            AppModeService.defaultMode();
+            SwAlert.fire({
               icon: 'error',
               title: 'Error a ingresar crendeciales!',
               confirmButtonText: 'Aceptar!'
             }).then();
           }
         });
+      } else {
+        AppModeService.defaultMode();
       }
     });
+  }
+
+  private static defaultMode() {
+    if (environment.production) {
+      environment.apiUrl = environment.modesApp.production;
+    } else {
+      environment.apiUrl = environment.modesApp.test;
+    }
   }
 }
