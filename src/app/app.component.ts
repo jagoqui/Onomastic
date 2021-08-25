@@ -99,7 +99,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     this.globalListenFunc = this.renderer.listen('document', 'keydown.alt.l', () => {
       this.appModeSvc.mode = 'local';
     });
-    this.globalListenFunc = this.renderer.listen('document', 'keydown.alt.a', () => {
+    this.globalListenFunc = this.renderer.listen('document', 'keydown.alt.t', () => {
       this.appModeSvc.mode = 'test';
     });
     this.globalListenFunc = this.renderer.listen('document', 'keydown.alt.p', () => {
