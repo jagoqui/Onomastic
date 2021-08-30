@@ -1,11 +1,11 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 import SwAlert from 'sweetalert2';
-import { Observable, of } from 'rxjs';
-import { environment } from '@env/environment';
-import { HttpClient } from '@angular/common/http';
-import { ImageUpload } from '@adminShared/models/image-upload.model';
-import { NgxImageCompressService } from 'ngx-image-compress';
-import { FriendlyNumberAbbreviationService } from '@appShared/services/friendly-number-abbreviation.service';
+import {Observable, of} from 'rxjs';
+import {environment} from '@env/environment';
+import {HttpClient} from '@angular/common/http';
+import {ImageUpload} from '@adminShared/models/image-upload.model';
+import {NgxImageCompressService} from 'ngx-image-compress';
+import {FriendlyNumberAbbreviationService} from '@appShared/services/friendly-number-abbreviation.service';
 
 @Injectable({
   providedIn: 'root'
@@ -30,7 +30,7 @@ export class UploadImageService {
   }
 
   loadImage(editor) {
-    this.imageCompress.uploadFile().then(({ image, orientation }) => {
+    this.imageCompress.uploadFile().then(({image, orientation}) => {
       const htmlImg: HTMLImageElement = new Image();
       htmlImg.src = image;
 
@@ -121,12 +121,11 @@ export class UploadImageService {
     image.alt = 'template-card';
     image.setAttribute('style', `
       background-color: #f2f2f2  !important;
-      display: block !important;
-      margin:auto !important;
-      width:100% !important;
-      max-width:80% !important;
-      height: auto !important;
-      max-height:40vw !important;
+      display: block!important;
+      margin: 2vw auto !important;
+      width: 100%!important;
+      max-width: 95%!important;
+      height: auto!important;
       object-fit: cover !important;
       object-position: center center !important;
     `);
@@ -134,11 +133,12 @@ export class UploadImageService {
     image.setAttribute('is', 'image');
     image.setAttribute('width', '50');
     image.setAttribute('height', '50');
+    image.setAttribute('alt', 'plantilla');
     editor.selection.insertNode(image);
   };
 
   onDeleteImage(imgUriEdit?: string) {
-    if(!imgUriEdit && this.imgURI?.includes('blob')){
+    if (!imgUriEdit && this.imgURI?.includes('blob')) {
       document.getElementById('templateCardImage')?.remove();
       return;
     }

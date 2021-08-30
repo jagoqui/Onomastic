@@ -64,8 +64,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   private optionGroupLabels: OptionGroupLabels = {
     name: 'nombre',
     date: 'fecha',
-    academicUnit: 'unidades  académicas',
-    administrativeUnit: 'unidades administrativas',
+    academicUnit: 'unidad  académicas',
+    administrativeUnit: 'unidad administrativas',
     bodyType: 'estamentos',
     program: 'programas'
   };
