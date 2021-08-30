@@ -25,7 +25,7 @@ import {ResponsiveService} from '@appShared/services/responsive.service';
 import {BaseFormTemplateCard} from '@adminShared/utils/base-form-template-card';
 
 type SIZEiCONS = 'tiny' | 'xsmall' | 'small' | 'middle' | 'large';
-type LABELS = 'nombre' | 'fecha' | 'facultad/escuela' | 'estamento' | 'programa';
+type LABELS = 'nombre' | 'fecha' | 'unidad  académica' | 'unidad administrativa' | 'estamento' | 'programa';
 
 interface Sizes {
   xs: SIZEiCONS;
@@ -38,7 +38,8 @@ interface Sizes {
 interface OptionGroupLabels {
   name: LABELS;
   date: LABELS;
-  school: LABELS;
+  academicUnit: LABELS;
+  administrativeUnit:LABELS,
   bodyType: LABELS;
   program: LABELS;
 }
@@ -63,7 +64,8 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   private optionGroupLabels: OptionGroupLabels = {
     name: 'nombre',
     date: 'fecha',
-    school: 'facultad/escuela',
+    academicUnit: 'unidad  académica',
+    administrativeUnit: 'unidad administrativa',
     bodyType: 'estamento',
     program: 'programa'
   };
