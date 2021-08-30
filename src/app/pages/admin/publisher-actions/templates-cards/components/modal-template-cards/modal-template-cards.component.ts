@@ -25,7 +25,7 @@ import {ResponsiveService} from '@appShared/services/responsive.service';
 import {BaseFormTemplateCard} from '@adminShared/utils/base-form-template-card';
 
 type SIZEiCONS = 'tiny' | 'xsmall' | 'small' | 'middle' | 'large';
-type LABELS = 'nombre' | 'fecha' | 'facultad/escuela' | 'estamento' | 'programa';
+type LABELS = 'nombre' | 'fecha' | 'unidad  académicas' | 'unidad administrativas' | 'estamentos' | 'programas';
 
 interface Sizes {
   xs: SIZEiCONS;
@@ -38,7 +38,8 @@ interface Sizes {
 interface OptionGroupLabels {
   name: LABELS;
   date: LABELS;
-  school: LABELS;
+  academicUnit: LABELS;
+  administrativeUnit:LABELS,
   bodyType: LABELS;
   program: LABELS;
 }
@@ -63,9 +64,10 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
   private optionGroupLabels: OptionGroupLabels = {
     name: 'nombre',
     date: 'fecha',
-    school: 'facultad/escuela',
-    bodyType: 'estamento',
-    program: 'programa'
+    academicUnit: 'unidad  académicas',
+    administrativeUnit: 'unidad administrativas',
+    bodyType: 'estamentos',
+    program: 'programas'
   };
   private destroy$ = new Subject<any>();
 
