@@ -1,5 +1,14 @@
 import {OverlayContainer} from '@angular/cdk/overlay';
-import {AfterViewInit, Component, HostBinding, OnDestroy, OnInit, Renderer2} from '@angular/core';
+import {
+  AfterContentChecked,
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  HostBinding,
+  OnDestroy,
+  OnInit,
+  Renderer2
+} from '@angular/core';
 import {AuthService} from '@adminShared/services/auth.service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {Subject} from 'rxjs';
@@ -38,7 +47,7 @@ import {AppModeService} from '@appShared/services/app-mode.service';
   `,
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
+export class AppComponent implements OnInit, AfterContentChecked,OnDestroy {
   @HostBinding('class') className: THEME;
   globalListenFunc: { (): void; (): void; };
 
@@ -47,6 +56,7 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
   private destroy$ = new Subject<any>();
 
   constructor(
+    private changeDetRef: ChangeDetectorRef,
     private appModeSvc: AppModeService,
     private renderer: Renderer2,
     private responsiveSvc: ResponsiveService,
@@ -69,7 +79,8 @@ export class AppComponent implements AfterViewInit, OnInit, OnDestroy {
     this.className = classTheme;
   }
 
-  ngAfterViewInit(): void {
+  ngAfterContentChecked(): void {
+    this.changeDetRef.detectChanges();
     setTimeout(() => {
       this.responsiveSvc.screenWidth$
         .pipe(takeUntil(this.destroy$))

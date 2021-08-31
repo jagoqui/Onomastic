@@ -8,7 +8,7 @@ import {NgxCaptchaModule} from 'ngx-captcha';
 import {MaterialModule} from '../material-module.module';
 import {FooterComponent} from './components/footer/footer.component';
 import {HeaderComponent} from './components/header/header.component';
-import {MailUsersSubscriptionStatusComponent,} from './components/mail-users-subscription-status/mail-users-subscription-status.component';
+import {RecipientSubscriptionStatusComponent,} from './components/recipient-subscription-status/recipient-subscription-status.component';
 import {SidebarComponent} from './components/sidebar/sidebar.component';
 import {MaterialElevationDirective,} from './directives/material-elevation.directive';
 import {NgxSpinnerModule} from 'ngx-spinner';
@@ -39,7 +39,7 @@ export default imports;
     HeaderComponent,
     SidebarComponent,
     FooterComponent,
-    MailUsersSubscriptionStatusComponent,
+    RecipientSubscriptionStatusComponent,
     MaterialElevationDirective,
     ScrollComponent
   ],
@@ -49,7 +49,7 @@ export default imports;
     exports: [
         imports,
         HeaderComponent,
-        MailUsersSubscriptionStatusComponent,
+        RecipientSubscriptionStatusComponent,
         SidebarComponent,
         FooterComponent,
         MaterialElevationDirective,

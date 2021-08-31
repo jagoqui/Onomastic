@@ -2,8 +2,9 @@ import {NgModule} from '@angular/core';
 import {RouterModule, Routes} from '@angular/router';
 import {QuicklinkStrategy} from 'ngx-quicklink';
 import {NegateCheckLoginGuard} from '@appShared/guards/negate-check-login.guard';
-// eslint-disable-next-line max-len
-import {MailUsersSubscriptionStatusComponent} from '@appShared/components/mail-users-subscription-status/mail-users-subscription-status.component';
+
+import {RecipientSubscriptionStatusComponent}
+  from '@appShared/components/recipient-subscription-status/recipient-subscription-status.component';
 import {CheckLoginGuard} from '@appShared/guards/check-login.guard';
 import {PageNotFoundComponent} from '@appShared/components/page-not-found/page-not-found.component';
 import {ForgotPasswordComponent} from '@auth/forgot-password/forgot-password.component';
@@ -13,7 +14,6 @@ const routes: Routes = [
   {
     path: '',
     redirectTo: '/login',
-    // redirectTo: '/PUBLISHER/events-day',
     pathMatch: 'full'
   },
   {
@@ -23,7 +23,7 @@ const routes: Routes = [
   },
   {
     path: 'mail-users-subscription-status/:email',
-    component: MailUsersSubscriptionStatusComponent
+    component: RecipientSubscriptionStatusComponent
   },
   {
     path: 'ADMIN',
