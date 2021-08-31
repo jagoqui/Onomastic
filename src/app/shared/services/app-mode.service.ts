@@ -64,6 +64,7 @@ export class AppModeService {
   }
 
   private static defaultMode() {
+    console.warn(environment.apiUrl);
     if (environment.production) {
       environment.apiUrl = environment.modesApp.production;
     } else {
