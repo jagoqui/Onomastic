@@ -21,7 +21,8 @@ export class InterceptorService implements HttpInterceptor {
     this.loaderSvc.setLoading(true);
 
     let requestClone: HttpRequest<any>;
-    if (req.url.replace(environment.apiUrl, '') === '/auth/signin') {
+    const baseUrl: string = req.url.replace(environment.apiUrl, '');
+    if ( baseUrl === '/auth/signin' || baseUrl.includes( 'unsubscribe')) {
       this.loaderSvc.setLoading(false);
       requestClone = req.clone();
     } else {

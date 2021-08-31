@@ -9,7 +9,7 @@ import { takeUntil } from 'rxjs/operators';
   selector: 'app-mail-users-subscription-status',
   template: ''
 })
-export class MailUsersSubscriptionStatusComponent implements OnInit, OnDestroy {
+export class RecipientSubscriptionStatusComponent implements OnInit, OnDestroy {
   private destroy$ = new Subject<any>();
 
   constructor(
