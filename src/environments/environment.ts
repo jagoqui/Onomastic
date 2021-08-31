@@ -3,7 +3,7 @@ export const environment = {
   modesApp:{
     local: 'http://localhost:8080/onomastico',
     test: 'http://arquimedes.udea.edu.co:8096/onomastico',
-    production: 'https://wsingenieria.udea.edu/onomastico'
+    production: 'https://wsingenieria.udea.edu.co:8094/onomastico'
   },
   apiUrl:'',
   uploadImagesUriServer: 'upload',
