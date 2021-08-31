@@ -1,5 +1,5 @@
 export const environment = {
-  production: false,
+  production: true,
   modesApp:{
     local: 'http://localhost:8080/onomastico',
     test: 'http://arquimedes.udea.edu.co:8096/onomastico',
