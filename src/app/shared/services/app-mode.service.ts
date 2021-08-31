@@ -10,9 +10,9 @@ type MODES = 'local' | 'test' | 'production';
 export class AppModeService {
 
   constructor() {
-    const appMode: MODES = localStorage.getItem('AppMode') as MODES;
-    if (appMode) {
-      this.mode = appMode;
+    const aapModeInMemory = localStorage.getItem('AppMode');
+    if (aapModeInMemory) {
+      this.mode = aapModeInMemory as MODES;
       return;
     }
     AppModeService.defaultMode();

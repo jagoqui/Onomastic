@@ -47,9 +47,9 @@ import {AppModeService} from '@appShared/services/app-mode.service';
   `,
   styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit, AfterContentChecked,OnDestroy {
+export class AppComponent implements OnInit, AfterContentChecked,AfterViewInit,OnDestroy {
   @HostBinding('class') className: THEME;
-  globalListenFunc: { (): void; (): void; };
+  globalListenFunc: { (): void; (): void };
 
   opened = false;
   title = 'Onomastic';
@@ -79,8 +79,7 @@ export class AppComponent implements OnInit, AfterContentChecked,OnDestroy {
     this.className = classTheme;
   }
 
-  ngAfterContentChecked(): void {
-    this.changeDetRef.detectChanges();
+  ngAfterViewInit() {
     setTimeout(() => {
       this.responsiveSvc.screenWidth$
         .pipe(takeUntil(this.destroy$))
@@ -100,10 +99,14 @@ export class AppComponent implements OnInit, AfterContentChecked,OnDestroy {
           this.spinner.show(undefined, {
             type: 'ball-triangle-path',
             size
-          });
+          }).then();
 
         });
     });
+  }
+
+  ngAfterContentChecked(): void {
+    this.changeDetRef.detectChanges();
   }
 
   ngOnInit(): void {
