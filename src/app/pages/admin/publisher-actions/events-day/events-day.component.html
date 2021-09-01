@@ -25,7 +25,7 @@
       <table mat-table [dataSource]='dataSource' multiTemplateDataRows class='mat-elevation-z8' matSort>
         <ng-container matColumnDef='{{property}}' *ngFor='let property of columnsToDisplay'>
           <th mat-header-cell *matHeaderCellDef mat-sort-header> {{property === 'condicionesEvento'?
-            'Condición -> Tipo de condición': property |
+            'Tipo de condición ->  Condición': property |
             titlecase}}
           </th>
           <td mat-cell *matCellDef='let event' title='Click para ver más/menos detalles'>
@@ -33,8 +33,8 @@
             <ng-template #arrayKey>
               <div *ngFor="let field of event[property]"  fxLayout="row"
                    fxLayoutAlign="space-between center">
-                <span>{{field.value | titlecase }}</span>
                 <span >{{fieldFormat(field.condicion) | uppercase}}</span>
+                <span>{{field.value | titlecase }}</span>
               </div>
             </ng-template>
           </td>
@@ -43,7 +43,7 @@
           <td mat-cell *matCellDef='let event' [attr.colspan]='columnsToDisplay.length'>
             <div [@detailExpand]="event == expandedElement ? 'expanded' : 'collapsed'" fxLayoutAlign='center center'>
               <app-template-card [@detailExpand]="event == expandedElement ? 'expanded' : 'collapsed'"
-                                 #cardHtml *ngIf='event.plantilla' [card]='event.plantilla' [actions]='false'
+                                 *ngIf='event.plantilla' [card]='event.plantilla' [actions]='false'
                                  (refreshCards)='onRefresh($event)'></app-template-card>
             </div>
           </td>
