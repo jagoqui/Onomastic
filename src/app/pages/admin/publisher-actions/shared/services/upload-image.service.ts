@@ -122,7 +122,7 @@ export class UploadImageService {
     image.setAttribute('style', `
       background-color: #f2f2f2  !important;
       display: block!important;
-      margin: 2vw auto !important;
+      margin: auto !important;
       width: 100%!important;
       max-width: 95%!important;
       height: auto!important;
