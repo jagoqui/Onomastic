@@ -412,6 +412,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
     this.templateCardForm.baseForm.get('unidadAcademicaPorPlantilla').updateValueAndValidity();
     this.templateCardForm.baseForm.get('unidadAdministrativaPorPlantilla').setValidators(null);
     this.templateCardForm.baseForm.get('unidadAdministrativaPorPlantilla').updateValueAndValidity();
+    //TODO: Set touched flags to active input units
   }
 
   ngOnDestroy(): void {
