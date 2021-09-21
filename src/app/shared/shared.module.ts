@@ -16,6 +16,7 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {ScrollComponent} from './components/scroll/scroll.component';
 
 import {LottieModule} from 'ngx-lottie';
+import { LoveMailStatusComponent } from './components/love-mail-status/love-mail-status.component';
 
 
 export const playerFactory = () => import(/* webpackChunkName: 'lottie-web' */ 'lottie-web');
@@ -41,7 +42,8 @@ export default imports;
     FooterComponent,
     RecipientSubscriptionStatusComponent,
     MaterialElevationDirective,
-    ScrollComponent
+    ScrollComponent,
+    LoveMailStatusComponent
   ],
   imports: [
     imports

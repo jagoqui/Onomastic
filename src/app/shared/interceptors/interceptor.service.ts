@@ -22,7 +22,9 @@ export class InterceptorService implements HttpInterceptor {
 
     let requestClone: HttpRequest<any>;
     const baseUrl: string = req.url.replace(environment.apiUrl, '');
-    if ( baseUrl === '/auth/signin' || baseUrl.includes( 'unsubscribe')) {
+    if (baseUrl === '/auth/signin' || baseUrl.includes('unsubscribe') || baseUrl.includes('love-mail') ||
+      baseUrl.includes('set_love') || baseUrl.includes('feedback') || baseUrl.includes('jagoqui')) { //TODO:
+      // No es escalable, setear un objeto para haacer un búsqueda por llave
       this.loaderSvc.setLoading(false);
       requestClone = req.clone();
     } else {

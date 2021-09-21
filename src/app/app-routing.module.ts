@@ -9,6 +9,7 @@ import {CheckLoginGuard} from '@appShared/guards/check-login.guard';
 import {PageNotFoundComponent} from '@appShared/components/page-not-found/page-not-found.component';
 import {ForgotPasswordComponent} from '@auth/forgot-password/forgot-password.component';
 import {ResetPasswordComponent} from '@auth/reset-password/reset-password.component';
+import {LoveMailStatusComponent} from "@appShared/components/love-mail-status/love-mail-status.component";
 
 const routes: Routes = [
   {
@@ -24,6 +25,10 @@ const routes: Routes = [
   {
     path: 'mail-users-subscription-status/:email',
     component: RecipientSubscriptionStatusComponent
+  },
+  {
+    path: 'love-mail-status/:email/:eventId',
+    component: LoveMailStatusComponent
   },
   {
     path: 'ADMIN',
