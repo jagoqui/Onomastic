@@ -29,7 +29,7 @@ export class LoveMailStatusComponent implements OnInit, OnDestroy {
       .subscribe((favorite) => isFavorite = favorite); //TODO: Hacer await
 
     SwAlert.fire({
-      title: '¡Calificános! 😊.',
+      title: '¡Calíficanos!',
       text: `${isFavorite ? 'Ya habías marcado cómo favorito tu correo, ya no te gusta?' : 'Si has llegado hasta aquí' +
         ' es porque te gusta nuestro correo 😍.'}`,
       icon: 'info',
@@ -47,14 +47,19 @@ export class LoveMailStatusComponent implements OnInit, OnDestroy {
                 title: 'Gracias por calificarnos',
                 footer: 'Tu opinión es de muy importante para nosotros para logar a que cada vez tengas una mejor' +
                   ' experiencia.',
-                input: 'text',
+                input: 'textarea',
+                inputPlaceholder:'Cuentános que te pareció nuestro correo. [ max 50 carácteres]',
                 inputAttributes: {
-                  autocapitalize: 'true'
+                  autocapitalize: 'off',
+                  autocorrect: 'true'
                 },
                 showCancelButton: true,
                 confirmButtonText: 'Enviar retroalimentación',
                 cancelButtonText:'No tengo nada por decir',
                 showLoaderOnConfirm: true,
+                inputValidator: (result) => {
+                  return !result && 'You need to agree with T&C';
+                },
                 preConfirm: (sentFeedback) => fetch(`//api.github.com/users/jagoqui`)
                     .then(response => {
                       if (!response.ok) {
