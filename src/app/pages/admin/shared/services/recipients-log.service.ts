@@ -16,6 +16,18 @@ export class RecipientsLogService {
     return this.http
       .get<RecipientsLog[]>(`${environment.apiUrl}/emails`);
   }
+  getLoveStatus(userEmail: string, eventId: string): Observable<boolean> {
+    const params = new HttpParams(
+      {
+        fromObject: {
+          userEmail: userEmail as unknown as string,
+          eventId: eventId as unknown as string
+        }
+      }
+    );
+    return this.http
+      .get<boolean>(`${environment.apiUrl}/recipients_log/love_status`, {params});
+  }
 
   setLoveStatus(isLove: boolean, userEmail: string, eventId: string): Observable<RecipientsLog> {
     const params = new HttpParams(
@@ -31,21 +43,4 @@ export class RecipientsLogService {
       .get<RecipientsLog>(`${environment.apiUrl}/recipients_log/set_love`, {params});
   }
 
-  getLoveStatus(userEmail: string, eventId: string): Observable<boolean> {
-    const params = new HttpParams(
-      {
-        fromObject: {
-          userEmail: userEmail as unknown as string,
-          eventId: eventId as unknown as string
-        }
-      }
-    );
-    return this.http
-      .get<boolean>(`${environment.apiUrl}/recipients_log/love_status`, {params});
-  }
-
-  sentFeedback(feedback: string): Observable<RecipientsLog> {
-    return this.http
-      .get<RecipientsLog>(`${environment.apiUrl}/recipients_log/feedback/${feedback}`);
-  }
 }

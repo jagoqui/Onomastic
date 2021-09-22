@@ -1,9 +1,9 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { environment } from '@env/environment';
-import { Recipient } from '@adminShared/models/recipient.model';
-import { Publisher } from '@adminShared/models/publisher.model';
+import {Injectable} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {Observable} from 'rxjs';
+import {environment} from '@env/environment';
+import {Recipient} from '@adminShared/models/recipient.model';
+import {Publisher} from '@adminShared/models/publisher.model';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class PublisherService {
   }
 
   save(publisher: Publisher): Observable<Publisher> {
-    if(publisher?.id){
+    if (publisher?.id) {
       return this.http
         .put<Publisher>(`${environment.apiUrl}/usuarios/${publisher.id}`, publisher);
     }
@@ -22,6 +22,10 @@ export class PublisherService {
       .post<Publisher>(`${environment.apiUrl}/usuarios`, publisher);
   }
 
+  getPublisher(id: string): Observable<Publisher> {
+    return this.http
+      .get<Publisher>(`${environment.apiUrl}/usuarios/${{id}}`);
+  }
 
   getAll(): Observable<Publisher[]> {
     return this.http
