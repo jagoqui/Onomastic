@@ -11,7 +11,7 @@ export interface AuthRes {
   tokenType: string;
 }
 
-export interface DecodeToken {
+export interface DecodeToken {//TODO: EL back sólo está devolviendo el sub y el rol
   sub: string;
   rol: ROLE;
   nombre: string;

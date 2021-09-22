@@ -6,6 +6,8 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Auth, AuthRes, DecodeToken} from '@adminShared/models/auth.model';
 import {environment} from '@env/environment';
+import {PublisherService} from '@adminShared/services/publisher.service';
+import SwAlert from 'sweetalert2';
 
 const jwtHelper = new JwtHelperService();
 
@@ -20,7 +22,8 @@ export class AuthService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private publisherSvc: PublisherService
   ) {
     this.checkToken();
   }
@@ -50,7 +53,7 @@ export class AuthService {
   login(authData: Auth): Observable<boolean> {
     authData.userEmail = `${authData.userEmail}${authData.userEmail.indexOf('@') === -1 ? '@udea.edu.co' : ''}`.trim();
     return this.http.post<AuthRes>(`${environment.apiUrl}/auth/signin`, authData).pipe(
-      map((authRes: any) => {
+      map((authRes) => {
         if (authRes) {
           localStorage.setItem('AuthRes', JSON.stringify(authRes));
           this.authRes.next(authRes);
@@ -64,7 +67,6 @@ export class AuthService {
   }
 
   decodeToken(token: string): DecodeToken {
-    //TODO: Ponerle clave al token
     return jwtHelper.decodeToken(token);
   }
 
@@ -98,12 +100,21 @@ export class AuthService {
     const authRes: AuthRes = JSON.parse(localStorage.getItem('AuthRes')) || null;
     if (authRes) {
       const isExpired = jwtHelper.isTokenExpired(authRes.accessToken);
-      //TODO: Pregutar si el usuario está activo
       if (isExpired) {
         this.logout();
       } else {
-        this.authRes.next(authRes);
-        this.isLogged.next(true);
+        const id = jwtHelper.decodeToken(authRes.accessToken).sub;
+        this.publisherSvc.getPublisher(id).subscribe(publisher => {
+          if (publisher?.estado === 'ACTIVO') {
+            this.authRes.next(authRes);
+            this.isLogged.next(true);
+          } else {
+            SwAlert.fire({
+              icon: 'error',
+              title: ` El publicador fue desactivado!`
+            }).then(_ => this.logout());
+          }
+        },()=>SwAlert.showValidationMessage('Error validando el estado del publicador.'));
       }
     }
   }

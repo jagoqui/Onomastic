@@ -63,8 +63,7 @@ export class RecipientSubscriptionStatusComponent implements OnInit, OnDestroy {
             <a href='${this.router.navigate(['PUBLISHER/help'])}'>Ayuda</a>.
           `,
           'info'
-        ).then(_ => {
-        });
+        ).then();
       }
     });
   }

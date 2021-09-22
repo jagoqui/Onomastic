@@ -27,7 +27,7 @@ const routes: Routes = [
     component: RecipientSubscriptionStatusComponent
   },
   {
-    path: 'love-mail-status/:email/:eventId',
+    path: 'love-mail-status/:email/:event_id',
     component: LoveMailStatusComponent
   },
   {

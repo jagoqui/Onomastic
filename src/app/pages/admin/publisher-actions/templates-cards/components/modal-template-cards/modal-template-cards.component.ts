@@ -137,7 +137,7 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
         'align', 'indent', 'outdent', '|',
         'ol', 'ul', '|',
         'table', 'hr', '|',
-        'superscript', 'subscript', 'symbol', '|',
+        'superscript', 'subscript', 'symbol', 'link','|',
         'eraser', 'selectall', 'copyTrash', '|', 'imageUpload', 'print', '|', 'labels', '|',
         '\n',
         'undo', 'redo', 'reset', 'preview', 'fullsize', '|', 'theme', 'info', 'about'
