@@ -55,7 +55,6 @@ export class AuthService {
     const {userEmail, password} = authData;
     return this.http.post<AuthRes>(`${environment.apiUrl}/auth/signin`, {userEmail, password}).pipe(
       map((authRes) => {
-        console.log(authRes);
         if (authRes) {
           localStorage.setItem('AuthRes', JSON.stringify(authRes));
           this.authRes.next(authRes);

@@ -22,7 +22,7 @@ export class InterceptorService implements HttpInterceptor {
 
     let requestClone: HttpRequest<any>;
     const baseUrl: string = req.url.replace(environment.apiUrl, '');
-    console.log(baseUrl);
+    console.warn(baseUrl);
     const whiteList = [
       'auth',
       'unsubscribe',
