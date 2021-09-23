@@ -1,14 +1,20 @@
 import {Injectable} from '@angular/core';
-import {ActivatedRouteSnapshot, CanActivate, RouterStateSnapshot, UrlTree,} from '@angular/router';
+import {CanActivate,} from '@angular/router';
 import {Observable} from 'rxjs';
+import {AuthService} from '@adminShared/services/auth.service';
+import {map, take} from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CheckAdminRoleGuard implements CanActivate {
-  canActivate(
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
-    return true;
+  constructor(
+    private authSvc: AuthService,) {
+  }
+
+  canActivate(): Observable<boolean> {
+    return this.authSvc.isAdmin$.pipe(
+      take(1),
+      map((isAdmin: boolean) => isAdmin));
   }
 }

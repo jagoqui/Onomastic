@@ -15,7 +15,7 @@ export class BaseFormAuth {
     //TODO: Hacer valide si es un email, si detecta que es un correo.
     userEmail: ['', [Validators.required]],
     password: ['', [Validators.required]],
-    recaptchaKey: ['', Validators.required],
+    recaptchaKey: [null, Validators.required],
   });
 
 

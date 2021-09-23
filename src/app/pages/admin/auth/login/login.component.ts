@@ -14,7 +14,7 @@ import {AnimationItem} from 'lottie-web';
 import {ThemeSwitcherControllerService} from '@appShared/services/theme-switcher-controller.service';
 import {takeUntil} from 'rxjs/operators';
 import {THEME} from '@adminShared/models/shared.model';
-import {Auth} from "@adminShared/models/auth.model";
+import {Auth} from '@adminShared/models/auth.model';
 
 @Component({
   selector: 'app-login',
@@ -84,6 +84,8 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   handleSuccessRecaptcha() {
     this.recaptchaConfig.success = true;
+    //TODO: Obtener el token del recaptcha y enviarlo al back para validarlo, o probar con la versión 3 de recaptcha
+    // this.loginForm.baseForm.patchValue({recaptchaKey: ''});
   }
 
 
@@ -98,17 +100,10 @@ export class LoginComponent implements OnInit, OnDestroy {
           };
         });
 
-    this.spinner.show(undefined, {
+    this.spinner.show('spinner', {
       type: 'ball-triangle-path',
       size: 'medium'
     }).then();
-
-    this.loginForm.baseForm.get('name').setValidators(null);
-    this.loginForm.baseForm.get('name').updateValueAndValidity();
-    this.loginForm.baseForm.get('association').setValidators(null);
-    this.loginForm.baseForm.get('association').updateValueAndValidity();
-    this.loginForm.baseForm.get('role').setValidators(null);
-    this.loginForm.baseForm.get('role').updateValueAndValidity();
   }
 
   ngOnDestroy(): void {

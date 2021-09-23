@@ -22,6 +22,7 @@ export class InterceptorService implements HttpInterceptor {
 
     let requestClone: HttpRequest<any>;
     const baseUrl: string = req.url.replace(environment.apiUrl, '');
+    console.warn(baseUrl);
     const whiteList = [
       'auth',
       'unsubscribe',
@@ -29,10 +30,12 @@ export class InterceptorService implements HttpInterceptor {
       'set_love'
     ];
 
-    if (whiteList.filter(url => baseUrl.includes(url))) {
+    if (whiteList.filter(url => baseUrl.includes(url))?.length>0) {
+      console.log('Sin token');
       this.loaderSvc.setLoading(false);
       requestClone = req.clone();
     } else {
+      console.log('Con token');
       const authRes = this.authSvc.authResValue;
       if (authRes) {
         const {tokenType, accessToken} = authRes;
@@ -86,6 +89,7 @@ export class InterceptorService implements HttpInterceptor {
   private getServerErrorMessage(error: HttpErrorResponse): string {
     switch (error.status) {
       case 401: {
+        console.warn('Error de permisos.');
         this.authSvc.logout();
         return `Forbidden: ${error.message}`;
       }

@@ -16,7 +16,7 @@ import {NgSelectModule} from '@ng-select/ng-select';
 import {ScrollComponent} from './components/scroll/scroll.component';
 
 import {LottieModule} from 'ngx-lottie';
-import { LoveMailStatusComponent } from './components/love-mail-status/love-mail-status.component';
+import {LoveMailStatusComponent} from './components/love-mail-status/love-mail-status.component';
 
 
 export const playerFactory = () => import(/* webpackChunkName: 'lottie-web' */ 'lottie-web');
@@ -48,15 +48,15 @@ export default imports;
   imports: [
     imports
   ],
-    exports: [
-        imports,
-        HeaderComponent,
-        RecipientSubscriptionStatusComponent,
-        SidebarComponent,
-        FooterComponent,
-        MaterialElevationDirective,
-        ScrollComponent
-    ]
+  exports: [
+      imports,
+      HeaderComponent,
+      RecipientSubscriptionStatusComponent,
+      SidebarComponent,
+      FooterComponent,
+      MaterialElevationDirective,
+      ScrollComponent
+  ]
 })
 export class SharedModule {
 }
