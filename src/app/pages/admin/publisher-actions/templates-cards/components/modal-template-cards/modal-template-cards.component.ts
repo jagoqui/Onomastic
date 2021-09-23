@@ -39,7 +39,7 @@ interface OptionGroupLabels {
   name: LABELS;
   date: LABELS;
   academicUnits: LABELS;
-  administrativeUnits:LABELS,
+  administrativeUnits: LABELS;
   bodyTypes: LABELS;
   programs: LABELS;
 }
@@ -133,11 +133,11 @@ export class ModalTemplateCardsComponent implements OnInit, AfterViewInit, OnDes
       insertImageAsBase64URI: false,
       buttons: [
         'font', 'paragraph', 'fontsize', 'brush', '|',
-        'bold', 'underline', 'italic', 'strikethrough', '|',
+        'bold', 'underline', 'italic', 'strikethrough', 'link', '|',
         'align', 'indent', 'outdent', '|',
         'ol', 'ul', '|',
         'table', 'hr', '|',
-        'superscript', 'subscript', 'symbol', 'link','|',
+        'superscript', 'subscript', 'symbol', '|',
         'eraser', 'selectall', 'copyTrash', '|', 'imageUpload', 'print', '|', 'labels', '|',
         '\n',
         'undo', 'redo', 'reset', 'preview', 'fullsize', '|', 'theme', 'info', 'about'

@@ -52,8 +52,10 @@ export class AuthService {
 
   login(authData: Auth): Observable<boolean> {
     authData.userEmail = `${authData.userEmail}${authData.userEmail.indexOf('@') === -1 ? '@udea.edu.co' : ''}`.trim();
-    return this.http.post<AuthRes>(`${environment.apiUrl}/auth/signin`, authData).pipe(
+    const {userEmail, password} = authData;
+    return this.http.post<AuthRes>(`${environment.apiUrl}/auth/signin`, {userEmail, password}).pipe(
       map((authRes) => {
+        console.log(authRes);
         if (authRes) {
           localStorage.setItem('AuthRes', JSON.stringify(authRes));
           this.authRes.next(authRes);

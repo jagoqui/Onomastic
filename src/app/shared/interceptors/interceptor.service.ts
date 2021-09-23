@@ -22,6 +22,7 @@ export class InterceptorService implements HttpInterceptor {
 
     let requestClone: HttpRequest<any>;
     const baseUrl: string = req.url.replace(environment.apiUrl, '');
+    console.log(baseUrl);
     const whiteList = [
       'auth',
       'unsubscribe',
@@ -29,7 +30,8 @@ export class InterceptorService implements HttpInterceptor {
       'set_love'
     ];
 
-    if (whiteList.filter(url => baseUrl.includes(url))) {
+    if (whiteList.filter(url => baseUrl.includes(url))?.length>0) {
+      console.log('Sin token');
       this.loaderSvc.setLoading(false);
       requestClone = req.clone();
     } else {
