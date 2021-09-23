@@ -4,6 +4,7 @@ import {Observable} from 'rxjs';
 import {environment} from '@env/environment';
 import {Recipient} from '@adminShared/models/recipient.model';
 import {Publisher} from '@adminShared/models/publisher.model';
+import {STATE} from "@adminShared/models/shared.model";
 
 @Injectable({
   providedIn: 'root'
@@ -24,8 +25,14 @@ export class PublisherService {
 
   getPublisher(id: string): Observable<Publisher> {
     return this.http
-      .get<Publisher>(`${environment.apiUrl}/usuarios/${{id}}`);
+      .get<Publisher>(`${environment.apiUrl}/usuarios/${id}`);
   }
+
+  getPublisherState(id: string): Observable<STATE> {
+    return this.http
+      .get<STATE>(`${environment.apiUrl}/usuarios/${id}`);
+  }
+
 
   getAll(): Observable<Publisher[]> {
     return this.http

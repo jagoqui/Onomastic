@@ -90,9 +90,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   ngOnInit(): void {
-    this.loginForm.baseForm.get('recaptchaKey').setValidators(null);
-    this.loginForm.baseForm.get('recaptchaKey')?.updateValueAndValidity();
-
     this.themeSwitcherController.themeClass$
       .pipe(takeUntil(this.destroy$))
       .subscribe(

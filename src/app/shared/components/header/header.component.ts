@@ -3,10 +3,12 @@ import {FormControl} from '@angular/forms';
 import {AuthService} from '@adminShared/services/auth.service';
 import {Subject} from 'rxjs';
 import {takeUntil} from 'rxjs/operators';
-import {ThemeSwitcherControllerService} from '../../services/theme-switcher-controller.service';
+import {ThemeSwitcherControllerService} from '@appShared/services';
 import {AnimationOptions} from 'ngx-lottie';
 import {AnimationItem} from 'lottie-web';
 import {THEME} from '@adminShared/models/shared.model';
+import {PublisherService} from '@app/pages/admin/shared/services/publisher.service';
+import SwAlert from 'sweetalert2';
 
 @Component({
   selector: 'app-header',
@@ -47,7 +49,8 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
 
   constructor(
     private authSvc: AuthService,
-    private themeSwitcherController: ThemeSwitcherControllerService
+    private themeSwitcherController: ThemeSwitcherControllerService,
+    private publisherSvc: PublisherService
   ) {
   }
 
@@ -65,7 +68,7 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
       .subscribe(
         (theme: THEME) => {
           this.darkMode = theme === 'dark-theme';
-          if(this.toggleDarkThemeControl.value !== this.darkMode){
+          if (this.toggleDarkThemeControl.value !== this.darkMode) {
             this.toggleDarkThemeControl.setValue(this.darkMode);
           }
         }
@@ -77,6 +80,22 @@ export class HeaderComponent implements OnInit, OnChanges, OnDestroy {
         this.darkMode = darkMode;
         this.themeSwitcherController.themeScheme = darkMode ? 'dark-theme' : 'light-theme';
       });
+
+    //TODO: Se está tomando el cambio cuando se recarga la página, buscar manera de que se ejecute cada vez que haga
+    // una petición, o el back debe validarlo en cada peticón
+    // this.publisherSvc.getPublisherState(this.authSvc.publisherId)
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe((state) => {
+    //     if (state === 'INACTIVO') {
+    //       SwAlert.fire({
+    //         icon: 'error',
+    //         title: ` El publicador fue desactivado!`
+    //       }).then(_ => this.authSvc.logout());
+    //     }
+    //   }, () => {
+    //     SwAlert.showValidationMessage('Error validando el estado del publicador.');
+    //     this.authSvc.logout();
+    //   });
   }
 
   ngOnChanges(changes: SimpleChanges) {

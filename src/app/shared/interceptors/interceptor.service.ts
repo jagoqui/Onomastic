@@ -35,6 +35,7 @@ export class InterceptorService implements HttpInterceptor {
       this.loaderSvc.setLoading(false);
       requestClone = req.clone();
     } else {
+      console.log('Con token');
       const authRes = this.authSvc.authResValue;
       if (authRes) {
         const {tokenType, accessToken} = authRes;
@@ -88,6 +89,7 @@ export class InterceptorService implements HttpInterceptor {
   private getServerErrorMessage(error: HttpErrorResponse): string {
     switch (error.status) {
       case 401: {
+        console.warn('Error de permisos.');
         this.authSvc.logout();
         return `Forbidden: ${error.message}`;
       }

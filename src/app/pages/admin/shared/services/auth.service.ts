@@ -6,7 +6,6 @@ import {BehaviorSubject, Observable} from 'rxjs';
 import {map} from 'rxjs/operators';
 import {Auth, AuthRes, DecodeToken} from '@adminShared/models/auth.model';
 import {environment} from '@env/environment';
-import {PublisherService} from '@adminShared/services/publisher.service';
 import SwAlert from 'sweetalert2';
 
 const jwtHelper = new JwtHelperService();
@@ -16,14 +15,13 @@ const jwtHelper = new JwtHelperService();
   providedIn: 'root'
 })
 export class AuthService {
-
   private authRes = new BehaviorSubject<AuthRes>(null);
   private isLogged = new BehaviorSubject<boolean>(false);
+  private isAdmin = new BehaviorSubject<boolean>(false);
 
   constructor(
     private http: HttpClient,
     private router: Router,
-    private publisherSvc: PublisherService
   ) {
     this.checkToken();
   }
@@ -32,8 +30,22 @@ export class AuthService {
     return this.authRes.asObservable();
   }
 
+  get isLogged$(): Observable<boolean> {
+    return this.isLogged.asObservable();
+  }
+
+  get isAdmin$(): Observable<boolean>{
+    console.log(this.isPublisherAdmin);
+    return this.isAdmin.asObservable();
+  }
+
   get authResValue(): AuthRes {
     return this.authRes.getValue();
+  }
+
+  get publisherId(): string {
+    const authRes: AuthRes = JSON.parse(localStorage.getItem('AuthRes')) || null;
+    return jwtHelper.decodeToken(authRes?.accessToken)?.sub;
   }
 
   get isPublisherAdmin(): boolean {
@@ -43,11 +55,8 @@ export class AuthService {
         isAdmin = this.decodeToken(authRes.accessToken).rol === 'ADMIN';
       }
     });
+    this.isAdmin.next(isAdmin);
     return isAdmin;
-  }
-
-  get isLogged$(): Observable<boolean> {
-    return this.isLogged.asObservable();
   }
 
   login(authData: Auth): Observable<boolean> {
@@ -100,22 +109,14 @@ export class AuthService {
   private checkToken() {
     const authRes: AuthRes = JSON.parse(localStorage.getItem('AuthRes')) || null;
     if (authRes) {
-      const isExpired = jwtHelper.isTokenExpired(authRes.accessToken);
+      const isExpired: boolean = jwtHelper.isTokenExpired(authRes.accessToken);
       if (isExpired) {
+        //TODO: Posiblemente no se muestre la alerta, probar luego insertandolo dentro de un popup
+        SwAlert.showValidationMessage('Expiró el tiempo de la sesión.');
         this.logout();
       } else {
-        const id = jwtHelper.decodeToken(authRes.accessToken).sub;
-        this.publisherSvc.getPublisher(id).subscribe(publisher => {
-          if (publisher?.estado === 'ACTIVO') {
-            this.authRes.next(authRes);
-            this.isLogged.next(true);
-          } else {
-            SwAlert.fire({
-              icon: 'error',
-              title: ` El publicador fue desactivado!`
-            }).then(_ => this.logout());
-          }
-        },()=>SwAlert.showValidationMessage('Error validando el estado del publicador.'));
+        this.authRes.next(authRes);
+        this.isLogged.next(true);
       }
     }
   }
